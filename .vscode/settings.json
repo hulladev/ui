@@ -1,4 +1,5 @@
 {
+  "eslint.experimental.useFlatConfig": false,
   "eslint.workingDirectories": [
     {
       "mode": "auto"
