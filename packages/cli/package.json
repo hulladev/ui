@@ -1,0 +1,19 @@
+{
+  "name": "@hulla/ui",
+  "description": "Multi-platform low-code UI generator 🤖",
+  "bin": "dist/bin.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint --ext .ts --fix .",
+    "build": "bunchee -m",
+    "watch": "bunchee -w",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.7.0",
+    "picocolors": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12"
+  }
+}
