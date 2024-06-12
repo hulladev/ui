@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../tsconfig.json",
+  "include": [
+    "./src/*.ts",
+    "src/bin/index.ts",
+    "src/scripts/addComponent.ts",
+    "src/scripts/setup.ts",
+    "src/utils/fs.ts",
+    "src/lib/constants.ts",
+    "src/utils/cli.ts",
+    "src/utils/args.ts",
+    "src/lib/types.ts"
+  ],
+  "compilerOptions": {
+    "types": ["node"],
+    "rootDir": "../",
+    "outDir": "./dist"
+  }
+}
