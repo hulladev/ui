@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "UI Export Schema",
+  "type": "object",
+  "properties": {
+    "imports": {
+      "type": "object",
+      "properties": {
+        "astro": {
+          "type": "string"
+        },
+        "react": {
+          "type": "string"
+        },
+        "react-native": {
+          "type": "string"
+        },
+        "solid-js": {
+          "type": "string"
+        }
+      },
+      "required": ["astro", "react", "react-native", "solid-js"]
+    }
+  },
+  "required": ["imports"]
+}

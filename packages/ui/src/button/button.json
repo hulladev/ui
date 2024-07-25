@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schema.json",
+  "imports": {
+    "astro": "./button.astro",
+    "react": "./button.react.tsx",
+    "react-native": "./button.native.tsx",
+    "solid-js": "./button.solid.tsx"
+  }
+}
