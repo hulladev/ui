@@ -1,0 +1,20 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import type { VariantProps } from '@hulla/style'
+import { vn } from '@/lib/style'
+
+const css = vn({
+  base: 'rounded-sm',
+  variants: {
+    primary: 'bg-blue-500 text-white',
+    secondary: 'bg-gray-500 text-white',
+  },
+})
+
+export type Props = Omit<HTMLAttributes<'button'>, 'class' | 'class:list'> & VariantProps<typeof css>
+const props = Astro.props
+---
+
+<button {...props} class={css(props)}>
+  <slot />
+</button>
