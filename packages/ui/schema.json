@@ -18,9 +18,22 @@
         "solid-js": {
           "type": "string"
         }
-      },
-      "required": ["astro", "react", "react-native", "solid-js"]
+      }
+    },
+    "style": {
+      "type": "object",
+      "properties": {
+        "tailwind": {
+          "type": "string"
+        },
+        "inline": {
+          "type": "string"
+        },
+        "stylex": {
+          "type": "string"
+        }
+      }
     }
   },
-  "required": ["imports"]
+  "required": ["imports", "style"]
 }
