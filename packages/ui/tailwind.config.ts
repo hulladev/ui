@@ -12,10 +12,10 @@ const colors = {
   primary: twColors.blue,
   secondary: twColors.emerald,
   tertiary: twColors.violet,
-}
+} as const
 
 export default {
-  content: [],
+  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
     colors,
   },
