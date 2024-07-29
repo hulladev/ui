@@ -1,4 +1,5 @@
 import { cancel, isCancel } from '@clack/prompts'
+import isUnicodeSupported from 'is-unicode-supported'
 import pc from 'picocolors'
 
 export function capitalizeFirstLetter(str: string) {
@@ -17,4 +18,13 @@ export function onCancel<T>(val: T) {
 
 export function announce(msg: string) {
   return `[${pc.cyan('🤖 @hulla/ui')}]: ${msg}`
+}
+
+const unicode = isUnicodeSupported()
+const symbol = (c: string, fallback: string) => (unicode ? c : fallback)
+
+export const SYMBOL = {
+  start: pc.gray(symbol('┌', 'T')),
+  bar: pc.gray(symbol('│', '|')),
+  end: pc.gray(symbol('└', '-')),
 }
