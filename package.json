@@ -59,7 +59,7 @@
       "scopes": [
         "cli",
         "ui",
-        "css",
+        "gen",
         "repo"
       ],
       "types": [

@@ -1,4 +1,4 @@
-import { vn } from '@/lib/style'
+import { vn } from '@/style'
 import type { VariantProps } from '@hulla/style'
 import type { ButtonHTMLAttributes, DetailedHTMLProps, PropsWithChildren } from 'react'
 
