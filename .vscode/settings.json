@@ -1,8 +1,23 @@
 {
-  "eslint.experimental.useFlatConfig": false,
+  "eslint.useFlatConfig": false,
   "eslint.workingDirectories": [
     {
       "mode": "auto"
     }
+  ],
+  "prettier.documentSelectors": ["**/*.astro"],
+  "[astro]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "ngClass",
+    "class:list",
+    "variants*",
+    "base*"
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    ["(?:vn|cn)\\(([^\\);]*)[\\);]", "[`'\"]([^'\"`,;]*)[`'\"]"],
   ]
 }

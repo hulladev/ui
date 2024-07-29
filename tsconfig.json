@@ -26,5 +26,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["./packages"]
+  "include": ["./packages", "examples"],
+  "exclude": ["node_modules", "./generated/*", "dist"]
 }
