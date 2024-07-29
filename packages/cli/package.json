@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
+    "is-unicode-supported": "^2.0.0",
     "picocolors": "^1.0.1"
   },
   "devDependencies": {
