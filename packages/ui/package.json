@@ -1,13 +1,21 @@
 {
   "name": "@hulla/ui-generator",
   "private": true,
+  "scripts": {
+    "generate:ui": "pnpm run build && node scripts/generate.js",
+    "generate:clean": "pnpm run build && node scripts/generate.js --clean",
+    "build": "tsc scripts/generate.ts"
+  },
   "devDependencies": {
     "@hulla/style": "^0.0.2",
+    "@types/node": "^20.12.12",
     "@types/react": "^18.3.3"
   },
   "dependencies": {
     "@astrojs/ts-plugin": "^1.9.0",
+    "@clack/prompts": "^0.7.0",
     "astro": "^4.12.2",
+    "picocolors": "^1.0.1",
     "react": "^18.3.1",
     "react-native": "^0.74.3",
     "solid-js": "^1.8.19",

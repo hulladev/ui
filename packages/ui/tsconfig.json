@@ -1,8 +1,9 @@
 {
   "extends": ["../../tsconfig.json", "astro/tsconfigs/base"],
-  "include": ["src"],
+  "include": ["src", "scripts"],
   "compilerOptions": {
     "baseUrl": ".",
+    "types": ["node"],
     "paths": {
       "@/*": ["./*"]
     },
