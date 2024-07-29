@@ -9,15 +9,9 @@
   "[astro]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "tailwindCSS.classAttributes": [
-    "class",
-    "className",
-    "ngClass",
-    "class:list",
-    "variants*",
-    "base*"
-  ],
-  "tailwindCSS.experimental.classRegex": [
-    ["(?:vn|cn)\\(([^\\);]*)[\\);]", "[`'\"]([^'\"`,;]*)[`'\"]"],
-  ]
+  "tailwindCSS.experimental.configFile": {
+    "examples/astro/tailwind.config.ts": "examples/astro/**",
+    "packages/ui/tailwind.config.ts": "packages/ui/**"
+  },
+  "tailwindCSS.experimental.classRegex": [["(?:vn|cn)\\(([^\\);]*)[\\);]", "[`'\"]([^'\"`,;]*)[`'\"]"]]
 }
