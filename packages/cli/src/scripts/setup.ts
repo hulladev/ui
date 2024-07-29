@@ -1,11 +1,11 @@
-import { confirm, intro, outro, select, spinner, text } from '@clack/prompts'
+import { confirm, group, intro, multiselect, outro, select, spinner, text } from '@clack/prompts'
 import { exec, type ExecException } from 'node:child_process'
-import { access, constants as fsConstants, writeFile } from 'node:fs/promises'
+import { access, constants as fsConstants, mkdir, writeFile } from 'node:fs/promises'
 import { promisify } from 'node:util'
 import pc from 'picocolors'
-import { supported_frameworks } from '../lib/constants'
-import type { Config, Frameworks, PackageManagers, Styles } from '../lib/types'
-import { announce, capitalizeFirstLetter, onCancel } from '../utils/cli'
+import { extensions as EXT, supported_frameworks } from '../lib/constants'
+import type { Config, FrameworksKeys, PackageManagers, StyleKeys } from '../lib/types'
+import { SYMBOL, announce, capitalizeFirstLetter, onCancel } from '../utils/cli'
 import { attemptFile, cycleExtension, extractDeps, getMajorVersion, getSetupInstallCommand } from '../utils/fs'
 import { keys } from '../utils/objects'
 
@@ -57,7 +57,7 @@ export const setup = async () => {
       labelStyle: 'exact' | 'capitalized' = 'capitalized'
     ) =>
     (
-      value: T extends 'frameworks' ? Frameworks : T extends 'style' ? Styles : PackageManagers,
+      value: T extends 'frameworks' ? FrameworksKeys : T extends 'style' ? StyleKeys : PackageManagers,
       label: string = labelStyle === 'exact' ? value : capitalizeFirstLetter(value.replaceAll('-', ' '))
     ) => {
       const detected =
@@ -126,7 +126,7 @@ export const setup = async () => {
     message: 'Which framework are you using? 🤔',
     initialValue:
       detectedFramework?.result ??
-      keys(detectedDependencies).find((key) => supported_frameworks.includes(key as Frameworks)),
+      keys(detectedDependencies).find((key) => supported_frameworks.includes(key as FrameworksKeys)),
     options: [
       frameworkOption('react'),
       frameworkOption('react-native'),
@@ -140,15 +140,20 @@ export const setup = async () => {
 
   /* --------------------- Followup - combined frameworks --------------------- */
   if (frameworkInitial === 'astro') {
-    const frameworkExtra = (await select({
-      message: 'Are you using Astro in combination with other framework?',
-      initialValue:
-        detectedFramework?.result ??
-        keys(detectedDependencies).find((key) => supported_frameworks.includes(key as Frameworks)),
-      options: [frameworkOption('react'), frameworkOption('solid')],
-    })) as Frameworks
-    frameworks.push(frameworkExtra)
-    onCancel(frameworkExtra)
+    const hasExtra = await confirm({
+      message: 'Do you use Astro in combination with other UI frameworks? 🌐',
+    })
+    if (hasExtra) {
+      const frameworkExtra = (await multiselect({
+        message: 'Are you using Astro in combination with other framework?',
+        initialValues: detectedFramework?.result
+          ? [detectedFramework?.result]
+          : keys(detectedDependencies).filter((key) => supported_frameworks.includes(key as FrameworksKeys)),
+        options: [frameworkOption('react'), frameworkOption('solid')],
+      })) as FrameworksKeys[]
+      frameworkExtra.forEach((framework) => frameworks.push(framework))
+      onCancel(frameworkExtra)
+    }
   }
 
   /* ------------------------------ RSC for react ----------------------------- */
@@ -167,23 +172,71 @@ export const setup = async () => {
     }
   }
 
+  const customExtensions = await confirm({
+    message: 'Do you want to customize the file extensions for your components? 📝',
+    initialValue: false,
+  })
+
+  const extensions: Record<FrameworksKeys, string> = frameworks.reduce(
+    (res, framework) => ({
+      ...res,
+      [framework]: EXT[framework as FrameworksKeys],
+    }),
+    {} as Record<FrameworksKeys, string>
+  )
+  if (customExtensions) {
+    for await (const [framework, extension] of Object.entries(extensions)) {
+      const newExtension = ((await text({
+        message: `Enter the file extension for ${framework} components:`,
+        placeholder: extension,
+      })) ?? extension) as string
+      onCancel(newExtension)
+      extensions[framework as FrameworksKeys] = newExtension
+    }
+  }
+
   /* ----------------------------- Styling options ---------------------------- */
   const styleOption = option('style')
-  const style = await select({
-    message: 'Which styling solution are you using? 🎨',
-    initialValue: detectedStyle as Styles | undefined,
-    options: [
-      styleOption('tailwind', 'Tailwindcss'),
-      styleOption('stylex'),
-      styleOption('inline', frameworks.includes('react-native') ? 'Inline styles / Stylesheet' : 'Inline styles'),
-      // we filter out stylex for react-native because it's not supported yet
-    ].filter((item) => (item.value === 'stylex' ? (frameworks.includes('react-native') ? false : true) : true)),
-  })
+  const style = await group(
+    {
+      solution: () =>
+        select({
+          message: 'Which styling solution are you using? 🎨',
+          initialValue: detectedStyle as StyleKeys | undefined,
+          options: [
+            styleOption('tailwind', 'Tailwindcss'),
+            styleOption('stylex'),
+            styleOption('inline', frameworks.includes('react-native') ? 'Inline styles / Stylesheet' : 'Inline styles'),
+            // we filter out stylex for react-native because it's not supported yet
+          ].filter((item) => (item.value === 'stylex' ? (frameworks.includes('react-native') ? false : true) : true)),
+        }),
+      path: () =>
+        text({
+          message: 'Where will your style util file path? 📁',
+          placeholder: '@/lib/style',
+        }),
+      config: ({ results }) =>
+        text({
+          message: `Where will be your ${results.solution} configuration file located? 📁`,
+          placeholder: `./${results.solution}.config.ts`,
+        }),
+    },
+    {
+      onCancel,
+    }
+  )
   onCancel(style)
+
+  if (style.path === undefined) {
+    style.path = '@/lib/style'
+  }
+  if (style.config === undefined) {
+    style.config = `./${style.solution}.config.ts`
+  }
 
   /* ---------------- Followup install nativewind if necessary ---------------- */
   if (frameworks.includes('react-native')) {
-    if (style === 'tailwind') {
+    if (style.solution === 'tailwind') {
       const confirmframework = await confirm({
         message:
           'Using tailwind with react-native requires you to install `nativewind`.\n\n \t\t> https://www.nativewind.dev/ \n\n Have you installed it and are ready to proceed?',
@@ -192,7 +245,7 @@ export const setup = async () => {
     }
     // atm this prompt never shows since we filter the stylex option out above for react-native.
     // Waiting for official mention on stylex docs, before recommending it here
-    if (style === 'stylex') {
+    if (style.solution === 'stylex') {
       const confirmStyle = await confirm({
         message:
           'Using stylex with react-native requires you to install `react-native-stylex`.\n\n https://github.com/retyui/react-native-stylex',
@@ -201,10 +254,27 @@ export const setup = async () => {
     }
   }
 
+  const githubProtocol = (await select({
+    message: 'Which protocol do you want to use for GitHub communication? 🌐',
+    initialValue: 'api',
+    options: [
+      { value: 'https', label: 'HTTPS' },
+      { value: 'api', label: 'GitHub CLI (recommended)' },
+    ],
+  })) as string
+  onCancel(githubProtocol)
+
+  if (githubProtocol === 'api') {
+    console.info(
+      `${SYMBOL.bar}\n${SYMBOL.bar} 💡 ${pc.cyan(`Please make sure you have the gh CLI installed. ${pc.underline('https://cli.github.com/')}`)}`
+    )
+  }
+
   const configFile = {
     output,
     packageManager,
-    frameworks,
+    githubProtocol,
+    frameworks: extensions,
     ...(frameworks.includes('react') ? { rsc } : {}),
     style,
   }
@@ -224,7 +294,7 @@ export const setup = async () => {
     await promisify(exec)(command).catch((err: ExecException) => {
       didFail = true
       console.error(
-        `${pc.gray('\n|\n└')}  ${announce(`Error installing dependencies! Receied the following error: \n\n${pc.red(err.message)}\n${pc.red(err.stdout)}`)}`
+        `${pc.gray(`\n|\n${SYMBOL.end}`)}  ${announce(`Error installing dependencies! Receied the following error: \n\n${pc.red(err.message)}\n${pc.red(err.stdout)}`)}`
       )
     })
     s.stop(
@@ -236,9 +306,10 @@ export const setup = async () => {
 
   /* --------------------------- Create config file --------------------------- */
   s.start(`Creating your configuration file in ${pc.bgCyan(path)}`)
+  await mkdir(`${process.cwd()}/${path.split('/').slice(0, -1).join('/')}`, { recursive: true })
   await writeFile(`${process.cwd()}/${path}`, JSON.stringify(configFile, null, 2))
   s.stop(`Finished setting up configuration! 🎉`)
   outro(
-    `Thank you for using ${pc.cyan('@hulla/ui')}. Check out ${pc.underline(pc.cyan('https://hulla.dev/docs/ui'))} for more info ❤️`
+    `Thank you for using ${pc.cyan('@hulla/ui')} ❤️\n\n Run the command again to add components or check out ${pc.underline(pc.cyan('https://hulla.dev/docs/ui'))} for more info `
   )
 }
