@@ -69,14 +69,14 @@ export function getMajorVersion(versionString: string) {
 export function getSetupInstallCommand(config: Config, detectedDependencies: Partial<Record<string, string>>) {
   const deps = []
   const devDeps = []
-  if (config.style.includes('tailwind')) {
+  deps.push('@hulla/style')
+  if (config.style.solution.includes('tailwind')) {
     devDeps.push('tailwindcss')
-    deps.push('tailwind-merge')
-    if (config.frameworks.includes('react-native')) {
+    if (Object.keys(config.frameworks).includes('react-native')) {
       deps.push('nativewind')
     }
   }
-  if (config.style.includes('stylex')) {
+  if (config.style.solution.includes('stylex')) {
     deps.push('@stylexjs/stylex')
   }
   const removeAlredyInstalled = (d: string[]) => d.filter((dep) => !detectedDependencies[dep])
