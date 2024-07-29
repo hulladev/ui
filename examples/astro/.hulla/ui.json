@@ -1,0 +1,16 @@
+{
+  "output": "./src/components/ui",
+  "packageManager": "pnpm",
+  "githubProtocol": "api",
+  "frameworks": {
+    "astro": ".astro",
+    "react": ".tsx",
+    "solid": ".tsx"
+  },
+  "rsc": "true",
+  "style": {
+    "solution": "tailwind",
+    "path": "@/lib/style",
+    "config": "./tailwind.config.ts"
+  }
+}
