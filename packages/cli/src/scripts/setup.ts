@@ -1,6 +1,8 @@
 import { confirm, group, intro, multiselect, outro, select, spinner, text } from '@clack/prompts'
 import { exec, type ExecException } from 'node:child_process'
+import { existsSync } from 'node:fs'
 import { access, constants as fsConstants, mkdir, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { promisify } from 'node:util'
 import pc from 'picocolors'
 import { extensions as EXT, supported_frameworks } from '../lib/constants'
@@ -140,20 +142,16 @@ export const setup = async () => {
 
   /* --------------------- Followup - combined frameworks --------------------- */
   if (frameworkInitial === 'astro') {
-    const hasExtra = await confirm({
-      message: 'Do you use Astro in combination with other UI frameworks? 🌐',
-    })
-    if (hasExtra) {
-      const frameworkExtra = (await multiselect({
-        message: 'Are you using Astro in combination with other framework?',
-        initialValues: detectedFramework?.result
-          ? [detectedFramework?.result]
-          : keys(detectedDependencies).filter((key) => supported_frameworks.includes(key as FrameworksKeys)),
-        options: [frameworkOption('react'), frameworkOption('solid')],
-      })) as FrameworksKeys[]
-      frameworkExtra.forEach((framework) => frameworks.push(framework))
-      onCancel(frameworkExtra)
-    }
+    console.info(`${pc.gray(SYMBOL.bar)} ${announce(`Don't select any option if you only use .astro files`)}`)
+    const frameworkExtra = (await multiselect({
+      message: 'Are you using Astro in combination with other framework?',
+      initialValues: detectedFramework?.result
+        ? [detectedFramework?.result]
+        : keys(detectedDependencies).filter((key) => supported_frameworks.includes(key as FrameworksKeys)),
+      options: [frameworkOption('react'), frameworkOption('solid')],
+    })) as FrameworksKeys[]
+    frameworkExtra.forEach((framework) => frameworks.push(framework))
+    onCancel(frameworkExtra)
   }
 
   /* ------------------------------ RSC for react ----------------------------- */
@@ -305,9 +303,23 @@ export const setup = async () => {
   }
 
   /* --------------------------- Create config file --------------------------- */
-  s.start(`Creating your configuration file in ${pc.bgCyan(path)}`)
-  await mkdir(`${process.cwd()}/${path.split('/').slice(0, -1).join('/')}`, { recursive: true })
+  s.start(`Creating necessary files... 📁`)
+  s.message(`Creating your configuration file in ${pc.bgCyan(path)}`)
   await writeFile(`${process.cwd()}/${path}`, JSON.stringify(configFile, null, 2))
+  s.message(`Creating your style util file in ${pc.bgCyan(style.path)}`)
+  const stylePath = join(process.cwd(), style.path.replace('@', 'src'))
+  if (!existsSync(stylePath)) {
+    await mkdir(stylePath.split('/').slice(0, -1).join('/'), { recursive: true })
+  }
+  const styleFilePath = stylePath.includes('.ts') ? stylePath : `${stylePath}.ts`
+  await writeFile(
+    styleFilePath,
+    `import { style } from '@hulla/style'
+
+export const { cn, vn } = style()
+`,
+    { flag: 'w' }
+  )
   s.stop(`Finished setting up configuration! 🎉`)
   outro(
     `Thank you for using ${pc.cyan('@hulla/ui')} ❤️\n\n Run the command again to add components or check out ${pc.underline(pc.cyan('https://hulla.dev/docs/ui'))} for more info `
