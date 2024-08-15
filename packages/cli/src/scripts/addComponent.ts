@@ -119,7 +119,9 @@ export const addComponent = async (parsedArgs: ParsedArgs) => {
         }
         // github api version
         if (parsedArgs.config.githubProtocol === 'api') {
-          return promisify(exec)(GH_API.api.raw(`${framework}/${parsedArgs.config.style}/${component}${extension}`))
+          return promisify(exec)(
+            GH_API.api.raw(`${framework}/${parsedArgs.config.style?.solution}/${component}${extension}`)
+          )
             .catch((err) => {
               console.error(
                 `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Failed to fetch component ${component}. \n\n Github API returned with following message: ${err.message}.`
@@ -137,7 +139,7 @@ export const addComponent = async (parsedArgs: ParsedArgs) => {
             })
         }
         // https version
-        return fetch(GH_API.https.raw(`${framework}/${parsedArgs.config.style}/${component}${extension}`))
+        return fetch(GH_API.https.raw(`${framework}/${parsedArgs.config.style?.solution}/${component}${extension}`))
           .then(
             (res) =>
               ({

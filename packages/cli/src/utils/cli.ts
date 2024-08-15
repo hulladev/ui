@@ -1,6 +1,7 @@
-import { cancel, isCancel } from '@clack/prompts'
+import { cancel, confirm, isCancel, spinner } from '@clack/prompts'
 import isUnicodeSupported from 'is-unicode-supported'
 import pc from 'picocolors'
+import type { Codemod, Line } from '../../../codemods/src/types'
 
 export function capitalizeFirstLetter(str: string) {
   return str.replace(/\b\w/g, (char) => char.toUpperCase())
@@ -27,4 +28,53 @@ export const SYMBOL = {
   start: pc.gray(symbol('┌', 'T')),
   bar: pc.gray(symbol('│', '|')),
   end: pc.gray(symbol('└', '-')),
+  topLeft: symbol('┌', '+'),
+  topRight: symbol('┐', '+'),
+  bottomLeft: symbol('└', '+'),
+  bottomRight: symbol('┘', '+'),
+  horizontal: symbol('─', '-'),
+  vertical: symbol('│', '|'),
+}
+
+export function box(msg: string): string {
+  const lines = msg.split('\n')
+  const maxLength = Math.max(...lines.map((line) => line.length))
+  const boxWidth = maxLength + 2 // Adding padding for the box
+
+  const top = `${SYMBOL.topLeft}${SYMBOL.horizontal.repeat(boxWidth - 1)}${SYMBOL.topRight}`
+  const bottom = `${SYMBOL.bottomLeft}${SYMBOL.horizontal.repeat(boxWidth - 1)}${SYMBOL.bottomRight}`
+
+  const middle = lines.map((line) => `${SYMBOL.vertical} ${line.padEnd(maxLength, ' ')}`).join('\n')
+
+  return `${top}\n${middle}\n${bottom}`
+}
+
+export function renderLineStatus(line: Line) {
+  switch (line.status) {
+    case 'added':
+      return pc.green(`+ ${line.content}`)
+    case 'removed':
+      return pc.red(`- ${line.content}`)
+    case 'unchanged':
+      return pc.gray(`  ${line.content}`)
+    default:
+      return line.content
+  }
+}
+
+export async function propose(
+  codemod: Codemod,
+  title = `Would you like to make following changes to ${pc.underline(codemod.path)} ?`
+) {
+  if (!codemod.hasChanges) {
+    return
+  }
+  const write = await confirm({ message: title })
+  console.log(box(codemod.lines.map(renderLineStatus).join('\n')))
+  const s = spinner()
+  s.start(`Applying changes to ${pc.underline(codemod.path)} ✨`)
+  if (write) {
+    await codemod.run()
+  }
+  s.stop(`Changes applied ${pc.underline(codemod.path)} ✅`)
 }

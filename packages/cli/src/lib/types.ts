@@ -4,8 +4,14 @@ export type StyleKeys = 'tailwind' | 'stylex' | 'inline'
 export type Config = {
   style: {
     solution: StyleKeys
-    path: string
+    globals: string
+    util: string
     config: string
+  }
+  typescript: {
+    src: string
+    alias: string
+    tsconfig: string
   }
   rsc?: 'true' | 'false'
   output: string

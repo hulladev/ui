@@ -1,4 +1,5 @@
-import { confirm, group, intro, multiselect, outro, select, spinner, text } from '@clack/prompts'
+import { confirm, group, intro, multiselect, outro, select, spinner, text, type PromptGroup } from '@clack/prompts'
+import { tsConfigSetup } from 'codemods'
 import { exec, type ExecException } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { access, constants as fsConstants, mkdir, writeFile } from 'node:fs/promises'
@@ -7,7 +8,7 @@ import { promisify } from 'node:util'
 import pc from 'picocolors'
 import { extensions as EXT, supported_frameworks } from '../lib/constants'
 import type { Config, FrameworksKeys, PackageManagers, StyleKeys } from '../lib/types'
-import { SYMBOL, announce, capitalizeFirstLetter, onCancel } from '../utils/cli'
+import { SYMBOL, announce, capitalizeFirstLetter, onCancel, propose } from '../utils/cli'
 import { attemptFile, cycleExtension, extractDeps, getMajorVersion, getSetupInstallCommand } from '../utils/fs'
 import { keys } from '../utils/objects'
 
@@ -116,10 +117,33 @@ export const setup = async () => {
   }
 
   /* ----------------------------- Output location ---------------------------- */
+
+  const tsconfig = ((await text({
+    message: 'Where is your tsconfig located? 📄',
+    placeholder: './tsconfig.json',
+  })) ?? './tsconfig.json') as string
+
+  let src = ((await text({
+    message: 'Where is  is your source code located? 🗂️',
+    placeholder: './src',
+  })) ?? './src') as string
+  onCancel(src)
+  src = src.endsWith('/') ? src : `${src}/`
+
+  let alias = ((await text({
+    message: `Which path alias do you want to use for your source code (${src}) location? 📁`,
+    placeholder: '@/',
+  })) ?? '@/') as string
+  onCancel(alias)
+  alias = alias.endsWith('/') ? alias : `${alias}/`
+
+  const tsconfigCodemod = await tsConfigSetup({ path: tsconfig, src, alias })
+  await propose(tsconfigCodemod)
+
   const output = ((await text({
     message: 'Where do you want to add your components? 🗂️',
-    placeholder: './src/components/ui',
-  })) ?? './src/components/ui') as string
+    placeholder: `${alias}components`,
+  })) ?? `${alias}components`) as string
   onCancel(output)
 
   /* ------------------------------- Frameworks ------------------------------- */
@@ -194,42 +218,58 @@ export const setup = async () => {
   }
 
   /* ----------------------------- Styling options ---------------------------- */
-  const styleOption = option('style')
-  const style = await group(
+  // TODO: Uncomment these lines once more styling solution sare added, for now we only support tailwind
+  // const styleOption = option('style')
+  const stylePrompt = await group(
     {
-      solution: () =>
-        select({
-          message: 'Which styling solution are you using? 🎨',
-          initialValue: detectedStyle as StyleKeys | undefined,
-          options: [
-            styleOption('tailwind', 'Tailwindcss'),
-            styleOption('stylex'),
-            styleOption('inline', frameworks.includes('react-native') ? 'Inline styles / Stylesheet' : 'Inline styles'),
-            // we filter out stylex for react-native because it's not supported yet
-          ].filter((item) => (item.value === 'stylex' ? (frameworks.includes('react-native') ? false : true) : true)),
-        }),
-      path: () =>
+      // solution: () =>
+      //   select({
+      //     message: 'Which styling solution are you using? 🎨',
+      //     initialValue: detectedStyle as StyleKeys | undefined,
+      //     options: [
+      //       styleOption('tailwind', 'Tailwindcss'),
+      //       styleOption('stylex'),
+      //       styleOption('inline', frameworks.includes('react-native') ? 'Inline styles / Stylesheet' : 'Inline styles'),
+      //       // we filter out stylex for react-native because it's not supported yet
+      //     ].filter((item) => (item.value === 'stylex' ? (frameworks.includes('react-native') ? false : true) : true)),
+      //   }),
+      config: () =>
+        // config: ({ results }) =>
         text({
-          message: 'Where will your style util file path? 📁',
-          placeholder: '@/lib/style',
-        }),
-      config: ({ results }) =>
+          message: `Where will be your tailwind configuration file located? 📁`,
+          placeholder: `./tailwind.config.ts`,
+          // message: `Where will be your ${results.solution} configuration file located? 📁`,
+          // placeholder: `./${results.solution}.config.ts`,
+        }) as Promise<string>,
+      globals: () =>
         text({
-          message: `Where will be your ${results.solution} configuration file located? 📁`,
-          placeholder: `./${results.solution}.config.ts`,
+          message: 'Where will be your globals.css style import be located? 📁',
+          placeholder: `${alias}assets/globals.css`,
         }),
-    },
+      util: () => text({ message: 'Where will be your style util file located? 📁', placeholder: `${alias}lib/style` }),
+    } as PromptGroup<{
+      // solution: symbol | 'tailwind' | 'stylex' | 'inline'
+      config: string
+      globals: string
+      util: string
+    }>,
     {
       onCancel,
     }
   )
-  onCancel(style)
+  const style = {
+    ...stylePrompt,
+    solution: 'tailwind' as const satisfies StyleKeys,
+  }
 
-  if (style.path === undefined) {
-    style.path = '@/lib/style'
+  if (style.globals === undefined) {
+    style.globals = `${alias}assets/globals.css`
   }
   if (style.config === undefined) {
     style.config = `./${style.solution}.config.ts`
+  }
+  if (style.util === undefined) {
+    style.util = `${alias}lib/style`
   }
 
   /* ---------------- Followup install nativewind if necessary ---------------- */
@@ -243,23 +283,23 @@ export const setup = async () => {
     }
     // atm this prompt never shows since we filter the stylex option out above for react-native.
     // Waiting for official mention on stylex docs, before recommending it here
-    if (style.solution === 'stylex') {
-      const confirmStyle = await confirm({
-        message:
-          'Using stylex with react-native requires you to install `react-native-stylex`.\n\n https://github.com/retyui/react-native-stylex',
-      })
-      onCancel(confirmStyle)
-    }
+    // if (style.solution === 'stylex') {
+    //   const confirmStyle = await confirm({
+    //     message:
+    //       'Using stylex with react-native requires you to install `react-native-stylex`.\n\n https://github.com/retyui/react-native-stylex',
+    //   })
+    //   onCancel(confirmStyle)
+    // }
   }
 
-  const githubProtocol = (await select({
+  const githubProtocol = await select({
     message: 'Which protocol do you want to use for GitHub communication? 🌐',
     initialValue: 'api',
     options: [
       { value: 'https', label: 'HTTPS' },
       { value: 'api', label: 'GitHub CLI (recommended)' },
     ],
-  })) as string
+  })
   onCancel(githubProtocol)
 
   if (githubProtocol === 'api') {
@@ -268,12 +308,17 @@ export const setup = async () => {
     )
   }
 
-  const configFile = {
+  const configFile: Config = {
     output,
-    packageManager,
-    githubProtocol,
+    packageManager: packageManager as Exclude<symbol, typeof packageManager>,
+    typescript: {
+      src,
+      alias,
+      tsconfig,
+    },
+    githubProtocol: githubProtocol as 'https' | 'api',
     frameworks: extensions,
-    ...(frameworks.includes('react') ? { rsc } : {}),
+    ...(frameworks.includes('react') ? { rsc: rsc as 'true' | 'false' } : {}),
     style,
   }
   const defaultCommand = getSetupInstallCommand(configFile as Config, detectedDependencies)
@@ -306,8 +351,8 @@ export const setup = async () => {
   s.start(`Creating necessary files... 📁`)
   s.message(`Creating your configuration file in ${pc.bgCyan(path)}`)
   await writeFile(`${process.cwd()}/${path}`, JSON.stringify(configFile, null, 2))
-  s.message(`Creating your style util file in ${pc.bgCyan(style.path)}`)
-  const stylePath = join(process.cwd(), style.path.replace('@', 'src'))
+  s.message(`Creating your style util file in ${pc.bgCyan(style.util)}`)
+  const stylePath = join(process.cwd(), style.util.replace(alias, src))
   if (!existsSync(stylePath)) {
     await mkdir(stylePath.split('/').slice(0, -1).join('/'), { recursive: true })
   }
