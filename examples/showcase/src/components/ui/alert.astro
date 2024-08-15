@@ -1,0 +1,44 @@
+---
+import { vn } from '@/lib/style'
+import type { VariantProps } from '@hulla/style'
+import type { HTMLAttributes } from 'astro/types'
+
+const css = vn({
+  base: 'not-italic relative flex items-center gap-md rounded-md w-full before:content-[""] before:bg-gradient-to-b before:from-transparent before:to-transparent before:h-2xl before:w-[0.2rem] before:rounded-md shaodw-inner ring-1 ring-opacity-50 drop-shadow-sm',
+  props: {
+    variant: {
+      tip: 'bg-primary/20  before:via-primary shadow-primary/40 ring-primary',
+      error: 'bg-error/20 before:via-error shadow-error/40 ring-error',
+      warning: 'bg-warning/20 before:via-warning shadow-warning/40 ring-warning',
+      success: 'bg-success/20 before:via-success shadow-success/40 ring-success',
+    },
+  },
+})
+
+const textCss = vn({
+  base: 'text-xl font-semibold',
+  props: {
+    variant: {
+      tip: 'text-primary',
+      error: 'text-error',
+      warning: 'text-warning',
+      success: 'text-success',
+    },
+  },
+})
+
+export type Props = HTMLAttributes<'em'> &
+  VariantProps<typeof css> & {
+    title: string
+  }
+
+const props = Astro.props
+---
+
+<em class={css(props)}>
+  <slot name="icon" />
+  <span class="py-sm block">
+    <h2 class={textCss(props)}>{props.title}</h2>
+    <slot />
+  </span>
+</em>

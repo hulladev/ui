@@ -1,0 +1,149 @@
+---
+import '../base.css'
+import { ChangeTheme } from '@/components/ChangeTheme'
+import Showcase from '@/components/Showcase.astro'
+import Button from '@/components/ui/button.astro'
+import Select from '@/components/ui/select.astro'
+import { Switch } from '@/components/ui/switch'
+import Code from '@/components/ui/code.astro'
+import Alert from '@/components/ui/alert.astro'
+import TypescriptIcon from '@/assets/icons/typescripticon.astro'
+import Menu from '@/components/ui/menu/Menu.astro'
+import MenuTitle from '@/components/ui/menu/MenuTitle.astro'
+import MenuItem from '@/components/ui/menu/MenuItem.astro'
+import MenuList from '@/components/ui/menu/MenuList.astro'
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro</title>
+  </head>
+  <body class="min-w-screen min-h-screen">
+    <nav class="p-lg flex items-center gap-4 shadow-lg">
+      <ChangeTheme client:only="react" />
+    </nav>
+    <main class="p-md">
+      <Showcase element="Color scheme">
+        <div class="flex flex-col items-center">
+          <div class="w-lg h-lg bg-primary"></div>
+          <p class="description text-sm">Primary</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="w-lg h-lg bg-bg dark:bg-bgdark border"></div>
+          <p class="description text-sm">Background</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="w-lg h-lg bg-fg dark:bg-fgdark border"></div>
+          <p class="description text-sm">Foreground</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="w-lg h-lg bg-secondary border"></div>
+          <p class="description text-sm">Secondary</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="w-lg h-lg bg-error border"></div>
+          <p class="description text-sm">Error</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="w-lg h-lg bg-success border"></div>
+          <p class="description text-sm">Success</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="w-lg h-lg bg-warning border"></div>
+          <p class="description text-sm">Warning</p>
+        </div>
+        <h2 class="text-3xl">Heading</h2>
+        <o>Some text</o>
+        <p class="description">Secondary text</p>
+      </Showcase>
+      <Showcase element="Button">
+        <Button>Default button</Button>
+        <Button variant="primary">Primary button</Button>
+        <Button variant="outline">Outline button</Button>
+        <Button variant="ghost">Ghost button</Button>
+        <Button size="lg">Large button</Button>
+        <Button size="sm">Small button</Button>
+        <Button disabled>Disabled button</Button>
+      </Showcase>
+      <Showcase element="Select">
+        <Select class="max-w-36">
+          <option>Option 1</option>
+          <option>Option 2</option>
+          <option>Option 3 with a very long text</option>
+        </Select>
+      </Showcase>
+      <Showcase element="Switch">
+        <Switch client:load />
+        <Switch client:load checked />
+        <Switch client:load disabled />
+        <Switch><p class="scale-75 text-sm">🍺</p></Switch>
+        <Switch checked><p class="scale-75 text-sm">📚</p></Switch>
+      </Showcase>
+      <Showcase element="Code">
+        <Code
+          lang="rust"
+          code={`fn main() {
+  println!("Hello, world!");
+}`}
+        />
+        <Code lang="typescript" code={`console.log('Hello, world!')`} file="src/lib/hello.ts">
+          <TypescriptIcon slot="icon" />
+        </Code>
+        <Code
+          lang="javascript"
+          code={`console.log('hi!') // [!code highlight]
+function foo (bar) { return bar } // [!code --]
+foo(123) // [!code ++]
+with syntax highlighting! // [!code ++]`}
+        />
+        <Code code={`console.log('Hello, world!') // [!code --]`} lang="typescript" />
+      </Showcase>
+      <Showcase element="Alert">
+        <Alert title="Something went wrong" variant="error">
+          <p slot="icon">❌</p>
+          Error alert
+        </Alert>
+        <Alert title="Be cautious" variant="warning">Warning alert</Alert>
+        <Alert title="Hooray" variant="success">Success alert</Alert>
+        <Alert title="Be advised" variant="tip">Tip alert</Alert>
+      </Showcase>
+      <Showcase element="Menu">
+        <Menu>
+          <MenuTitle>Hello world</MenuTitle>
+          <MenuList>
+            <MenuItem>Item 1</MenuItem>
+            <MenuItem>Item 2</MenuItem>
+            <MenuItem active>Active menu item</MenuItem>
+            <MenuItem>Item 4</MenuItem>
+            <MenuItem nested>
+              <Menu>
+                <MenuTitle>Nested menu</MenuTitle>
+                <MenuList>
+                  <MenuItem>Nested Item 1</MenuItem>
+                  <MenuItem>Nested Item 2</MenuItem>
+                  <MenuItem>Nested Item 3</MenuItem>
+                  <MenuItem>Nested Item 4</MenuItem>
+                </MenuList>
+              </Menu>
+            </MenuItem>
+          </MenuList>
+        </Menu>
+      </Showcase>
+    </main>
+  </body>
+</html>
+
+<script>
+  if (
+    localStorage.theme === 'dark' ||
+    (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  ) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+</script>

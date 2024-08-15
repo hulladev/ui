@@ -1,0 +1,14 @@
+---
+export type Props = {
+  element: string
+}
+
+const { element } = Astro.props
+---
+
+<section class="my-md p-lg space-y-md border-dark dark:border-light border">
+  <h2 class="text-2xl font-semibold">{element}</h2>
+  <div class="gap-lg flex flex-wrap items-center">
+    <slot />
+  </div>
+</section>

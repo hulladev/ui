@@ -1,0 +1,33 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { codeToHtml, type BundledTheme } from 'shiki'
+import type { BundledLanguage } from 'shiki/langs'
+import { transformerNotationDiff, transformerNotationHighlight, transformerNotationFocus } from '@shikijs/transformers'
+
+export type Props = HTMLAttributes<'code'> & {
+  file?: string
+  lang: BundledLanguage
+  theme?: BundledTheme
+  code: string
+}
+
+const { file, code, lang } = Astro.props
+
+const html = await codeToHtml(code, {
+  lang,
+  theme: 'catppuccin-macchiato',
+  transformers: [transformerNotationDiff(), transformerNotationHighlight(), transformerNotationFocus()],
+})
+---
+
+<div class="text-light relative w-full rounded-lg">
+  {
+    file && (
+      <code id="file" class="left-md gap-sm top-sm text-fgdark/70 absolute flex items-center text-xs">
+        <slot name="icon" />
+        {file}
+      </code>
+    )
+  }
+  <Fragment set:html={html} />
+</div>
