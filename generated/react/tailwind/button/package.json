@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../schema.json",
+  "name": "button.react",
+  "extension": ".tsx",
+  "private": true,
+  "devDependencies": {
+    "@types/node": "^20.12.12"
+  }
+}

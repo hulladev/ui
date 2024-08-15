@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../schema.json",
+  "name": "button.astro",
+  "extension": ".astro",
+  "private": true
+}

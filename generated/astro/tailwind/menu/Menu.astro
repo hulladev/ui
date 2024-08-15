@@ -1,0 +1,12 @@
+---
+import { cn } from '@/lib/style'
+import type { HTMLAttributes } from 'astro/types'
+
+export type MenuProps = HTMLAttributes<'menu'>
+type Props = MenuProps
+const { class: className, ...props } = Astro.props
+---
+
+<details {...props} class={cn('group flex items-center', className)}>
+  <slot />
+</details>
