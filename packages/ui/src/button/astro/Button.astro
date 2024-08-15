@@ -1,0 +1,15 @@
+---
+import type { VariantProps } from '@hulla/style'
+import type { HTMLAttributes } from 'astro/types'
+import { vn } from '@/lib/style'
+import { button } from '../style/tailwind.button'
+
+export const css = vn(button)
+
+export type Props = HTMLAttributes<'button'> & VariantProps<typeof css>
+const { class: className, variant, size, ...props } = Astro.props
+---
+
+<button {...props} class:list={css({ className, variant, size })}>
+  <slot />
+</button>
