@@ -7,7 +7,7 @@
     "paths": {
       "@/*": ["./*"]
     },
-    "jsx": "react",
+    "jsx": "react-jsx",
     "plugins": [
       {
         "name": "@astrojs/ts-plugin"

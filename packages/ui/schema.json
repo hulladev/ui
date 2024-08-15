@@ -3,37 +3,33 @@
   "title": "UI Export Schema",
   "type": "object",
   "properties": {
-    "imports": {
-      "type": "object",
-      "properties": {
-        "astro": {
-          "type": "string"
-        },
-        "react": {
-          "type": "string"
-        },
-        "react-native": {
-          "type": "string"
-        },
-        "solid-js": {
-          "type": "string"
-        }
-      }
+    "name": {
+      "type": "string"
     },
-    "style": {
+    "private": {
+      "type": "boolean"
+    },
+    "extension": {
+      "type": "string"
+    },
+    "scripts": {
       "type": "object",
       "properties": {
-        "tailwind": {
+        "build": {
           "type": "string"
         },
-        "inline": {
+        "dev": {
           "type": "string"
         },
-        "stylex": {
+        "format": {
+          "type": "string"
+        },
+        "lint": {
           "type": "string"
         }
-      }
+      },
+      "required": ["build", "dev", "format", "lint"]
     }
   },
-  "required": ["imports", "style"]
+  "required": ["name", "private", "extension"]
 }
