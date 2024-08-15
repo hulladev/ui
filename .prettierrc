@@ -3,7 +3,7 @@
   "semi": false,
   "printWidth": 120,
   "singleQuote": true,
-  "plugins": ["prettier-plugin-organize-imports", "prettier-plugin-astro"],
+  "plugins": ["prettier-plugin-organize-imports", "prettier-plugin-astro", "prettier-plugin-tailwindcss"],
   "overrides": [
     {
       "files": "*.astro",
