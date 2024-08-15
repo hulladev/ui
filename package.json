@@ -61,7 +61,7 @@
         "cli",
         "ui",
         "gen",
-        "codemod",
+        "codemods",
         "examples",
         "repo"
       ],
