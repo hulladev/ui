@@ -1,0 +1,16 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { cn } from '@/lib/style'
+import { menuitem } from '../style/tailwind.menu'
+
+export type MenuItemProps = HTMLAttributes<'li'> & {
+  active?: boolean
+  nested?: boolean
+}
+
+const props = Astro.props as MenuItemProps
+---
+
+<li {...props} data-active={props.active} data-nested={props.nested} class={cn(menuitem, props.class)}>
+  <slot />
+</li>

@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../schema.json",
+  "name": "menu.react",
+  "extension": ".tsx",
+  "private": true
+}

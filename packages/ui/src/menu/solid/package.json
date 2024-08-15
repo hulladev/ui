@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../schema.json",
+  "name": "menu.solid",
+  "extension": ".tsx",
+  "private": true
+}

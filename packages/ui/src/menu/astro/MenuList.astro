@@ -1,0 +1,10 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { cn } from '@/lib/style'
+import { menulist } from '../style/tailwind.menu'
+
+export type MenuListProps = HTMLAttributes<'menu'>
+const props = Astro.props as MenuListProps
+---
+
+<menu class={cn(menulist, props.class)}><slot /></menu>
