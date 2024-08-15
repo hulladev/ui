@@ -20,9 +20,9 @@
       "persistent": true
     },
     "generate:ui": {
-      "dependsOn": ["^generate:ui"],
+      "outputs": ["scripts/generate.js", "../../generated"],
       "inputs": ["scripts/generate.ts", "src"],
-      "outputs": ["scripts/generate.js"]
+      "cache": false
     },
     "generate:clean": {
       "dependsOn": ["^generate:ui"],

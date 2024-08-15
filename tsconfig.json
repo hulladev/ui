@@ -7,7 +7,7 @@
     "allowJs": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "Bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,
@@ -27,5 +27,5 @@
     }
   },
   "include": ["./packages", "examples"],
-  "exclude": ["node_modules", "./generated/*", "dist"]
+  "exclude": ["node_modules", "generated", "dist"]
 }

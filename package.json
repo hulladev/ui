@@ -43,10 +43,11 @@
     "prettier": "^3.2.5",
     "prettier-plugin-astro": "^0.14.0",
     "prettier-plugin-organize-imports": "^3.2.4",
-    "turbo": "^2.0.4",
+    "prettier-plugin-tailwindcss": "^0.6.5",
+    "turbo": "^2.0.12",
     "typescript": "^5.4.5"
   },
-  "packageManager": "pnpm@9.3.0",
+  "packageManager": "pnpm@9.7.0",
   "engines": {
     "node": ">=18"
   },
@@ -60,6 +61,8 @@
         "cli",
         "ui",
         "gen",
+        "codemod",
+        "examples",
         "repo"
       ],
       "types": [
