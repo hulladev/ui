@@ -52,13 +52,16 @@ export function getInstallCommand(packageManager: PackageManagers, deps: string[
   const command = installCommand[packageManager]
   const depsInstall = `${command} ${deps.join(' ')}`
   const devDepsInstall = `${command} -D ${devDeps.join(' ')}`
-  if (devDeps.length && devDeps.length) {
+  if (devDeps.length && deps.length) {
     return `${depsInstall} && ${devDepsInstall}`
   }
-  if (devDeps.length) {
+  if (deps.length) {
     return depsInstall
   }
-  return devDepsInstall
+  if (devDeps.length) {
+    return devDepsInstall
+  }
+  return ''
 }
 
 export function getMajorVersion(versionString: string) {
@@ -81,4 +84,16 @@ export function getSetupInstallCommand(config: Config, detectedDependencies: Par
   }
   const removeAlredyInstalled = (d: string[]) => d.filter((dep) => !detectedDependencies[dep])
   return getInstallCommand(config.packageManager, removeAlredyInstalled(deps), removeAlredyInstalled(devDeps))
+}
+
+export function replaceTypescriptAlias(alias: string, src: string, path: string) {
+  if (src.startsWith('./')) {
+    src = src.slice(2)
+  } else if (src.startsWith('../')) {
+    src = src.slice(3)
+  } else if (src.startsWith('/')) {
+    src = src.slice(1)
+  }
+  src = src.endsWith('/') ? src : `${src}/`
+  return path.replace(new RegExp(alias, 'g'), src)
 }
