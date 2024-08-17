@@ -9,19 +9,18 @@ export type Config = {
     config: string
   }
   typescript: {
-    src: string
     alias: string
     tsconfig: string
+    src: string
   }
-  rsc?: 'true' | 'false'
   output: string
   packageManager: PackageManagers
   githubProtocol: 'https' | 'api'
-  frameworks: Record<FrameworksKeys, string>
+  frameworks: Record<FrameworksKeys, Pick<Partial<Config>, 'output'> & { extension: string; rsc?: 'true' | 'false' }>
 }
 
 export type ArgConfig = Record<
-  keyof Config,
+  keyof Omit<Config, 'typescript'>,
   {
     values: string[]
     access: '=' | 'flag' | 'cumulative'

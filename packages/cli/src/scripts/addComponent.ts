@@ -1,20 +1,22 @@
-import { confirm, intro, multiselect, outro, spinner } from '@clack/prompts'
+import { intro, multiselect, outro, spinner } from '@clack/prompts'
 import { exec } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import { promisify } from 'node:util'
 import pc from 'picocolors'
-import { promisify } from 'util'
-import { extensions as EXT, GH_API, intros } from '../lib/constants'
+import type { PackageJSON } from '../../../ui/lib/types'
+import { extensions as EXT, intros } from '../lib/constants'
+import { createGitAPI } from '../lib/git'
 import type { FrameworksKeys, ParsedArgs } from '../lib/types'
 import { SYMBOL, announce, capitalizeFirstLetter, onCancel } from '../utils/cli'
+import { getInstallCommand, replaceTypescriptAlias } from '../utils/fs'
 
 type GFile = {
-  text: () => Promise<string> | string
-  ok: boolean
-  component: string
-  framework: string
-  extension: string
+  file: string
+  content: string
+  path: string
+  dir: string
 }
 
 export const addComponent = async (parsedArgs: ParsedArgs) => {
@@ -23,39 +25,46 @@ export const addComponent = async (parsedArgs: ParsedArgs) => {
   /* ------------ Fetch available components from the cache or repo ----------- */
   const s = spinner()
   s.start('Checking available components...')
-  let availableComponentsResponse: Response = { ok: false } as Response
-  let availableComponents: { name: string }[] = []
-  if (parsedArgs.config.githubProtocol === 'api') {
-    await promisify(exec)(GH_API.api.content)
-      .then((res) => {
-        availableComponents = (JSON.parse(res.stdout) as { name: string }[]).map(({ name }) => ({ name }))
-        availableComponentsResponse = {
-          ok: true,
-        } as Response
-      })
-      .catch((err) => {
-        availableComponentsResponse = {
-          ok: false,
-        } as Response
-        availableComponents = {
-          // @ts-expect-error overriding expected type
-          message: err.message,
-        }
-      })
-  } else {
-    availableComponentsResponse = await fetch(GH_API.https.content)
-    availableComponents = (await availableComponentsResponse.json()) as { name: string }[]
-  }
-  if (!availableComponentsResponse.ok) {
-    const error = (availableComponents as unknown as { message: string }).message
-    console.error(
-      `[🤖 ${pc.cyan('@hulla/ui')}]: ${pc.red(
-        `Failed to retrieve available components. \n\n Github API returned with following message: ${error}.`
-      )}`
-    )
-    s.stop('Failed to retrieve available components. ❌')
+
+  if (parsedArgs.config.githubProtocol === undefined) {
+    s.stop('No github protocol found in config. Please check https://hulla.dev/docs/ui/config/#protocol ❌')
     process.exit(1)
   }
+
+  if (
+    parsedArgs.config.style?.util === undefined ||
+    parsedArgs.config.output === undefined ||
+    parsedArgs.config.typescript?.src === undefined ||
+    parsedArgs.config.typescript?.alias === undefined ||
+    parsedArgs.config.frameworks === undefined ||
+    parsedArgs.config.packageManager === undefined
+  ) {
+    const missingValues = [
+      parsedArgs.config.style?.util === undefined ? 'util' : '',
+      parsedArgs.config.output === undefined ? 'output' : '',
+      parsedArgs.config.typescript?.src === undefined ? 'typescript.src' : '',
+      parsedArgs.config.typescript?.alias === undefined ? 'typescript.alias' : '',
+      parsedArgs.config.frameworks === undefined ? 'frameworks' : '',
+      parsedArgs.config.packageManager === undefined ? 'packageManager' : '',
+    ].filter(Boolean)
+    console.error(
+      `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Missing required config values ${pc.underline(missingValues.join(' '))}. PLease run the initialzing command ${pc.cyan('@hulla/ui init')} again.`
+    )
+    process.exit(1)
+  }
+
+  const git = createGitAPI(parsedArgs.config.githubProtocol)
+  const gitContents = await git.listComponents()
+  if (gitContents.err) {
+    console.error(
+      `[🤖 ${pc.cyan('@hulla/ui')}]: ${pc.red(
+        `Failed to retrieve available components. \n\n Github API returned with following message: ${gitContents.err}.`
+      )}`
+    )
+    process.exit(1)
+  }
+  const availableComponents = gitContents.res
+
   s.stop('Retrieved available component library! 📚')
   /* ---------------- Parse which components user wants to add ---------------- */
   let components: string[]
@@ -86,120 +95,174 @@ export const addComponent = async (parsedArgs: ParsedArgs) => {
     })) as string[]
     onCancel(components)
   }
-  const frameworks =
-    parsedArgs.args.frameworks !== undefined
-      ? (parsedArgs.args.frameworks as string).split(',').reduce(
-          (res, framework) => ({
-            ...res,
-            [framework]:
-              (parsedArgs.config.frameworks ?? {})[framework as keyof typeof parsedArgs.config.frameworks] ??
-              EXT[framework as keyof typeof EXT],
-          }),
-          {} as Record<FrameworksKeys, string>
-        )
-      : parsedArgs.config.frameworks ?? EXT
-  const added: Record<string, GFile> = {}
-  /* -------------------- Download the generated components ------------------- */
-  for (let i = 0; i < Object.keys(frameworks).length; i++) {
-    const framework = Object.keys(frameworks)[i]
-    const extension = frameworks[framework as FrameworksKeys]
-    if (!extension) {
-      console.error(
-        `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Unsupported framework "${pc.red(framework)}" detected. Aborting operation. Supported frameworks are ${Object.keys(EXT).join(', ')}`
-      )
-      process.exit(1)
-    }
 
-    // Map over components and fetch them
-    const files: GFile[] = await Promise.all(
-      components.map((component) => {
-        // Found already a preferenced framework for this component
-        if (added[component]) {
-          return added[component]
-        }
-        // github api version
-        if (parsedArgs.config.githubProtocol === 'api') {
-          return promisify(exec)(
-            GH_API.api.raw(`${framework}/${parsedArgs.config.style?.solution}/${component}${extension}`)
-          )
-            .catch((err) => {
-              console.error(
-                `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Failed to fetch component ${component}. \n\n Github API returned with following message: ${err.message}.`
-              )
-              process.exit(1)
-            })
-            .then((res) => {
-              return {
-                ok: true,
-                text: () => res.stdout,
-                component,
-                framework: framework,
-                extension,
-              } satisfies GFile
-            })
-        }
-        // https version
-        return fetch(GH_API.https.raw(`${framework}/${parsedArgs.config.style?.solution}/${component}${extension}`))
-          .then(
-            (res) =>
-              ({
-                ok: res.ok,
-                text: () => res.text(),
-                component,
-                framework: framework,
-                extension,
-              }) satisfies GFile
-          )
-          .catch((err) => {
-            console.error(
-              `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Failed to fetch component ${component}. \n\n Github API returned with following message: ${err.message}.`
-            )
-            process.exit(1)
-          })
-      })
+  let frameworks: Record<FrameworksKeys, string>
+  const setFrameworks = (from: string[]) =>
+    from.reduce(
+      (res, framework) => ({
+        ...res,
+        [framework]:
+          (parsedArgs.config.frameworks ?? {})[framework as keyof typeof parsedArgs.config.frameworks]?.['extension'] ??
+          EXT[framework as keyof typeof EXT],
+      }),
+      {} as Record<FrameworksKeys, string>
     )
 
-    files.forEach((file) => {
-      if (!file.ok) {
-        console.error(
-          `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Failed to fetch component ${file.component} for framework ${file.framework}. \n\n Github API returned with following message: ${file.text}.`
-        )
-        process.exit(1)
-      }
-      added[file.component] = file
-    })
-  }
-
-  s.start('Adding components...')
-  /* ----------------------------- Write to files ----------------------------- */
-  for (const [component, file] of Object.entries(added)) {
-    let canWrite = true
-    if (existsSync(join(process.cwd(), parsedArgs.config.output!))) {
-      canWrite = (await confirm({
-        message: `File ${component} already exists. Are you sure you want to overwrite it? ❓`,
-      })) as boolean
-    }
-    if (!canWrite) {
-      console.info(`Skipping component ${component} ⏩`)
-      continue
-    }
-    try {
-      if (!existsSync(join(process.cwd(), parsedArgs.config.output!))) {
-        await mkdir(join(process.cwd(), parsedArgs.config.output!), { recursive: true })
-      }
-      await writeFile(
-        join(process.cwd(), parsedArgs.config.output!, `${component}${file.extension}`),
-        await file.text(),
-        { flag: 'w' }
+  if (parsedArgs.args.frameworks === undefined) {
+    // If arg not specified and only 1 framework in config, just use it
+    if (Object.keys(parsedArgs.config.frameworks ?? {}).length === 1) {
+      frameworks = setFrameworks(Object.keys(parsedArgs.config.frameworks ?? {}))
+    } else {
+      // arg not passed and multiple frameworks in config - prompt user to select
+      console.info(
+        `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  ${announce(
+          `These are the frameworks configured in your ${parsedArgs.args.config ?? '.hulla/ui.json'} file. \nIf you need to add a new one run ${pc.cyan('@hulla/ui setup frameworks')} command ${pc.italic('(or run @hulla/ui init to re-initialize the entire config)')}`
+        )}`
       )
-    } catch (err) {
+      const selectedFrameworks = (await multiselect({
+        message: 'Which frameworks would you like to install the components for?',
+        options: Object.keys(parsedArgs.config.frameworks ?? {}).map((framework) => {
+          return {
+            label: capitalizeFirstLetter(framework),
+            value: framework,
+          }
+        }),
+      })) as string[]
+      onCancel(selectedFrameworks)
+      frameworks = setFrameworks(selectedFrameworks)
+    }
+  } else {
+    // arg provided - check if it's valid and if so, use it
+    const passedFrameworks = (parsedArgs.args.frameworks as string).split(',')
+    if (passedFrameworks.some((framework) => !Object.keys(parsedArgs.config.frameworks ?? {}).includes(framework))) {
       console.error(
-        `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Failed to write component ${component} to disk. \n\n Node.js returned with following message: ${(err as Error).message}.`
+        `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Unsupported framework detected. Aborting operation. Supported frameworks are ${Object.keys(parsedArgs.config.frameworks ?? {}).join(', ')}.\nIf you need to add a new one run ${pc.cyan('@hulla/ui setup frameworks')} command ${pc.italic('(or run @hulla/ui init to re-initialize the entire config)')}`
       )
       process.exit(1)
     }
+    frameworks = setFrameworks(passedFrameworks)
   }
+  /* -------------------- Download the generated components ------------------- */
+
+  const deps = new Set<string>()
+  const devDeps = new Set<string>()
+
+  const frameworkfiles: GFile[] = await Promise.all(
+    Object.entries(frameworks).map(async ([frameworkK, extensionK]) => {
+      const framework = frameworkK as FrameworksKeys
+      const extension = extensionK as keyof typeof EXT
+      return Promise.all(
+        components.map(async (component) => {
+          const style = parsedArgs.config.style?.solution
+          if (!style) {
+            console.error(
+              `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: No style solution found in config. Aborting operation.`
+            )
+            return process.exit(1)
+          }
+
+          const gitComponents = await git.componentFiles(framework, style, component)
+          if (gitComponents.err) {
+            console.error(
+              `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Failed to fetch component ${component}. \n\n Github API returned with following message: ${gitComponents.err}.`
+            )
+            process.exit(1)
+          }
+          const componentFiles = gitComponents.res
+          if (componentFiles.some((file) => file.type === 'dir')) {
+            console.error(
+              `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Unexpected ${component} component structure. Please create a bug report with your config and exact commands. Aborting operation.`
+            )
+            process.exit(1)
+          }
+          if (!componentFiles.find((file) => file.name === 'package.json')) {
+            console.error(
+              `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Failed to fetch component ${component}. No package.json found. Please create a bug report with your ui.json config and exact commands`
+            )
+            process.exit(1)
+          }
+
+          const gitPackageJson = await git.raw<'json', PackageJSON>(framework, style, component, 'package.json', 'json')
+          if (gitPackageJson.err) {
+            console.error(
+              `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Failed to fetch component ${component}. \n\n Github API returned with following message: ${gitPackageJson.err}.`
+            )
+            process.exit(1)
+          }
+          const { dependencies, devDependencies } = gitPackageJson.res
+          for (const dep of Object.keys(dependencies ?? {})) {
+            deps.add(dep)
+          }
+          for (const devDep of Object.keys(devDependencies ?? {})) {
+            devDeps.add(devDep)
+          }
+
+          return Promise.all(
+            componentFiles
+              .filter((file) => file.name !== 'package.json')
+              .map(async (gitFile) => {
+                const file = await git.raw(framework, style, component, gitFile.name, 'text')
+                if (file.err) {
+                  console.error(
+                    `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Failed to fetch component ${component}. \n\n Github API returned with following message: ${file.err}.`
+                  )
+                  process.exit(1)
+                }
+                const dir = replaceTypescriptAlias(
+                  parsedArgs.config.typescript!.alias,
+                  parsedArgs.config.typescript!.src,
+                  join(
+                    process.cwd(),
+                    (parsedArgs.config.frameworks ?? {})[framework]?.output ?? parsedArgs.config.output!,
+                    component
+                  )
+                )
+                return {
+                  file: gitFile.name,
+                  path: join(dir, `${gitFile.name.split('.')[0]}${extension}`),
+                  dir,
+                  content: file.res.replace('@/lib/style', parsedArgs.config.style?.util ?? '@/lib/style'),
+                }
+              })
+          )
+        })
+      ).then((files) => files.flat())
+    })
+  ).then((frameworks) => frameworks.flat())
+
+  /* ----------------------------- Write to files ----------------------------- */
+  s.start('Adding components ⚡️')
+  await Promise.all(
+    frameworkfiles.map(async (file) => {
+      if (!existsSync(file.dir)) {
+        await mkdir(file.dir, { recursive: true }).catch((err) => {
+          console.error(
+            `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Failed to create directory ${file.dir}. \n\n ${err}`
+          )
+          process.exit(1)
+        })
+      }
+      return writeFile(file.path, file.content, { flag: 'w' }).catch((err) => {
+        console.error(
+          `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Failed to write to file ${file.path}. \n\n ${err}`
+        )
+        process.exit(1)
+      })
+    })
+  )
   s.stop('Added components successfully! ✅')
+  /* -------------------------- Install dependencies -------------------------- */
+  const installDeps = getInstallCommand(parsedArgs.config.packageManager, Array.from(deps), Array.from(devDeps))
+  if (installDeps.length) {
+    s.start('Installing dependencies 🤖')
+    await promisify(exec)(installDeps).catch((err) => {
+      console.error(
+        `${pc.gray(SYMBOL.bar)}\n${pc.gray(SYMBOL.end)}  [🤖 ${pc.cyan('@hulla/ui')}]: Failed to install dependencies. \n\n ${err}`
+      )
+      process.exit(1)
+    })
+    s.stop('Dependencies installed! ✅')
+  }
 
   outro(
     `Thank you for using ${pc.cyan('@hulla/ui')}. Check out ${pc.underline(pc.cyan('https://hulla.dev/docs/ui'))} for more info ❤️`
