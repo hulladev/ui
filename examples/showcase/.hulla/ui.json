@@ -8,12 +8,21 @@
   },
   "githubProtocol": "api",
   "frameworks": {
-    "astro": ".astro"
+    "astro": {
+      "extension": ".astro"
+    },
+    "react": {
+      "extension": ".react.tsx"
+    },
+    "solid": {
+      "extension": ".solid.tsx"
+    }
   },
+  "rsc": "true",
   "style": {
-    "solution": "tailwind",
     "config": "./tailwind.config.ts",
     "globals": "@/assets/globals.css",
-    "util": "@/lib/style"
+    "util": "@/lib/style",
+    "solution": "tailwind"
   }
 }
