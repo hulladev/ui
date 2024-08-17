@@ -1,5 +1,7 @@
 import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import pc from 'picocolors'
+import { extensions } from '../lib/constants'
 import type { ArgConfig, Config, ParsedArgs } from '../lib/types'
 
 const ARGS = {
@@ -28,11 +30,6 @@ const ARGS = {
     access: '=',
     variant: 'config',
   },
-  rsc: {
-    values: ['--rsc=', '-r='],
-    access: 'flag',
-    variant: 'config',
-  },
   init: {
     values: ['--init', '-i', 'init'],
     access: 'flag',
@@ -56,7 +53,7 @@ export type ResConfig = Partial<{
 
 export const parseArgs = async (args: string[]): Promise<ParsedArgs> => {
   let isInit: boolean = false
-  let config: Partial<Config> = {}
+  let config: Omit<Partial<Config>, 'frameworks'> & { frameworks?: string } = {}
   const configArgs: Partial<Record<keyof ArgConfig, string | string[]>> = {}
   const errors: Record<string, string> = {}
   let cumulative: keyof ResConfig | '' = ''
@@ -97,21 +94,48 @@ export const parseArgs = async (args: string[]): Promise<ParsedArgs> => {
   if (configArgs.init === 'true') {
     isInit = true
     // we dont care about config not loading (even if the config arg was passed) in init, since it will be overwritten
-    return { errors, config, isInit, args: configArgs }
+    return {
+      errors,
+      // @ts-expect-error typescript cant guarantee the frameworks arg is in correct format
+      config: {
+        ...config,
+        ...(config.frameworks
+          ? config.frameworks.split(',').reduce(
+              (acc, curr) => {
+                // @ts-expect-error typescript cant guarantee the frameworks arg is in correct format
+                acc[curr] = { extension: extensions[curr] }
+                return acc
+              },
+              {} as Config['frameworks']
+            )
+          : {}),
+      },
+      isInit,
+      args: configArgs,
+    }
   }
-  if (configArgs.config) {
+  // if frameworks were passed its a special scenario where we need to modify the config object
+  if (configArgs.config || configArgs.frameworks) {
     try {
-      const passedConfig = await readFile(`${process.cwd()}/${configArgs.config}`, {
+      const passedConfig = await readFile(join(process.cwd(), (configArgs.config as string) ?? '.hulla/ui.json'), {
         encoding: 'utf-8',
       })
+      const resolvedJson = JSON.parse(passedConfig)
       config = {
-        ...JSON.parse(passedConfig),
+        ...resolvedJson,
         ...config,
+        frameworks: configArgs.frameworks
+          ? (configArgs.frameworks as string).split(',').reduce((acc: Record<string, any>, curr: string) => {
+              acc[curr] = resolvedJson.frameworks[curr]
+              return acc
+            }, {})
+          : config.frameworks,
       }
     } catch {
       errors['Configuration argument'] =
         `[🤖 ${pc.cyan('@hulla/ui')}]: ${pc.red(`Could not load configuration file in ${process.cwd()}/${configArgs.config ?? '.hulla/ui.json'}. Did you provide the correct path?`)}`
     }
   }
-  return { errors, config, args: configArgs, isInit }
+  // we're fine with conversion here, since if frameworks were not passed, the type will match Config
+  return { errors, config: config as unknown as Config, args: configArgs, isInit }
 }

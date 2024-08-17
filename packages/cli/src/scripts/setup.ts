@@ -317,7 +317,15 @@ export const setup = async () => {
       tsconfig,
     },
     githubProtocol: githubProtocol as 'https' | 'api',
-    frameworks: extensions,
+    frameworks: Object.entries(extensions).reduce(
+      (acc, [framework, extension]) => ({
+        ...acc,
+        [framework]: {
+          extension,
+        },
+      }),
+      {} as Record<FrameworksKeys, { extension: string }>
+    ),
     ...(frameworks.includes('react') ? { rsc: rsc as 'true' | 'false' } : {}),
     style,
   }
