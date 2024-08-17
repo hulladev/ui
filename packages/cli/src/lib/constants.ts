@@ -35,14 +35,15 @@ export const required_config_properties = ['framework', 'output', 'style', 'conf
 export const supported_frameworks = ['react', 'react-native', 'astro', 'solid'] satisfies FrameworksKeys[]
 
 export const GH_API = {
+  availableComponents: 'repos/hulladev/ui/contents/packages/ui/src',
+  generated: 'repos/hulladev/ui/contents/generated',
   https: {
-    content: 'https://api.github.com/repos/hulladev/ui/contents/packages/ui/src',
-    raw: (path: string) => `https://raw.githubusercontent.com/hulladev/ui/master/generated/${path}`,
+    standard: 'https://api.github.com/',
+    raw: 'https://raw.githubusercontent.com/hulladev/ui/master/',
   },
   api: {
-    content: 'gh api repos/hulladev/ui/contents/packages/ui/src',
-    raw: (path: string) =>
-      `gh api repos/hulladev/ui/contents/generated/${path} --header "Accept: application/vnd.github.v3.raw"`,
+    standard: 'gh api ',
+    raw: 'gh api ',
   },
 }
 
