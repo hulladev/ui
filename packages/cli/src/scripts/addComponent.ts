@@ -189,7 +189,7 @@ export const addComponent = async (parsedArgs: ParsedArgs) => {
             )
             process.exit(1)
           }
-          const { dependencies, devDependencies } = gitPackageJson.res
+          const { dependencies, devDependencies, name: packageName } = gitPackageJson.res
           for (const dep of Object.keys(dependencies ?? {})) {
             deps.add(dep)
           }
@@ -221,7 +221,14 @@ export const addComponent = async (parsedArgs: ParsedArgs) => {
                   file: gitFile.name,
                   path: join(dir, `${gitFile.name.split('.')[0]}${extension}`),
                   dir,
-                  content: file.res.replace('@/lib/style', parsedArgs.config.style?.util ?? '@/lib/style'),
+                  // if it's an index file, replace the .framework.extension with the user defined framework extension in ui.json
+                  content: gitFile.name.includes('index')
+                    ? file.res.replaceAll(
+                        `.${packageName.split('.')[1]}`,
+                        extension.replace('.tsx', '').replace('.ts', '')
+                      )
+                    : // otherwise update the style import path for component ui exports
+                      file.res.replace('@/lib/style', parsedArgs.config.style?.util ?? '@/lib/style'),
                 }
               })
           )

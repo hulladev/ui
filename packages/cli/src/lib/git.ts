@@ -3,15 +3,15 @@ import { promisify } from 'node:util'
 import { GH_API } from './constants'
 import type { FrameworksKeys, StyleKeys } from './types'
 
-type Res<T = string, E = string> = {
+export type Res<T = string, E = string> = {
   res: T
   err: E
   protocol: Protocol
 }
 
-type Method = 'text' | 'json'
-type Protocol = 'api' | 'https'
-type GHContents = Array<{ name: string; path: string; type: 'file' | 'dir' }>
+export type Method = 'text' | 'json'
+export type Protocol = 'api' | 'https'
+export type GHContents = Array<{ name: string; path: string; type: 'file' | 'dir' }>
 
 export function apiFetch(protocol: Protocol) {
   return <T = string, E = string>(cmd: string, method: Method, headers: string = ''): Promise<Res<T, E>> => {
