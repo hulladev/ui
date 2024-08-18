@@ -22,8 +22,16 @@ export async function tsConfigSetup(opts: { path: string; src: string; alias: st
   let tsconfigRaw = ''
   // Check if tsconfig exists
   if (existsSync(path)) {
-    tsconfigRaw = await readFile(path, 'utf-8')
-    const tsconfig = JSON.parse(tsconfigRaw)
+    tsconfigRaw = await readFile(path, { encoding: 'utf-8' }).then((res) => res.toString())
+    let tsconfig
+    try {
+      tsconfig = JSON.parse(tsconfigRaw)
+    } catch (error) {
+      console.error(
+        `${path} is not a valid JSON file. JSON.Parse Failed with following error: ${(error as Error).message}`
+      )
+      process.exit(1)
+    }
     // If compilerOptions exists just add the paths
     if (tsconfig.compilerOptions) {
       if (!tsconfig.compilerOptions.paths) {
