@@ -9,7 +9,14 @@ import pc from 'picocolors'
 import { extensions as EXT, supported_frameworks } from '../lib/constants'
 import type { Config, FrameworksKeys, PackageManagers, StyleKeys } from '../lib/types'
 import { SYMBOL, announce, capitalizeFirstLetter, onCancel, propose } from '../utils/cli'
-import { attemptFile, cycleExtension, extractDeps, getMajorVersion, getSetupInstallCommand } from '../utils/fs'
+import {
+  attemptFile,
+  cycleExtension,
+  extractDeps,
+  getMajorVersion,
+  getSetupInstallCommand,
+  replaceTypescriptAlias,
+} from '../utils/fs'
 import { keys } from '../utils/objects'
 
 export const setup = async () => {
@@ -384,13 +391,16 @@ export const { cn, vn } = style()
     { flag: 'w' }
   )
   if (style.solution === 'tailwind') {
-    const twCodemod = await tailwindSetup({ path: style.config, protocol: githubProtocol as 'api' | 'https' })
+    const twCodemod = await tailwindSetup({
+      path: replaceTypescriptAlias(configFile.typescript.alias, configFile.typescript.src, style.config),
+      protocol: githubProtocol as 'api' | 'https',
+    })
     s.message(`Creating your ${style.config} file`)
     if (twCodemod.hasChanges) {
       await propose(twCodemod)
     }
     const twGlobalsCodemod = await tailwindGlobalsSetup({
-      path: style.globals,
+      path: replaceTypescriptAlias(configFile.typescript.alias, configFile.typescript.src, style.globals),
       protocol: githubProtocol as 'api' | 'https',
     })
     s.message(`Creating your ${style.globals} file`)
