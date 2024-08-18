@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-bg text-fg dark:bg-bgdark dark:text-fgdark;
+  }
+
+  .description {
+    @apply text-sm text-fg/70 dark:text-fgdark/70;
+  }
+}
