@@ -1,0 +1,26 @@
+{
+  "name": "solid",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "ui:add": "pnpm exec cli add",
+    "ui:init": "pnpm exec cli init"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "cli": "workspace:*",
+    "solid-devtools": "^0.29.2",
+    "tailwindcss": "^3.4.6",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.11",
+    "vite-plugin-solid": "^2.8.2"
+  },
+  "dependencies": {
+    "@hulla/style": "^0.1.0",
+    "solid-js": "^1.8.11"
+  }
+}

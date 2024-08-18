@@ -1,0 +1,21 @@
+{
+  "output": "@/components",
+  "packageManager": "pnpm",
+  "typescript": {
+    "src": "./src/",
+    "alias": "@/",
+    "tsconfig": "./tsconfig.json"
+  },
+  "githubProtocol": "api",
+  "frameworks": {
+    "solid": {
+      "extension": ".tsx"
+    }
+  },
+  "style": {
+    "config": "./tailwind.config.ts",
+    "globals": "@/assets/globals.css",
+    "util": "@/lib/style",
+    "solution": "tailwind"
+  }
+}
