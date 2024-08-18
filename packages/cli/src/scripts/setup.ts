@@ -1,5 +1,5 @@
 import { confirm, group, intro, multiselect, outro, select, spinner, text, type PromptGroup } from '@clack/prompts'
-import { tailwindSetup, tsConfigSetup } from 'codemods'
+import { tailwindGlobalsSetup, tailwindSetup, tsConfigSetup } from 'codemods'
 import { exec, type ExecException } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { access, constants as fsConstants, mkdir, writeFile } from 'node:fs/promises'
@@ -388,6 +388,14 @@ export const { cn, vn } = style()
     s.message(`Creating your ${style.config} file`)
     if (twCodemod.hasChanges) {
       await propose(twCodemod)
+    }
+    const twGlobalsCodemod = await tailwindGlobalsSetup({
+      path: style.globals,
+      protocol: githubProtocol as 'api' | 'https',
+    })
+    s.message(`Creating your ${style.globals} file`)
+    if (twGlobalsCodemod.hasChanges) {
+      await propose(twGlobalsCodemod)
     }
   }
   s.stop(`Finished setting up configuration! 🎉`)
