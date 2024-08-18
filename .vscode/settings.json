@@ -10,7 +10,8 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "tailwindCSS.experimental.configFile": {
-    "examples/showcase/tailwind.config.ts": "examples/showcase/**",
+    "examples/astro/tailwind.config.ts": "examples/astro/**",
+    "examples/solid/tailwind.config.ts": "examples/solid/**",
     "packages/ui/tailwind.config.ts": "packages/ui/**"
   },
   "tailwindCSS.experimental.classRegex": [["(?:vn|cn)\\(([^\\);]*)[\\);]", "[`'\"]([^'\"`,;]*)[`'\"]"]]

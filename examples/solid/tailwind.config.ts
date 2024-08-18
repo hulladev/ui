@@ -27,7 +27,7 @@ export const colors = {
 }
 
 export default {
-  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}', './index.html'],
   darkMode: 'class',
   theme: {
     colors,

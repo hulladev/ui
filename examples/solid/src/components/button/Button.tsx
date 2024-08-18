@@ -1,4 +1,3 @@
-/** @jsxImportSource solid-js **/
 import { vn } from '@/lib/style'
 import type { VariantProps } from '@hulla/style'
 import type { ParentProps } from 'solid-js'
