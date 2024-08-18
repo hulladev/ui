@@ -64,9 +64,7 @@ type ChangedFile = {
 async function getChangedFiles(): Promise<ChangedFile[]> {
   let changedFiles: ChangedFile[] = []
   try {
-    const { stdout, stderr } = await execPromise('git status --porcelain | grep packages/ui/src')
-
-    console.log({ stderr })
+    const { stdout } = await execPromise('git status --porcelain | grep packages/ui/src')
 
     changedFiles = stdout
       .split('\n')
@@ -209,7 +207,6 @@ async function generateFromPath(dirPath: string) {
                 )
 
                 const regex = new RegExp(`\\b${styleImport}\\b`)
-                console.debug({ cssLines, styleImportStart, styleImportEnd, styleValue })
                 lines[styleDeclarationLineIndex] = lines[styleDeclarationLineIndex].replace(regex, styleValue)
               }
               return {
