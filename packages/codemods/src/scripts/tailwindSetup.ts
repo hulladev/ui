@@ -14,12 +14,12 @@ export async function tailwindSetup(opts: { path: string; protocol: Protocol }):
   const gitTw =
     protocol === 'api'
       ? await apiFetch(protocol)(
-          `gh api repos/hulladev/ui/contents/packages/ui/tailwind.config.base.ts`,
+          `gh api repos/hulladev/ui/contents/packages/ui/downloads/tailwind/config.ts`,
           'text',
           '-H "Accept: application/vnd.github.v3.raw"'
         )
       : await httpsFetch(protocol)(
-          'https://raw.githubusercontent.com/hulladev/ui/master/packages/ui/tailwind.config.base.ts',
+          'https://raw.githubusercontent.com/hulladev/ui/master/packages/ui/downloads/tailwind/config.ts',
           'text',
           { headers: { Accept: 'application/vnd.github.v3.raw' } }
         )
