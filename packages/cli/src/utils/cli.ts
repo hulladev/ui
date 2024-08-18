@@ -69,8 +69,8 @@ export async function propose(
   if (!codemod.hasChanges) {
     return
   }
-  const write = await confirm({ message: title })
   console.log(box(codemod.lines.map(renderLineStatus).join('\n')))
+  const write = await confirm({ message: title })
   const s = spinner()
   s.start(`Applying changes to ${pc.underline(codemod.path)} ✨`)
   if (write) {

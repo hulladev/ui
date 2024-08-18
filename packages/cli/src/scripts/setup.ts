@@ -1,5 +1,5 @@
 import { confirm, group, intro, multiselect, outro, select, spinner, text, type PromptGroup } from '@clack/prompts'
-import { tsConfigSetup } from 'codemods'
+import { tailwindSetup, tsConfigSetup } from 'codemods'
 import { exec, type ExecException } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { access, constants as fsConstants, mkdir, writeFile } from 'node:fs/promises'
@@ -340,7 +340,7 @@ export const setup = async () => {
       placeholder: `${defaultCommand}`,
     })) ?? defaultCommand) as string
     onCancel(command)
-    s.start(`Installing dependencies... 🔧`)
+    s.start(`Installing dependencies 🔧`)
     let didFail = false
     await promisify(exec)(command).catch((err: ExecException) => {
       didFail = true
@@ -356,10 +356,20 @@ export const setup = async () => {
   }
 
   /* --------------------------- Create config file --------------------------- */
-  s.start(`Creating necessary files... 📁`)
-  s.message(`Creating your configuration file in ${pc.bgCyan(path)}`)
-  await writeFile(`${process.cwd()}/${path}`, JSON.stringify(configFile, null, 2))
-  s.message(`Creating your style util file in ${pc.bgCyan(style.util)}`)
+  s.start(`Creating necessary files 📁`)
+  s.message(`Creating your configuration file in ${pc.cyan(path)}`)
+  try {
+    if (!existsSync(join(process.cwd(), path))) {
+      await mkdir(join(process.cwd(), path).split('/').slice(0, -1).join('/'), { recursive: true })
+    }
+    await writeFile(join(process.cwd(), path), JSON.stringify(configFile, null, 2), { flag: 'w' })
+  } catch (error) {
+    console.error(
+      `${pc.gray(`\n|\n${SYMBOL.end}`)}  ${announce(`Error creating configuration file! Got the following error: ${(error as Error).message} Please check your path and try again ⚠️`)}`
+    )
+    process.exit(1)
+  }
+  s.message(`Creating your style util file in ${pc.cyan(style.util)}`)
   const stylePath = join(process.cwd(), style.util.replace(alias, src))
   if (!existsSync(stylePath)) {
     await mkdir(stylePath.split('/').slice(0, -1).join('/'), { recursive: true })
@@ -373,6 +383,13 @@ export const { cn, vn } = style()
 `,
     { flag: 'w' }
   )
+  if (style.solution === 'tailwind') {
+    const twCodemod = await tailwindSetup({ path: style.config, protocol: githubProtocol as 'api' | 'https' })
+    s.message(`Creating your ${style.config} file`)
+    if (twCodemod.hasChanges) {
+      await propose(twCodemod)
+    }
+  }
   s.stop(`Finished setting up configuration! 🎉`)
   outro(
     `Thank you for using ${pc.cyan('@hulla/ui')} ❤️\n\n Run the command again to add components or check out ${pc.underline(pc.cyan('https://hulla.dev/docs/ui'))} for more info `

@@ -1,8 +1,9 @@
 {
-  "name": "@hulla/ui",
+  "name": "cli",
+  "private": true,
   "description": "Multi-platform low-code UI generator 🤖",
-  "bin": "dist/bin.js",
   "type": "module",
+  "bin": "./dist/bin/index.js",
   "scripts": {
     "lint": "eslint --ext .ts --fix .",
     "build": "bunchee -m",
