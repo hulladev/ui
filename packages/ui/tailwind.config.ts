@@ -1,6 +1,6 @@
 import forms from '@tailwindcss/forms'
 import type { Config } from 'tailwindcss'
-import tw from './tailwind.config.base'
+import tw from './downloads/tailwind/config'
 
 export default {
   ...tw,
