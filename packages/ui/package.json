@@ -2,7 +2,8 @@
   "name": "ui",
   "private": true,
   "scripts": {
-    "build": "pnpm exec generator"
+    "build": "pnpm exec generator",
+    "dev": "bunchee -m -w"
   },
   "devDependencies": {
     "@hulla/style": "^0.1.0",
