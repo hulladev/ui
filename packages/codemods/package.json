@@ -4,7 +4,9 @@
   "scripts": {
     "build": "bunchee -m"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "import": {
@@ -16,5 +18,8 @@
         "default": "./dist/index.js"
       }
     }
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12"
   }
 }

@@ -2,7 +2,8 @@
   "name": "generator",
   "private": true,
   "scripts": {
-    "build": "bunchee -m"
+    "build": "bunchee -m",
+    "dev": "bunchee -m -w"
   },
   "bin": "./dist/bin/index.js",
   "exports": {
