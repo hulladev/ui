@@ -5,8 +5,8 @@ import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { promisify } from 'node:util'
 import * as pc from 'picocolors'
-import type { PackageJSON } from '../lib/types'
-import { uniqBy } from '../lib/utils'
+import type { PackageJSON } from '../types'
+import { extractContentFromClosure, extractImports, findClosure, uniqBy } from '../utils'
 
 const execPromise = promisify(exec)
 
@@ -28,6 +28,12 @@ async function main() {
     updatedComponents = await generate()
   } else {
     const changedFiles = uniqBy(await getChangedFiles(), 'component')
+    if (changedFiles.length === 0) {
+      s.stop(
+        `[${pc.cyan('@hulla/ui 🤖')}] No new files to generate! ⚡️\n  Only changes  inside ui/src trigger generation. Or run with a ${pc.cyan('--clean')} flag`
+      )
+      return
+    }
     const updateDirs = changedFiles.map((file) => {
       const path = join(process.cwd(), 'src', file.component)
       if (!existsSync(path)) {
@@ -58,7 +64,9 @@ type ChangedFile = {
 async function getChangedFiles(): Promise<ChangedFile[]> {
   let changedFiles: ChangedFile[] = []
   try {
-    const { stdout } = await execPromise('git status --porcelain | grep packages/ui/src')
+    const { stdout, stderr } = await execPromise('git status --porcelain | grep packages/ui/src')
+
+    console.log({ stderr })
 
     changedFiles = stdout
       .split('\n')
@@ -71,6 +79,9 @@ async function getChangedFiles(): Promise<ChangedFile[]> {
           }) satisfies ChangedFile
       )
   } catch (error) {
+    if (error.message === 'Command failed: git status --porcelain | grep packages/ui/src\n') {
+      return []
+    }
     console.error(`Error: ${error instanceof Error ? error.message : String(error)}`)
   }
   return changedFiles
@@ -237,80 +248,6 @@ async function generateFromPath(dirPath: string) {
       )
     })
   )
-}
-
-/**
- * Extracts the imports for any import statements
- * @param importStatement String of the import statement
- * @returns Array of imports
- * @example extractImports("import { vn, cn } from '@/lib/style'") => ['vn', 'cn']
- */
-function extractImports(importStatement: string): string[] {
-  const importRegex = /import\s*{([^}]+)}\s*from\s*['"][^'"]+['"]/
-  const match = importStatement.match(importRegex)
-  if (match && match[1]) {
-    return match[1].split(',').map((item) => item.trim())
-  }
-  return []
-}
-
-/**
- * Finds the closure of a given code block.
- * @param lines array of lines
- * @param start start index
- * @returns closure end index
- */
-function findClosure(lines: string[], start: number) {
-  const bracketStack = {
-    '{': 0,
-    '(': 0,
-  }
-  for (let i = start; i < lines.length; i++) {
-    const line = lines[i]
-    for (const char of line) {
-      if (char === '{') {
-        bracketStack['{'] += 1
-      }
-      if (char === '}') {
-        bracketStack['{'] -= 1
-      }
-      if (char === '(') {
-        bracketStack['('] += 1
-      }
-      if (char === ')') {
-        bracketStack['('] -= 1
-      }
-    }
-    if (bracketStack['{'] === 0 && bracketStack['('] === 0) {
-      return i
-    }
-  }
-  throw new Error('No closure found')
-}
-
-/**
- * Extracts the content between the outermost parentheses of a given string.
- * @param str - The input string containing content within parentheses.
- * @returns The extracted content between the outermost parentheses.
- * @throws {Error} If the input string is missing opening or closing parentheses.
- */
-function extractContentFromClosure(str: string): string {
-  // Find the index of the first opening parenthesis
-  const openParenIndex: number = str.indexOf('(')
-
-  // Find the index of the last closing parenthesis
-  const closeParenIndex: number = str.lastIndexOf(')')
-
-  // Check if both parentheses are found
-  if (openParenIndex === -1 || closeParenIndex === -1) {
-    throw new Error('Invalid input: missing parentheses')
-  }
-
-  // Extract the content between the parentheses
-  const content: string = str.substring(openParenIndex + 1, closeParenIndex)
-
-  // Remove any leading or trailing whitespace
-  return content.trim()
 }
 
 // This line runs the program: ▷

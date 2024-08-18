@@ -2,10 +2,7 @@
   "name": "ui",
   "private": true,
   "scripts": {
-    "dev": "node scripts/generate.js",
-    "generate:ui": "pnpm run build && node scripts/generate.js",
-    "generate:clean": "pnpm run build && node scripts/generate.js --clean",
-    "build": "tsc scripts/generate.ts"
+    "build": "pnpm exec generator"
   },
   "devDependencies": {
     "@hulla/style": "^0.1.0",
@@ -14,6 +11,7 @@
     "@types/react": "^18.3.3"
   },
   "dependencies": {
+    "generator": "workspace:*",
     "@astrojs/ts-plugin": "^1.9.0",
     "@clack/prompts": "^0.7.0",
     "astro": "^4.12.2",
