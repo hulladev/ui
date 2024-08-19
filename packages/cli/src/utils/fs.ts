@@ -75,6 +75,8 @@ export function getSetupInstallCommand(config: Config, detectedDependencies: Par
   deps.push('@hulla/style')
   if (config.style.solution.includes('tailwind')) {
     devDeps.push('tailwindcss')
+    devDeps.push('autoprefixer')
+    devDeps.push('postcss')
     if (Object.keys(config.frameworks).includes('react-native')) {
       deps.push('nativewind')
     }
