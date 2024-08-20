@@ -1,6 +1,6 @@
-import { apiFetch, httpsFetch, type Protocol } from '@/packages/cli/src/lib/git'
 import { existsSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
+import { apiFetch, httpsFetch, type Protocol } from '../../../cli/src/lib/git'
 import { createChanges } from '../changes'
 import type { Codemod } from '../types'
 
@@ -45,6 +45,8 @@ export async function postcssSetup(opts: { path: string; protocol: Protocol }): 
         .replace(/module\.exports\s*=\s*/, '') // Remove module.exports assignment
         .replace(/(\w+):/g, '"$1":') // Add quotes around keys
         .replace(/'/g, '"') // Replace single quotes with double quotes
+        .replace(/,\s*}/g, '}') // Remove trailing commas before closing braces
+        .replace(/,\s*]/g, ']') // Remove trailing commas before closing brackets
 
     try {
       const userConfigJson = JSON.parse(jsonString(userPostcssConfig))
@@ -63,7 +65,8 @@ export async function postcssSetup(opts: { path: string; protocol: Protocol }): 
       const mergedConfigString = `module.exports = ${JSON.stringify(mergedConfig, null, 2)};`
 
       // Replace the content inside module.exports = {} with mergedConfigString
-      postcssConfig = userPostcssConfig.replace(/module\.exports\s*=\s*{[\s\S]*?};/, mergedConfigString)
+      const [beforeModuleExports, afterModuleExports] = userPostcssConfig.split(/module\.exports\s*=\s*{[\s\S]*?}/)
+      postcssConfig = `${beforeModuleExports ?? ''} ${mergedConfigString} ${afterModuleExports ?? ''}`
       const lines = await createChanges(userPostcssConfig, postcssConfig)
       return {
         ...codemod,
