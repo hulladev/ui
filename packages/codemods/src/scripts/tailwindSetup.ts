@@ -1,6 +1,6 @@
-import { apiFetch, httpsFetch, type Protocol } from '@/packages/cli/src/lib/git'
 import { existsSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
+import { apiFetch, httpsFetch, type Protocol } from '../../../cli/src/lib/git'
 import { createChanges } from '../changes'
 import type { Codemod } from '../types'
 
