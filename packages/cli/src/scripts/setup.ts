@@ -1,5 +1,5 @@
 import { confirm, group, intro, multiselect, outro, select, spinner, text, type PromptGroup } from '@clack/prompts'
-import { tailwindGlobalsSetup, tailwindSetup, tsConfigSetup } from 'codemods'
+import { postcssSetup, tailwindGlobalsSetup, tailwindSetup, tsConfigSetup } from 'codemods'
 import { exec, type ExecException } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { access, constants as fsConstants, mkdir, writeFile } from 'node:fs/promises'
@@ -364,7 +364,6 @@ export const setup = async () => {
 
   /* --------------------------- Create config file --------------------------- */
   s.start(`Creating necessary files 📁`)
-  s.message(`Creating your configuration file in ${pc.cyan(path)}`)
   try {
     if (!existsSync(join(process.cwd(), path))) {
       await mkdir(join(process.cwd(), path).split('/').slice(0, -1).join('/'), { recursive: true })
@@ -376,7 +375,6 @@ export const setup = async () => {
     )
     process.exit(1)
   }
-  s.message(`Creating your style util file in ${pc.cyan(style.util)}`)
   const stylePath = join(process.cwd(), style.util.replace(alias, src))
   if (!existsSync(stylePath)) {
     await mkdir(stylePath.split('/').slice(0, -1).join('/'), { recursive: true })
@@ -395,7 +393,6 @@ export const { cn, vn } = style()
       path: replaceTypescriptAlias(configFile.typescript.alias, configFile.typescript.src, style.config),
       protocol: githubProtocol as 'api' | 'https',
     })
-    s.message(`Creating your ${style.config} file`)
     if (twCodemod.hasChanges) {
       await propose(twCodemod)
     }
@@ -403,9 +400,15 @@ export const { cn, vn } = style()
       path: replaceTypescriptAlias(configFile.typescript.alias, configFile.typescript.src, style.globals),
       protocol: githubProtocol as 'api' | 'https',
     })
-    s.message(`Creating your ${style.globals} file`)
     if (twGlobalsCodemod.hasChanges) {
       await propose(twGlobalsCodemod)
+    }
+    const postcssCodemod = await postcssSetup({
+      path: './postcss.config.js',
+      protocol: githubProtocol as 'api' | 'https',
+    })
+    if (postcssCodemod.hasChanges) {
+      await propose(postcssCodemod)
     }
   }
   s.stop(`Finished setting up configuration! 🎉`)

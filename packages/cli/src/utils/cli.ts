@@ -1,4 +1,4 @@
-import { cancel, confirm, isCancel, spinner } from '@clack/prompts'
+import { cancel, confirm, isCancel } from '@clack/prompts'
 import isUnicodeSupported from 'is-unicode-supported'
 import pc from 'picocolors'
 import type { Codemod, Line } from '../../../codemods/src/types'
@@ -71,10 +71,13 @@ export async function propose(
   }
   console.log(box(codemod.lines.map(renderLineStatus).join('\n')))
   const write = await confirm({ message: title })
-  const s = spinner()
-  s.start(`Applying changes to ${pc.underline(codemod.path)} ✨`)
+  onCancel(write)
   if (write) {
     await codemod.run()
+    announce(`Changes made to ${pc.underline(codemod.path)} ✅`)
+  } else {
+    announce(
+      `If for whatever reason you did not like the proposed changes, please do them manually for the package to work properly. See the manual installation docs at: ${pc.cyan('https://hulla.dev/docs/ui/installation#manual-installation')}`
+    )
   }
-  s.stop(`Changes applied ${pc.underline(codemod.path)} ✅`)
 }
