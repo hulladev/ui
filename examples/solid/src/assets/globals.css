@@ -10,8 +10,4 @@
   .description {
     @apply text-sm text-fg/70 dark:text-fgdark/70;
   }
-
-  p {
-    color: red;
-  }
 }
