@@ -7,6 +7,11 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
+    "build:package": {
+      "dependsOn": ["^build"],
+      "outputs": ["package.json"],
+      "inputs": ["./packages/**"]
+    },
     "watch": {
       "dependsOn": ["^watch"],
       "outputs": [".next/**", "!.next/cache/**"],
@@ -19,17 +24,6 @@
     "dev": {
       "cache": false,
       "persistent": true
-    },
-    "generate:ui": {
-      "outputs": ["scripts/generate.js", "../../generated"],
-      "inputs": ["scripts/generate.ts", "src"],
-      "cache": false
-    },
-    "generate:clean": {
-      "dependsOn": ["^generate:ui"],
-      "inputs": ["scripts/generate.ts", "src"],
-      "outputs": ["scripts/generate.js"],
-      "cache": false
     }
   }
 }
