@@ -68,7 +68,7 @@ export const addComponent = async (parsedArgs: ParsedArgs) => {
   s.stop('Retrieved available component library! 📚')
   /* ---------------- Parse which components user wants to add ---------------- */
   let components: string[]
-  if (parsedArgs.args.add) {
+  if (parsedArgs.args.add?.length) {
     for (const component of parsedArgs.args.add) {
       if (!availableComponents.find(({ name }) => name === component)) {
         console.error(
@@ -269,6 +269,12 @@ export const addComponent = async (parsedArgs: ParsedArgs) => {
       process.exit(1)
     })
     s.stop('Dependencies installed! ✅')
+  }
+
+  if (parsedArgs.config.scripts?.add) {
+    s.start(`Running add script with following command: ${pc.gray(parsedArgs.config.scripts.add)} 🤖`)
+    await promisify(exec)(parsedArgs.config.scripts.add)
+    s.stop(`Post add script ran successfully with following command: ${pc.gray(parsedArgs.config.scripts.add)} ✅`)
   }
 
   outro(

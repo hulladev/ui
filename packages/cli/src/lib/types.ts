@@ -16,6 +16,10 @@ export type Config = {
   output: string
   packageManager: PackageManagers
   githubProtocol: 'https' | 'api'
+  scripts?: {
+    add?: string
+    setup?: string
+  }
   frameworks: Record<FrameworksKeys, Pick<Partial<Config>, 'output'> & { extension: string; rsc?: 'true' | 'false' }>
 }
 
