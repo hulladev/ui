@@ -1,0 +1,15 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { cn } from '@/lib/style'
+
+export type MenuItemProps = HTMLAttributes<'li'> & {
+  active?: boolean
+  nested?: boolean
+}
+
+const props = Astro.props as MenuItemProps
+---
+
+<li {...props} data-active={props.active} data-nested={props.nested} class={cn('hover:bg-fg/10 dark:hover:bg-fgdark/20 py-sm px-md text-fg/80 hover:text-fg dark:text-fgdark/80 dark:hover:text-fgdark data-[active]:bg-primary/20 data-[active]:text-primary dark:data-[active]:text-primary data-[active]:hover:bg-primary/30 dark:data-[active]:hover:bg-primary/30 w-full cursor-pointer rounded-md text-sm transition-colors active:animate-pulse active:duration-150 data-[nested]:py-0 data-[nested]:hover:bg-transparent dark:data-[nested]:hover:bg-transparent', props.class)}>
+  <slot />
+</li>
