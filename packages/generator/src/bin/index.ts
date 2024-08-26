@@ -195,11 +195,21 @@ async function generateFromPath(dirPath: string) {
               for (const styleImport of styleImports) {
                 const styleImportStart = cssLines.findIndex((line) => line.includes(`export const ${styleImport}`))
                 const styleImportEnd = findClosure(cssLines, styleImportStart)
-                const styleDeclarationLineIndex = lines.findIndex(
+                let styleDeclarationLineIndex = lines.findIndex(
                   (line) => line.includes(`cn(${styleImport}`) || line.includes(`vn(${styleImport}`)
                 )
                 if (styleDeclarationLineIndex === -1) {
-                  throw new Error(`No style declaration found in ${filePath}`)
+                  // No declaration found, check for newline declaration
+                  const nlIndex = lines.findIndex((line) => line.includes(styleImport) || line.includes(styleImport))
+                  if (nlIndex === -1) {
+                    throw new Error(`No style declaration found in ${filePath}`)
+                  }
+                  const prevLine = lines[nlIndex - 1]
+                  if (prevLine.includes('cn(') || prevLine.includes('vn(')) {
+                    styleDeclarationLineIndex = nlIndex
+                  } else {
+                    throw new Error(`No style declaration found in ${filePath}`)
+                  }
                 }
 
                 const styleValue = extractContentFromClosure(
