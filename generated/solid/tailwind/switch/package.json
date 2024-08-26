@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../schema.json",
+  "name": "switch.solid",
+  "extension": ".tsx",
+  "private": true
+}

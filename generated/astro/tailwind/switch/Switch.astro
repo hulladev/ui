@@ -1,0 +1,26 @@
+---
+import { cn } from '@/lib/style'
+import type { HTMLAttributes } from 'astro/types'
+
+export type SwitchProps = HTMLAttributes<'button'> & {
+  checked?: boolean
+}
+
+const props = Astro.props as SwitchProps
+---
+
+<button
+  type="button"
+  aria-checked={props.checked}
+  {...props}
+  class={cn(
+    'min-w-xl group relative inline-flex h-[1.25rem] flex-shrink-0 cursor-pointer rounded-full border-2 transition-colors duration-200 ease-in-out',
+  'dark:border-fgdark/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-55 disabled:opacity-70',
+    props.checked ? 'bg-primary hover:bg-primary/80 border-primary/20' : 'bg-fg/70 hover:bg-fg/60 border-fg/20'
+  )}
+>
+  <span class={cn('bg-bg shadow-shadow dark:bg-fgdark pointer-events-none flex h-[1.4rem] w-[1.4rem] -translate-y-1 transform items-center justify-center rounded-full leading-none shadow-inner ring-0 drop-shadow-lg transition-all duration-200 ease-in-out', props.checked ? 'translate-x-lg' : '-translate-x-1')}>
+    <slot />
+  </span>
+  <span class="sr-only">{props.checked ? 'On' : 'Off'}</span>
+</button>
