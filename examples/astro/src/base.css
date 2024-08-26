@@ -8,7 +8,7 @@
   }
 
   .description {
-    @apply text-sm text-fg/70 dark:text-fgdark/70;
+    @apply text-fg/70 dark:text-fgdark/70 text-sm;
   }
 
   .shiki {
@@ -16,19 +16,19 @@
   }
 
   .shiki .line {
-    @apply relative px-md ring-inset inline-block w-full bg-gradient-to-r to-transparent before:text-xs before:absolute before:left-1 before:top-px before:font-bold;
+    @apply px-md relative inline-block w-full bg-gradient-to-r to-transparent ring-inset before:absolute before:left-1 before:top-px before:text-xs before:font-bold;
   }
 
   .shiki .line.highlighted {
-    @apply  from-primary/60 before:content-["⇢"] before:text-primary;
+    @apply from-primary/60 before:text-primary before:content-["⇢"];
   }
 
   .shiki .line.diff.add {
-    @apply from-success/60 before:content-["+"] before:text-success;
+    @apply from-success/60 before:text-success before:content-["+"];
   }
 
   .shiki .line.diff.remove {
-    @apply from-error/60 before:content-["-"] before:text-error;
+    @apply from-error/60 before:text-error before:content-["-"];
   }
 
   code#file + .shiki {

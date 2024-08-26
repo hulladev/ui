@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Switch } from './ui/switch.tsx'
+import { Switch } from './switch/Switch.react'
 
 export function ChangeTheme() {
   const [checked, setChecked] = useState(false)

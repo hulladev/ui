@@ -1,11 +1,11 @@
 import { cn } from '@/lib/style'
 import type { ButtonHTMLAttributes, DetailedHTMLProps } from 'react'
 
-export type Props = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> & {
+export type SwitchProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> & {
   checked?: boolean
 }
 
-export function Switch({ children, checked, ...props }: Props) {
+export function Switch({ children, checked, ...props }: SwitchProps) {
   return (
     <button
       {...props}
@@ -16,7 +16,6 @@ export function Switch({ children, checked, ...props }: Props) {
         'dark:border-fgdark/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-55 disabled:opacity-70',
         checked ? 'bg-primary hover:bg-primary/80 border-primary/20' : 'bg-fg/70 hover:bg-fg/60 border-fg/20'
       )}
-      aria-label="Toggle switch"
     >
       <span
         className={cn(
