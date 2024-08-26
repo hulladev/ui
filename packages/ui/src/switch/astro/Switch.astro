@@ -1,0 +1,26 @@
+---
+import { cn } from '@/lib/style'
+import type { HTMLAttributes } from 'astro/types'
+import { switchCn, switchFace } from '../style/tailwind.switch'
+
+export type SwitchProps = HTMLAttributes<'button'> & {
+  checked?: boolean
+}
+
+const props = Astro.props as SwitchProps
+---
+
+<button
+  type="button"
+  aria-checked={props.checked}
+  {...props}
+  class={cn(
+    switchCn,
+    props.checked ? 'bg-primary hover:bg-primary/80 border-primary/20' : 'bg-fg/70 hover:bg-fg/60 border-fg/20'
+  )}
+>
+  <span class={cn(switchFace, props.checked ? 'translate-x-lg' : '-translate-x-1')}>
+    <slot />
+  </span>
+  <span class="sr-only">{props.checked ? 'On' : 'Off'}</span>
+</button>

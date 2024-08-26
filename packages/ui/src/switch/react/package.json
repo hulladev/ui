@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../schema.json",
+  "name": "switch.react",
+  "extension": ".tsx",
+  "private": true
+}
