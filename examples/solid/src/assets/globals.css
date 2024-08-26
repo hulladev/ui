@@ -8,6 +8,6 @@
   }
 
   .description {
-    @apply text-sm text-fg/70 dark:text-fgdark/70;
+    @apply text-fg/70 dark:text-fgdark/70 text-sm;
   }
 }

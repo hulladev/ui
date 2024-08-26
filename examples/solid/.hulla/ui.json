@@ -17,5 +17,8 @@
     "globals": "@/assets/globals.css",
     "util": "@/lib/style",
     "solution": "tailwind"
+  },
+  "scripts": {
+    "add": "pnpm run format"
   }
 }

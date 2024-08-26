@@ -1,5 +1,6 @@
 {
   "name": "solid",
+  "private": true,
   "version": "0.0.0",
   "description": "",
   "scripts": {
@@ -7,13 +8,14 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
+    "format": "prettier --write .",
     "ui:add": "pnpm exec cli add",
     "ui:init": "pnpm exec cli init"
   },
   "license": "MIT",
   "devDependencies": {
     "autoprefixer": "^10.4.20",
-    "cli": "workspace:*",
+    "@hulla/ui": "workspace:*",
     "postcss": "^8.4.41",
     "solid-devtools": "^0.29.2",
     "tailwindcss": "^3.4.6",
