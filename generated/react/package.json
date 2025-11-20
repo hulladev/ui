@@ -1,0 +1,12 @@
+{
+  "name": "@hulla/ui-react",
+  "private": true,
+  "dependencies": {
+    "@hulla/style": "^0.2.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

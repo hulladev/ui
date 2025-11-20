@@ -1,0 +1,10 @@
+{
+  "name": "@hulla/ui-vue",
+  "private": true,
+  "dependencies": {
+    "@hulla/style": "^0.2.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
