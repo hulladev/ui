@@ -1,9 +1,10 @@
 import { constants, existsSync } from "node:fs"
-import { access, mkdir, readdir } from "node:fs/promises"
-import { join } from "node:path"
+import { access, copyFile, mkdir, readdir } from "node:fs/promises"
+import { dirname, join } from "node:path"
 import { cwd } from "node:process"
 import { generateComponent } from "./helpers/generateComponent"
 import { generateFrameworkPackageJson } from "./helpers/generateFrameworkPackageJson"
+import { generateFrameworkTsconfig } from "./helpers/generateFrameworkTsconfig"
 import { Config, Frameworks } from "./types.public"
 import { entries } from "./utils/objects"
 
@@ -68,6 +69,53 @@ export async function build<const F extends Frameworks>(config: Config<F>): Prom
     })
   )
 
+  // Copy shared and framework-specific files
+  if (config.copyFiles) {
+    console.info(`\n[🤖 @hulla/ui]: copying shared files`)
+    await Promise.all(
+      entries(config.outputDirs).map(async ([framework, outputDir]) => {
+        const frameworkOutputPath = join(basepath, outputDir)
+
+        // Get shared and framework-specific files to copy
+        const sharedFiles = config.copyFiles?.shared ?? []
+        const frameworkFiles = config.copyFiles?.[framework] ?? []
+        const allFilesToCopy = [...sharedFiles, ...frameworkFiles]
+
+        if (allFilesToCopy.length === 0) return
+
+        // Get the source directory from input dirs
+        const inputPaths = config.inputDirs[framework]
+        if (!inputPaths) return
+        const firstInputPath = (Array.isArray(inputPaths) ? inputPaths[0] : inputPaths) as string
+        const sourceDir = join(basepath, firstInputPath, "..")
+
+        // Copy each file
+        await Promise.all(
+          allFilesToCopy.map(async (filePath) => {
+            const sourcePath = join(sourceDir, filePath)
+            const destPath = join(frameworkOutputPath, filePath)
+
+            // Create destination directory if it doesn't exist
+            const destDir = dirname(destPath)
+            if (!existsSync(destDir)) {
+              await mkdir(destDir, { recursive: true })
+            }
+
+            try {
+              await copyFile(sourcePath, destPath)
+              console.info(`[🤖 @hulla/ui]: copied ${filePath} to ${framework}`)
+            } catch (error) {
+              console.error(
+                `[🤖 @hulla/ui]: failed to copy ${filePath} to ${framework}:`,
+                error
+              )
+            }
+          })
+        )
+      })
+    )
+  }
+
   // Generate framework-level package.json files
   console.info(`\n[🤖 @hulla/ui]: generating framework package.json files`)
   await Promise.all(
@@ -94,6 +142,41 @@ export async function build<const F extends Frameworks>(config: Config<F>): Prom
         devDependencies: allDevDependencies,
         scripts: config.scripts,
       })
+    })
+  )
+
+  // Generate framework-level tsconfig.json files
+  console.info(`\n[🤖 @hulla/ui]: generating framework tsconfig.json files`)
+  await Promise.all(
+    entries(config.outputDirs).map(async ([framework, outputDir]) => {
+      const frameworkOutputPath = join(basepath, outputDir)
+
+      if (!existsSync(frameworkOutputPath)) {
+        await mkdir(frameworkOutputPath, { recursive: true })
+      }
+
+      // Construct the source tsconfig path for the framework
+      const inputPaths = config.inputDirs[framework]
+      if (!inputPaths) return
+      const firstInputPath = (Array.isArray(inputPaths) ? inputPaths[0] : inputPaths) as string
+      const sourceTsconfigPath = join(basepath, firstInputPath, "tsconfig.json")
+
+      // Check if source tsconfig exists
+      try {
+        await access(sourceTsconfigPath, constants.F_OK)
+
+        await generateFrameworkTsconfig({
+          framework: String(framework),
+          sourceTsconfigPath,
+          outputPath: frameworkOutputPath,
+          globalModifier: config.tsconfig?.modifier,
+          frameworkModifier: config.tsconfig?.frameworkModifiers?.[framework],
+        })
+      } catch {
+        console.warn(
+          `[🤖 @hulla/ui]: skipping tsconfig generation for ${framework} (source not found at ${sourceTsconfigPath})`
+        )
+      }
     })
   )
 

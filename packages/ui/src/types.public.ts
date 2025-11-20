@@ -9,6 +9,10 @@ export type Config<F extends Frameworks> = {
   dependencies?: Partial<Record<F[number], string[]>> & { shared?: string[] }
   devDependencies?: Partial<Record<F[number], string[]>> & { shared?: string[] }
   copyFiles?: Partial<Record<F[number], string[]>> & { shared?: string[] }
+  tsconfig?: {
+    modifier?: (config: any) => any
+    frameworkModifiers?: Partial<Record<F[number], (config: any) => any>>
+  }
   scripts: {
     installDep: string
     installDevDep: string
