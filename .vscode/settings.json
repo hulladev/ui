@@ -3,5 +3,27 @@
     {
       "mode": "auto"
     }
-  ]
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    ["(?:ui\\.)?cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*)[\"'`]"],
+    ["classes:\\s*\\{([^}]*)\\}", ":\\s*[\"'`]([^\"'`]*)[\"'`]"],
+    ["base:\\s*[\"'`]([^\"'`]*)[\"'`]"],
+    ["\\.css\\(([^)]*)\\)", "[\"'`]([^\"'`]*)[\"'`]"],
+    ["className[=:]\\s*[\"'`]([^\"'`]*)"]
+  ],
+  "tailwindCSS.includeLanguages": {
+    "typescript": "javascript",
+    "typescriptreact": "javascript"
+  },
+  "tailwindCSS.files.exclude": [
+    "**/.git/**",
+    "**/node_modules/**",
+    "**/.hg/**",
+    "**/.svn/**"
+  ],
+  "css.customData": [
+    ".vscode/css_custom_data.json"
+  ],
+  "tailwindCSS.rootFontSize": 16,
+  "tailwindCSS.showPixelEquivalents": true
 }
