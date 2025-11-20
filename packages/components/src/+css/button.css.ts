@@ -1,4 +1,4 @@
-import { variant } from "@/style"
+import { variant } from "@/lib/style"
 
 export const buttonCss = variant({
   name: "variant",

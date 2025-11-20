@@ -1,5 +1,5 @@
 import { buttonCss } from "@/+css/button.css"
-import { cn } from "@/style"
+import { cn } from "@/lib/style"
 import { VariantProps } from "@hulla/style"
 import { resolve } from "@hulla/ui"
 import type { ButtonHTMLAttributes, DetailedHTMLProps, PropsWithChildren } from "react"
