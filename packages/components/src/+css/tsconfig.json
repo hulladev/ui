@@ -1,0 +1,20 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "extends": ["../../tsconfig.json"],
+    "compilerOptions": {
+        "composite": true,
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "incremental": true,
+        "rootDir": "..",
+        "baseUrl": "..",
+        "jsx": "react-jsx",
+        "paths": {
+            "@/*": ["./*"]
+        }
+    },
+    "include": [
+        "./**/*",
+        "../style.ts"
+    ]
+}
