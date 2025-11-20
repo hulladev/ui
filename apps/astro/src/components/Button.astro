@@ -1,0 +1,22 @@
+---
+import { vn } from '@/styles'
+import type { VariantProps } from '@hulla/style'
+import type { HTMLAttributes } from 'astro/types'
+
+const css = vn({
+    base: 'bg-red-500',
+    props: {
+        variant: {
+            primary: 'bg-blue-500',
+            secondary: 'bg-green-500',
+        }
+    }
+})
+
+type Props = HTMLAttributes<'button'> & VariantProps<typeof css>
+const { class: className, variant, ...props } = Astro.props
+---
+
+<button {...props} class={css({ className, variant})}>
+    <slot />
+</button>
