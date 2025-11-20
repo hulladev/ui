@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "outDir": "dist",
+    "baseUrl": ".",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "lib": [
+      "es2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "moduleDetection": "force",
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022",
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
+  },
+  "include": [
+    "./**/*",
+    "styles/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
