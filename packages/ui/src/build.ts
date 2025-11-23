@@ -165,20 +165,10 @@ export async function build<const F extends Frameworks>(
 
         // Generate framework-level package.json
         (async () => {
-          const sharedDeps = config.dependencies?.shared ?? []
-          const frameworkDeps = config.dependencies?.[framework] ?? []
-          const allDependencies = [...sharedDeps, ...frameworkDeps]
-
-          const sharedDevDeps = config.devDependencies?.shared ?? []
-          const frameworkDevDeps = config.devDependencies?.[framework] ?? []
-          const allDevDependencies = [...sharedDevDeps, ...frameworkDevDeps]
-
           await generateFrameworkPackageJson({
             framework: String(framework),
             outputPath: frameworkOutputPath,
-            dependencies: allDependencies,
-            devDependencies: allDevDependencies,
-            scripts: config.scripts,
+            packageJson: config.packageJson,
             cache,
           })
         })(),

@@ -3,6 +3,7 @@ import { existsSync } from "node:fs"
 import { readFile, writeFile } from "node:fs/promises"
 import { join } from "node:path"
 import { promisify } from "node:util"
+import type { PackageJson } from "type-fest"
 import { BuildCache } from "../buildCache"
 
 const execAsync = promisify(exec)
@@ -10,11 +11,11 @@ const execAsync = promisify(exec)
 type GenerateFrameworkPackageJsonOptions = {
   framework: string
   outputPath: string
-  dependencies: string[]
-  devDependencies: string[]
-  scripts: {
-    installDep: string
-    installDevDep: string
+  packageJson: {
+    installDepCommand: string
+    installDevDepCommand: string
+    modifier?: (packageJson: PackageJson) => PackageJson
+    frameworkModifiers?: Partial<Record<string, (packageJson: PackageJson) => PackageJson>>
   }
   cache: BuildCache
 }
@@ -58,15 +59,30 @@ function buildInstallCommand(baseCommand: string, packages: string[]): string {
 export async function generateFrameworkPackageJson(
   options: GenerateFrameworkPackageJsonOptions
 ): Promise<void> {
-  const { framework, outputPath, dependencies, devDependencies, scripts, cache } = options
+  const { framework, outputPath, packageJson: packageJsonConfig, cache } = options
 
-  const packageJson = {
+  // Start with base package.json
+  let packageJson: PackageJson = {
     name: `@hulla/ui-${framework}`,
     private: true,
   }
 
+  // Apply base modifier if provided
+  if (packageJsonConfig.modifier) {
+    packageJson = packageJsonConfig.modifier(packageJson)
+  }
+
+  // Apply framework-specific modifier if provided
+  if (packageJsonConfig.frameworkModifiers?.[framework]) {
+    packageJson = packageJsonConfig.frameworkModifiers[framework](packageJson)
+  }
+
   const packageJsonPath = join(outputPath, "package.json")
   const newContent = JSON.stringify(packageJson, null, 2) + "\n"
+
+  // Extract dependencies and devDependencies for installation
+  const dependencies = packageJson.dependencies ? Object.keys(packageJson.dependencies) : []
+  const devDependencies = packageJson.devDependencies ? Object.keys(packageJson.devDependencies) : []
 
   // Check if package.json exists and compare content
   let shouldInstallDeps = true
@@ -96,14 +112,14 @@ export async function generateFrameworkPackageJson(
 
   // Install dependencies only if they changed
   if (shouldInstallDeps && dependencies.length > 0) {
-    const depCommand = buildInstallCommand(scripts.installDep, dependencies)
+    const depCommand = buildInstallCommand(packageJsonConfig.installDepCommand, dependencies)
     console.info(`[🤖 @hulla/ui]: installing dependencies for ${framework}: ${depCommand}`)
     await execAsync(depCommand, { cwd: outputPath })
   }
 
   // Install devDependencies only if they changed
   if (shouldInstallDevDeps && devDependencies.length > 0) {
-    const devDepCommand = buildInstallCommand(scripts.installDevDep, devDependencies)
+    const devDepCommand = buildInstallCommand(packageJsonConfig.installDevDepCommand, devDependencies)
     console.info(`[🤖 @hulla/ui]: installing devDependencies for ${framework}: ${devDepCommand}`)
     await execAsync(devDepCommand, { cwd: outputPath })
   }

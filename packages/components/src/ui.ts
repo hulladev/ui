@@ -17,14 +17,6 @@ export const ui = defineConfig({
     svelte: "../../generated/svelte",
     vue: "../../generated/vue",
   },
-  dependencies: {
-    shared: ["@hulla/style"],
-    react: ["react", "react-dom"],
-  },
-  devDependencies: {
-    shared: ["typescript"],
-    react: ["@types/react", "@types/react-dom"],
-  },
   copyFiles: {
     shared: ["lib/style.ts"],
   },
@@ -50,6 +42,7 @@ export const ui = defineConfig({
             // Remove parent directory references
             if (path.startsWith("..")) {
               // Transform "../lib/style.ts" to "lib/style.ts"
+              // import handled in copyFiles step above
               return path.replace(/^\.\.\//, "")
             }
             return path
@@ -63,9 +56,37 @@ export const ui = defineConfig({
       return config
     },
   },
+  packageJson: {
+    installDepCommand: "pnpm add",
+    installDevDepCommand: "pnpm add -D",
+    modifier: (pkg) => ({
+      ...pkg,
+      dependencies: {
+        ...pkg.dependencies,
+        "@hulla/style": "*",
+      },
+      devDependencies: {
+        ...pkg.devDependencies,
+        typescript: "*",
+      },
+    }),
+    frameworkModifiers: {
+      react: (pkg) => ({
+        ...pkg,
+        dependencies: {
+          ...pkg.dependencies,
+          react: "*",
+          "react-dom": "*",
+        },
+        devDependencies: {
+          ...pkg.devDependencies,
+          "@types/react": "*",
+          "@types/react-dom": "*",
+        },
+      }),
+    },
+  },
   scripts: {
-    installDep: "pnpm add",
-    installDevDep: "pnpm add -D",
     postBuild: 'cd .. && pnpm prettier --write "./generated/**/*.{ts,tsx,md,json,css}"',
   },
 })
