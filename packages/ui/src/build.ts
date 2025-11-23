@@ -2,6 +2,7 @@ import { constants, existsSync } from "node:fs"
 import { access, copyFile, mkdir, readdir } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { cwd } from "node:process"
+import { execAsync } from "./helpers/execAsync"
 import { generateComponent } from "./helpers/generateComponent"
 import { generateFrameworkPackageJson } from "./helpers/generateFrameworkPackageJson"
 import { generateFrameworkTsconfig } from "./helpers/generateFrameworkTsconfig"
@@ -10,6 +11,11 @@ import { entries } from "./utils/objects"
 
 export async function build<const F extends Frameworks>(config: Config<F>): Promise<void> {
   console.info(`\n[🤖 @hulla/ui]: starting ui build process`)
+  if (config.scripts.preBuild) {
+    console.info(`[🤖 @hulla/ui]: running pre-install script`)
+    await execAsync(config.scripts.preBuild)
+  }
+
   const basepath = config.basePath ?? cwd()
   const frameworksDirs = await Promise.all(
     entries(config.inputDirs).map(async ([framework, paths]) => {
@@ -105,10 +111,7 @@ export async function build<const F extends Frameworks>(config: Config<F>): Prom
               await copyFile(sourcePath, destPath)
               console.info(`[🤖 @hulla/ui]: copied ${filePath} to ${framework}`)
             } catch (error) {
-              console.error(
-                `[🤖 @hulla/ui]: failed to copy ${filePath} to ${framework}:`,
-                error
-              )
+              console.error(`[🤖 @hulla/ui]: failed to copy ${filePath} to ${framework}:`, error)
             }
           })
         )
@@ -179,6 +182,11 @@ export async function build<const F extends Frameworks>(config: Config<F>): Prom
       }
     })
   )
+
+  if (config.scripts.postBuild) {
+    console.info(`[🤖 @hulla/ui]: running post-install script`)
+    await execAsync(config.scripts.postBuild)
+  }
 
   console.info(`\n[🤖 @hulla/ui]: build process completed`)
 }

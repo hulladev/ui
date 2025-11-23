@@ -66,5 +66,6 @@ export const ui = defineConfig({
   scripts: {
     installDep: "pnpm add",
     installDevDep: "pnpm add -D",
+    postBuild: 'cd .. && pnpm prettier --write "./generated/**/*.{ts,tsx,md,json,css}"',
   },
 })

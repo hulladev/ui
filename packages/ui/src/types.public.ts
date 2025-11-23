@@ -1,3 +1,5 @@
+import type { TsConfigJson } from "type-fest"
+
 export type Frameworks = readonly string[]
 
 export type Config<F extends Frameworks> = {
@@ -10,11 +12,13 @@ export type Config<F extends Frameworks> = {
   devDependencies?: Partial<Record<F[number], string[]>> & { shared?: string[] }
   copyFiles?: Partial<Record<F[number], string[]>> & { shared?: string[] }
   tsconfig?: {
-    modifier?: (config: any) => any
-    frameworkModifiers?: Partial<Record<F[number], (config: any) => any>>
+    modifier?: (config: TsConfigJson) => TsConfigJson
+    frameworkModifiers?: Partial<Record<F[number], (config: TsConfigJson) => TsConfigJson>>
   }
   scripts: {
     installDep: string
     installDevDep: string
+    preBuild?: string
+    postBuild?: string
   }
 }

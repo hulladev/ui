@@ -26,10 +26,7 @@ function deepMerge(target: any, source: any): any {
   return result
 }
 
-async function resolveExtends(
-  tsconfigPath: string,
-  basePath: string
-): Promise<any[]> {
+async function resolveExtends(tsconfigPath: string, basePath: string): Promise<any[]> {
   const configContent = await readFile(tsconfigPath, "utf-8")
   const config = JSON.parse(configContent)
 
@@ -85,13 +82,7 @@ function cleanupConfig(config: any): any {
 export async function generateFrameworkTsconfig(
   options: GenerateFrameworkTsconfigOptions
 ): Promise<void> {
-  const {
-    framework,
-    sourceTsconfigPath,
-    outputPath,
-    globalModifier,
-    frameworkModifier,
-  } = options
+  const { framework, sourceTsconfigPath, outputPath, globalModifier, frameworkModifier } = options
 
   try {
     // Get the base path for resolving node_modules
