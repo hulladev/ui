@@ -6,22 +6,14 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@shared/*": [
-        "shared/*"
-      ]
+      "@/*": ["./*"],
+      "@shared/*": ["shared/*"]
     },
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
     "isolatedModules": true,
-    "lib": [
-      "es2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["es2022", "DOM", "DOM.Iterable"],
     "moduleDetection": "force",
     "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
@@ -31,14 +23,6 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react"
   },
-  "include": [
-    "./**/*",
-    "styles/**/*",
-    "hulla/**/*",
-    "lib/style.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["./**/*", "styles/**/*", "hulla/**/*", "lib/style.ts"],
+  "exclude": ["node_modules", "dist"]
 }
