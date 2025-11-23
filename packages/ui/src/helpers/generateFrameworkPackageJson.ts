@@ -1,7 +1,9 @@
 import { exec } from "node:child_process"
-import { writeFile } from "node:fs/promises"
+import { existsSync } from "node:fs"
+import { readFile, writeFile } from "node:fs/promises"
 import { join } from "node:path"
 import { promisify } from "node:util"
+import { BuildCache } from "../buildCache"
 
 const execAsync = promisify(exec)
 
@@ -14,6 +16,7 @@ type GenerateFrameworkPackageJsonOptions = {
     installDep: string
     installDevDep: string
   }
+  cache: BuildCache
 }
 
 function parsePackageString(packageString: string): { name: string; version?: string } {
@@ -55,7 +58,7 @@ function buildInstallCommand(baseCommand: string, packages: string[]): string {
 export async function generateFrameworkPackageJson(
   options: GenerateFrameworkPackageJsonOptions
 ): Promise<void> {
-  const { framework, outputPath, dependencies, devDependencies, scripts } = options
+  const { framework, outputPath, dependencies, devDependencies, scripts, cache } = options
 
   const packageJson = {
     name: `@hulla/ui-${framework}`,
@@ -63,21 +66,63 @@ export async function generateFrameworkPackageJson(
   }
 
   const packageJsonPath = join(outputPath, "package.json")
-  await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + "\n")
+  const newContent = JSON.stringify(packageJson, null, 2) + "\n"
 
+  // Check if package.json exists and compare content
+  let shouldInstallDeps = true
+  let shouldInstallDevDeps = true
+
+  if (existsSync(packageJsonPath)) {
+    try {
+      const existingContent = await readFile(packageJsonPath, "utf-8")
+      const existingJson = JSON.parse(existingContent)
+
+      // Check if dependencies changed by comparing the actual installed packages
+      shouldInstallDeps = dependencies.length > 0 && !areDependenciesInstalled(existingJson, dependencies)
+      shouldInstallDevDeps =
+        devDependencies.length > 0 && !areDevDependenciesInstalled(existingJson, devDependencies)
+
+      if (!shouldInstallDeps && !shouldInstallDevDeps) {
+        console.info(`[🤖 @hulla/ui]: dependencies unchanged for ${framework}, skipping installation`)
+      }
+    } catch (error) {
+      // If there's an error reading/parsing, proceed with install
+      console.warn(`[🤖 @hulla/ui]: error checking existing package.json for ${framework}:`, error)
+    }
+  }
+
+  await writeFile(packageJsonPath, newContent)
   console.info(`[🤖 @hulla/ui]: created package.json for ${framework}`)
 
-  // Install dependencies
-  if (dependencies.length > 0) {
+  // Install dependencies only if they changed
+  if (shouldInstallDeps && dependencies.length > 0) {
     const depCommand = buildInstallCommand(scripts.installDep, dependencies)
     console.info(`[🤖 @hulla/ui]: installing dependencies for ${framework}: ${depCommand}`)
     await execAsync(depCommand, { cwd: outputPath })
   }
 
-  // Install devDependencies
-  if (devDependencies.length > 0) {
+  // Install devDependencies only if they changed
+  if (shouldInstallDevDeps && devDependencies.length > 0) {
     const devDepCommand = buildInstallCommand(scripts.installDevDep, devDependencies)
     console.info(`[🤖 @hulla/ui]: installing devDependencies for ${framework}: ${devDepCommand}`)
     await execAsync(devDepCommand, { cwd: outputPath })
   }
+
+  await cache.markFileProcessed(packageJsonPath)
+}
+
+function areDependenciesInstalled(packageJson: any, requiredDeps: string[]): boolean {
+  const installed = packageJson.dependencies || {}
+  return requiredDeps.every((dep) => {
+    const { name } = parsePackageString(dep)
+    return name in installed
+  })
+}
+
+function areDevDependenciesInstalled(packageJson: any, requiredDevDeps: string[]): boolean {
+  const installed = packageJson.devDependencies || {}
+  return requiredDevDeps.every((dep) => {
+    const { name } = parsePackageString(dep)
+    return name in installed
+  })
 }

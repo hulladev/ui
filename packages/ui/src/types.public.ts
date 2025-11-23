@@ -22,3 +22,4 @@ export type Config<F extends Frameworks> = {
     postBuild?: string
   }
 }
+

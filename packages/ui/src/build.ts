@@ -1,7 +1,8 @@
-import { constants, existsSync } from "node:fs"
+import { constants, Dirent } from "node:fs"
 import { access, copyFile, mkdir, readdir } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { cwd } from "node:process"
+import { BuildCache } from "./buildCache"
 import { execAsync } from "./helpers/execAsync"
 import { generateComponent } from "./helpers/generateComponent"
 import { generateFrameworkPackageJson } from "./helpers/generateFrameworkPackageJson"
@@ -9,14 +10,31 @@ import { generateFrameworkTsconfig } from "./helpers/generateFrameworkTsconfig"
 import { Config, Frameworks } from "./types.public"
 import { entries } from "./utils/objects"
 
-export async function build<const F extends Frameworks>(config: Config<F>): Promise<void> {
+export async function build<const F extends Frameworks>(
+  config: Config<F>,
+  options: { force?: boolean } = {}
+): Promise<void> {
   console.info(`\n[🤖 @hulla/ui]: starting ui build process`)
+
+  const basepath = config.basePath ?? cwd()
+  const cache = new BuildCache(basepath)
+
+  // Load cache unless force flag is set
+  if (options.force) {
+    console.info(`[🤖 @hulla/ui]: force rebuild requested, skipping cache`)
+    cache.clear()
+  } else {
+    await cache.load()
+  }
+
+  let componentsSkipped = 0
+  let componentsRebuilt = 0
+
   if (config.scripts.preBuild) {
     console.info(`[🤖 @hulla/ui]: running pre-install script`)
     await execAsync(config.scripts.preBuild)
   }
 
-  const basepath = config.basePath ?? cwd()
   const frameworksDirs = await Promise.all(
     entries(config.inputDirs).map(async ([framework, paths]) => {
       const pathsArray = Array.isArray(paths) ? paths : [paths]
@@ -58,9 +76,31 @@ export async function build<const F extends Frameworks>(config: Config<F>): Prom
       const files = await readdir(path, { withFileTypes: true })
       const outputDir = config.outputDirs[framework]
       const outputPath = join(basepath, outputDir, name)
-      if (!existsSync(outputPath)) {
-        await mkdir(outputPath, { recursive: true })
+
+      // Collect all source file paths to check cache
+      const sourceFiles: string[] = []
+      async function collectFiles(dirPath: string, dirent: Dirent): Promise<void> {
+        if (dirent.isDirectory()) {
+          const subDirPath = join(dirPath, dirent.name)
+          const subFiles = await readdir(subDirPath, { withFileTypes: true })
+          await Promise.all(subFiles.map((f) => collectFiles(subDirPath, f)))
+        } else {
+          sourceFiles.push(join(dirPath, dirent.name))
+        }
       }
+
+      await Promise.all(files.map((file) => collectFiles(path, file)))
+
+      // Check if component needs rebuilding
+      const hasChanged = await cache.hasAnyFileChanged(sourceFiles)
+
+      if (!hasChanged) {
+        componentsSkipped++
+        return
+      }
+
+      componentsRebuilt++
+      await mkdir(outputPath, { recursive: true })
 
       await Promise.all(
         files.map((file) =>
@@ -69,123 +109,122 @@ export async function build<const F extends Frameworks>(config: Config<F>): Prom
             framework,
             outputPath,
             tsconfigPath: config.tsconfigPath,
+            cache,
           })
         )
       )
     })
   )
 
-  // Copy shared and framework-specific files
-  if (config.copyFiles) {
-    console.info(`\n[🤖 @hulla/ui]: copying shared files`)
-    await Promise.all(
-      entries(config.outputDirs).map(async ([framework, outputDir]) => {
-        const frameworkOutputPath = join(basepath, outputDir)
+  // Process framework-level operations: copy files, generate package.json, generate tsconfig
+  console.info(`\n[🤖 @hulla/ui]: processing framework-level operations`)
+  await Promise.all(
+    entries(config.outputDirs).map(async ([framework, outputDir]) => {
+      const frameworkOutputPath = join(basepath, outputDir)
+      await mkdir(frameworkOutputPath, { recursive: true })
 
-        // Get shared and framework-specific files to copy
-        const sharedFiles = config.copyFiles?.shared ?? []
-        const frameworkFiles = config.copyFiles?.[framework] ?? []
-        const allFilesToCopy = [...sharedFiles, ...frameworkFiles]
+      // Run all framework operations in parallel
+      await Promise.all([
+        // Copy shared and framework-specific files
+        (async () => {
+          if (!config.copyFiles) return
 
-        if (allFilesToCopy.length === 0) return
+          const sharedFiles = config.copyFiles?.shared ?? []
+          const frameworkFiles = config.copyFiles?.[framework] ?? []
+          const allFilesToCopy = [...sharedFiles, ...frameworkFiles]
 
-        // Get the source directory from input dirs
-        const inputPaths = config.inputDirs[framework]
-        if (!inputPaths) return
-        const firstInputPath = (Array.isArray(inputPaths) ? inputPaths[0] : inputPaths) as string
-        const sourceDir = join(basepath, firstInputPath, "..")
+          if (allFilesToCopy.length === 0) return
 
-        // Copy each file
-        await Promise.all(
-          allFilesToCopy.map(async (filePath) => {
-            const sourcePath = join(sourceDir, filePath)
-            const destPath = join(frameworkOutputPath, filePath)
+          const inputPaths = config.inputDirs[framework]
+          if (!inputPaths) return
+          const firstInputPath = (Array.isArray(inputPaths) ? inputPaths[0] : inputPaths) as string
+          const sourceDir = join(basepath, firstInputPath, "..")
 
-            // Create destination directory if it doesn't exist
-            const destDir = dirname(destPath)
-            if (!existsSync(destDir)) {
+          await Promise.all(
+            allFilesToCopy.map(async (filePath) => {
+              const sourcePath = join(sourceDir, filePath)
+              const destPath = join(frameworkOutputPath, filePath)
+              const destDir = dirname(destPath)
+
               await mkdir(destDir, { recursive: true })
-            }
 
-            try {
-              await copyFile(sourcePath, destPath)
-              console.info(`[🤖 @hulla/ui]: copied ${filePath} to ${framework}`)
-            } catch (error) {
-              console.error(`[🤖 @hulla/ui]: failed to copy ${filePath} to ${framework}:`, error)
-            }
+              try {
+                // Check if file needs copying using cache
+                const hasChanged = await cache.hasFileChanged(sourcePath)
+                if (hasChanged) {
+                  await copyFile(sourcePath, destPath)
+                  await cache.markFileProcessed(sourcePath)
+                  console.info(`[🤖 @hulla/ui]: copied ${filePath} to ${framework}`)
+                }
+              } catch (error) {
+                console.error(`[🤖 @hulla/ui]: failed to copy ${filePath} to ${framework}:`, error)
+              }
+            })
+          )
+        })(),
+
+        // Generate framework-level package.json
+        (async () => {
+          const sharedDeps = config.dependencies?.shared ?? []
+          const frameworkDeps = config.dependencies?.[framework] ?? []
+          const allDependencies = [...sharedDeps, ...frameworkDeps]
+
+          const sharedDevDeps = config.devDependencies?.shared ?? []
+          const frameworkDevDeps = config.devDependencies?.[framework] ?? []
+          const allDevDependencies = [...sharedDevDeps, ...frameworkDevDeps]
+
+          await generateFrameworkPackageJson({
+            framework: String(framework),
+            outputPath: frameworkOutputPath,
+            dependencies: allDependencies,
+            devDependencies: allDevDependencies,
+            scripts: config.scripts,
+            cache,
           })
-        )
-      })
-    )
-  }
+        })(),
 
-  // Generate framework-level package.json files
-  console.info(`\n[🤖 @hulla/ui]: generating framework package.json files`)
-  await Promise.all(
-    entries(config.outputDirs).map(async ([framework, outputDir]) => {
-      const frameworkOutputPath = join(basepath, outputDir)
+        // Generate framework-level tsconfig.json
+        (async () => {
+          const inputPaths = config.inputDirs[framework]
+          if (!inputPaths) return
+          const firstInputPath = (Array.isArray(inputPaths) ? inputPaths[0] : inputPaths) as string
+          const sourceTsconfigPath = join(basepath, firstInputPath, "tsconfig.json")
 
-      if (!existsSync(frameworkOutputPath)) {
-        await mkdir(frameworkOutputPath, { recursive: true })
-      }
+          try {
+            await access(sourceTsconfigPath, constants.F_OK)
 
-      // Merge shared and framework-specific dependencies
-      const sharedDeps = config.dependencies?.shared ?? []
-      const frameworkDeps = config.dependencies?.[framework] ?? []
-      const allDependencies = [...sharedDeps, ...frameworkDeps]
-
-      const sharedDevDeps = config.devDependencies?.shared ?? []
-      const frameworkDevDeps = config.devDependencies?.[framework] ?? []
-      const allDevDependencies = [...sharedDevDeps, ...frameworkDevDeps]
-
-      await generateFrameworkPackageJson({
-        framework: String(framework),
-        outputPath: frameworkOutputPath,
-        dependencies: allDependencies,
-        devDependencies: allDevDependencies,
-        scripts: config.scripts,
-      })
-    })
-  )
-
-  // Generate framework-level tsconfig.json files
-  console.info(`\n[🤖 @hulla/ui]: generating framework tsconfig.json files`)
-  await Promise.all(
-    entries(config.outputDirs).map(async ([framework, outputDir]) => {
-      const frameworkOutputPath = join(basepath, outputDir)
-
-      if (!existsSync(frameworkOutputPath)) {
-        await mkdir(frameworkOutputPath, { recursive: true })
-      }
-
-      // Construct the source tsconfig path for the framework
-      const inputPaths = config.inputDirs[framework]
-      if (!inputPaths) return
-      const firstInputPath = (Array.isArray(inputPaths) ? inputPaths[0] : inputPaths) as string
-      const sourceTsconfigPath = join(basepath, firstInputPath, "tsconfig.json")
-
-      // Check if source tsconfig exists
-      try {
-        await access(sourceTsconfigPath, constants.F_OK)
-
-        await generateFrameworkTsconfig({
-          framework: String(framework),
-          sourceTsconfigPath,
-          outputPath: frameworkOutputPath,
-          globalModifier: config.tsconfig?.modifier,
-          frameworkModifier: config.tsconfig?.frameworkModifiers?.[framework],
-        })
-      } catch {
-        console.warn(
-          `[🤖 @hulla/ui]: skipping tsconfig generation for ${framework} (source not found at ${sourceTsconfigPath})`
-        )
-      }
+            await generateFrameworkTsconfig({
+              framework: String(framework),
+              sourceTsconfigPath,
+              outputPath: frameworkOutputPath,
+              globalModifier: config.tsconfig?.modifier,
+              frameworkModifier: config.tsconfig?.frameworkModifiers?.[framework],
+            })
+          } catch {
+            console.warn(
+              `[🤖 @hulla/ui]: skipping tsconfig generation for ${framework} (source not found at ${sourceTsconfigPath})`
+            )
+          }
+        })(),
+      ])
     })
   )
 
   if (config.scripts.postBuild) {
     console.info(`[🤖 @hulla/ui]: running post-install script`)
     await execAsync(config.scripts.postBuild)
+  }
+
+  // Save cache
+  await cache.save()
+
+  // Log build metrics
+  console.info(`\n[🤖 @hulla/ui]: build metrics:`)
+  console.info(`  - Components rebuilt: ${componentsRebuilt}`)
+  console.info(`  - Components skipped (cached): ${componentsSkipped}`)
+  if (componentsSkipped > 0) {
+    const percentSkipped = Math.round((componentsSkipped / (componentsRebuilt + componentsSkipped)) * 100)
+    console.info(`  - Cache hit rate: ${percentSkipped}%`)
   }
 
   console.info(`\n[🤖 @hulla/ui]: build process completed`)

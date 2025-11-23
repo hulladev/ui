@@ -1,4 +1,4 @@
-import { Dirent, existsSync } from "node:fs"
+import { Dirent } from "node:fs"
 import { copyFile, mkdir, readdir, readFile, writeFile } from "node:fs/promises"
 import { join } from "node:path"
 import {
@@ -14,6 +14,7 @@ import {
   StringLiteral,
   SyntaxKind,
 } from "typescript"
+import { BuildCache } from "../buildCache"
 import { Frameworks } from "../types.public"
 import { resolvePathAlias, resolveTsconfigPath } from "./parser"
 
@@ -22,6 +23,8 @@ type TransformFileParams = {
   framework: Frameworks[number]
   outputPath: string
   tsconfigPath?: string
+  cache: BuildCache
+  resolvedTsconfig?: string
 }
 
 export async function generateComponent({
@@ -29,38 +32,48 @@ export async function generateComponent({
   framework,
   outputPath,
   tsconfigPath,
+  cache,
+  resolvedTsconfig,
 }: TransformFileParams) {
   if (dirent.isDirectory()) {
     const dirOutputPath = join(outputPath, dirent.name)
-    if (!existsSync(dirOutputPath)) {
-      await mkdir(dirOutputPath, { recursive: true })
-    }
-    // Fix: read subdirectory contents and process each file
+    await mkdir(dirOutputPath, { recursive: true })
+
+    // Resolve tsconfig once for the directory
     const subDirPath = join(dirent.parentPath, dirent.name)
+    const resolved = resolvedTsconfig || (await resolveTsconfigPath(subDirPath, tsconfigPath))
+
     const subDirContents = await readdir(subDirPath, { withFileTypes: true })
     await Promise.all(
       subDirContents.map((subDirent) =>
-        generateComponent({ dirent: subDirent, framework, outputPath: dirOutputPath, tsconfigPath })
+        generateComponent({
+          dirent: subDirent,
+          framework,
+          outputPath: dirOutputPath,
+          tsconfigPath,
+          cache,
+          resolvedTsconfig: resolved,
+        })
       )
     )
   } else {
+    const sourcePath = join(dirent.parentPath, dirent.name)
+
     if (dirent.name === "package.json") {
-      const sourcePath = join(dirent.parentPath, dirent.name)
       const destPath = join(outputPath, dirent.name)
       await copyFile(sourcePath, destPath)
+      await cache.markFileProcessed(sourcePath)
     } else {
-      const sourcePath = join(dirent.parentPath, dirent.name)
+      // Resolve tsconfig once if not already resolved
+      const resolved = resolvedTsconfig || (await resolveTsconfigPath(dirent.parentPath, tsconfigPath))
+
       const fileContents = await readFile(sourcePath, {
         encoding: "utf-8",
       })
-      const transformedContent = await transformFile(
-        fileContents,
-        sourcePath,
-        dirent.parentPath,
-        tsconfigPath
-      )
+      const transformedContent = await transformFile(fileContents, sourcePath, dirent.parentPath, resolved)
       const destPath = join(outputPath, dirent.name)
       await writeFile(destPath, transformedContent, "utf-8")
+      await cache.markFileProcessed(sourcePath)
     }
   }
 }
@@ -69,12 +82,9 @@ async function transformFile(
   fileContents: string,
   sourceFilePath: string,
   sourceFileDir: string,
-  tsconfigPath?: string
+  resolvedTsconfigPath: string
 ): Promise<string> {
   const sourceFile = createSourceFile(sourceFilePath, fileContents, ScriptTarget.Latest, true)
-
-  // Find tsconfig
-  const resolvedTsconfigPath = await resolveTsconfigPath(sourceFileDir, tsconfigPath)
 
   // Track imports to remove and add
   const importsToRemove = new Set<string>()
