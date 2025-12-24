@@ -13,7 +13,7 @@
     "build": "uigen src/ui.ts"
   },
   "devDependencies": {
-    "@hulla/ui": "workspace:*",
+    "@hulla/ui-kit": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^22.15.3",

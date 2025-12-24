@@ -1,4 +1,4 @@
-import { defineConfig } from "@hulla/ui"
+import { defineConfig } from "@hulla/ui-kit"
 
 export const ui = defineConfig({
   tsconfigPath: "./tsconfig.json",

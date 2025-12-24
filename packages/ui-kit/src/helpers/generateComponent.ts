@@ -24,7 +24,7 @@ type TransformFileParams = {
   outputPath: string
   tsconfigPath?: string
   cache: BuildCache
-  resolvedTsconfig?: string
+  resolvedTsconfig?: string | null
 }
 
 export async function generateComponent({
@@ -66,6 +66,9 @@ export async function generateComponent({
     } else {
       // Resolve tsconfig once if not already resolved
       const resolved = resolvedTsconfig || (await resolveTsconfigPath(dirent.parentPath, tsconfigPath))
+      if (!resolved) {
+        throw new Error(`Failed to resolve tsconfig for ${sourcePath}`)
+      }
 
       const fileContents = await readFile(sourcePath, {
         encoding: "utf-8",
@@ -137,8 +140,8 @@ async function transformFile(
       }
 
       // Check if this is the resolve import from @hulla/ui
-      if (moduleSpecifier === "@hulla/ui") {
-        importsToRemove.add("@hulla/ui")
+      if (moduleSpecifier === "@hulla/ui-kit") {
+        importsToRemove.add("@hulla/ui-kit")
       }
     }
   })

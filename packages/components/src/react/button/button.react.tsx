@@ -1,7 +1,7 @@
 import { buttonCss } from "@/+css/button.css"
 import { cn } from "@/lib/style"
 import { VariantProps } from "@hulla/style"
-import { resolve } from "@hulla/ui"
+import { resolve } from "@hulla/ui-kit"
 import type { ButtonHTMLAttributes, DetailedHTMLProps, PropsWithChildren } from "react"
 
 const buttonVariant = resolve(buttonCss)
