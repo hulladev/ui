@@ -1,6 +1,10 @@
-import { defineConfig } from "@hulla/ui-kit"
+import { createLibrary } from "@hulla/ui"
 
-export const ui = defineConfig({
+export const ui = createLibrary({
+  name: "@hulla/ui",
+  version: "0.0.0",
+  author: "Samuel Hulla",
+  url: "https://hulla.dev/docs/ui",
   tsconfigPath: "./tsconfig.json",
   frameworks: ["astro", "react", "solid", "svelte", "vue"],
   inputDirs: {
@@ -11,11 +15,14 @@ export const ui = defineConfig({
     vue: "./src/vue",
   },
   outputDirs: {
-    astro: "../../generated/astro",
-    react: "../../generated/react",
-    solid: "../../generated/solid",
-    svelte: "../../generated/svelte",
-    vue: "../../generated/vue",
+    rootDir: "../../generated",
+    frameworks: {
+      astro: "./astro",
+      react: "./react",
+      solid: "./solid",
+      svelte: "./svelte",
+      vue: "./vue",
+    },
   },
   copyFiles: {
     shared: ["lib/style.ts"],
