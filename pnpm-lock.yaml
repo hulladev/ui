@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@hulla/ui':
+        specifier: workspace:*
+        version: link:packages/ui
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:packages/eslint-config
@@ -273,9 +276,9 @@ importers:
         specifier: ^4.1.13
         version: 4.1.18
     devDependencies:
-      '@hulla/ui-kit':
+      '@hulla/ui':
         specifier: workspace:*
-        version: link:../ui-kit
+        version: link:../ui
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
@@ -348,7 +351,7 @@ importers:
 
   packages/typescript-config: {}
 
-  packages/ui-kit:
+  packages/ui:
     dependencies:
       '@hulla/args':
         specifier: ^0.0.2
