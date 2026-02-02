@@ -1,0 +1,23 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.2/schema.json",
+  "changelog": "@changesets/cli/changelog",
+  "commit": false,
+  "fixed": [],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "master",
+  "updateInternalDependencies": "patch",
+  "ignore": [
+    "sandbox-astro",
+    "sandbox-react",
+    "sandbox-solid",
+    "sandbox-svelte",
+    "sandbox-vue",
+    "components",
+    "@hulla/ui-react",
+    "@hulla/ui-astro",
+    "@hulla/ui-solid",
+    "@hulla/ui-svelte",
+    "@hulla/ui-vue"
+  ]
+}

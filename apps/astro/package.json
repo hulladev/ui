@@ -1,5 +1,6 @@
 {
-  "name": "astro",
+  "name": "sandbox-astro",
+  "private": true,
   "type": "module",
   "version": "0.0.1",
   "scripts": {

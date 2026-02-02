@@ -1,5 +1,6 @@
 {
-  "name": "vite-template-solid",
+  "name": "sandbox-solid",
+  "private": true,
   "version": "0.0.0",
   "description": "",
   "type": "module",
