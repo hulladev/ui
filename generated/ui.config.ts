@@ -12,4 +12,7 @@ export const config: UILibrary = {
     vue: "./vue",
   },
   version: "0.0.0",
+  copyFiles: {
+    shared: [{ src: "lib/style.ts", dest: "lib/style.ts", required: true }],
+  },
 }

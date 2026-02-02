@@ -7,8 +7,20 @@ import { execAsync } from "./helpers/execAsync"
 import { generateComponent } from "./helpers/generateComponent"
 import { generateFrameworkPackageJson } from "./helpers/generateFrameworkPackageJson"
 import { generateFrameworkTsconfig } from "./helpers/generateFrameworkTsconfig"
-import { Config, Frameworks } from "./types.public"
+import { Config, CopyFileEntry, Frameworks, NormalizedCopyFile } from "./types.public"
 import { entries, validateFrameworkPath } from "./utils/objects"
+
+function normalizeCopyFileEntry(entry: CopyFileEntry): NormalizedCopyFile {
+  if (typeof entry === "string") {
+    return { src: entry, dest: entry, required: true }
+  }
+  return {
+    src: entry.src,
+    dest: entry.dest ?? entry.src,
+    required: entry.required ?? true,
+    ...(entry.description && { description: entry.description }),
+  }
+}
 
 export async function build<const F extends Frameworks>(
   config: Config<F>,
@@ -145,7 +157,7 @@ export async function build<const F extends Frameworks>(
 
           const sharedFiles = config.copyFiles?.shared ?? []
           const frameworkFiles = config.copyFiles?.[framework] ?? []
-          const allFilesToCopy = [...sharedFiles, ...frameworkFiles]
+          const allFilesToCopy = [...sharedFiles, ...frameworkFiles].map(normalizeCopyFileEntry)
 
           if (allFilesToCopy.length === 0) return
 
@@ -155,9 +167,9 @@ export async function build<const F extends Frameworks>(
           const sourceDir = join(basepath, firstInputPath, "..")
 
           await Promise.all(
-            allFilesToCopy.map(async (filePath) => {
-              const sourcePath = join(sourceDir, filePath)
-              const destPath = join(frameworkOutputPath, filePath)
+            allFilesToCopy.map(async (file) => {
+              const sourcePath = join(sourceDir, file.src)
+              const destPath = join(frameworkOutputPath, file.dest)
               const destDir = dirname(destPath)
 
               await mkdir(destDir, { recursive: true })
@@ -168,10 +180,10 @@ export async function build<const F extends Frameworks>(
                 if (hasChanged) {
                   await copyFile(sourcePath, destPath)
                   await cache.markFileProcessed(sourcePath)
-                  console.info(`[🤖 @hulla/ui]: copied ${filePath} to ${framework}`)
+                  console.info(`[🤖 @hulla/ui]: copied ${file.src} to ${framework}`)
                 }
               } catch (error) {
-                console.error(`[🤖 @hulla/ui]: failed to copy ${filePath} to ${framework}:`, error)
+                console.error(`[🤖 @hulla/ui]: failed to copy ${file.src} to ${framework}:`, error)
               }
             })
           )
@@ -217,13 +229,45 @@ export async function build<const F extends Frameworks>(
   // Generate ui.config.ts at rootDir
   console.info(`[🤖 @hulla/ui]: generating ui.config.ts`)
   const uiConfigPath = join(basepath, config.outputDirs.rootDir, 'ui.config.ts')
-  const authorString = Array.isArray(config.author) 
+  const authorString = Array.isArray(config.author)
     ? `[${config.author.map(a => `'${a}'`).join(', ')}]`
     : `'${config.author}'`
 
   const frameworksEntries = entries(config.outputDirs.frameworks)
     .map(([framework, path]) => `  ${String(framework)}: '${path}'`)
     .join(',\n')
+
+  // Normalize copyFiles for output
+  let copyFilesOutput = ''
+  if (config.copyFiles) {
+    const normalizedCopyFiles: Record<string, NormalizedCopyFile[]> = {}
+
+    for (const [key, files] of Object.entries(config.copyFiles)) {
+      if (files && files.length > 0) {
+        normalizedCopyFiles[key] = files.map(normalizeCopyFileEntry)
+      }
+    }
+
+    if (Object.keys(normalizedCopyFiles).length > 0) {
+      const formatFile = (f: NormalizedCopyFile) => {
+        const parts = [
+          `src: '${f.src}'`,
+          `dest: '${f.dest}'`,
+          `required: ${f.required}`,
+        ]
+        if (f.description) {
+          parts.push(`description: '${f.description}'`)
+        }
+        return `{ ${parts.join(', ')} }`
+      }
+
+      const copyFilesEntries = Object.entries(normalizedCopyFiles)
+        .map(([key, files]) => `    ${key}: [\n      ${files.map(formatFile).join(',\n      ')}\n    ]`)
+        .join(',\n')
+
+      copyFilesOutput = `,\n  copyFiles: {\n${copyFilesEntries}\n  }`
+    }
+  }
 
   const configLines = [
     `  name: '${config.name}',`,
@@ -232,7 +276,7 @@ export async function build<const F extends Frameworks>(
     `  frameworks: {`,
     frameworksEntries,
     `  },`,
-    `  version: '${config.version}'`
+    `  version: '${config.version}'${copyFilesOutput}`
   ]
 
   const uiConfigContent = `import type { UILibrary } from '@hulla/ui'

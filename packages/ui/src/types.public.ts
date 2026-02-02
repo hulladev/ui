@@ -2,6 +2,24 @@ import type { PackageJson, TsConfigJson } from "type-fest"
 
 export type Frameworks = readonly string[]
 
+// Entry can be simple string or object with metadata
+export type CopyFileEntry =
+  | string
+  | {
+      src: string
+      dest?: string // Defaults to src path
+      required?: boolean // Defaults to true
+      description?: string // For CLI display
+    }
+
+// Always normalized in output
+export type NormalizedCopyFile = {
+  src: string
+  dest: string
+  required: boolean
+  description?: string
+}
+
 export type OutputDirs<F extends Frameworks> = {
   rootDir: string
   frameworks: Record<F[number], string>
@@ -17,7 +35,7 @@ export type Config<F extends Frameworks> = {
   tsconfigPath?: string
   inputDirs: Record<F[number], string[] | string>
   outputDirs: OutputDirs<F>
-  copyFiles?: Partial<Record<F[number], string[]>> & { shared?: string[] }
+  copyFiles?: Partial<Record<F[number], CopyFileEntry[]>> & { shared?: CopyFileEntry[] }
   tsconfig?: {
     modifier?: (config: TsConfigJson) => TsConfigJson
     frameworkModifiers?: Partial<Record<F[number], (config: TsConfigJson) => TsConfigJson>>
@@ -45,4 +63,7 @@ export type UILibrary = {
   author?: string | string[]
   frameworks: Record<string, string>
   version: string
+  copyFiles?: {
+    shared?: NormalizedCopyFile[]
+  } & Record<string, NormalizedCopyFile[]>
 }
