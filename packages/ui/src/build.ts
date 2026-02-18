@@ -1,6 +1,6 @@
 import { constants, Dirent } from "node:fs"
 import { access, copyFile, mkdir, readdir, writeFile } from "node:fs/promises"
-import { dirname, join } from "node:path"
+import { dirname, join, resolve } from "node:path"
 import { cwd } from "node:process"
 import { BuildCache } from "./buildCache"
 import { execAsync } from "./helpers/execAsync"
@@ -205,6 +205,7 @@ export async function build<const F extends Frameworks>(
           if (!inputPaths) return
           const firstInputPath = (Array.isArray(inputPaths) ? inputPaths[0] : inputPaths) as string
           const sourceTsconfigPath = join(basepath, firstInputPath, "tsconfig.json")
+          const userTsconfigAbsolute = resolve(basepath, config.tsconfigPath ?? "./tsconfig.json")
 
           try {
             await access(sourceTsconfigPath, constants.F_OK)
@@ -213,6 +214,7 @@ export async function build<const F extends Frameworks>(
               framework: String(framework),
               sourceTsconfigPath,
               outputPath: frameworkOutputPath,
+              userTsconfigPath: userTsconfigAbsolute,
               globalModifier: config.tsconfig?.modifier,
               frameworkModifier: config.tsconfig?.frameworkModifiers?.[framework],
             })

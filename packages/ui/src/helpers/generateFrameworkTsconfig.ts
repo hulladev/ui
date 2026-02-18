@@ -1,10 +1,11 @@
 import { readFile, writeFile } from "node:fs/promises"
-import { dirname, join, resolve } from "node:path"
+import { dirname, join, relative, resolve } from "node:path"
 
 type GenerateFrameworkTsconfigOptions = {
   framework: string
   sourceTsconfigPath: string
   outputPath: string
+  userTsconfigPath: string
   globalModifier?: (config: any) => any
   frameworkModifier?: (config: any) => any
 }
@@ -62,54 +63,102 @@ async function resolveExtends(tsconfigPath: string, basePath: string): Promise<a
   return resolvedConfigs
 }
 
-function cleanupConfig(config: any): any {
-  const cleaned = { ...config }
+/**
+ * Extract jsx-related compiler options from the extends chain.
+ */
+async function extractJsxSettings(
+  sourceTsconfigPath: string,
+  basePath: string
+): Promise<Record<string, string>> {
+  const configs = await resolveExtends(sourceTsconfigPath, basePath)
+  const merged = configs.reduce((acc, config) => deepMerge(acc, config), {})
+  const jsxSettings: Record<string, string> = {}
 
-  // Remove fields that don't make sense in standalone output
-  delete cleaned.references
-  delete cleaned.composite
-  delete cleaned.incremental
-
-  // Remove compilerOptions that are development-specific
-  if (cleaned.compilerOptions) {
-    delete cleaned.compilerOptions.composite
-    delete cleaned.compilerOptions.incremental
+  if (merged.compilerOptions?.jsx) {
+    jsxSettings.jsx = merged.compilerOptions.jsx
+  }
+  if (merged.compilerOptions?.jsxImportSource) {
+    jsxSettings.jsxImportSource = merged.compilerOptions.jsxImportSource
   }
 
-  return cleaned
+  return jsxSettings
 }
 
 export async function generateFrameworkTsconfig(
   options: GenerateFrameworkTsconfigOptions
 ): Promise<void> {
-  const { framework, sourceTsconfigPath, outputPath, globalModifier, frameworkModifier } = options
+  const {
+    framework,
+    sourceTsconfigPath,
+    outputPath,
+    userTsconfigPath,
+    globalModifier,
+    frameworkModifier,
+  } = options
 
   try {
-    // Get the base path for resolving node_modules
+    // Read the source framework tsconfig directly (no recursive resolution)
+    const sourceContent = await readFile(sourceTsconfigPath, "utf-8")
+    const sourceConfig = JSON.parse(sourceContent)
+
+    // Compute relative path from output directory to user's tsconfig
+    const extendsPath = relative(outputPath, userTsconfigPath)
+
+    // Extract jsx settings from the extends chain
     const basePath = resolve(dirname(sourceTsconfigPath), "../..")
+    const jsxSettings = await extractJsxSettings(sourceTsconfigPath, basePath)
 
-    // Resolve all extends recursively
-    const configs = await resolveExtends(sourceTsconfigPath, basePath)
+    // Build paths from source, filtering out monorepo-specific ones
+    const paths: Record<string, string[]> = {}
+    if (sourceConfig.compilerOptions?.paths) {
+      for (const [key, value] of Object.entries(sourceConfig.compilerOptions.paths)) {
+        // Skip monorepo-internal aliases like @shared/*
+        if (key === "@shared/*") continue
+        paths[key] = value as string[]
+      }
+    }
 
-    // Merge all configs in order (first to last, each overriding previous)
-    let mergedConfig = configs.reduce((acc, config) => deepMerge(acc, config), {})
+    // Build include from source, adjusting parent-relative paths
+    let include: string[] | undefined
+    if (sourceConfig.include) {
+      include = (sourceConfig.include as string[])
+        .map((path: string) => {
+          // Transform "../lib/style.ts" to "lib/style.ts" etc.
+          if (path.startsWith("..")) {
+            return path.replace(/^\.\.\//, "")
+          }
+          return path
+        })
+        .filter((path: string) => {
+          // Remove paths that no longer exist (like +css)
+          return !path.includes("+css")
+        })
+    }
 
-    // Clean up fields that don't make sense in output
-    mergedConfig = cleanupConfig(mergedConfig)
+    // Build minimal config
+    let config: any = {
+      extends: extendsPath,
+      compilerOptions: {
+        baseUrl: ".",
+        ...(Object.keys(paths).length > 0 && { paths }),
+        ...jsxSettings,
+      },
+      ...(include && { include }),
+    }
 
     // Apply global modifier if provided
     if (globalModifier) {
-      mergedConfig = globalModifier(mergedConfig)
+      config = globalModifier(config)
     }
 
     // Apply framework-specific modifier if provided
     if (frameworkModifier) {
-      mergedConfig = frameworkModifier(mergedConfig)
+      config = frameworkModifier(config)
     }
 
     // Write the final tsconfig
     const tsconfigPath = join(outputPath, "tsconfig.json")
-    await writeFile(tsconfigPath, JSON.stringify(mergedConfig, null, 2) + "\n")
+    await writeFile(tsconfigPath, JSON.stringify(config, null, 2) + "\n")
 
     console.info(`[🤖 @hulla/ui]: created tsconfig.json for ${framework}`)
   } catch (error) {
