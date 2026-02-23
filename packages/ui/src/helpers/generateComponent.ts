@@ -78,9 +78,11 @@ export async function generateComponent({
         fileContents,
         sourcePath,
         dirent.parentPath,
-        resolved
+        resolved,
+        framework
       )
-      const destPath = join(outputPath, dirent.name)
+      const outputFilename = getGeneratedOutputFilename(dirent.name, framework)
+      const destPath = join(outputPath, outputFilename)
       await writeFile(destPath, transformedContent, "utf-8")
       await cache.markFileProcessed(sourcePath)
     }
@@ -91,7 +93,8 @@ async function transformFile(
   fileContents: string,
   sourceFilePath: string,
   sourceFileDir: string,
-  resolvedTsconfigPath: string
+  resolvedTsconfigPath: string,
+  framework: Frameworks[number]
 ): Promise<string> {
   const sourceFile = createSourceFile(sourceFilePath, fileContents, ScriptTarget.Latest, true)
 
@@ -120,7 +123,7 @@ async function transformFile(
 
   // If no resolve calls, return original content
   if (resolveCallArgs.length === 0) {
-    return fileContents
+    return rewriteImportSpecifiers(fileContents, framework)
   }
 
   // Find imports for each resolve argument
@@ -247,5 +250,82 @@ async function transformFile(
     transformedContent = transformedContent.replace(resolveCallRegex, value)
   })
 
-  return transformedContent
+  return rewriteImportSpecifiers(transformedContent, framework)
+}
+
+export function getGeneratedOutputFilename(name: string, framework: Frameworks[number]): string {
+  const indexVariantRegex = new RegExp(
+    `^index\\..+\\.${escapeRegExp(framework)}((?:\\.[^.]+)+)$`
+  )
+  const indexVariantMatch = name.match(indexVariantRegex)
+  if (indexVariantMatch) {
+    return `index${indexVariantMatch[1]}`
+  }
+
+  const frameworkSuffixRegex = new RegExp(
+    `\\.${escapeRegExp(framework)}(?=(?:\\.[^.]+)+$)`
+  )
+  return frameworkSuffixRegex.test(name) ? name.replace(frameworkSuffixRegex, "") : name
+}
+
+function rewriteImportSpecifiers(
+  content: string,
+  framework: Frameworks[number]
+): string {
+  const rewrite = (moduleSpecifier: string): string => {
+    if (!isLikelyRelativeSpecifier(moduleSpecifier)) {
+      return moduleSpecifier
+    }
+    return stripFrameworkSuffix(moduleSpecifier, framework)
+  }
+
+  let rewrittenContent = content
+  const importPatterns = [
+    /(from\s+["'])([^"']+)(["'])/g,
+    /(import\s+["'])([^"']+)(["'])/g,
+    /(import\s*\(\s*["'])([^"']+)(["']\s*\))/g,
+    /(require\s*\(\s*["'])([^"']+)(["']\s*\))/g,
+  ]
+
+  for (const pattern of importPatterns) {
+    rewrittenContent = rewrittenContent.replace(pattern, (_match, prefix, specifier, suffix) => {
+      return `${prefix}${rewrite(specifier)}${suffix}`
+    })
+  }
+
+  return rewrittenContent
+}
+
+function isLikelyRelativeSpecifier(specifier: string): boolean {
+  if (specifier.startsWith(".") || specifier.startsWith("..")) {
+    return true
+  }
+
+  if (specifier.includes("/") || specifier.startsWith("@") || specifier.includes(":")) {
+    return false
+  }
+
+  return true
+}
+
+function stripFrameworkSuffix(specifier: string, framework: Frameworks[number]): string {
+  const queryOrHashIndex = specifier.search(/[?#]/)
+  const basePath = queryOrHashIndex >= 0 ? specifier.slice(0, queryOrHashIndex) : specifier
+  const trailing = queryOrHashIndex >= 0 ? specifier.slice(queryOrHashIndex) : ""
+  const frameworkSuffixRegex = new RegExp(
+    `\\.${escapeRegExp(framework)}(?=(?:\\.[^./?#]+)*$)`
+  )
+
+  if (!frameworkSuffixRegex.test(basePath)) {
+    return specifier
+  }
+
+  const strippedPath = basePath.replace(frameworkSuffixRegex, "")
+  const normalizedPath = strippedPath.startsWith(".") ? strippedPath : `./${strippedPath}`
+
+  return `${normalizedPath}${trailing}`
+}
+
+function escapeRegExp(input: string): string {
+  return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 }

@@ -1,10 +1,10 @@
 import { constants, Dirent } from "node:fs"
-import { access, copyFile, mkdir, readdir, writeFile } from "node:fs/promises"
-import { dirname, join, resolve } from "node:path"
+import { access, copyFile, mkdir, readdir, rm, writeFile } from "node:fs/promises"
+import { dirname, join, relative, resolve, sep } from "node:path"
 import { cwd } from "node:process"
 import { BuildCache } from "./buildCache"
 import { execAsync } from "./helpers/execAsync"
-import { generateComponent } from "./helpers/generateComponent"
+import { generateComponent, getGeneratedOutputFilename } from "./helpers/generateComponent"
 import { generateFrameworkPackageJson } from "./helpers/generateFrameworkPackageJson"
 import { generateFrameworkTsconfig } from "./helpers/generateFrameworkTsconfig"
 import { Config, CopyFileEntry, Frameworks, NormalizedCopyFile } from "./types.public"
@@ -20,6 +20,67 @@ function normalizeCopyFileEntry(entry: CopyFileEntry): NormalizedCopyFile {
     required: entry.required ?? true,
     ...(entry.description && { description: entry.description }),
   }
+}
+
+function normalizeRelPath(path: string): string {
+  return path.split(sep).join("/")
+}
+
+async function collectExpectedOutputFiles(
+  sourceRoot: string,
+  framework: string
+): Promise<Set<string>> {
+  const expected = new Set<string>()
+
+  async function walk(currentPath: string): Promise<void> {
+    const entries = await readdir(currentPath, { withFileTypes: true })
+
+    await Promise.all(
+      entries.map(async (entry) => {
+        const entryPath = join(currentPath, entry.name)
+        if (entry.isDirectory()) {
+          await walk(entryPath)
+          return
+        }
+
+        const rel = relative(sourceRoot, entryPath)
+        const relDir = dirname(rel)
+        const outputName = getGeneratedOutputFilename(entry.name, framework)
+        const outputRel = relDir === "." ? outputName : join(relDir, outputName)
+        expected.add(normalizeRelPath(outputRel))
+      })
+    )
+  }
+
+  await walk(sourceRoot)
+  return expected
+}
+
+async function pruneStaleOutputFiles(outputRoot: string, expectedFiles: Set<string>): Promise<void> {
+  async function walk(currentPath: string): Promise<void> {
+    const entries = await readdir(currentPath, { withFileTypes: true })
+
+    await Promise.all(
+      entries.map(async (entry) => {
+        const entryPath = join(currentPath, entry.name)
+        if (entry.isDirectory()) {
+          await walk(entryPath)
+          const remaining = await readdir(entryPath)
+          if (remaining.length === 0) {
+            await rm(entryPath, { recursive: false, force: true })
+          }
+          return
+        }
+
+        const rel = normalizeRelPath(relative(outputRoot, entryPath))
+        if (!expectedFiles.has(rel)) {
+          await rm(entryPath, { force: true })
+        }
+      })
+    )
+  }
+
+  await walk(outputRoot)
 }
 
 export async function build<const F extends Frameworks>(
@@ -139,6 +200,9 @@ export async function build<const F extends Frameworks>(
           })
         )
       )
+
+      const expectedOutputFiles = await collectExpectedOutputFiles(path, String(framework))
+      await pruneStaleOutputFiles(outputPath, expectedOutputFiles)
     })
   )
 
