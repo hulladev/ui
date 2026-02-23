@@ -267,8 +267,8 @@ importers:
   packages/components:
     dependencies:
       '@hulla/style':
-        specifier: ^0.2.1
-        version: 0.2.1
+        specifier: ^0.2.2
+        version: 0.2.2
       react:
         specifier: ^19.1.0
         version: 19.1.0
@@ -995,6 +995,9 @@ packages:
 
   '@hulla/style@0.2.1':
     resolution: {integrity: sha512-a4KiOW3j/4j8yYbFevDnrKOVpO7/4bcPA8G7BmjqpYz+mZsMcCDzzdRiQw19bdkwrpSaP8zawi/2Ii/D2jNxOw==}
+
+  '@hulla/style@0.2.2':
+    resolution: {integrity: sha512-Zc/qnmzmNp1NzGhf+oH8Z7GayyyFkNJxJeUVI3/Cyto/ZVjbBVYgdYoMqnHzODCMPPi+8D7p8jqCxVjf95o9JQ==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -5832,6 +5835,8 @@ snapshots:
       zod: 3.25.76
 
   '@hulla/style@0.2.1': {}
+
+  '@hulla/style@0.2.2': {}
 
   '@humanfs/core@0.19.1': {}
 
