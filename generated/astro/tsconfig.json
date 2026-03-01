@@ -3,5 +3,5 @@
   "compilerOptions": {
     "baseUrl": "."
   },
-  "include": ["./**/*", "styles/**/*"]
+  "include": ["./**/*", "styles/**/*", "hulla/**/*", "lib/style.ts"]
 }

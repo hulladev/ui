@@ -2,7 +2,7 @@
   "name": "@hulla/ui-react",
   "private": true,
   "dependencies": {
-    "@hulla/style": "*",
+    "@hulla/style": "catalog:",
     "react": "*",
     "react-dom": "*"
   },

@@ -10,7 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@hulla/style": "^0.2.0",
+    "@hulla/style": "catalog:",
     "@tailwindcss/vite": "^4.1.13",
     "astro": "^5.13.9",
     "tailwindcss": "^4.1.13"

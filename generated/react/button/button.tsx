@@ -1,25 +1,20 @@
-import { cn, variant } from "@/lib/style"
-import { VariantProps } from "@hulla/style"
+import { cn, vn } from "@/lib/style"
 import type { ButtonHTMLAttributes, DetailedHTMLProps, PropsWithChildren } from "react"
 
-const buttonVariant = variant({
-  name: "variant",
-  classes: {
-    primary: "bg-blue-500",
-    outlined: "bg-transparent border border-gray-300",
-  },
-  base: "cursor-pointer rounded-sm",
-  default: "primary",
+const $variant = vn({
+  primary: "bg-blue-500",
+  outlined: "bg-transparent border border-gray-300",
 })
 
 export type ButtonProps = PropsWithChildren<
   DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
-> &
-  VariantProps<typeof buttonVariant>
+> & {
+  variant: typeof $variant.infer
+}
 
 export function Button({ children, className, variant, ...props }: ButtonProps) {
   return (
-    <button {...props} className={cn(buttonVariant.css(variant), className)}>
+    <button {...props} className={cn("p-4 rounded", $variant(variant), className)}>
       {children}
     </button>
   )

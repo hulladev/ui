@@ -2,7 +2,7 @@
   "name": "@hulla/ui-svelte",
   "private": true,
   "dependencies": {
-    "@hulla/style": "*"
+    "@hulla/style": "catalog:"
   },
   "devDependencies": {
     "typescript": "*"
