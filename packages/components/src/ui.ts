@@ -29,8 +29,8 @@ export const ui = createLibrary({
   },
   tsconfig: {},
   packageJson: {
-    installDepCommand: "pnpm add",
-    installDevDepCommand: "pnpm add -D",
+    installDepCommand: "bun add",
+    installDevDepCommand: "bun add -d",
     modifier: (pkg) => ({
       ...pkg,
       dependencies: {
@@ -43,6 +43,13 @@ export const ui = createLibrary({
       },
     }),
     frameworkModifiers: {
+      astro: (pkg) => ({
+        ...pkg,
+        dependencies: {
+          ...pkg.dependencies,
+          astro: "^5.0.0",
+        },
+      }),
       react: (pkg) => ({
         ...pkg,
         dependencies: {
@@ -59,6 +66,6 @@ export const ui = createLibrary({
     },
   },
   scripts: {
-    postBuild: 'cd .. && pnpm prettier --write "./generated/**/*.{ts,tsx,md,json,css}"',
+    postBuild: 'cd ../.. && bun run prettier --write "./generated/**/*.{ts,tsx,md,json,css}"',
   },
 })
