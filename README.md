@@ -6,7 +6,7 @@
 > If you're looking to add components to your application, use the **`hulla` CLI**
 > [github.com/hulladev/cli](https://github.com/hulladev/cli)
 >
-> This repository is mainly aimed at developers/teams who want to create their own UI Libraries copatible with `hulla` cli
+> This repository is mainly aimed at developers/teams who want to create their own UI Libraries coppatible with `hulla` cli or people who want to update or add new components to the hulla ui library.
 
 ## What This Repo Contains
 
