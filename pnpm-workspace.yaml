@@ -1,4 +1,12 @@
 packages:
   - "apps/*"
   - "packages/*"
+  - "packages/components/src/astro"
+  - "packages/components/src/react"
+  - "packages/components/src/solid"
+  - "packages/components/src/svelte"
+  - "packages/components/src/vue"
   - "generated/*"
+
+catalog:
+  "@hulla/style": "0.3.0"

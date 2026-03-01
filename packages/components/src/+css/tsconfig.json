@@ -15,6 +15,6 @@
     },
     "include": [
         "./**/*",
-        "../style.ts"
+        "../lib/style.ts"
     ]
 }

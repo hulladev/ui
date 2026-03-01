@@ -1,0 +1,9 @@
+{
+  "name": "@components/vue",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "vue": "^3.5.18"
+  }
+}

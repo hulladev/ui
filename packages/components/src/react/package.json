@@ -1,0 +1,12 @@
+{
+  "name": "@components/react",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}

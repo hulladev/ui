@@ -35,7 +35,7 @@ export const ui = createLibrary({
       ...pkg,
       dependencies: {
         ...pkg.dependencies,
-        "@hulla/style": "*",
+        "@hulla/style": "catalog:",
       },
       devDependencies: {
         ...pkg.devDependencies,

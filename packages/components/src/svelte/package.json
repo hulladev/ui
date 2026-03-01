@@ -1,0 +1,9 @@
+{
+  "name": "@components/svelte",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "svelte": "^5.0.0"
+  }
+}
