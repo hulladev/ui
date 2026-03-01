@@ -2,7 +2,7 @@
   "name": "@hulla/ui-vue",
   "private": true,
   "dependencies": {
-    "@hulla/style": "catalog:"
+    "@hulla/style": "0.3.0"
   },
   "devDependencies": {
     "typescript": "*"
