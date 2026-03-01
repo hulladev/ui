@@ -15,6 +15,10 @@
 - `generated`: generated framework outputs from the build pipeline _(what you use in `hulla` cli)_
 - `apps/*`: local playground/example apps for framework validation
 
+## Contributing
+
+See [`contributing.md`](./contributing.md) for setup, development workflow, sandbox sync behavior, and repo conventions.
+
 ## Component Sources
 
 Components are authored in [`packages/components/src`](packages/components/src) by framework:
@@ -58,8 +62,8 @@ export const ui = createLibrary({
     },
   },
   packageJson: {
-    installDepCommand: "pnpm add",
-    installDevDepCommand: "pnpm add -D",
+    installDepCommand: "bun add",
+    installDevDepCommand: "bun add -D",
   },
   scripts: {},
 })
@@ -80,8 +84,8 @@ export const ui = createLibrary({
 From this repository root:
 
 ```bash
-pnpm install
-pnpm build
+bun install
+bun run build
 ```
 
 For direct generator usage, `@hulla/ui` also ships `uigen`:
@@ -91,3 +95,4 @@ uigen ./packages/components/src/ui.ts
 ```
 
 (Used internally by the build flow and typically wrapped by the `hulla` CLI.)
+

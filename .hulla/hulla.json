@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/hulladev/cli/v0.0.0-alpha.1/schemas/hulla.schema.json",
+  "cli": {
+    "scripts": {
+      "add": "bun add",
+      "addDev": "bun add -D",
+      "uninstall": "bun remove",
+      "upgrade": "bun update"
+    }
+  },
+  "configs": {
+    "ui": ".hulla/ui.json"
+  }
+}

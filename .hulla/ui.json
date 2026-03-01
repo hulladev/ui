@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "sources": [
+    "https://github.com/hulladev/ui/tree/master/generated"
+  ],
+  "installs": [
+    {
+      "sourceUrl": "https://github.com/hulladev/ui/tree/master/generated",
+      "libraryName": "@hulla/ui",
+      "componentsRoot": "src/components",
+      "copyFilesRoot": "src",
+      "rootTsconfigPath": "apps/react/tsconfig.json",
+      "frameworks": [
+        {
+          "name": "astro",
+          "templatePath": "astro",
+          "outputPath": "src/components",
+          "tsconfigPath": "apps/react/tsconfig.json"
+        },
+        {
+          "name": "react",
+          "templatePath": "react",
+          "outputPath": "src/components",
+          "tsconfigPath": "apps/react/tsconfig.json"
+        },
+        {
+          "name": "solid",
+          "templatePath": "solid",
+          "outputPath": "src/components",
+          "tsconfigPath": "apps/react/tsconfig.json"
+        },
+        {
+          "name": "svelte",
+          "templatePath": "svelte",
+          "outputPath": "src/components",
+          "tsconfigPath": "apps/react/tsconfig.json"
+        },
+        {
+          "name": "vue",
+          "templatePath": "vue",
+          "outputPath": "src/components",
+          "tsconfigPath": "apps/react/tsconfig.json"
+        }
+      ]
+    }
+  ],
+  "postAddUpdateStep": ""
+}
