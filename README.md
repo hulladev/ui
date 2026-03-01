@@ -43,7 +43,7 @@ A library definition lives in [`packages/components/src/ui.ts`](packages/compone
 import { createLibrary } from "@hulla/ui"
 
 export const ui = createLibrary({
-  name: "@hulla/ui",
+  name: "your-library-name",
   version: "0.0.0",
   frameworks: ["react", "vue"],
   inputDirs: {
