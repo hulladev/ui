@@ -1,8 +1,6 @@
 # @hulla/ui
 
-`@hulla/ui` is the source-of-truth repository for generating Hulla UI libraries.
-
-It defines shared component sources and build configuration, then outputs framework-specific packages (Astro, React, Solid, Svelte, Vue).
+`@hulla/ui` the revolutionary UI lib builder for new age of coding
 
 > [!IMPORTANT]
 > If you're looking to add components to your application, use the **`hulla` CLI**
