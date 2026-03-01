@@ -5,6 +5,7 @@ import { join } from "node:path"
 import { promisify } from "node:util"
 import type { PackageJson } from "type-fest"
 import { BuildCache } from "../buildCache"
+import { dimPath, formatFramework, log } from "./log"
 
 const execAsync = promisify(exec)
 
@@ -18,10 +19,16 @@ type GenerateFrameworkPackageJsonOptions = {
     frameworkModifiers?: Partial<Record<string, (packageJson: PackageJson) => PackageJson>>
   }
   cache: BuildCache
+  executeInstall?: boolean
+}
+
+type GenerateFrameworkPackageJsonResult = {
+  depCommand?: string
+  devDepCommand?: string
 }
 
 function parsePackageString(packageString: string): { name: string; version?: string } {
-  // Handle scoped packages like @hulla/style@1.0.0
+  // Handle scoped packages like @hulla/style@x.y.z
   if (packageString.startsWith("@")) {
     const atIndex = packageString.indexOf("@", 1)
     if (atIndex !== -1) {
@@ -58,8 +65,14 @@ function buildInstallCommand(baseCommand: string, packages: string[]): string {
 
 export async function generateFrameworkPackageJson(
   options: GenerateFrameworkPackageJsonOptions
-): Promise<void> {
-  const { framework, outputPath, packageJson: packageJsonConfig, cache } = options
+): Promise<GenerateFrameworkPackageJsonResult> {
+  const {
+    framework,
+    outputPath,
+    packageJson: packageJsonConfig,
+    cache,
+    executeInstall = true,
+  } = options
 
   // Start with base package.json
   let packageJson: PackageJson = {
@@ -100,39 +113,37 @@ export async function generateFrameworkPackageJson(
         dependencies.length > 0 && !areDependenciesInstalled(existingJson, dependencies)
       shouldInstallDevDeps =
         devDependencies.length > 0 && !areDevDependenciesInstalled(existingJson, devDependencies)
-
-      if (!shouldInstallDeps && !shouldInstallDevDeps) {
-        console.info(
-          `[🤖 @hulla/ui]: dependencies unchanged for ${framework}, skipping installation`
-        )
-      }
     } catch (error) {
       // If there's an error reading/parsing, proceed with install
-      console.warn(`[🤖 @hulla/ui]: error checking existing package.json for ${framework}:`, error)
+      log.error(`failed checking package.json for ${formatFramework(framework)}`, error)
     }
   }
 
   await writeFile(packageJsonPath, newContent)
-  console.info(`[🤖 @hulla/ui]: created package.json for ${framework}`)
+  log.item(`${formatFramework(framework)} wrote package.json`)
+  log.dimItem(dimPath(packageJsonPath))
+
+  const depCommand =
+    shouldInstallDeps && dependencies.length > 0
+      ? buildInstallCommand(packageJsonConfig.installDepCommand, dependencies)
+      : undefined
+  const devDepCommand =
+    shouldInstallDevDeps && devDependencies.length > 0
+      ? buildInstallCommand(packageJsonConfig.installDevDepCommand, devDependencies)
+      : undefined
 
   // Install dependencies only if they changed
-  if (shouldInstallDeps && dependencies.length > 0) {
-    const depCommand = buildInstallCommand(packageJsonConfig.installDepCommand, dependencies)
-    console.info(`[🤖 @hulla/ui]: installing dependencies for ${framework}: ${depCommand}`)
+  if (executeInstall && depCommand) {
     await execAsync(depCommand, { cwd: outputPath })
   }
 
   // Install devDependencies only if they changed
-  if (shouldInstallDevDeps && devDependencies.length > 0) {
-    const devDepCommand = buildInstallCommand(
-      packageJsonConfig.installDevDepCommand,
-      devDependencies
-    )
-    console.info(`[🤖 @hulla/ui]: installing devDependencies for ${framework}: ${devDepCommand}`)
+  if (executeInstall && devDepCommand) {
     await execAsync(devDepCommand, { cwd: outputPath })
   }
 
   await cache.markFileProcessed(packageJsonPath)
+  return { depCommand, devDepCommand }
 }
 
 function areDependenciesInstalled(packageJson: any, requiredDeps: string[]): boolean {

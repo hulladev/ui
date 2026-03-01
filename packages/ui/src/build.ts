@@ -7,6 +7,7 @@ import { execAsync } from "./helpers/execAsync"
 import { generateComponent, getGeneratedOutputFilename } from "./helpers/generateComponent"
 import { generateFrameworkPackageJson } from "./helpers/generateFrameworkPackageJson"
 import { generateFrameworkTsconfig } from "./helpers/generateFrameworkTsconfig"
+import { dimPath, formatFramework, formatPath, log } from "./helpers/log"
 import { Config, CopyFileEntry, Frameworks, NormalizedCopyFile } from "./types.public"
 import { entries, validateFrameworkPath } from "./utils/objects"
 
@@ -87,21 +88,28 @@ export async function build<const F extends Frameworks>(
   config: Config<F>,
   options: { force?: boolean } = {}
 ): Promise<void> {
-  console.info(`\n[🤖 @hulla/ui]: starting ui build process`)
+  log.section("🏗️ Build")
 
   const basepath = config.basePath ?? cwd()
   const cache = new BuildCache(basepath)
+  log.item(`workspace: ${dimPath(basepath)}`)
 
   // Load cache unless force flag is set
   if (options.force) {
-    console.info(`[🤖 @hulla/ui]: force rebuild requested, skipping cache`)
+    log.item("cache: force rebuild enabled")
     cache.clear()
   } else {
     await cache.load()
   }
 
   // Validate all framework paths
-  console.info(`[🤖 @hulla/ui]: validating framework paths`)
+  log.section("🧭 Validate")
+  log.item("checking framework output paths")
+  log.item(
+    `frameworks: ${entries(config.outputDirs.frameworks)
+      .map(([framework]) => formatFramework(String(framework)))
+      .join(", ")}`
+  )
   for (const [framework, frameworkPath] of entries(config.outputDirs.frameworks)) {
     // Validate paths are relative (start with './')
     if (!frameworkPath.startsWith('./')) {
@@ -118,7 +126,8 @@ export async function build<const F extends Frameworks>(
   let componentsRebuilt = 0
 
   if (config.scripts.preBuild) {
-    console.info(`[🤖 @hulla/ui]: running pre-install script`)
+    log.section("🧪 Scripts")
+    log.item("running pre-build script")
     await execAsync(config.scripts.preBuild)
   }
 
@@ -187,6 +196,8 @@ export async function build<const F extends Frameworks>(
       }
 
       componentsRebuilt++
+      log.item(`${formatFramework(String(framework))} rebuilt component ${name}`)
+      log.dimItem(dimPath(`${path} -> ${outputPath}`))
       await mkdir(outputPath, { recursive: true })
 
       await Promise.all(
@@ -207,93 +218,127 @@ export async function build<const F extends Frameworks>(
   )
 
   // Process framework-level operations: copy files, generate package.json, generate tsconfig
-  console.info(`\n[🤖 @hulla/ui]: processing framework-level operations`)
+  const frameworkTargets = entries(config.outputDirs.frameworks).map(([framework, frameworkPath]) => ({
+    framework,
+    outputPath: join(basepath, config.outputDirs.rootDir, frameworkPath),
+  }))
+
   await Promise.all(
-    entries(config.outputDirs.frameworks).map(async ([framework, frameworkPath]) => {
-      const frameworkOutputPath = join(basepath, config.outputDirs.rootDir, frameworkPath)
-      await mkdir(frameworkOutputPath, { recursive: true })
-
-      // Run all framework operations in parallel
-      await Promise.all([
-        // Copy shared and framework-specific files
-        (async () => {
-          if (!config.copyFiles) return
-
-          const sharedFiles = config.copyFiles?.shared ?? []
-          const frameworkFiles = config.copyFiles?.[framework] ?? []
-          const allFilesToCopy = [...sharedFiles, ...frameworkFiles].map(normalizeCopyFileEntry)
-
-          if (allFilesToCopy.length === 0) return
-
-          const inputPaths = config.inputDirs[framework as F[number]]
-          if (!inputPaths) return
-          const firstInputPath = (Array.isArray(inputPaths) ? inputPaths[0] : inputPaths) as string
-          const sourceDir = join(basepath, firstInputPath, "..")
-
-          await Promise.all(
-            allFilesToCopy.map(async (file) => {
-              const sourcePath = join(sourceDir, file.src)
-              const destPath = join(frameworkOutputPath, file.dest)
-              const destDir = dirname(destPath)
-
-              await mkdir(destDir, { recursive: true })
-
-              try {
-                // Check if file needs copying using cache
-                const hasChanged = await cache.hasFileChanged(sourcePath)
-                if (hasChanged) {
-                  await copyFile(sourcePath, destPath)
-                  await cache.markFileProcessed(sourcePath)
-                  console.info(`[🤖 @hulla/ui]: copied ${file.src} to ${framework}`)
-                }
-              } catch (error) {
-                console.error(`[🤖 @hulla/ui]: failed to copy ${file.src} to ${framework}:`, error)
-              }
-            })
-          )
-        })(),
-
-        // Generate framework-level package.json
-        (async () => {
-          await generateFrameworkPackageJson({
-            framework: String(framework),
-            outputPath: frameworkOutputPath,
-            packageJson: config.packageJson,
-            cache,
-          })
-        })(),
-
-        // Generate framework-level tsconfig.json
-        (async () => {
-          const inputPaths = config.inputDirs[framework as F[number]]
-          if (!inputPaths) return
-          const firstInputPath = (Array.isArray(inputPaths) ? inputPaths[0] : inputPaths) as string
-          const sourceTsconfigPath = join(basepath, firstInputPath, "tsconfig.json")
-          const userTsconfigAbsolute = resolve(basepath, config.tsconfigPath ?? "./tsconfig.json")
-
-          try {
-            await access(sourceTsconfigPath, constants.F_OK)
-
-            await generateFrameworkTsconfig({
-              framework: String(framework),
-              sourceTsconfigPath,
-              outputPath: frameworkOutputPath,
-              userTsconfigPath: userTsconfigAbsolute,
-              globalModifier: config.tsconfig?.modifier,
-              frameworkModifier: config.tsconfig?.frameworkModifiers?.[framework],
-            })
-          } catch {
-            console.warn(
-              `[🤖 @hulla/ui]: skipping tsconfig generation for ${framework} (source not found at ${sourceTsconfigPath})`
-            )
-          }
-        })(),
-      ])
-    })
+    frameworkTargets.map((target) => mkdir(target.outputPath, { recursive: true }))
   )
 
+  let loggedCopySection = false
+  for (const { framework, outputPath: frameworkOutputPath } of frameworkTargets) {
+    if (!config.copyFiles) break
+
+    const sharedFiles = config.copyFiles?.shared ?? []
+    const frameworkFiles = config.copyFiles?.[framework] ?? []
+    const allFilesToCopy = [...sharedFiles, ...frameworkFiles].map(normalizeCopyFileEntry)
+
+    if (allFilesToCopy.length === 0) continue
+
+    const inputPaths = config.inputDirs[framework as F[number]]
+    if (!inputPaths) continue
+    const firstInputPath = (Array.isArray(inputPaths) ? inputPaths[0] : inputPaths) as string
+    const sourceDir = join(basepath, firstInputPath, "..")
+
+    for (const file of allFilesToCopy) {
+      const sourcePath = join(sourceDir, file.src)
+      const destPath = join(frameworkOutputPath, file.dest)
+      const destDir = dirname(destPath)
+
+      await mkdir(destDir, { recursive: true })
+
+      try {
+        // Check if file needs copying using cache
+        const hasChanged = await cache.hasFileChanged(sourcePath)
+        if (hasChanged) {
+          if (!loggedCopySection) {
+            log.section("📄 Copy Files")
+            loggedCopySection = true
+          }
+          await copyFile(sourcePath, destPath)
+          await cache.markFileProcessed(sourcePath)
+          log.item(`${formatFramework(String(framework))} copied ${file.src}`)
+          log.dimItem(dimPath(`${sourcePath} -> ${destPath}`))
+        }
+      } catch (error) {
+        log.error(
+          `failed copy for ${formatFramework(String(framework))} (${formatPath(file.src)})`,
+          error
+        )
+      }
+    }
+  }
+
+  log.section("📦 Package.json")
+  const frameworkInstallPlans: Array<{
+    framework: string
+    outputPath: string
+    depCommand?: string
+    devDepCommand?: string
+  }> = []
+  for (const { framework, outputPath: frameworkOutputPath } of frameworkTargets) {
+    const plan = await generateFrameworkPackageJson({
+      framework: String(framework),
+      outputPath: frameworkOutputPath,
+      packageJson: config.packageJson,
+      cache,
+      executeInstall: false,
+    })
+    frameworkInstallPlans.push({
+      framework: String(framework),
+      outputPath: frameworkOutputPath,
+      depCommand: plan.depCommand,
+      devDepCommand: plan.devDepCommand,
+    })
+  }
+
+  const hasInstallCommands = frameworkInstallPlans.some(
+    (plan) => Boolean(plan.depCommand) || Boolean(plan.devDepCommand)
+  )
+  if (hasInstallCommands) {
+    log.section("📥 Install")
+    for (const plan of frameworkInstallPlans) {
+      if (plan.depCommand) {
+        log.item(`${formatFramework(plan.framework)} deps: ${plan.depCommand}`)
+        await execAsync(plan.depCommand, { cwd: plan.outputPath })
+      }
+      if (plan.devDepCommand) {
+        log.item(`${formatFramework(plan.framework)} devDeps: ${plan.devDepCommand}`)
+        await execAsync(plan.devDepCommand, { cwd: plan.outputPath })
+      }
+    }
+  }
+
+  log.section("⚙️ Tsconfig")
+  for (const { framework, outputPath: frameworkOutputPath } of frameworkTargets) {
+    const inputPaths = config.inputDirs[framework as F[number]]
+    if (!inputPaths) continue
+    const firstInputPath = (Array.isArray(inputPaths) ? inputPaths[0] : inputPaths) as string
+    const sourceTsconfigPath = join(basepath, firstInputPath, "tsconfig.json")
+    const userTsconfigAbsolute = resolve(basepath, config.tsconfigPath ?? "./tsconfig.json")
+
+    try {
+      await access(sourceTsconfigPath, constants.F_OK)
+
+      await generateFrameworkTsconfig({
+        framework: String(framework),
+        sourceTsconfigPath,
+        outputPath: frameworkOutputPath,
+        userTsconfigPath: userTsconfigAbsolute,
+        globalModifier: config.tsconfig?.modifier,
+        frameworkModifier: config.tsconfig?.frameworkModifiers?.[framework],
+      })
+    } catch {
+      log.warn(`${formatFramework(String(framework))} skipped tsconfig generation (missing source tsconfig)`)
+      log.dimItem(dimPath(sourceTsconfigPath))
+    }
+  }
+
   // Generate ui.config.ts at rootDir
-  console.info(`[🤖 @hulla/ui]: generating ui.config.ts`)
+  log.section("📝 Config")
+  log.item("generating ui.config.ts")
   const uiConfigPath = join(basepath, config.outputDirs.rootDir, 'ui.config.ts')
   const authorString = Array.isArray(config.author)
     ? `[${config.author.map(a => `'${a}'`).join(', ')}]`
@@ -354,10 +399,11 @@ ${configLines.join('\n')}
 
   await mkdir(dirname(uiConfigPath), { recursive: true })
   await writeFile(uiConfigPath, uiConfigContent, 'utf-8')
-  console.info(`[🤖 @hulla/ui]: created ui.config.ts at ${config.outputDirs.rootDir}`)
+  log.item(`wrote ui.config.ts: ${dimPath(uiConfigPath)}`)
 
   if (config.scripts.postBuild) {
-    console.info(`[🤖 @hulla/ui]: running post-install script`)
+    log.section("🧪 Scripts")
+    log.item("running post-build script")
     await execAsync(config.scripts.postBuild)
   }
 
@@ -365,15 +411,13 @@ ${configLines.join('\n')}
   await cache.save()
 
   // Log build metrics
-  console.info(`\n[🤖 @hulla/ui]: build metrics:`)
-  console.info(`  - Components rebuilt: ${componentsRebuilt}`)
-  console.info(`  - Components skipped (cached): ${componentsSkipped}`)
+  log.section("📊 Metrics")
+  log.item(`components rebuilt: ${componentsRebuilt}`)
+  log.item(`components skipped (cache): ${componentsSkipped}`)
   if (componentsSkipped > 0) {
     const percentSkipped = Math.round(
       (componentsSkipped / (componentsRebuilt + componentsSkipped)) * 100
     )
-    console.info(`  - Cache hit rate: ${percentSkipped}%`)
+    log.item(`cache hit rate: ${percentSkipped}%`)
   }
-
-  console.info(`\n[🤖 @hulla/ui]: build process completed`)
 }

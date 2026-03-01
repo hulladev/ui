@@ -1,5 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises"
 import { dirname, join, relative, resolve } from "node:path"
+import { dimPath, formatFramework, log } from "./log"
 
 type GenerateFrameworkTsconfigOptions = {
   framework: string
@@ -160,9 +161,10 @@ export async function generateFrameworkTsconfig(
     const tsconfigPath = join(outputPath, "tsconfig.json")
     await writeFile(tsconfigPath, JSON.stringify(config, null, 2) + "\n")
 
-    console.info(`[🤖 @hulla/ui]: created tsconfig.json for ${framework}`)
+    log.item(`${formatFramework(framework)} wrote tsconfig.json`)
+    log.dimItem(dimPath(tsconfigPath))
   } catch (error) {
-    console.error(`[🤖 @hulla/ui]: failed to generate tsconfig for ${framework}:`, error)
+    log.error(`failed generating tsconfig for ${formatFramework(framework)}`, error)
     throw error
   }
 }

@@ -3,6 +3,7 @@ import { existsSync } from "node:fs"
 import { mkdir, readFile, stat, writeFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { cwd } from "node:process"
+import { formatPath, log } from "./helpers/log"
 
 interface CacheEntry {
   timestamp: number
@@ -41,7 +42,7 @@ export class BuildCache {
         if (cached.version === BuildCache.CACHE_VERSION) {
           this.manifest = cached
         } else {
-          console.info("[🤖 @hulla/ui]: cache version mismatch, invalidating cache")
+          log.warn("cache version mismatch, invalidating")
           this.manifest = {
             files: {},
             version: BuildCache.CACHE_VERSION,
@@ -50,7 +51,7 @@ export class BuildCache {
         }
       }
     } catch (error) {
-      console.warn("[🤖 @hulla/ui]: failed to load cache, starting fresh:", error)
+      log.error("failed loading cache, starting fresh", error)
       this.manifest = {
         files: {},
         version: BuildCache.CACHE_VERSION,
@@ -108,7 +109,7 @@ export class BuildCache {
       }
       this.dirty = true
     } catch (error) {
-      console.warn(`[🤖 @hulla/ui]: failed to mark file as processed: ${filePath}`, error)
+      log.error(`failed marking file as processed (${formatPath(filePath)})`, error)
     }
   }
 
@@ -133,7 +134,7 @@ export class BuildCache {
       await writeFile(this.cacheFilePath, JSON.stringify(this.manifest, null, 2), "utf-8")
       this.dirty = false
     } catch (error) {
-      console.warn("[🤖 @hulla/ui]: failed to save cache:", error)
+      log.error("failed saving cache", error)
     }
   }
 
