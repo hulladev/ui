@@ -92,7 +92,6 @@
   },
   "workspaces": {
     "packages": [
-      "scripts",
       "apps/*",
       "packages/*",
       "packages/components/src/astro",

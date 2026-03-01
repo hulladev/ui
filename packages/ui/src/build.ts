@@ -1,5 +1,5 @@
 import { constants, Dirent } from "node:fs"
-import { access, copyFile, mkdir, readdir, rm, writeFile } from "node:fs/promises"
+import { access, copyFile, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises"
 import { dirname, join, relative, resolve, sep } from "node:path"
 import { cwd } from "node:process"
 import { BuildCache } from "./buildCache"
@@ -10,6 +10,27 @@ import { generateFrameworkTsconfig } from "./helpers/generateFrameworkTsconfig"
 import { dimPath, formatFramework, formatPath, log } from "./helpers/log"
 import { Config, CopyFileEntry, Frameworks, NormalizedCopyFile } from "./types.public"
 import { entries, validateFrameworkPath } from "./utils/objects"
+
+async function findWorkspaceRoot(startPath: string): Promise<string> {
+  let current = startPath
+  const maxDepth = 10
+  for (let i = 0; i < maxDepth; i++) {
+    const packageJsonPath = join(current, "package.json")
+    try {
+      const content = await readFile(packageJsonPath, "utf-8")
+      const pkg = JSON.parse(content)
+      if (pkg.workspaces) {
+        return current
+      }
+    } catch {
+      // Continue searching up
+    }
+    const parent = dirname(current)
+    if (parent === current) break
+    current = parent
+  }
+  return startPath
+}
 
 function normalizeCopyFileEntry(entry: CopyFileEntry): NormalizedCopyFile {
   if (typeof entry === "string") {
@@ -57,7 +78,10 @@ async function collectExpectedOutputFiles(
   return expected
 }
 
-async function pruneStaleOutputFiles(outputRoot: string, expectedFiles: Set<string>): Promise<void> {
+async function pruneStaleOutputFiles(
+  outputRoot: string,
+  expectedFiles: Set<string>
+): Promise<void> {
   async function walk(currentPath: string): Promise<void> {
     const entries = await readdir(currentPath, { withFileTypes: true })
 
@@ -91,8 +115,12 @@ export async function build<const F extends Frameworks>(
   log.section("🏗️ Build")
 
   const basepath = config.basePath ?? cwd()
+  const workspaceRoot = await findWorkspaceRoot(basepath)
   const cache = new BuildCache(basepath)
   log.item(`workspace: ${dimPath(basepath)}`)
+  if (workspaceRoot !== basepath) {
+    log.item(`root workspace: ${dimPath(workspaceRoot)}`)
+  }
 
   // Load cache unless force flag is set
   if (options.force) {
@@ -112,12 +140,12 @@ export async function build<const F extends Frameworks>(
   )
   for (const [framework, frameworkPath] of entries(config.outputDirs.frameworks)) {
     // Validate paths are relative (start with './')
-    if (!frameworkPath.startsWith('./')) {
+    if (!frameworkPath.startsWith("./")) {
       throw new Error(
         `Framework path for '${String(framework)}' must be relative (start with './'). Got: '${frameworkPath}'`
       )
     }
-    
+
     // Validate paths are within rootDir
     validateFrameworkPath(basepath, config.outputDirs.rootDir, String(framework), frameworkPath)
   }
@@ -218,14 +246,14 @@ export async function build<const F extends Frameworks>(
   )
 
   // Process framework-level operations: copy files, generate package.json, generate tsconfig
-  const frameworkTargets = entries(config.outputDirs.frameworks).map(([framework, frameworkPath]) => ({
-    framework,
-    outputPath: join(basepath, config.outputDirs.rootDir, frameworkPath),
-  }))
-
-  await Promise.all(
-    frameworkTargets.map((target) => mkdir(target.outputPath, { recursive: true }))
+  const frameworkTargets = entries(config.outputDirs.frameworks).map(
+    ([framework, frameworkPath]) => ({
+      framework,
+      outputPath: join(basepath, config.outputDirs.rootDir, frameworkPath),
+    })
   )
+
+  await Promise.all(frameworkTargets.map((target) => mkdir(target.outputPath, { recursive: true })))
 
   let loggedCopySection = false
   for (const { framework, outputPath: frameworkOutputPath } of frameworkTargets) {
@@ -294,21 +322,11 @@ export async function build<const F extends Frameworks>(
     })
   }
 
-  const hasInstallCommands = frameworkInstallPlans.some(
-    (plan) => Boolean(plan.depCommand) || Boolean(plan.devDepCommand)
-  )
+  const hasInstallCommands = frameworkInstallPlans.length > 0
   if (hasInstallCommands) {
     log.section("📥 Install")
-    for (const plan of frameworkInstallPlans) {
-      if (plan.depCommand) {
-        log.item(`${formatFramework(plan.framework)} deps: ${plan.depCommand}`)
-        await execAsync(plan.depCommand, { cwd: plan.outputPath })
-      }
-      if (plan.devDepCommand) {
-        log.item(`${formatFramework(plan.framework)} devDeps: ${plan.devDepCommand}`)
-        await execAsync(plan.devDepCommand, { cwd: plan.outputPath })
-      }
-    }
+    log.item("running bun install at root")
+    await execAsync("bun install", { cwd: workspaceRoot })
   }
 
   log.section("⚙️ Tsconfig")
@@ -331,7 +349,9 @@ export async function build<const F extends Frameworks>(
         frameworkModifier: config.tsconfig?.frameworkModifiers?.[framework],
       })
     } catch {
-      log.warn(`${formatFramework(String(framework))} skipped tsconfig generation (missing source tsconfig)`)
+      log.warn(
+        `${formatFramework(String(framework))} skipped tsconfig generation (missing source tsconfig)`
+      )
       log.dimItem(dimPath(sourceTsconfigPath))
     }
   }
@@ -339,17 +359,17 @@ export async function build<const F extends Frameworks>(
   // Generate ui.config.ts at rootDir
   log.section("📝 Config")
   log.item("generating ui.config.ts")
-  const uiConfigPath = join(basepath, config.outputDirs.rootDir, 'ui.config.ts')
+  const uiConfigPath = join(basepath, config.outputDirs.rootDir, "ui.config.ts")
   const authorString = Array.isArray(config.author)
-    ? `[${config.author.map(a => `'${a}'`).join(', ')}]`
+    ? `[${config.author.map((a) => `'${a}'`).join(", ")}]`
     : `'${config.author}'`
 
   const frameworksEntries = entries(config.outputDirs.frameworks)
     .map(([framework, path]) => `  ${String(framework)}: '${path}'`)
-    .join(',\n')
+    .join(",\n")
 
   // Normalize copyFiles for output
-  let copyFilesOutput = ''
+  let copyFilesOutput = ""
   if (config.copyFiles) {
     const normalizedCopyFiles: Record<string, NormalizedCopyFile[]> = {}
 
@@ -361,20 +381,18 @@ export async function build<const F extends Frameworks>(
 
     if (Object.keys(normalizedCopyFiles).length > 0) {
       const formatFile = (f: NormalizedCopyFile) => {
-        const parts = [
-          `src: '${f.src}'`,
-          `dest: '${f.dest}'`,
-          `required: ${f.required}`,
-        ]
+        const parts = [`src: '${f.src}'`, `dest: '${f.dest}'`, `required: ${f.required}`]
         if (f.description) {
           parts.push(`description: '${f.description}'`)
         }
-        return `{ ${parts.join(', ')} }`
+        return `{ ${parts.join(", ")} }`
       }
 
       const copyFilesEntries = Object.entries(normalizedCopyFiles)
-        .map(([key, files]) => `    ${key}: [\n      ${files.map(formatFile).join(',\n      ')}\n    ]`)
-        .join(',\n')
+        .map(
+          ([key, files]) => `    ${key}: [\n      ${files.map(formatFile).join(",\n      ")}\n    ]`
+        )
+        .join(",\n")
 
       copyFilesOutput = `,\n  copyFiles: {\n${copyFilesEntries}\n  }`
     }
@@ -387,18 +405,18 @@ export async function build<const F extends Frameworks>(
     `  frameworks: {`,
     frameworksEntries,
     `  },`,
-    `  version: '${config.version}'${copyFilesOutput}`
+    `  version: '${config.version}'${copyFilesOutput}`,
   ]
 
   const uiConfigContent = `import type { UILibrary } from '@hulla/ui'
 
 export const config: UILibrary = {
-${configLines.join('\n')}
+${configLines.join("\n")}
 }
 `
 
   await mkdir(dirname(uiConfigPath), { recursive: true })
-  await writeFile(uiConfigPath, uiConfigContent, 'utf-8')
+  await writeFile(uiConfigPath, uiConfigContent, "utf-8")
   log.item(`wrote ui.config.ts: ${dimPath(uiConfigPath)}`)
 
   if (config.scripts.postBuild) {
