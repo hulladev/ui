@@ -1,135 +1,96 @@
-# Turborepo starter
+# @hulla/ui
 
-This Turborepo starter is maintained by the Turborepo core team.
+`@hulla/ui` is the source-of-truth repository for generating Hulla UI libraries.
 
-## Using this example
+It defines shared component sources and build configuration, then outputs framework-specific packages (Astro, React, Solid, Svelte, Vue).
 
-Run the following command:
+> [!IMPORTANT]
+> If you're looking to add components to your application, use the **`hulla` CLI**
+> [github.com/hulladev/cli](https://github.com/hulladev/cli)
+>
+> This repository is mainly aimed at developers/teams who want to create their own UI Libraries copatible with `hulla` cli
 
-```sh
-npx create-turbo@latest
+## What This Repo Contains
+
+- `packages/ui`: core generation API (`createLibrary`, `resolve`, types)
+- `packages/components`: component source templates per framework
+- `generated`: generated framework outputs from the build pipeline _(what you use in `hulla` cli)_
+- `apps/*`: local playground/example apps for framework validation
+
+## Component Sources
+
+Components are authored in [`packages/components/src`](packages/components/src) by framework:
+
+- `astro/`
+- `react/`
+- `solid/`
+- `svelte/`
+- `vue/`
+
+- `+css/` - Shared styles/classes between frameworks
+
+A library definition lives in [`packages/components/src/ui.ts`](packages/components/src/ui.ts).
+
+## Basic `@hulla/ui` API
+
+`@hulla/ui` exports:
+
+- `createLibrary(config)`
+- `resolve(...)`
+- `withRootDir(...)`
+- public types from `types.public.ts`
+
+### Minimal Example
+
+```ts
+import { createLibrary } from "@hulla/ui"
+
+export const ui = createLibrary({
+  name: "@hulla/ui",
+  version: "0.0.0",
+  frameworks: ["react", "vue"],
+  inputDirs: {
+    react: "./src/react",
+    vue: "./src/vue",
+  },
+  outputDirs: {
+    rootDir: "./generated",
+    frameworks: {
+      react: "./react",
+      vue: "./vue",
+    },
+  },
+  packageJson: {
+    installDepCommand: "pnpm add",
+    installDevDepCommand: "pnpm add -D",
+  },
+  scripts: {},
+})
 ```
 
-## What's inside?
+### Core Config Fields
 
-This Turborepo includes the following packages/apps:
+- `frameworks`: frameworks to generate
+- `inputDirs`: source directories per framework
+- `outputDirs`: root and framework output directories
+- `copyFiles`: optional files copied into generated outputs
+- `packageJson`: dependency installation commands + optional modifiers
+- `tsconfig`: optional modifiers for generated tsconfig files
+- `scripts`: optional `preBuild` / `postBuild` hooks
 
-### Apps and Packages
+## Generate Output Locally
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+From this repository root:
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+```bash
+pnpm install
+pnpm build
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+For direct generator usage, `@hulla/ui` also ships `uigen`:
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+```bash
+uigen ./packages/components/src/ui.ts
 ```
 
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+(Used internally by the build flow and typically wrapped by the `hulla` CLI.)
