@@ -26,7 +26,6 @@ Components are authored in [`packages/components/src`](packages/components/src) 
 - `solid/`
 - `svelte/`
 - `vue/`
-
 - `+css/` - Shared styles/classes between frameworks
 
 A library definition lives in [`packages/components/src/ui.ts`](packages/components/src/ui.ts).
