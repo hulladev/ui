@@ -2,7 +2,8 @@
   "name": "@hulla/ui-astro",
   "private": true,
   "dependencies": {
-    "@hulla/style": "0.3.0"
+    "@hulla/style": "catalog:",
+    "astro": "^5.0.0"
   },
   "devDependencies": {
     "typescript": "*"
