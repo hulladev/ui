@@ -88,6 +88,23 @@ bun install
 bun run build
 ```
 
+For active component development, run watcher mode:
+
+```bash
+bun run dev
+```
+
+This watches `packages/components/src/**` and rebuilds `generated/**` on change.
+
+## Sandbox Workflow
+
+Use an external sandbox (recommended) to avoid duplicate file-search matches inside this repo.
+
+- Recommended location: `../ui-sandbox`
+- Configure sandbox source as local generated output: `../ui/generated`
+
+See [`contributing.md`](./contributing.md) for full setup and end-to-end workflow.
+
 For direct generator usage, `@hulla/ui` also ships `uigen`:
 
 ```bash
@@ -95,4 +112,3 @@ uigen ./packages/components/src/ui.ts
 ```
 
 (Used internally by the build flow and typically wrapped by the `hulla` CLI.)
-
