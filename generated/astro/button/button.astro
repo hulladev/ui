@@ -7,12 +7,10 @@ const $variant = vn({
   primary: "bg-blue-500",
   outlined: "bg-transparent border border-gray-300",
 })
-const $base = "p-2 border-4 border-red-500 rounded"
 
 type Props = HTMLAttributes<'button'> & { variant: typeof $variant.infer }
 const { class: className, variant, ...props } = Astro.props as Props
 ---
 
-<button {...props} class={cn($base, $variant(variant), className)}><slot /></button>
-
+<button {...props} class={cn("p-2 border-4 border-red-500 rounded", $variant(variant), className)}><slot /></button>
 

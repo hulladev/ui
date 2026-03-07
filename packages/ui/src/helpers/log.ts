@@ -1,14 +1,6 @@
 import pc from "picocolors"
 
-const FRAMEWORK_COLORS = [
-  pc.cyan,
-  pc.green,
-  pc.blue,
-  pc.yellow,
-  pc.magenta,
-  pc.red,
-  pc.inverse,
-]
+const FRAMEWORK_COLORS = [pc.cyan, pc.green, pc.blue, pc.yellow, pc.magenta, pc.red, pc.inverse]
 
 function pickFrameworkColor(framework: string): (value: string) => string {
   const name = framework.toLowerCase()

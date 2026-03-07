@@ -16,13 +16,13 @@ export function validateFrameworkPath(
 ): void {
   const resolvedRoot = resolve(basepath, rootDir)
   const resolvedFramework = resolve(basepath, rootDir, frameworkPath)
-  
+
   // Check if framework path is within rootDir
   if (!resolvedFramework.startsWith(resolvedRoot)) {
     throw new Error(
       `Framework '${framework}' resolves to a path outside rootDir.\n` +
-      `  Framework path: ${resolvedFramework}\n` +
-      `  RootDir: ${resolvedRoot}`
+        `  Framework path: ${resolvedFramework}\n` +
+        `  RootDir: ${resolvedRoot}`
     )
   }
 }

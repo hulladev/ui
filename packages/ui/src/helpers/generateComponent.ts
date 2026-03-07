@@ -264,24 +264,17 @@ async function transformFile(
 }
 
 export function getGeneratedOutputFilename(name: string, framework: Frameworks[number]): string {
-  const indexVariantRegex = new RegExp(
-    `^index\\..+\\.${escapeRegExp(framework)}((?:\\.[^.]+)+)$`
-  )
+  const indexVariantRegex = new RegExp(`^index\\..+\\.${escapeRegExp(framework)}((?:\\.[^.]+)+)$`)
   const indexVariantMatch = name.match(indexVariantRegex)
   if (indexVariantMatch) {
     return `index${indexVariantMatch[1]}`
   }
 
-  const frameworkSuffixRegex = new RegExp(
-    `\\.${escapeRegExp(framework)}(?=(?:\\.[^.]+)+$)`
-  )
+  const frameworkSuffixRegex = new RegExp(`\\.${escapeRegExp(framework)}(?=(?:\\.[^.]+)+$)`)
   return frameworkSuffixRegex.test(name) ? name.replace(frameworkSuffixRegex, "") : name
 }
 
-function rewriteImportSpecifiers(
-  content: string,
-  framework: Frameworks[number]
-): string {
+function rewriteImportSpecifiers(content: string, framework: Frameworks[number]): string {
   const rewrite = (moduleSpecifier: string): string => {
     if (!isLikelyRelativeSpecifier(moduleSpecifier)) {
       return moduleSpecifier
@@ -322,9 +315,7 @@ function stripFrameworkSuffix(specifier: string, framework: Frameworks[number]):
   const queryOrHashIndex = specifier.search(/[?#]/)
   const basePath = queryOrHashIndex >= 0 ? specifier.slice(0, queryOrHashIndex) : specifier
   const trailing = queryOrHashIndex >= 0 ? specifier.slice(queryOrHashIndex) : ""
-  const frameworkSuffixRegex = new RegExp(
-    `\\.${escapeRegExp(framework)}(?=(?:\\.[^./?#]+)*$)`
-  )
+  const frameworkSuffixRegex = new RegExp(`\\.${escapeRegExp(framework)}(?=(?:\\.[^./?#]+)*$)`)
 
   if (!frameworkSuffixRegex.test(basePath)) {
     return specifier

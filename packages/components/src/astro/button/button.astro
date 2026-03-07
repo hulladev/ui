@@ -5,12 +5,10 @@ import type { HTMLAttributes } from "astro/types"
 import { resolve } from "@hulla/ui"
 
 const $variant = resolve(buttonCss)
-const $base = resolve(base)
 
 type Props = HTMLAttributes<'button'> & { variant: typeof $variant.infer }
 const { class: className, variant, ...props } = Astro.props as Props
 ---
 
-<button {...props} class={cn($base, $variant(variant), className)}><slot /></button>
-
+<button {...props} class={cn(resolve(base), $variant(variant), className)}><slot /></button>
 

@@ -6,7 +6,7 @@
     "dev": "turbo run dev",
     "dev:components": "turbo run dev --filter=components",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "fmt": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"
   },
   "devDependencies": {

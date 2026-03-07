@@ -4,7 +4,6 @@ import { resolve } from "@hulla/ui"
 import type { ButtonHTMLAttributes, DetailedHTMLProps, PropsWithChildren } from "react"
 
 const $variant = resolve(buttonCss)
-const $base = resolve(base)
 
 export type ButtonProps = PropsWithChildren<
   DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
@@ -14,7 +13,7 @@ export type ButtonProps = PropsWithChildren<
 
 export function Button({ children, className, variant, ...props }: ButtonProps) {
   return (
-    <button {...props} className={cn($base, $variant(variant), className)}>
+    <button {...props} className={cn(resolve(base), $variant(variant), className)}>
       {children}
     </button>
   )
