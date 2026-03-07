@@ -127,7 +127,10 @@ async function transformFile(
   }
 
   // Find imports for each resolve argument
-  const importMap = new Map<string, { moduleSpecifier: string; importClause: string }>()
+  const importMap = new Map<
+    string,
+    { exportedName: string; moduleSpecifier: string; importClause: string }
+  >()
   sourceFile.statements.forEach((statement) => {
     if (isImportDeclaration(statement)) {
       const moduleSpecifier = (statement.moduleSpecifier as StringLiteral).text
@@ -136,9 +139,11 @@ async function transformFile(
         const namedBindings = statement.importClause.namedBindings
         if (namedBindings && isNamedImports(namedBindings)) {
           namedBindings.elements.forEach((element) => {
-            const importedName = element.name.text
-            if (resolveCallArgs.includes(importedName)) {
-              importMap.set(importedName, {
+            const localName = element.name.text
+            const exportedName = element.propertyName?.text ?? localName
+            if (resolveCallArgs.includes(localName)) {
+              importMap.set(localName, {
+                exportedName,
                 moduleSpecifier,
                 importClause: fileContents.substring(statement.pos, statement.end).trim(),
               })
@@ -148,9 +153,9 @@ async function transformFile(
         }
       }
 
-      // Check if this is the resolve import from @hulla/ui
-      if (moduleSpecifier === "@hulla/ui-kit") {
-        importsToRemove.add("@hulla/ui-kit")
+      // Remove resolve imports after all resolve(...) calls are inlined.
+      if (moduleSpecifier === "@hulla/ui") {
+        importsToRemove.add("@hulla/ui")
       }
     }
   })
@@ -187,7 +192,10 @@ async function transformFile(
         const hasExport = statement.modifiers?.some((mod) => mod.kind === SyntaxKind.ExportKeyword)
         if (hasExport) {
           statement.declarationList.declarations.forEach((declaration) => {
-            if (isIdentifier(declaration.name) && declaration.name.text === varName) {
+            if (
+              isIdentifier(declaration.name) &&
+              declaration.name.text === importInfo.exportedName
+            ) {
               if (declaration.initializer) {
                 declarationValue = importedFileContents
                   .substring(declaration.initializer.pos, declaration.initializer.end)
@@ -206,7 +214,9 @@ async function transformFile(
     })
 
     if (!declarationValue) {
-      throw new Error(`Cannot find exported declaration for "${varName}" in ${resolvedPath}`)
+      throw new Error(
+        `Cannot find exported declaration for "${importInfo.exportedName}" in ${resolvedPath}`
+      )
     }
 
     variablesToInline.set(varName, { name: varName, value: declarationValue })

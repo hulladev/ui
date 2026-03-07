@@ -19,7 +19,7 @@ export class BuildCache {
   private cacheFilePath: string
   private manifest: CacheManifest
   private dirty = false
-  private static readonly CACHE_VERSION = "1.0.0"
+  private static readonly CACHE_VERSION = "1.0.1"
 
   constructor(basePath: string = cwd()) {
     this.cacheFilePath = join(basePath, ".hulla", ".cache", "ui-cache.json")

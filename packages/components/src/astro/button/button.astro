@@ -1,15 +1,16 @@
 ---
-import { buttonCss } from "@/+css/button.css"
+import { buttonCss, className as base } from "@/+css/button.css"
 import { cn } from "@/lib/style"
 import type { HTMLAttributes } from "astro/types"
 import { resolve } from "@hulla/ui"
 
 const $variant = resolve(buttonCss)
+const $base = resolve(base)
 
 type Props = HTMLAttributes<'button'> & { variant: typeof $variant.infer }
 const { class: className, variant, ...props } = Astro.props as Props
 ---
 
-<button {...props} class={cn("p-2 border-4 border-red-500 rounded", $variant(variant), className)}><slot /></button>
+<button {...props} class={cn($base, $variant(variant), className)}><slot /></button>
 
 
