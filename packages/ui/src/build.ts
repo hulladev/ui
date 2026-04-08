@@ -108,6 +108,15 @@ async function pruneStaleOutputFiles(
   await walk(outputRoot)
 }
 
+async function pathExists(path: string): Promise<boolean> {
+  try {
+    await access(path, constants.F_OK)
+    return true
+  } catch {
+    return false
+  }
+}
+
 export async function build<const F extends Frameworks>(
   config: Config<F>,
   options: { force?: boolean } = {}
@@ -215,10 +224,11 @@ export async function build<const F extends Frameworks>(
 
       await Promise.all(files.map((file) => collectFiles(path, file)))
 
-      // Check if component needs rebuilding
+      // Rebuild if source changed or generated output is missing.
       const hasChanged = await cache.hasAnyFileChanged(sourceFiles)
+      const outputExists = await pathExists(outputPath)
 
-      if (!hasChanged) {
+      if (!hasChanged && outputExists) {
         componentsSkipped++
         return
       }
@@ -278,9 +288,11 @@ export async function build<const F extends Frameworks>(
       await mkdir(destDir, { recursive: true })
 
       try {
-        // Check if file needs copying using cache
+        // Restore missing outputs even when the source file is unchanged in cache.
         const hasChanged = await cache.hasFileChanged(sourcePath)
-        if (hasChanged) {
+        const destExists = await pathExists(destPath)
+
+        if (hasChanged || !destExists) {
           if (!loggedCopySection) {
             log.section("📄 Copy Files")
             loggedCopySection = true
