@@ -1,6 +1,5 @@
----
 import { vn, cn } from "@/lib/style"
-import type { HTMLAttributes } from "astro/types"
+import type { ComponentPropsWithoutRef } from "react"
 
 const $size = vn({
   sm: "h-8 rounded-sm px-2.5 text-[0.8125rem] [&[type=file]]:leading-[1.875rem] file:text-[0.8125rem]",
@@ -16,20 +15,31 @@ const $variant = vn({
     "rounded-none border-0 border-b border-border bg-transparent px-0 shadow-none hover:border-foreground/35 focus-visible:border-primary aria-invalid:border-danger",
 })
 
-type Props = HTMLAttributes<"input"> & {
+export type SelectProps = ComponentPropsWithoutRef<"select"> & {
   controlSize?: typeof $size.infer
   variant?: typeof $variant.infer
 }
-const { class: className, controlSize = "md", variant = "outline", ...props } = Astro.props as Props
----
 
-<input
-  {...props}
-  data-slot="control"
-  class={cn(
-    "block w-full min-w-0 appearance-none text-foreground antialiased placeholder:text-muted-foreground/65 transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none file:mr-3 file:border-0 file:bg-transparent file:p-0 file:font-medium file:leading-[inherit] file:text-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-55 read-only:cursor-default aria-invalid:placeholder:text-danger/60",
-    $size(controlSize),
-    $variant(variant),
-    className
-  )}
-/>
+export function Select({
+  children,
+  className,
+  controlSize = "md",
+  variant = "outline",
+  ...props
+}: SelectProps) {
+  return (
+    <select
+      {...props}
+      data-slot="control"
+      className={cn(
+        "block w-full min-w-0 cursor-pointer text-foreground antialiased transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-55 [&[multiple]]:h-auto [&[multiple]]:cursor-default [&[multiple]]:py-2",
+        $size(controlSize),
+        $variant(variant),
+        "pr-9 [&[multiple]]:pr-3",
+        className
+      )}
+    >
+      {children}
+    </select>
+  )
+}

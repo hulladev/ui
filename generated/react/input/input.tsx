@@ -2,9 +2,9 @@ import { vn, cn } from "@/lib/style"
 import type { ComponentPropsWithoutRef } from "react"
 
 const $size = vn({
-  sm: "h-8 rounded-sm px-2.5 text-[0.8125rem] file:text-[0.8125rem]",
-  md: "h-10 rounded-md px-3 text-sm file:text-sm",
-  lg: "h-12 rounded-md px-3.5 text-base file:text-base",
+  sm: "h-8 rounded-sm px-2.5 text-[0.8125rem] [&[type=file]]:leading-[1.875rem] file:text-[0.8125rem]",
+  md: "h-10 rounded-md px-3 text-sm [&[type=file]]:leading-[2.375rem] file:text-sm",
+  lg: "h-12 rounded-md px-3.5 text-base [&[type=file]]:leading-[2.875rem] file:text-base",
 })
 const $variant = vn({
   outline:
@@ -31,9 +31,9 @@ export function Input({
       {...props}
       data-slot="control"
       className={cn(
-        "block w-full min-w-0 appearance-none text-foreground antialiased placeholder:text-muted-foreground/65 transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none file:mr-3 file:border-0 file:bg-transparent file:p-0 file:font-medium file:text-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-55 read-only:cursor-default aria-invalid:placeholder:text-danger/60",
-        $variant(variant),
+        "block w-full min-w-0 appearance-none text-foreground antialiased placeholder:text-muted-foreground/65 transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none file:mr-3 file:border-0 file:bg-transparent file:p-0 file:font-medium file:leading-[inherit] file:text-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-55 read-only:cursor-default aria-invalid:placeholder:text-danger/60",
         $size(controlSize),
+        $variant(variant),
         className
       )}
     />

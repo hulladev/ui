@@ -21,6 +21,9 @@ export const config = {
     input: {
       frameworks: ["astro", "react"],
     },
+    select: {
+      frameworks: ["astro", "react"],
+    },
   },
   author: "Samuel Hulla",
   copyFiles: {

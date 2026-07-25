@@ -77,10 +77,6 @@ body::before {
   opacity: 0.16;
 }
 
-:where(button, input) {
-  font: inherit;
-}
-
 a {
   color: inherit;
 }
@@ -502,7 +498,7 @@ h2 {
 }
 
 .workbench--input {
-  min-height: 56rem;
+  min-height: 68rem;
 }
 
 [data-preview-component="input-field-preview"] .preview-panel {
@@ -520,7 +516,8 @@ h2 {
 }
 
 .input-size-row,
-.field-state-grid {
+.field-state-grid,
+.native-type-lab {
   display: grid;
   gap: 1rem;
   padding-top: 2rem;
@@ -545,7 +542,86 @@ h2 {
   gap: 1.5rem 1rem;
 }
 
+.native-type-lab {
+  gap: 1.25rem;
+}
+
+.native-type-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+  color: var(--color-muted-foreground);
+  font-size: 0.78rem;
+}
+
+.native-type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.native-type-grid [data-slot="label"] {
+  color: var(--color-muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+}
+
+.native-type-file {
+  grid-column: 1 / -1;
+}
+
 .prop-controls.prop-controls--input {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.workbench--select {
+  min-height: 61rem;
+}
+
+[data-preview-component="select-preview"] .preview-panel {
+  width: min(100%, 40rem);
+}
+
+.select-preview {
+  display: grid;
+  gap: 2rem;
+}
+
+.select-style-matrix {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.select-size-row,
+.select-state-grid {
+  display: grid;
+  gap: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.select-size-row {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+}
+
+.select-size-row [data-slot="label"] {
+  color: var(--color-muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+}
+
+.select-state-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem 1rem;
+}
+
+.prop-controls.prop-controls--select {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
@@ -1074,8 +1150,21 @@ h2 {
 
   .input-size-row,
   .field-state-grid,
-  .prop-controls.prop-controls--input {
+  .native-type-grid,
+  .select-size-row,
+  .select-state-grid,
+  .prop-controls.prop-controls--input,
+  .prop-controls.prop-controls--select {
     grid-template-columns: 1fr;
+  }
+
+  .native-type-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .native-type-file {
+    grid-column: auto;
   }
 
   .source-path {

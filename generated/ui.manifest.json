@@ -20,6 +20,9 @@
       },
       "input": {
         "frameworks": ["astro", "react"]
+      },
+      "select": {
+        "frameworks": ["astro", "react"]
       }
     },
     "author": "Samuel Hulla",
@@ -49,10 +52,12 @@
     "astro/field/field-label.astro": "4812f28914d83505af3ec3350a8d07a83fafdc10bedd02ba0370b3ba77206a70",
     "astro/field/field.astro": "646de49c88d24b94532f83d7428ecc1b60c3e17e1ca13ddd04601fd83f5aa28f",
     "astro/field/package.json": "cb577548a90e99c25732561b123f14e2235eb4061f44d48d680ebbf3fa7b243d",
-    "astro/input/input.astro": "515ea957d6015a890ca28f67dc92894eeb12dbb2d75f71602c48a0a4624e4c64",
+    "astro/input/input.astro": "06f5cf6e59a627d8c38cc3a9f3846f9f5afcd7139dbe9889c6d937ed2181ff82",
     "astro/input/package.json": "7f37d483a0819672d662024832cfabc1d5b728e585b5062dfb6721d3efb9e8a0",
     "astro/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
     "astro/package.json": "729beabe39fd3999678130c873b8c0a485a7fff6c0d401e505abf1b663a2a23b",
+    "astro/select/package.json": "40c8c24724b564e91f04d57917f907fe773190245b726a7986b1f877cc8bfbc8",
+    "astro/select/select.astro": "f323a510f0d4f61f3a3c6bd120824fe848974593f5a23d7cc0c2a215ea182f7d",
     "astro/styles.css": "b3ca163479b0cb3021211f9e4d0f2e280dcbceef42f2cb9e5854bba018b1aa1c",
     "astro/tsconfig.json": "c318190eb7fdf055d44be992e36362f6f8a6e0ceb83244218970f88faee1093c",
     "react/button/button.tsx": "ffed59bc4c90c7681fc4feeddc991676f0dba3a1eac519cc23ccc556508e9879",
@@ -65,10 +70,13 @@
     "react/field/index.tsx": "ada81ecc130111e321ecb18ab2e7817ecac2f0e36042950fe34ef1805db41a3b",
     "react/field/package.json": "cb577548a90e99c25732561b123f14e2235eb4061f44d48d680ebbf3fa7b243d",
     "react/input/index.tsx": "3116182228536c5b9f9a84ad00741dbbf40ba9fc3c037d1742ba387b0c34e539",
-    "react/input/input.tsx": "00fa87ce017904ea2327c344588e58e0ae1224349da9fca5cfbc3c35f8a4d284",
+    "react/input/input.tsx": "015a8fdf6acf8215003547ea64e77c7387d4dd6be59fa4f2710635e902e53722",
     "react/input/package.json": "7f37d483a0819672d662024832cfabc1d5b728e585b5062dfb6721d3efb9e8a0",
     "react/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
     "react/package.json": "84263571f414a10d33698b948854fecf7422d49195ddf1cb3f2e094609494b1b",
+    "react/select/index.tsx": "7d8cc28708a89dc3269a7213cb5898b2767eec6d7c85d4bbceea36f7df0ca426",
+    "react/select/package.json": "40c8c24724b564e91f04d57917f907fe773190245b726a7986b1f877cc8bfbc8",
+    "react/select/select.tsx": "1b4634754f9cf8a2c50cff611a3c96cb0ef1f94e560a8acfcdf85265d8f3f45f",
     "react/styles.css": "b3ca163479b0cb3021211f9e4d0f2e280dcbceef42f2cb9e5854bba018b1aa1c",
     "react/tsconfig.json": "a8e5bae18429ccac746feb8fa00a6aabac25b622dbbe3b678ee81eba87ae361d",
     "solid/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
@@ -79,7 +87,7 @@
     "svelte/package.json": "c3747e26bcc102b860fd4d3371cd81fb1cc13568d830d541e72afeaf6767aa92",
     "svelte/styles.css": "b3ca163479b0cb3021211f9e4d0f2e280dcbceef42f2cb9e5854bba018b1aa1c",
     "svelte/tsconfig.json": "f62ec89e196b417b33c95ae1dea8d61d35eb4411da96d44615a6bc5ffa159400",
-    "ui.config.ts": "8a3583e7a25240d9394c87223ff26f7cb2929c396f93a3eeda7e2f8e4afdaa31",
+    "ui.config.ts": "d22e401d4405b3bbd3f1a799e2571ecc701f8ed7583a42c7cda8724f98d5dd84",
     "vue/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
     "vue/package.json": "bad87abcda4da5b5ff58cea8b8d28d50a9370ddb5c9ec45ce83364e2392da0fd",
     "vue/styles.css": "b3ca163479b0cb3021211f9e4d0f2e280dcbceef42f2cb9e5854bba018b1aa1c",
