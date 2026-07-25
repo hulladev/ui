@@ -7,17 +7,5 @@
   "access": "public",
   "baseBranch": "master",
   "updateInternalDependencies": "patch",
-  "ignore": [
-    "sandbox-astro",
-    "sandbox-react",
-    "sandbox-solid",
-    "sandbox-svelte",
-    "sandbox-vue",
-    "components",
-    "@hulla/ui-react",
-    "@hulla/ui-astro",
-    "@hulla/ui-solid",
-    "@hulla/ui-svelte",
-    "@hulla/ui-vue"
-  ]
+  "ignore": ["components"]
 }
