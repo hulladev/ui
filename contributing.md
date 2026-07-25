@@ -1,40 +1,76 @@
 # Contributing
 
-This repository authors component templates and generates framework outputs used by `hulla` CLI.
+This repository owns both component templates and the generated registry consumed by the `hulla`
+CLI. Source and generated output are intentionally committed together.
 
-## Local Setup
+## Prerequisites
 
-From repo root:
+- Bun 1.3.9, matching the root `packageManager` field and CI.
+- Node.js 20 or newer, matching the published `@hulla/ui` runtime contract.
+
+Install the locked dependency graph from the repository root:
 
 ```bash
-bun install
+bun install --frozen-lockfile
 ```
 
-## Development Loop (Generator Watch)
+## Daily development workflow
 
-Run watcher from repo root:
+Start the generator watcher and component catalog together:
 
 ```bash
 bun run dev
 ```
 
-This runs `components` package `dev` task and watches:
+The generator watches `packages/components/src` and serializes rebuilds so a burst of file changes
+cannot create overlapping writes. The catalog compiles components from `generated/astro`, which
+means it exercises the same transformed files consumers receive.
 
-- `packages/components/src/**`
+Use the narrower commands when needed:
 
-On each change it rebuilds generated output into:
+```bash
+bun run dev:generator
+bun run dev:catalog
+```
 
-- `generated/**`
+Author only in `packages/components/src`. A successful generator run replaces `generated` as a
+complete tree; edits made directly in `generated` will be reported by `generate:check` and removed
+by the next write build.
 
-The watcher includes debounce and queued rebuild behavior so bursts of file changes do not spawn overlapping builds.
+See [Component authoring](./docs/component-authoring.md) before adding a component. In particular,
+every component directory needs a `package.json` marker, and `resolve(...)` has a deliberately
+strict source-template contract.
 
-## External Sandbox Hookup
+## Verification
 
-For cleaner file search and no duplicate component noise in this repo, use a sibling sandbox project (recommended):
+Run the full local and CI gate before requesting review:
 
-- `../ui-sandbox`
+```bash
+bun run verify
+```
 
-Configure sandbox `.hulla/ui.json` with local generated source:
+This checks formatting, lint, source types, unit and integration tests, package builds, generated
+drift, and isolated framework compilation. To diagnose one layer, run its root script directly.
+
+When a pull request intentionally changes `@hulla/ui`, add a changeset:
+
+```bash
+bun run changeset
+```
+
+Generated component content is not published as its own workspace package, so `components` is
+excluded from changesets.
+
+## Testing the consumer workflow
+
+Use a sibling sandbox to avoid duplicate source and generated search results in this repository:
+
+```text
+ui/          # this repository
+ui-sandbox/  # application used for hulla CLI smoke tests
+```
+
+Point the sandbox's `.hulla/ui.json` at this repository's generated registry:
 
 ```json
 {
@@ -44,14 +80,12 @@ Configure sandbox `.hulla/ui.json` with local generated source:
 }
 ```
 
-Then:
+Keep `bun run dev:generator` running here, then exercise `hulla ui init`, add, and update flows in
+the sandbox. This validates file ownership and installation behavior without coupling the library
+build to a consumer project.
 
-1. Keep `bun run dev` running in this repo.
-2. In sandbox, run `hulla ui init` and `hulla ui add <component>`.
-3. Re-run add/update flows after template edits to pick up local generated changes.
+## Commit and release workflow
 
-## Core Paths
-
-- Source templates: `packages/components/src`
-- Generator entry: `packages/components/src/ui.ts`
-- Generated output: `generated`
+Commit messages are checked with Commitlint through the Husky `commit-msg` hook. CI runs
+`bun run verify` on pull requests and pushes to `master`. Changesets opens version pull requests and
+publishes `@hulla/ui` only when the repository's npm token is configured.

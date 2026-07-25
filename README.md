@@ -1,114 +1,69 @@
-# @hulla/ui
+# Hulla UI
 
-`@hulla/ui` the revolutionary UI lib builder for new age of coding
+Hulla UI is the source-component registry and deterministic generator used by the
+[`hulla` CLI](https://github.com/hulladev/cli). This repository is for library authors and
+contributors; application developers install components through `hulla`, not directly from this
+workspace.
 
-> [!IMPORTANT]
-> If you're looking to add components to your application, use the **`hulla` CLI**
-> [github.com/hulladev/cli](https://github.com/hulladev/cli)
->
-> This repository is mainly aimed at developers/teams who want to create their own UI Libraries coppatible with `hulla` cli or people who want to update or add new components to the hulla ui library.
+The generator turns framework-specific source templates into complete, validated registries for
+Astro, React, Solid, Svelte, and Vue. Every build is staged, compared by content, and swapped into
+place atomically, so failed generation never leaves a partially updated registry.
 
-## What This Repo Contains
+## Start developing
 
-- `packages/ui`: core generation API (`createLibrary`, `resolve`, types)
-- `packages/components`: component source templates per framework
-- `generated`: generated framework outputs from the build pipeline _(what you use in `hulla` cli)_
-- `apps/*`: local playground/example apps for framework validation
-
-## Contributing
-
-See [`contributing.md`](./contributing.md) for setup, development workflow, sandbox sync behavior, and repo conventions.
-
-## Component Sources
-
-Components are authored in [`packages/components/src`](packages/components/src) by framework:
-
-- `astro/`
-- `react/`
-- `solid/`
-- `svelte/`
-- `vue/`
-- `+css/` - Shared styles/classes between frameworks
-
-A library definition lives in [`packages/components/src/ui.ts`](packages/components/src/ui.ts).
-
-## Basic `@hulla/ui` API
-
-`@hulla/ui` exports:
-
-- `createLibrary(config)`
-- `resolve(...)`
-- `withRootDir(...)`
-- public types from `types.public.ts`
-
-### Minimal Example
-
-```ts
-import { createLibrary } from "@hulla/ui"
-
-export const ui = createLibrary({
-  name: "your-library-name",
-  version: "0.0.0",
-  frameworks: ["react", "vue"],
-  inputDirs: {
-    react: "./src/react",
-    vue: "./src/vue",
-  },
-  outputDirs: {
-    rootDir: "./generated",
-    frameworks: {
-      react: "./react",
-      vue: "./vue",
-    },
-  },
-  packageJson: {
-    installDepCommand: "bun add",
-    installDevDepCommand: "bun add -D",
-  },
-  scripts: {},
-})
-```
-
-### Core Config Fields
-
-- `frameworks`: frameworks to generate
-- `inputDirs`: source directories per framework
-- `outputDirs`: root and framework output directories
-- `copyFiles`: optional files copied into generated outputs
-- `packageJson`: dependency installation commands + optional modifiers
-- `tsconfig`: optional modifiers for generated tsconfig files
-- `scripts`: optional `preBuild` / `postBuild` hooks
-
-## Generate Output Locally
-
-From this repository root:
+Requirements: Bun 1.3.9 and Node.js 20 or newer.
 
 ```bash
-bun install
-bun run build
-```
-
-For active component development, run watcher mode:
-
-```bash
+bun install --frozen-lockfile
 bun run dev
 ```
 
-This watches `packages/components/src/**` and rebuilds `generated/**` on change.
+`bun run dev` starts both the component generator watcher and the Astro catalog at
+`http://localhost:4321`. Edit files under `packages/components/src`; do not edit `generated`
+directly.
 
-## Sandbox Workflow
-
-Use an external sandbox (recommended) to avoid duplicate file-search matches inside this repo.
-
-- Recommended location: `../ui-sandbox`
-- Configure sandbox source as local generated output: `../ui/generated`
-
-See [`contributing.md`](./contributing.md) for full setup and end-to-end workflow.
-
-For direct generator usage, `@hulla/ui` also ships `uigen`:
+Before opening a pull request, run the same gate used by CI:
 
 ```bash
-uigen ./packages/components/src/ui.ts
+bun run verify
 ```
 
-(Used internally by the build flow and typically wrapped by the `hulla` CLI.)
+## Common commands
+
+| Command                   | Purpose                                                            |
+| ------------------------- | ------------------------------------------------------------------ |
+| `bun run dev`             | Watch component sources and run the catalog                        |
+| `bun run dev:generator`   | Watch and regenerate without the catalog                           |
+| `bun run dev:catalog`     | Run only the catalog                                               |
+| `bun run generate`        | Rebuild the committed registry atomically                          |
+| `bun run generate:check`  | Report generated drift without writing files                       |
+| `bun run check-generated` | Type-check generated output in isolated framework projects         |
+| `bun run verify`          | Format, lint, type-check, test, build, and verify generated output |
+
+## Repository map
+
+- `packages/ui` — published `@hulla/ui` generator API and `uigen` CLI.
+- `packages/components/src` — canonical component templates and shared source files.
+- `generated` — committed registry consumed by the `hulla` CLI.
+- `apps/catalog` — real Astro compilation and visual inspection environment.
+- `docs` — generator API, architecture, and component-authoring contracts.
+
+## Generator guarantees
+
+- Builds are deterministic and never depend on timestamps or an incremental cache.
+- The complete output is staged before the current registry is replaced.
+- Deleted source files and components are pruned automatically.
+- `--check` detects missing, changed, and unexpected files without overwriting them.
+- Paths are contained within their declared roots, output cannot overlap source inputs, and
+  generated metadata cannot be overwritten by copied files.
+- A content-hashed `ui.manifest.json` records component availability and every generated file.
+- Generated framework trees are type-checked independently of monorepo-only configuration.
+
+## Documentation
+
+- [Contributing](./contributing.md)
+- [Component authoring](./docs/component-authoring.md)
+- [Generator API and CLI](./docs/generator-api.md)
+- [Build architecture](./docs/architecture.md)
+
+For application installation flows, see the [`hulla` CLI](https://github.com/hulladev/cli).
