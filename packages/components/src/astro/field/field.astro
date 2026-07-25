@@ -1,0 +1,15 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"div">
+const { class: className, ...props } = Astro.props as Props
+---
+
+<div
+  {...props}
+  data-slot="field"
+  class={cn("group/field grid min-w-0 gap-1.5 text-left has-[:disabled]:opacity-70", className)}
+>
+  <slot />
+</div>

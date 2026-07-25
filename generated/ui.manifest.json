@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "library": {
+    "schemaVersion": 1,
+    "name": "@hulla/ui",
+    "version": "0.0.0",
+    "frameworks": {
+      "astro": "./astro",
+      "react": "./react",
+      "solid": "./solid",
+      "svelte": "./svelte",
+      "vue": "./vue"
+    },
+    "components": {
+      "button": {
+        "frameworks": ["astro", "react"]
+      },
+      "field": {
+        "frameworks": ["astro", "react"]
+      },
+      "input": {
+        "frameworks": ["astro", "react"]
+      }
+    },
+    "author": "Samuel Hulla",
+    "copyFiles": {
+      "shared": [
+        {
+          "src": "lib/style.ts",
+          "dest": "lib/style.ts",
+          "required": true,
+          "description": "Shared class and variant composition helpers"
+        },
+        {
+          "src": "styles.css",
+          "dest": "styles.css",
+          "required": true,
+          "description": "Shared Hulla design tokens and Tailwind theme"
+        }
+      ]
+    },
+    "url": "https://hulla.dev/docs/ui"
+  },
+  "files": {
+    "astro/button/button.astro": "1f6cdb4e3fb7ad3507ff2f546fec9fd0fa7b8c0cae2efbafbb8e833510a843ca",
+    "astro/button/package.json": "b7f614c54781aa37fd86ed439ca0fe6c06ade1a4cd806c30cce2377dd6890fd1",
+    "astro/field/field-description.astro": "803d40c8a5ecb3d9f1773719ea7c0aacaedc597dc4169637090205b86a1ff404",
+    "astro/field/field-error.astro": "47d2dcf6a941614653d17f44fc4db6bc6a06fa9c48314f668d759538ebb23e42",
+    "astro/field/field-label.astro": "4812f28914d83505af3ec3350a8d07a83fafdc10bedd02ba0370b3ba77206a70",
+    "astro/field/field.astro": "646de49c88d24b94532f83d7428ecc1b60c3e17e1ca13ddd04601fd83f5aa28f",
+    "astro/field/package.json": "cb577548a90e99c25732561b123f14e2235eb4061f44d48d680ebbf3fa7b243d",
+    "astro/input/input.astro": "515ea957d6015a890ca28f67dc92894eeb12dbb2d75f71602c48a0a4624e4c64",
+    "astro/input/package.json": "7f37d483a0819672d662024832cfabc1d5b728e585b5062dfb6721d3efb9e8a0",
+    "astro/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
+    "astro/package.json": "729beabe39fd3999678130c873b8c0a485a7fff6c0d401e505abf1b663a2a23b",
+    "astro/styles.css": "b3ca163479b0cb3021211f9e4d0f2e280dcbceef42f2cb9e5854bba018b1aa1c",
+    "astro/tsconfig.json": "c318190eb7fdf055d44be992e36362f6f8a6e0ceb83244218970f88faee1093c",
+    "react/button/button.tsx": "ffed59bc4c90c7681fc4feeddc991676f0dba3a1eac519cc23ccc556508e9879",
+    "react/button/index.tsx": "af34b9af96acc5b433c667d1faf5c5f79cd169ef33a47d3e27b6d6f94ced22c3",
+    "react/button/package.json": "b7f614c54781aa37fd86ed439ca0fe6c06ade1a4cd806c30cce2377dd6890fd1",
+    "react/field/field-description.tsx": "cfc1418231b923b776175d7abb69e8170b60dfde4ea5686d6db96504404310b7",
+    "react/field/field-error.tsx": "4ae4686c1ab367144c091c4114edf252a8f3b31a9deceb9ab2bd35c1a1841da2",
+    "react/field/field-label.tsx": "5b2407b406f4823adb73aa76f20e37117571af2c450b8a8bf878155c2df4aa3c",
+    "react/field/field.tsx": "66a072eec1202f6ebf139b62d607c3b83816948747de37bd98e01998eb0f901f",
+    "react/field/index.tsx": "ada81ecc130111e321ecb18ab2e7817ecac2f0e36042950fe34ef1805db41a3b",
+    "react/field/package.json": "cb577548a90e99c25732561b123f14e2235eb4061f44d48d680ebbf3fa7b243d",
+    "react/input/index.tsx": "3116182228536c5b9f9a84ad00741dbbf40ba9fc3c037d1742ba387b0c34e539",
+    "react/input/input.tsx": "00fa87ce017904ea2327c344588e58e0ae1224349da9fca5cfbc3c35f8a4d284",
+    "react/input/package.json": "7f37d483a0819672d662024832cfabc1d5b728e585b5062dfb6721d3efb9e8a0",
+    "react/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
+    "react/package.json": "84263571f414a10d33698b948854fecf7422d49195ddf1cb3f2e094609494b1b",
+    "react/styles.css": "b3ca163479b0cb3021211f9e4d0f2e280dcbceef42f2cb9e5854bba018b1aa1c",
+    "react/tsconfig.json": "a8e5bae18429ccac746feb8fa00a6aabac25b622dbbe3b678ee81eba87ae361d",
+    "solid/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
+    "solid/package.json": "5553851ea2c8547e2993d2357bd7342a604137160c2ec528c1617bf48b2f6218",
+    "solid/styles.css": "b3ca163479b0cb3021211f9e4d0f2e280dcbceef42f2cb9e5854bba018b1aa1c",
+    "solid/tsconfig.json": "37e941a49cbc375f8dfc37529cbc03fbba8f5c9497683e0654099144e6f4a15d",
+    "svelte/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
+    "svelte/package.json": "c3747e26bcc102b860fd4d3371cd81fb1cc13568d830d541e72afeaf6767aa92",
+    "svelte/styles.css": "b3ca163479b0cb3021211f9e4d0f2e280dcbceef42f2cb9e5854bba018b1aa1c",
+    "svelte/tsconfig.json": "f62ec89e196b417b33c95ae1dea8d61d35eb4411da96d44615a6bc5ffa159400",
+    "ui.config.ts": "8a3583e7a25240d9394c87223ff26f7cb2929c396f93a3eeda7e2f8e4afdaa31",
+    "vue/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
+    "vue/package.json": "bad87abcda4da5b5ff58cea8b8d28d50a9370ddb5c9ec45ce83364e2392da0fd",
+    "vue/styles.css": "b3ca163479b0cb3021211f9e4d0f2e280dcbceef42f2cb9e5854bba018b1aa1c",
+    "vue/tsconfig.json": "af330e55f24d82f4a8f7dd783978d46b0c2b1e7db66050b7dbcadd6c09759154"
+  }
+}

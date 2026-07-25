@@ -1,0 +1,18 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"p">
+const { class: className, ...props } = Astro.props as Props
+---
+
+<p
+  {...props}
+  data-slot="error"
+  class={cn(
+    "flex items-start gap-1.5 text-[0.8125rem] font-medium leading-5 text-danger before:mt-[0.45rem] before:block before:size-1 before:shrink-0 before:rounded-full before:bg-current empty:hidden",
+    className
+  )}
+>
+  <slot />
+</p>

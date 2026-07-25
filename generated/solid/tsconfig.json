@@ -1,9 +1,21 @@
 {
-  "extends": "../../packages/components/tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
+    "allowJs": true,
+    "checkJs": false,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "noUncheckedIndexedAccess": true,
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022",
     "jsx": "preserve",
     "jsxImportSource": "solid-js"
   },
-  "include": ["./**/*", "styles/**/*"]
+  "exclude": ["node_modules"],
+  "include": ["**/*"]
 }

@@ -1,14 +1,19 @@
 {
   "name": "@hulla/ui-react",
   "private": true,
+  "type": "module",
   "dependencies": {
+    "@fontsource-variable/schibsted-grotesk": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
     "@hulla/style": "0.3.0",
-    "react": "*",
-    "react-dom": "*"
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^4.1.13",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "typescript": "*",
-    "@types/react": "*",
-    "@types/react-dom": "*"
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0"
   }
 }
