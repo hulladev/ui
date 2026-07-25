@@ -1,0 +1,168 @@
+---
+type Props = {
+  component: string
+  hint?: string
+  propsLabel?: string
+  variantsLabel?: string
+}
+
+const {
+  component,
+  hint = "Tab focus",
+  propsLabel = "Props",
+  variantsLabel = "Variants",
+} = Astro.props
+const previewId = `${component.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}-preview`
+const hasProps = Astro.slots.has("props")
+---
+
+<div class="preview-pane" data-component-preview data-preview-component={previewId}>
+  <header class="bench-bar label">
+    <div class="preview-heading">
+      <span>Live canvas</span>
+      {
+        hasProps && (
+          <div class="preview-tabs" role="tablist" aria-label={`${component} preview mode`}>
+            <button
+              id={`${previewId}-variants-tab`}
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls={`${previewId}-variants`}
+              tabindex="0"
+              data-preview-tab="variants"
+            >
+              {variantsLabel}
+            </button>
+            <button
+              id={`${previewId}-props-tab`}
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls={`${previewId}-props`}
+              tabindex="-1"
+              data-preview-tab="props"
+            >
+              {propsLabel}
+            </button>
+          </div>
+        )
+      }
+    </div>
+
+    <div class="bench-actions">
+      <fieldset class="background-picker">
+        <legend class="sr-only">Canvas background</legend>
+        <span aria-hidden="true">Background</span>
+        <button
+          type="button"
+          aria-pressed="true"
+          data-canvas-background="grid"
+          title="Use grid background"
+        >
+          Grid
+        </button>
+        <button
+          type="button"
+          aria-pressed="false"
+          data-canvas-background="plain"
+          title="Use plain background"
+        >
+          Plain
+        </button>
+      </fieldset>
+      <span class="bench-hint">{hint}</span>
+    </div>
+  </header>
+
+  <div class="canvas" data-preview-canvas data-background="grid">
+    <div
+      class="preview-panel"
+      id={`${previewId}-variants`}
+      role={hasProps ? "tabpanel" : undefined}
+      aria-labelledby={hasProps ? `${previewId}-variants-tab` : undefined}
+      data-preview-panel="variants"
+    >
+      <slot name="variants" />
+    </div>
+
+    {
+      hasProps && (
+        <div
+          class="preview-panel"
+          id={`${previewId}-props`}
+          role="tabpanel"
+          aria-labelledby={`${previewId}-props-tab`}
+          data-preview-panel="props"
+          hidden
+        >
+          <slot name="props" />
+        </div>
+      )
+    }
+  </div>
+
+  <slot name="facts" />
+</div>
+
+<script>
+  document.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement
+    const preview = target.closest<HTMLElement>("[data-component-preview]")
+    if (!preview) return
+
+    const tab = target.closest<HTMLButtonElement>("[data-preview-tab]")
+    if (tab) {
+      const mode = tab.dataset.previewTab
+      if (!mode) return
+
+      preview.querySelectorAll<HTMLButtonElement>("[data-preview-tab]").forEach((item) => {
+        item.setAttribute("aria-selected", String(item === tab))
+        item.tabIndex = item === tab ? 0 : -1
+      })
+      preview.querySelectorAll<HTMLElement>("[data-preview-panel]").forEach((panel) => {
+        panel.hidden = panel.dataset.previewPanel !== mode
+      })
+      preview.dispatchEvent(
+        new CustomEvent("previewmodechange", { bubbles: true, detail: { mode } })
+      )
+      return
+    }
+
+    const background = target.closest<HTMLButtonElement>("[data-canvas-background]")
+    if (!background) return
+
+    const value = background.dataset.canvasBackground
+    const canvas = preview.querySelector<HTMLElement>("[data-preview-canvas]")
+    if (!value || !canvas) return
+
+    canvas.dataset.background = value
+    preview.querySelectorAll<HTMLButtonElement>("[data-canvas-background]").forEach((item) => {
+      item.setAttribute("aria-pressed", String(item === background))
+    })
+  })
+
+  document.addEventListener("keydown", (event) => {
+    const tab = (event.target as HTMLElement).closest<HTMLButtonElement>("[data-preview-tab]")
+    if (!tab || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return
+
+    const tablist = tab.closest<HTMLElement>('[role="tablist"]')
+    const tabs = Array.from(
+      tablist?.querySelectorAll<HTMLButtonElement>("[data-preview-tab]") ?? []
+    )
+    const currentIndex = tabs.indexOf(tab)
+    if (currentIndex < 0) return
+
+    event.preventDefault()
+    const nextIndex =
+      event.key === "Home"
+        ? 0
+        : event.key === "End"
+          ? tabs.length - 1
+          : event.key === "ArrowRight"
+            ? (currentIndex + 1) % tabs.length
+            : (currentIndex - 1 + tabs.length) % tabs.length
+    tabs[nextIndex]?.click()
+    tabs[nextIndex]?.focus()
+  })
+</script>

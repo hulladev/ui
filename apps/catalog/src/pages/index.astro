@@ -1,0 +1,541 @@
+---
+import ComponentPreview from "../components/ComponentPreview.astro"
+import ComponentSource from "../components/ComponentSource.astro"
+import Button from "../../../../generated/astro/button/button.astro"
+import FieldDescription from "../../../../generated/astro/field/field-description.astro"
+import FieldError from "../../../../generated/astro/field/field-error.astro"
+import FieldLabel from "../../../../generated/astro/field/field-label.astro"
+import Field from "../../../../generated/astro/field/field.astro"
+import Input from "../../../../generated/astro/input/input.astro"
+import astroButtonSource from "../../../../generated/astro/button/button.astro?raw"
+import astroFieldSource from "../../../../generated/astro/field/field.astro?raw"
+import astroInputSource from "../../../../generated/astro/input/input.astro?raw"
+import reactButtonSource from "../../../../generated/react/button/button.tsx?raw"
+import reactFieldSource from "../../../../generated/react/field/field.tsx?raw"
+import reactInputSource from "../../../../generated/react/input/input.tsx?raw"
+import manifest from "../../../../generated/ui.manifest.json"
+import "../styles/catalog.css"
+
+const button = manifest.library.components.button
+const field = manifest.library.components.field
+const input = manifest.library.components.input
+const frameworkCount = Object.keys(manifest.library.frameworks).length
+const buttonSizes = ["sm", "md", "lg"] as const
+const buttonVariants = ["primary", "secondary", "outline"] as const
+const inputSizes = ["sm", "md", "lg"] as const
+const inputVariants = ["outline", "filled", "underline"] as const
+const buttonSources = [
+  {
+    code: astroButtonSource,
+    filename: "generated/astro/button/button.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactButtonSource,
+    filename: "generated/react/button/button.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+const inputSources = [
+  {
+    code: astroInputSource,
+    filename: "generated/astro/input/input.astro",
+    framework: "Astro · Input",
+    language: "astro" as const,
+  },
+  {
+    code: reactInputSource,
+    filename: "generated/react/input/input.tsx",
+    framework: "React · Input",
+    language: "tsx" as const,
+  },
+  {
+    code: astroFieldSource,
+    filename: "generated/astro/field/field.astro",
+    framework: "Astro · Field",
+    language: "astro" as const,
+  },
+  {
+    code: reactFieldSource,
+    filename: "generated/react/field/field.tsx",
+    framework: "React · Field",
+    language: "tsx" as const,
+  },
+]
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content="Development catalog for inspecting Hulla UI components and generated framework output."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>Hulla UI — Component Foundry</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to component canvas</a>
+    <div class="shell">
+      <aside class="rail glass-panel" aria-label="Catalog navigation">
+        <a class="brand" href="/">
+          <span class="brand-mark">h.</span>
+          <span class="eyebrow">UI Foundry / 001</span>
+        </a>
+
+        <nav class="rail-nav">
+          <a href="#button" aria-current="page"><span>Button</span><span>01</span></a>
+          <a href="#input"><span>Input + Field</span><span>02</span></a>
+          <a href="/showcase"><span>Default theme example</span><span>↗</span></a>
+          <a href="https://hulla.dev/docs/ui"><span>Documentation</span><span>↗</span></a>
+        </nav>
+
+        <p class="rail-note">
+          Generated output<br />
+          {frameworkCount} framework targets<br />
+          Manifest schema v{manifest.schemaVersion}
+        </p>
+      </aside>
+
+      <main class="content" id="main">
+        <header class="masthead">
+          <div>
+            <p class="eyebrow">Component development environment</p>
+            <h1>Component foundry.</h1>
+            <p class="lede">
+              Inspect generated components under real framework compilation, switch contrast, and
+              exercise keyboard states before anything reaches the CLI source registry.
+            </p>
+          </div>
+
+          <label class="contrast-toggle label" for="contrast">
+            <input id="contrast" type="checkbox" />
+            Dark theme
+          </label>
+        </header>
+
+        <section class="component-section" id="button" aria-labelledby="button-title">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Primitive / Action</p>
+              <h2 id="button-title">Button</h2>
+            </div>
+            <span class="status">Generated cleanly</span>
+          </div>
+
+          <article class="bench glass-panel" aria-label="Button component preview">
+            <div class="workbench">
+              <ComponentPreview component="Button">
+                <div slot="variants" class="variant-matrix">
+                  {
+                    buttonVariants.map((variant) => (
+                      <div class="variant-row">
+                        <span class="label">{variant}</span>
+                        {buttonSizes.map((size) => (
+                          <Button size={size} variant={variant}>
+                            {size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
+                          </Button>
+                        ))}
+                      </div>
+                    ))
+                  }
+                  <div class="variant-row variant-row--disabled">
+                    <span class="label">Disabled</span>
+                    <Button disabled>Unavailable</Button>
+                  </div>
+                </div>
+
+                <div slot="props" class="prop-playground">
+                  <div class="prop-controls">
+                    <label class="prop-control">
+                      <span class="label">Variant</span>
+                      <select aria-label="Button variant" data-button-prop-variant>
+                        <option value="primary">Primary</option>
+                        <option value="secondary">Secondary</option>
+                        <option value="outline">Outline</option>
+                      </select>
+                    </label>
+
+                    <label class="prop-control">
+                      <span class="label">Size</span>
+                      <select aria-label="Button size" data-button-prop-size>
+                        <option value="sm">Small</option>
+                        <option value="md" selected>Medium</option>
+                        <option value="lg">Large</option>
+                      </select>
+                    </label>
+
+                    <label class="prop-disabled">
+                      <input type="checkbox" data-button-prop-disabled />
+                      <span class="toggle-track" aria-hidden="true"><span></span></span>
+                      <span class="label">Disabled</span>
+                    </label>
+                  </div>
+
+                  <div class="playground-stage">
+                    {
+                      buttonVariants.map((variant) =>
+                        buttonSizes.map((size) => (
+                          <Button
+                            variant={variant}
+                            size={size}
+                            data-playground-button
+                            data-variant={variant}
+                            data-size={size}
+                            hidden={variant !== "primary" || size !== "md"}
+                          >
+                            Preview action
+                          </Button>
+                        ))
+                      )
+                    }
+                  </div>
+
+                  <code class="prop-readout" data-prop-readout aria-live="polite"
+                    >&lt;Button variant="primary" size="md" /&gt;</code
+                  >
+                </div>
+
+                <dl slot="facts" class="facts">
+                  <div class="fact">
+                    <dt class="label">Available in</dt>
+                    <dd>{button.frameworks.join(" · ")}</dd>
+                  </div>
+                  <div class="fact">
+                    <dt class="label">Source mode</dt>
+                    <dd>CLI-owned code</dd>
+                  </div>
+                  <div class="fact">
+                    <dt class="label">Build contract</dt>
+                    <dd>Atomic + verified</dd>
+                  </div>
+                </dl>
+              </ComponentPreview>
+
+              <ComponentSource component="Button" sources={buttonSources} />
+            </div>
+          </article>
+        </section>
+
+        <section class="component-section" id="input" aria-labelledby="input-title">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Primitive / Form</p>
+              <h2 id="input-title">Input + Field</h2>
+            </div>
+            <span class="status">Generated cleanly</span>
+          </div>
+
+          <article class="bench glass-panel" aria-label="Input and Field component preview">
+            <div class="workbench workbench--input">
+              <ComponentPreview component="Input + Field" hint="Tab through controls">
+                <div slot="variants" class="input-preview">
+                  <div class="input-style-matrix" aria-label="Input style variants">
+                    {
+                      inputVariants.map((variant) => (
+                        <Field>
+                          <FieldLabel for={`input-variant-${variant}`}>{variant}</FieldLabel>
+                          <Input
+                            id={`input-variant-${variant}`}
+                            variant={variant}
+                            placeholder={
+                              variant === "outline"
+                                ? "name@company.com"
+                                : variant === "filled"
+                                  ? "Search by title…"
+                                  : "Workspace name"
+                            }
+                          />
+                        </Field>
+                      ))
+                    }
+                  </div>
+
+                  <div class="input-size-row" aria-label="Input sizes">
+                    {
+                      inputSizes.map((size) => (
+                        <Field>
+                          <FieldLabel for={`input-size-${size}`}>{size}</FieldLabel>
+                          <Input
+                            id={`input-size-${size}`}
+                            controlSize={size}
+                            placeholder={`${size} input`}
+                          />
+                        </Field>
+                      ))
+                    }
+                  </div>
+
+                  <div class="field-state-grid" aria-label="Field states">
+                    <Field>
+                      <FieldLabel for="project-code">Project code</FieldLabel>
+                      <Input
+                        id="project-code"
+                        required
+                        placeholder="e.g. ORB-142"
+                        aria-describedby="project-code-description"
+                      />
+                      <FieldDescription id="project-code-description">
+                        Used in generated issue keys.
+                      </FieldDescription>
+                    </Field>
+
+                    <Field>
+                      <FieldLabel for="contact-email">Contact email</FieldLabel>
+                      <Input
+                        id="contact-email"
+                        type="email"
+                        value="not-an-email"
+                        aria-invalid="true"
+                        aria-describedby="contact-email-error"
+                      />
+                      <FieldError id="contact-email-error"> Enter a valid work email. </FieldError>
+                    </Field>
+
+                    <Field>
+                      <FieldLabel for="region">Region</FieldLabel>
+                      <Input
+                        id="region"
+                        value="Europe / Prague"
+                        disabled
+                        aria-describedby="region-description"
+                      />
+                      <FieldDescription id="region-description">
+                        Inherited from your organization.
+                      </FieldDescription>
+                    </Field>
+
+                    <Field>
+                      <FieldLabel for="account-id">Account ID</FieldLabel>
+                      <Input
+                        id="account-id"
+                        value="acc_01HX9R2Q"
+                        readOnly
+                        variant="filled"
+                        aria-describedby="account-id-description"
+                      />
+                      <FieldDescription id="account-id-description">
+                        Read-only system value.
+                      </FieldDescription>
+                    </Field>
+                  </div>
+                </div>
+
+                <div slot="props" class="prop-playground input-prop-playground">
+                  <div class="prop-controls prop-controls--input">
+                    <label class="prop-control">
+                      <span class="label">Variant</span>
+                      <select aria-label="Input variant" data-input-prop-variant>
+                        <option value="outline">Outline</option>
+                        <option value="filled">Filled</option>
+                        <option value="underline">Underline</option>
+                      </select>
+                    </label>
+
+                    <label class="prop-control">
+                      <span class="label">Size</span>
+                      <select aria-label="Input size" data-input-prop-control-size>
+                        <option value="sm">Small</option>
+                        <option value="md" selected>Medium</option>
+                        <option value="lg">Large</option>
+                      </select>
+                    </label>
+
+                    <label class="prop-control">
+                      <span class="label">State</span>
+                      <select aria-label="Input state" data-input-prop-state>
+                        <option value="default">Default</option>
+                        <option value="invalid">Invalid</option>
+                        <option value="disabled">Disabled</option>
+                        <option value="readonly">Read only</option>
+                      </select>
+                    </label>
+                  </div>
+
+                  <div class="playground-stage playground-stage--field">
+                    <Field>
+                      <FieldLabel for="input-playground-outline-md" data-playground-label>
+                        Workspace name
+                      </FieldLabel>
+                      {
+                        inputVariants.map((variant) =>
+                          inputSizes.map((size) => {
+                            const selected = variant === "outline" && size === "md"
+                            return (
+                              <Input
+                                id={`input-playground-${variant}-${size}`}
+                                variant={variant}
+                                controlSize={size}
+                                value="Orbit command"
+                                aria-describedby={selected ? "input-prop-description" : undefined}
+                                data-playground-input
+                                data-variant={variant}
+                                data-size={size}
+                                disabled={!selected}
+                                hidden={!selected}
+                                tabindex={selected ? 0 : -1}
+                              />
+                            )
+                          })
+                        )
+                      }
+                      <FieldDescription id="input-prop-description" data-playground-description>
+                        This is how the field appears in context.
+                      </FieldDescription>
+                      <FieldError id="input-prop-error" data-playground-error hidden>
+                        A workspace with this name already exists.
+                      </FieldError>
+                    </Field>
+                  </div>
+
+                  <code class="prop-readout" data-prop-readout aria-live="polite"
+                    >&lt;Input variant="outline" controlSize="md" /&gt;</code
+                  >
+                </div>
+
+                <dl slot="facts" class="facts">
+                  <div class="fact">
+                    <dt class="label">Available in</dt>
+                    <dd>{input.frameworks.join(" · ")}</dd>
+                  </div>
+                  <div class="fact">
+                    <dt class="label">Field wrapper</dt>
+                    <dd>{field.frameworks.join(" · ")}</dd>
+                  </div>
+                  <div class="fact">
+                    <dt class="label">A11y contract</dt>
+                    <dd>Native + linked</dd>
+                  </div>
+                </dl>
+              </ComponentPreview>
+
+              <ComponentSource component="Input + Field" sources={inputSources} />
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const contrastToggle = document.querySelector<HTMLInputElement>("#contrast")
+      const sectionLinks = Array.from(
+        document.querySelectorAll<HTMLAnchorElement>('.rail-nav a[href^="#"]')
+      )
+
+      const syncSectionNavigation = () => {
+        const activeHash = window.location.hash || "#button"
+        sectionLinks.forEach((link) => {
+          if (link.hash === activeHash) link.setAttribute("aria-current", "page")
+          else link.removeAttribute("aria-current")
+        })
+      }
+
+      contrastToggle?.addEventListener("change", () => {
+        document.documentElement.dataset.theme = contrastToggle.checked ? "dark" : "light"
+      })
+      window.addEventListener("hashchange", syncSectionNavigation)
+      syncSectionNavigation()
+
+      const syncButtonPlayground = (preview: HTMLElement) => {
+        const variant =
+          preview.querySelector<HTMLSelectElement>("[data-button-prop-variant]")?.value ?? "primary"
+        const size =
+          preview.querySelector<HTMLSelectElement>("[data-button-prop-size]")?.value ?? "md"
+        const disabled =
+          preview.querySelector<HTMLInputElement>("[data-button-prop-disabled]")?.checked ?? false
+
+        preview
+          .querySelectorAll<HTMLButtonElement>("[data-playground-button]")
+          .forEach((button) => {
+            const selected = button.dataset.variant === variant && button.dataset.size === size
+            button.hidden = !selected
+            button.disabled = disabled
+          })
+
+        const readout = preview.querySelector<HTMLElement>("[data-prop-readout]")
+        if (readout) {
+          readout.textContent = `<Button variant="${variant}" size="${size}"${disabled ? " disabled" : ""} />`
+        }
+      }
+
+      const syncInputPlayground = (preview: HTMLElement) => {
+        const variant =
+          preview.querySelector<HTMLSelectElement>("[data-input-prop-variant]")?.value ?? "outline"
+        const controlSize =
+          preview.querySelector<HTMLSelectElement>("[data-input-prop-control-size]")?.value ?? "md"
+        const state =
+          preview.querySelector<HTMLSelectElement>("[data-input-prop-state]")?.value ?? "default"
+
+        preview.querySelectorAll<HTMLInputElement>("[data-playground-input]").forEach((input) => {
+          const selected = input.dataset.variant === variant && input.dataset.size === controlSize
+          input.hidden = !selected
+          input.disabled = !selected || state === "disabled"
+          input.readOnly = selected && state === "readonly"
+          input.tabIndex = selected ? 0 : -1
+
+          if (selected && state === "invalid") {
+            input.setAttribute("aria-invalid", "true")
+            input.setAttribute("aria-describedby", "input-prop-error")
+          } else if (selected) {
+            input.removeAttribute("aria-invalid")
+            input.setAttribute("aria-describedby", "input-prop-description")
+          }
+        })
+
+        const label = preview.querySelector<HTMLLabelElement>("[data-playground-label]")
+        if (label) label.htmlFor = `input-playground-${variant}-${controlSize}`
+
+        const description = preview.querySelector<HTMLElement>("[data-playground-description]")
+        const error = preview.querySelector<HTMLElement>("[data-playground-error]")
+        if (description) description.hidden = state === "invalid"
+        if (error) error.hidden = state !== "invalid"
+
+        const stateProp =
+          state === "invalid"
+            ? ' aria-invalid="true"'
+            : state === "disabled"
+              ? " disabled"
+              : state === "readonly"
+                ? " readOnly"
+                : ""
+        const readout = preview.querySelector<HTMLElement>("[data-prop-readout]")
+        if (readout) {
+          readout.textContent = `<Input variant="${variant}" controlSize="${controlSize}"${stateProp} />`
+        }
+      }
+
+      const syncPlayground = (preview: HTMLElement) => {
+        if (preview.querySelector("[data-playground-button]")) syncButtonPlayground(preview)
+        if (preview.querySelector("[data-playground-input]")) syncInputPlayground(preview)
+      }
+
+      document.addEventListener("previewmodechange", (event) => {
+        const preview = (event.target as HTMLElement).closest<HTMLElement>(
+          "[data-component-preview]"
+        )
+        if (preview && (event as CustomEvent<{ mode?: string }>).detail.mode === "props") {
+          syncPlayground(preview)
+        }
+      })
+
+      document.addEventListener("change", (event) => {
+        const control = (event.target as HTMLElement).closest(
+          [
+            "[data-button-prop-variant]",
+            "[data-button-prop-size]",
+            "[data-button-prop-disabled]",
+            "[data-input-prop-variant]",
+            "[data-input-prop-control-size]",
+            "[data-input-prop-state]",
+          ].join(",")
+        )
+        const preview = control?.closest<HTMLElement>("[data-component-preview]")
+        if (preview) syncPlayground(preview)
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,375 @@
+---
+import "../styles/showcase.css"
+
+const activity = [
+  { label: "Scope approved", meta: "Launch / 09:42", tone: "success" },
+  { label: "Briefing assembled", meta: "Atlas / 09:18", tone: "accent" },
+  { label: "Two risks surfaced", meta: "Monitor / 08:51", tone: "warning" },
+]
+
+const integrations = ["Linear", "Notion", "Slack", "Figma", "Drive"]
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content="Orbit is a fictional operations workspace demonstrating the Hulla default theme."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>Orbit — Hulla default theme showcase</title>
+    <script is:inline>
+      try {
+        const savedTheme = localStorage.getItem("hulla-showcase-theme")
+        if (savedTheme === "light" || savedTheme === "dark") {
+          document.documentElement.dataset.theme = savedTheme
+        }
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="ambient" aria-hidden="true">
+      <span class="ambient-orb ambient-orb--one"></span>
+      <span class="ambient-orb ambient-orb--two"></span>
+      <span class="ambient-grid"></span>
+    </div>
+
+    <header class="site-nav glass-panel">
+      <a class="wordmark" href="/showcase" aria-label="Orbit home">
+        <span class="orbit-mark" aria-hidden="true"><span></span></span>
+        <span>ORBIT</span>
+      </a>
+
+      <nav class="site-links" aria-label="Primary navigation">
+        <a href="#system">System</a>
+        <a href="#method">Method</a>
+        <a href="#stories">Stories</a>
+      </nav>
+
+      <div class="nav-actions">
+        <span class="system-state"><span></span>Systems nominal</span>
+        <label class="theme-switch" for="theme-toggle">
+          <span class="sr-only">Use light theme</span>
+          <input id="theme-toggle" type="checkbox" />
+          <span class="theme-track" aria-hidden="true"><span></span></span>
+        </label>
+        <a class="nav-cta" href="#start">Open workspace <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="hero-copy reveal">
+          <p class="eyebrow"><span></span>Operational intelligence, quietly applied</p>
+          <h1>Keep the important work in orbit.</h1>
+          <p class="hero-lede">
+            Orbit turns the scattered signals across your company into one calm, legible operating
+            picture—before another meeting has to.
+          </p>
+
+          <div class="hero-actions">
+            <a class="action action--primary" href="#start">
+              Start a workspace <span aria-hidden="true">↗</span>
+            </a>
+            <a class="action action--quiet" href="#system">
+              See the system <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+
+          <div class="hero-proof" aria-label="Product facts">
+            <div><strong>8.4h</strong><span>reclaimed weekly</span></div>
+            <div><strong>94%</strong><span>signal accuracy</span></div>
+            <div><strong>2 min</strong><span>to first briefing</span></div>
+          </div>
+        </div>
+
+        <div class="hero-stage reveal reveal--late" aria-label="Orbit product preview">
+          <div class="stage-halo" aria-hidden="true"></div>
+
+          <article class="workspace-window">
+            <header class="window-bar">
+              <div class="window-title">
+                <span class="window-orbit" aria-hidden="true"></span>
+                <span>Morning orbit</span>
+              </div>
+              <div class="window-meta">
+                <span>Friday · 09:42</span>
+                <span class="window-avatar">SH</span>
+              </div>
+            </header>
+
+            <div class="workspace-body">
+              <aside class="workspace-rail" aria-label="Preview navigation">
+                <p class="rail-label">Space</p>
+                <a class="rail-item rail-item--active" href="#system">
+                  <span class="rail-glyph">◉</span><span>Briefing</span><kbd>1</kbd>
+                </a>
+                <a class="rail-item" href="#system">
+                  <span class="rail-glyph">⌁</span><span>Signals</span><kbd>2</kbd>
+                </a>
+                <a class="rail-item" href="#system">
+                  <span class="rail-glyph">◎</span><span>Outcomes</span><kbd>3</kbd>
+                </a>
+                <p class="rail-label rail-label--spaced">Watching</p>
+                <a class="rail-item" href="#system">
+                  <span class="project-dot project-dot--blue"></span><span>Launch</span><em>7</em>
+                </a>
+                <a class="rail-item" href="#system">
+                  <span class="project-dot project-dot--green"></span><span>Atlas</span><em>3</em>
+                </a>
+              </aside>
+
+              <div class="briefing">
+                <div class="briefing-head">
+                  <div>
+                    <p class="micro-label">Executive briefing / 014</p>
+                    <h2>Good morning, Sam.</h2>
+                  </div>
+                  <span class="briefing-status"><span></span>Live</span>
+                </div>
+
+                <div class="signal-summary">
+                  <div class="summary-ring" aria-hidden="true">
+                    <span>87</span>
+                    <small>clarity</small>
+                  </div>
+                  <div class="summary-copy">
+                    <p>
+                      The launch remains on track. One dependency needs a decision before 14:00.
+                    </p>
+                    <div class="summary-tags">
+                      <span>12 sources read</span><span>3 changes</span><span>1 decision</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="priority-card">
+                  <div class="priority-icon" aria-hidden="true">!</div>
+                  <div>
+                    <p class="micro-label">Decision needed</p>
+                    <h3>Confirm the migration window</h3>
+                    <p>Platform and Support are aligned. Customer Success needs final timing.</p>
+                  </div>
+                  <button type="button" aria-label="Open decision">↗</button>
+                </div>
+
+                <div class="activity-list">
+                  <div class="activity-heading">
+                    <span>Since yesterday</span><span>3 material changes</span>
+                  </div>
+                  {
+                    activity.map((item) => (
+                      <div class="activity-row">
+                        <span class={`activity-state activity-state--${item.tone}`} />
+                        <strong>{item.label}</strong>
+                        <span>{item.meta}</span>
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+            </div>
+
+            <footer class="command-dock">
+              <span class="command-add" aria-hidden="true">+</span>
+              <span class="command-placeholder">Ask Orbit about your workspace…</span>
+              <kbd>⌘ K</kbd>
+              <button type="button">Run <span aria-hidden="true">↗</span></button>
+            </footer>
+          </article>
+
+          <aside class="floating-note glass-panel">
+            <p class="micro-label">Signal detected</p>
+            <strong>Launch confidence rose 8%</strong>
+            <div><span></span><small>Updated 2m ago</small></div>
+          </aside>
+
+          <aside class="floating-command glass-panel">
+            <span class="command-symbol" aria-hidden="true">⌘</span>
+            <div>
+              <small>Quick command</small>
+              <strong>Prepare the Monday brief</strong>
+            </div>
+            <kbd>↵</kbd>
+          </aside>
+        </div>
+      </section>
+
+      <section class="signal-strip" aria-label="Connected tools">
+        <span>One operating picture from</span>
+        {integrations.map((integration) => <strong>{integration}</strong>)}
+        <span>and 40+ more</span>
+      </section>
+
+      <section class="system-section" id="system">
+        <div class="section-intro">
+          <p class="eyebrow"><span></span>The operating layer</p>
+          <h2>Clarity without another dashboard.</h2>
+          <p>
+            Orbit reads the systems you already use, identifies what materially changed, and keeps
+            the next decision within reach.
+          </p>
+        </div>
+
+        <div class="system-grid">
+          <article class="feature-card feature-card--signal">
+            <div class="feature-copy">
+              <span class="feature-index">01 / SIGNAL</span>
+              <h3>See movement, not noise.</h3>
+              <p>
+                Hundreds of updates collapse into a short, prioritized view of what actually
+                changed.
+              </p>
+            </div>
+            <div class="signal-visual" aria-label="Signal volume chart">
+              <div class="signal-axis"><span>08:00</span><span>Now</span></div>
+              <div class="signal-bars" aria-hidden="true">
+                <span style="--bar: 18%"></span><span style="--bar: 31%"></span>
+                <span style="--bar: 24%"></span><span style="--bar: 42%"></span>
+                <span style="--bar: 36%"></span><span style="--bar: 61%"></span>
+                <span style="--bar: 48%"></span><span style="--bar: 72%"></span>
+                <span style="--bar: 58%"></span><span style="--bar: 82%"></span>
+                <span style="--bar: 69%"></span><span style="--bar: 92%"></span>
+              </div>
+              <div class="signal-callout glass-panel">
+                <span></span>
+                <div><small>Material change</small><strong>Migration risk resolved</strong></div>
+                <em>+12</em>
+              </div>
+            </div>
+          </article>
+
+          <article class="feature-card feature-card--command glass-panel">
+            <span class="feature-index">02 / COMMAND</span>
+            <h3>Ask in plain language.</h3>
+            <p>Every answer keeps a trace back to the people, projects, and source material.</p>
+            <div class="mini-command">
+              <span class="command-symbol" aria-hidden="true">⌘</span>
+              <span>What is blocking launch?</span>
+              <kbd>↵</kbd>
+            </div>
+            <div class="answer-stack">
+              <span></span><span></span><span></span>
+            </div>
+          </article>
+
+          <article class="feature-card feature-card--focus">
+            <span class="feature-index">03 / FOCUS</span>
+            <div class="focus-orbit" aria-hidden="true">
+              <span class="focus-core"></span>
+              <i class="focus-node focus-node--one"></i>
+              <i class="focus-node focus-node--two"></i>
+              <i class="focus-node focus-node--three"></i>
+            </div>
+            <h3>Keep attention where it compounds.</h3>
+            <p>Orbit learns which signals matter to each role and quiets everything else.</p>
+          </article>
+
+          <article class="feature-card feature-card--automation">
+            <div class="feature-copy">
+              <span class="feature-index">04 / AUTOMATION</span>
+              <h3>Move from insight to action.</h3>
+              <p>
+                Turn a decision into an owned task, a written update, or a recurring operating
+                rhythm.
+              </p>
+            </div>
+            <div class="automation-flow">
+              <div><span>01</span><strong>Signal arrives</strong><small>Linear + Slack</small></div>
+              <i></i>
+              <div><span>02</span><strong>Orbit assesses</strong><small>Confidence 94%</small></div>
+              <i></i>
+              <div class="automation-active">
+                <span>03</span><strong>Owner notified</strong><small>Done in 4 sec</small>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="method-section" id="method">
+        <div class="method-heading">
+          <p class="eyebrow"><span></span>Designed for composure</p>
+          <h2>Less ceremony.<br />Better decisions.</h2>
+        </div>
+
+        <ol class="method-list">
+          <li>
+            <span>01</span>
+            <div>
+              <strong>Connect</strong><p>Bring your existing tools. No migration project.</p>
+            </div>
+          </li>
+          <li>
+            <span>02</span>
+            <div><strong>Calibrate</strong><p>Tell Orbit what outcomes and risks matter.</p></div>
+          </li>
+          <li>
+            <span>03</span>
+            <div><strong>Operate</strong><p>Begin every day with an aligned picture.</p></div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="story-section glass-panel" id="stories">
+        <div class="story-mark" aria-hidden="true">“</div>
+        <blockquote>
+          Orbit replaced a ritual of status chasing with ten calm minutes each morning. We now spend
+          that energy deciding, not reconstructing.
+        </blockquote>
+        <div class="story-person">
+          <span>AR</span>
+          <div><strong>Ana Rios</strong><small>VP Operations · Northline</small></div>
+        </div>
+        <div class="story-stat">
+          <strong>31%</strong><span>fewer recurring status meetings</span>
+        </div>
+      </section>
+
+      <section class="closing-section" id="start">
+        <div class="closing-glow" aria-hidden="true"></div>
+        <p class="eyebrow"><span></span>Your next briefing is ready</p>
+        <h2>Put the work back in motion.</h2>
+        <p>Connect a workspace and see your first operating brief in under two minutes.</p>
+        <div class="hero-actions">
+          <a class="action action--primary" href="/showcase">
+            Start with Orbit <span aria-hidden="true">↗</span>
+          </a>
+          <a class="action action--quiet" href="mailto:hello@example.com">Talk to a human</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="wordmark" href="/showcase">
+        <span class="orbit-mark" aria-hidden="true"><span></span></span>
+        <span>ORBIT</span>
+      </a>
+      <p>A fictional product made to pressure-test the Hulla default theme.</p>
+      <div><a href="/">Component catalog</a><a href="#main">Back to top ↑</a></div>
+    </footer>
+
+    <script>
+      const toggle = document.querySelector<HTMLInputElement>("#theme-toggle")
+
+      const syncToggle = () => {
+        if (toggle) toggle.checked = document.documentElement.dataset.theme === "light"
+      }
+
+      syncToggle()
+
+      toggle?.addEventListener("change", () => {
+        const theme = toggle.checked ? "light" : "dark"
+        document.documentElement.dataset.theme = theme
+        try {
+          localStorage.setItem("hulla-showcase-theme", theme)
+        } catch {}
+      })
+    </script>
+  </body>
+</html>

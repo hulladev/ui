@@ -1,0 +1,29 @@
+{
+  "name": "@hulla/catalog",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "astro build",
+    "check-types": "astro check",
+    "dev": "astro dev",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "@fontsource-variable/schibsted-grotesk": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@hulla/style": "catalog:",
+    "astro": "^5.18.0",
+    "monaco-editor": "^0.56.0",
+    "tailwind-merge": "^3.6.0",
+    "tailwindcss": "^4.1.13"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@repo/eslint-config": "workspace:*",
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/node": "^24.8.1",
+    "eslint": "^9.39.3",
+    "typescript": "5.9.2"
+  }
+}
