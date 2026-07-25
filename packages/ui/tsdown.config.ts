@@ -1,4 +1,5 @@
 import { defineConfig } from "tsdown"
+import packageJson from "./package.json"
 
 export default defineConfig({
   entry: {
@@ -7,6 +8,9 @@ export default defineConfig({
   },
   format: ["cjs", "esm"],
   dts: true,
+  define: {
+    __PACKAGE_VERSION__: JSON.stringify(packageJson.version),
+  },
   sourcemap: true,
   exports: true,
   clean: true,

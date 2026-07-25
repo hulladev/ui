@@ -1,5 +1,7 @@
 export function resolve<const T>(value: T): T {
+  void value
   throw new Error(
-    `[🤖 @hulla/ui]: Do not use resolve in your components directly. It should be used in template you run build on`
+    "@hulla/ui: resolve(...) is a source-template marker and cannot run at runtime. " +
+      "Process this file with uigen; the generated output replaces the call."
   )
 }

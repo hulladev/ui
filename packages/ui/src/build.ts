@@ -1,453 +1,356 @@
-import { constants, Dirent } from "node:fs"
-import { access, copyFile, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises"
-import { dirname, join, relative, resolve, sep } from "node:path"
-import { cwd } from "node:process"
-import { BuildCache } from "./buildCache"
-import { execAsync } from "./helpers/execAsync"
-import { generateComponent, getGeneratedOutputFilename } from "./helpers/generateComponent"
+import { copyFile, lstat, mkdir, readFile, readdir } from "node:fs/promises"
+import { basename, dirname, extname, join, relative, resolve } from "node:path"
+import { findWorkspaceCatalog, normalizeConfig, type NormalizedConfig } from "./config"
+import {
+  compareTrees,
+  createStagingDirectory,
+  hashTree,
+  pathExists,
+  removeTree,
+  replaceTreeAtomically,
+  writeText,
+} from "./helpers/filesystem"
+import { formatGeneratedSource } from "./helpers/format"
 import { generateFrameworkPackageJson } from "./helpers/generateFrameworkPackageJson"
 import { generateFrameworkTsconfig } from "./helpers/generateFrameworkTsconfig"
-import { dimPath, formatFramework, formatPath, log } from "./helpers/log"
-import { Config, CopyFileEntry, Frameworks, NormalizedCopyFile } from "./types.public"
-import { entries, validateFrameworkPath } from "./utils/objects"
+import { log } from "./helpers/log"
+import { resolveInside, toPosixPath } from "./helpers/paths"
+import {
+  getGeneratedOutputFilename,
+  isTransformableSource,
+  transformSource,
+} from "./helpers/sourceTransform"
+import {
+  GeneratedOutputOutOfDateError,
+  type BuildOptions,
+  type BuildResult,
+  type Frameworks,
+  type NormalizedCopyFile,
+  type UILibrary,
+  type UILibraryManifest,
+  type Config,
+} from "./types.public"
 
-async function findWorkspaceRoot(startPath: string): Promise<string> {
-  let current = startPath
-  const maxDepth = 10
-  for (let i = 0; i < maxDepth; i++) {
-    const packageJsonPath = join(current, "package.json")
-    try {
-      const content = await readFile(packageJsonPath, "utf-8")
-      const pkg = JSON.parse(content)
-      if (pkg.workspaces) {
-        return current
-      }
-    } catch {
-      // Continue searching up
-    }
-    const parent = dirname(current)
-    if (parent === current) break
-    current = parent
-  }
-  return startPath
-}
-
-function normalizeCopyFileEntry(entry: CopyFileEntry): NormalizedCopyFile {
-  if (typeof entry === "string") {
-    return { src: entry, dest: entry, required: true }
-  }
-  return {
-    src: entry.src,
-    dest: entry.dest ?? entry.src,
-    required: entry.required ?? true,
-    ...(entry.description && { description: entry.description }),
-  }
-}
-
-function normalizeRelPath(path: string): string {
-  return path.split(sep).join("/")
-}
-
-async function collectExpectedOutputFiles(
-  sourceRoot: string,
+type PlannedFile = {
+  destination: string
   framework: string
-): Promise<Set<string>> {
-  const expected = new Set<string>()
+  source: string
+  transform: boolean
+}
 
-  async function walk(currentPath: string): Promise<void> {
-    const entries = await readdir(currentPath, { withFileTypes: true })
+type FrameworkPlan = {
+  components: string[]
+  files: PlannedFile[]
+  name: string
+  outputDir: string
+  sourceToOutput: Map<string, string>
+}
 
-    await Promise.all(
-      entries.map(async (entry) => {
-        const entryPath = join(currentPath, entry.name)
-        if (entry.isDirectory()) {
-          await walk(entryPath)
-          return
-        }
+function json(value: unknown): string {
+  return `${JSON.stringify(value, null, 2)}\n`
+}
 
-        const rel = relative(sourceRoot, entryPath)
-        const relDir = dirname(rel)
-        const outputName = getGeneratedOutputFilename(entry.name, framework)
-        const outputRel = relDir === "." ? outputName : join(relDir, outputName)
-        expected.add(normalizeRelPath(outputRel))
-      })
+function normalizedFrameworkPath(root: string, frameworkPath: string): string {
+  const path = toPosixPath(relative(root, frameworkPath))
+  return path.startsWith(".") ? path : `./${path}`
+}
+
+async function listComponentFiles(root: string): Promise<string[]> {
+  const result: string[] = []
+  const walk = async (directory: string): Promise<void> => {
+    const entries = await readdir(directory, { withFileTypes: true })
+    for (const entry of entries.sort((left, right) => left.name.localeCompare(right.name))) {
+      const path = join(directory, entry.name)
+      if (entry.isSymbolicLink()) {
+        throw new Error(`Symbolic links are not supported in component sources: ${path}`)
+      }
+      if (entry.isDirectory()) await walk(path)
+      else if (entry.isFile()) result.push(path)
+    }
+  }
+  await walk(root)
+  return result
+}
+
+function registerFile(
+  plan: FrameworkPlan,
+  destinations: Map<string, string>,
+  file: PlannedFile
+): void {
+  const existing = destinations.get(file.destination)
+  if (existing) {
+    throw new Error(
+      `Multiple sources emit the same ${file.framework} file:\n` +
+        `  destination: ${file.destination}\n` +
+        `  source 1: ${existing}\n` +
+        `  source 2: ${file.source}`
     )
   }
 
-  await walk(sourceRoot)
-  return expected
+  destinations.set(file.destination, file.source)
+  plan.files.push(file)
+  plan.sourceToOutput.set(resolve(file.source), file.destination)
 }
 
-async function pruneStaleOutputFiles(
-  outputRoot: string,
-  expectedFiles: Set<string>
+async function discoverComponents(
+  config: NormalizedConfig,
+  stagingRoot: string
+): Promise<FrameworkPlan[]> {
+  const plans: FrameworkPlan[] = []
+
+  for (const framework of config.frameworks) {
+    const outputDir = resolveInside(
+      stagingRoot,
+      relative(config.outputRoot, framework.outputDir),
+      `staging output for ${framework.name}`
+    )
+    const plan: FrameworkPlan = {
+      components: [],
+      files: [],
+      name: framework.name,
+      outputDir,
+      sourceToOutput: new Map(),
+    }
+    const destinations = new Map<string, string>([
+      [join(outputDir, "package.json"), "generated framework package.json"],
+      [join(outputDir, "tsconfig.json"), "generated framework tsconfig.json"],
+    ])
+    const componentSources = new Map<string, string>()
+
+    for (const inputDir of framework.inputDirs) {
+      const entries = await readdir(inputDir, { withFileTypes: true })
+      for (const entry of entries.sort((left, right) => left.name.localeCompare(right.name))) {
+        if (!entry.isDirectory()) continue
+        const componentRoot = join(inputDir, entry.name)
+        const packageJsonPath = join(componentRoot, "package.json")
+        if (!(await pathExists(packageJsonPath))) continue
+
+        const previousSource = componentSources.get(entry.name)
+        if (previousSource) {
+          throw new Error(
+            `Duplicate ${framework.name} component "${entry.name}":\n` +
+              `  source 1: ${previousSource}\n` +
+              `  source 2: ${componentRoot}`
+          )
+        }
+        componentSources.set(entry.name, componentRoot)
+        plan.components.push(entry.name)
+
+        for (const source of await listComponentFiles(componentRoot)) {
+          const sourceRelative = relative(componentRoot, source)
+          const destination = join(
+            outputDir,
+            entry.name,
+            dirname(sourceRelative),
+            getGeneratedOutputFilename(basename(source), framework.name)
+          )
+          registerFile(plan, destinations, {
+            destination,
+            framework: framework.name,
+            source,
+            transform: isTransformableSource(source),
+          })
+        }
+      }
+    }
+
+    const copyFiles = [
+      ...(config.copyFiles.shared ?? []),
+      ...(config.copyFiles[framework.name] ?? []),
+    ]
+    for (const entry of copyFiles) {
+      const source = resolveInside(
+        config.copyFilesRoot,
+        entry.src,
+        `copyFiles.${framework.name}.src`
+      )
+      if (!(await pathExists(source))) {
+        if (entry.required) throw new Error(`Required copy file does not exist: ${source}`)
+        continue
+      }
+      const stats = await lstat(source)
+      if (!stats.isFile())
+        throw new Error(`copyFiles entries must reference regular files: ${source}`)
+
+      const destination = resolveInside(outputDir, entry.dest, `copyFiles.${framework.name}.dest`)
+      registerFile(plan, destinations, {
+        destination,
+        framework: framework.name,
+        source,
+        transform: isTransformableSource(source),
+      })
+    }
+
+    plan.components.sort()
+    plan.files.sort((left, right) => left.destination.localeCompare(right.destination))
+    plans.push(plan)
+  }
+
+  return plans
+}
+
+async function renderPlannedFile(
+  file: PlannedFile,
+  plan: FrameworkPlan,
+  config: NormalizedConfig
 ): Promise<void> {
-  async function walk(currentPath: string): Promise<void> {
-    const entries = await readdir(currentPath, { withFileTypes: true })
+  await mkdir(dirname(file.destination), { recursive: true })
+  const extension = extname(file.source).toLowerCase()
 
-    await Promise.all(
-      entries.map(async (entry) => {
-        const entryPath = join(currentPath, entry.name)
-        if (entry.isDirectory()) {
-          await walk(entryPath)
-          const remaining = await readdir(entryPath)
-          if (remaining.length === 0) {
-            await rm(entryPath, { recursive: false, force: true })
-          }
-          return
-        }
+  if (extension === ".json") {
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(await readFile(file.source, "utf8"))
+    } catch (error) {
+      throw new Error(`Invalid JSON source ${file.source}`, { cause: error })
+    }
+    await writeText(file.destination, await formatGeneratedSource(file.destination, json(parsed)))
+    return
+  }
 
-        const rel = normalizeRelPath(relative(outputRoot, entryPath))
-        if (!expectedFiles.has(rel)) {
-          await rm(entryPath, { force: true })
-        }
-      })
+  if (file.transform) {
+    const transformed = await transformSource(await readFile(file.source, "utf8"), {
+      compilerOptions: config.compilerOptions,
+      destinationPath: file.destination,
+      framework: file.framework,
+      sourcePath: file.source,
+      sourceToOutput: plan.sourceToOutput,
+    })
+    await writeText(file.destination, await formatGeneratedSource(file.destination, transformed))
+    return
+  }
+
+  await copyFile(file.source, file.destination)
+}
+
+function copyFilesForConfig(config: NormalizedConfig): UILibrary["copyFiles"] {
+  const result: Record<string, NormalizedCopyFile[] | undefined> = {}
+  for (const [framework, files] of Object.entries(config.copyFiles)) {
+    if (files && files.length > 0) result[framework] = files
+  }
+  return Object.keys(result).length > 0 ? (result as UILibrary["copyFiles"]) : undefined
+}
+
+function createLibraryConfig(config: NormalizedConfig, plans: FrameworkPlan[]): UILibrary {
+  const components: UILibrary["components"] = {}
+  for (const plan of plans) {
+    for (const component of plan.components) {
+      const existing = components[component] ?? { frameworks: [] }
+      existing.frameworks.push(plan.name)
+      existing.frameworks.sort()
+      components[component] = existing
+    }
+  }
+
+  const copyFiles = copyFilesForConfig(config)
+  return {
+    schemaVersion: 1,
+    name: config.name,
+    version: config.version,
+    frameworks: Object.fromEntries(
+      config.frameworks.map((framework) => [
+        framework.name,
+        normalizedFrameworkPath(config.outputRoot, framework.outputDir),
+      ])
+    ),
+    components: Object.fromEntries(
+      Object.entries(components).sort(([left], [right]) => left.localeCompare(right))
+    ),
+    ...(config.author ? { author: config.author } : {}),
+    ...(copyFiles ? { copyFiles } : {}),
+    ...(config.url ? { url: config.url } : {}),
+  }
+}
+
+async function renderOutput(
+  config: NormalizedConfig,
+  stagingRoot: string
+): Promise<{ components: number; files: number }> {
+  const plans = await discoverComponents(config, stagingRoot)
+  const catalog = await findWorkspaceCatalog(config.basePath)
+
+  for (const plan of plans) {
+    await mkdir(plan.outputDir, { recursive: true })
+    await Promise.all(plan.files.map((file) => renderPlannedFile(file, plan, config)))
+    const packageJsonPath = join(plan.outputDir, "package.json")
+    await writeText(
+      packageJsonPath,
+      await formatGeneratedSource(
+        packageJsonPath,
+        json(generateFrameworkPackageJson(config, plan.name, catalog))
+      )
+    )
+    const tsconfigPath = join(plan.outputDir, "tsconfig.json")
+    await writeText(
+      tsconfigPath,
+      await formatGeneratedSource(tsconfigPath, json(generateFrameworkTsconfig(config, plan.name)))
     )
   }
 
-  await walk(outputRoot)
-}
+  const library = createLibraryConfig(config, plans)
+  const uiConfigPath = join(stagingRoot, "ui.config.ts")
+  const uiConfigContent =
+    `import type { UILibrary } from "@hulla/ui"\n\n` +
+    `export const config = ${JSON.stringify(library, null, 2)} satisfies UILibrary\n`
+  await writeText(uiConfigPath, await formatGeneratedSource(uiConfigPath, uiConfigContent))
 
-async function pathExists(path: string): Promise<boolean> {
-  try {
-    await access(path, constants.F_OK)
-    return true
-  } catch {
-    return false
+  const files = await hashTree(stagingRoot)
+  const manifest: UILibraryManifest = {
+    schemaVersion: 1,
+    library,
+    files,
+  }
+  const manifestPath = join(stagingRoot, "ui.manifest.json")
+  await writeText(manifestPath, await formatGeneratedSource(manifestPath, json(manifest)))
+
+  return {
+    components: Object.keys(library.components).length,
+    files: Object.keys(files).length + 1,
   }
 }
 
 export async function build<const F extends Frameworks>(
-  config: Config<F>,
-  options: { force?: boolean } = {}
-): Promise<void> {
-  log.section("🏗️ Build")
+  rawConfig: Config<F>,
+  options: BuildOptions = {}
+): Promise<BuildResult> {
+  const mode = options.mode ?? "write"
+  const config = await normalizeConfig(rawConfig)
+  const stagingRoot = await createStagingDirectory(config.outputRoot)
+  let stagingExists = true
 
-  const basepath = config.basePath ?? cwd()
-  const workspaceRoot = await findWorkspaceRoot(basepath)
-  const cache = new BuildCache(basepath)
-  log.item(`workspace: ${dimPath(basepath)}`)
-  if (workspaceRoot !== basepath) {
-    log.item(`root workspace: ${dimPath(workspaceRoot)}`)
-  }
+  try {
+    const rendered = await renderOutput(config, stagingRoot)
+    const differences = await compareTrees(stagingRoot, config.outputRoot)
+    const changed = differences.length > 0
 
-  // Load cache unless force flag is set
-  if (options.force) {
-    log.item("cache: force rebuild enabled")
-    cache.clear()
-  } else {
-    await cache.load()
-  }
+    if (mode === "check" && changed) {
+      throw new GeneratedOutputOutOfDateError(config.outputRoot, differences)
+    }
 
-  // Validate all framework paths
-  log.section("🧭 Validate")
-  log.item("checking framework output paths")
-  log.item(
-    `frameworks: ${entries(config.outputDirs.frameworks)
-      .map(([framework]) => formatFramework(String(framework)))
-      .join(", ")}`
-  )
-  for (const [framework, frameworkPath] of entries(config.outputDirs.frameworks)) {
-    // Validate paths are relative (start with './')
-    if (!frameworkPath.startsWith("./")) {
-      throw new Error(
-        `Framework path for '${String(framework)}' must be relative (start with './'). Got: '${frameworkPath}'`
+    if (mode === "write" && changed) {
+      await replaceTreeAtomically(stagingRoot, config.outputRoot)
+      stagingExists = false
+    }
+
+    if (!options.quiet) {
+      log.section(mode === "check" ? "✅ Generated output verified" : "✅ Generated output ready")
+      log.item(`library: ${config.name}@${config.version}`)
+      log.item(`components: ${rendered.components}`)
+      log.item(`files: ${rendered.files}`)
+      log.item(`output: ${config.outputRoot}`)
+      log.item(
+        changed ? (mode === "write" ? "status: updated" : "status: stale") : "status: current"
       )
     }
 
-    // Validate paths are within rootDir
-    validateFrameworkPath(basepath, config.outputDirs.rootDir, String(framework), frameworkPath)
-  }
-
-  let componentsSkipped = 0
-  let componentsRebuilt = 0
-
-  if (config.scripts.preBuild) {
-    log.section("🧪 Scripts")
-    log.item("running pre-build script")
-    await execAsync(config.scripts.preBuild)
-  }
-
-  const frameworksDirs = await Promise.all(
-    entries(config.inputDirs).map(async ([framework, paths]) => {
-      const pathsArray = Array.isArray(paths) ? paths : [paths]
-
-      const dirsWithPackageJson = await Promise.all(
-        pathsArray.map(async (path) => {
-          const fullPath = join(basepath, path)
-          const entries = await readdir(fullPath, { withFileTypes: true })
-
-          // Filter for directories and check if they contain package.json
-          const dirChecks = await Promise.all(
-            entries
-              .filter((entry) => entry.isDirectory())
-              .map(async (entry) => {
-                const packageJsonPath = join(fullPath, entry.name, "package.json")
-                try {
-                  await access(packageJsonPath, constants.F_OK)
-                  return { name: entry.name, path: join(fullPath, entry.name), framework }
-                } catch {
-                  return null
-                }
-              })
-          )
-
-          return dirChecks.filter(
-            (dir): dir is { name: string; path: string; framework: F[number] } => dir !== null
-          )
-        })
-      )
-
-      return dirsWithPackageJson.flat()
-    })
-  ).then((dirs) => dirs.flat())
-
-  await Promise.all(
-    frameworksDirs.map(async (component) => {
-      const { name, path, framework } = component
-
-      const files = await readdir(path, { withFileTypes: true })
-      const outputDir = join(config.outputDirs.rootDir, config.outputDirs.frameworks[framework])
-      const outputPath = join(basepath, outputDir, name)
-
-      // Collect all source file paths to check cache
-      const sourceFiles: string[] = []
-      async function collectFiles(dirPath: string, dirent: Dirent): Promise<void> {
-        if (dirent.isDirectory()) {
-          const subDirPath = join(dirPath, dirent.name)
-          const subFiles = await readdir(subDirPath, { withFileTypes: true })
-          await Promise.all(subFiles.map((f) => collectFiles(subDirPath, f)))
-        } else {
-          sourceFiles.push(join(dirPath, dirent.name))
-        }
-      }
-
-      await Promise.all(files.map((file) => collectFiles(path, file)))
-
-      // Rebuild if source changed or generated output is missing.
-      const hasChanged = await cache.hasAnyFileChanged(sourceFiles)
-      const outputExists = await pathExists(outputPath)
-
-      if (!hasChanged && outputExists) {
-        componentsSkipped++
-        return
-      }
-
-      componentsRebuilt++
-      log.item(`${formatFramework(String(framework))} rebuilt component ${name}`)
-      log.dimItem(dimPath(`${path} -> ${outputPath}`))
-      await mkdir(outputPath, { recursive: true })
-
-      await Promise.all(
-        files.map((file) =>
-          generateComponent({
-            dirent: file,
-            framework,
-            outputPath,
-            tsconfigPath: config.tsconfigPath,
-            cache,
-          })
-        )
-      )
-
-      const expectedOutputFiles = await collectExpectedOutputFiles(path, String(framework))
-      await pruneStaleOutputFiles(outputPath, expectedOutputFiles)
-    })
-  )
-
-  // Process framework-level operations: copy files, generate package.json, generate tsconfig
-  const frameworkTargets = entries(config.outputDirs.frameworks).map(
-    ([framework, frameworkPath]) => ({
-      framework,
-      outputPath: join(basepath, config.outputDirs.rootDir, frameworkPath),
-    })
-  )
-
-  await Promise.all(frameworkTargets.map((target) => mkdir(target.outputPath, { recursive: true })))
-
-  let loggedCopySection = false
-  for (const { framework, outputPath: frameworkOutputPath } of frameworkTargets) {
-    if (!config.copyFiles) break
-
-    const sharedFiles = config.copyFiles?.shared ?? []
-    const frameworkFiles = config.copyFiles?.[framework] ?? []
-    const allFilesToCopy = [...sharedFiles, ...frameworkFiles].map(normalizeCopyFileEntry)
-
-    if (allFilesToCopy.length === 0) continue
-
-    const inputPaths = config.inputDirs[framework as F[number]]
-    if (!inputPaths) continue
-    const firstInputPath = (Array.isArray(inputPaths) ? inputPaths[0] : inputPaths) as string
-    const sourceDir = join(basepath, firstInputPath, "..")
-
-    for (const file of allFilesToCopy) {
-      const sourcePath = join(sourceDir, file.src)
-      const destPath = join(frameworkOutputPath, file.dest)
-      const destDir = dirname(destPath)
-
-      await mkdir(destDir, { recursive: true })
-
-      try {
-        // Restore missing outputs even when the source file is unchanged in cache.
-        const hasChanged = await cache.hasFileChanged(sourcePath)
-        const destExists = await pathExists(destPath)
-
-        if (hasChanged || !destExists) {
-          if (!loggedCopySection) {
-            log.section("📄 Copy Files")
-            loggedCopySection = true
-          }
-          await copyFile(sourcePath, destPath)
-          await cache.markFileProcessed(sourcePath)
-          log.item(`${formatFramework(String(framework))} copied ${file.src}`)
-          log.dimItem(dimPath(`${sourcePath} -> ${destPath}`))
-        }
-      } catch (error) {
-        log.error(
-          `failed copy for ${formatFramework(String(framework))} (${formatPath(file.src)})`,
-          error
-        )
-      }
+    return {
+      changed,
+      components: rendered.components,
+      files: rendered.files,
+      mode,
+      outputRoot: config.outputRoot,
     }
-  }
-
-  log.section("📦 Package.json")
-  const frameworkInstallPlans: Array<{
-    framework: string
-    outputPath: string
-    depCommand?: string
-    devDepCommand?: string
-  }> = []
-  for (const { framework, outputPath: frameworkOutputPath } of frameworkTargets) {
-    const plan = await generateFrameworkPackageJson({
-      framework: String(framework),
-      outputPath: frameworkOutputPath,
-      packageJson: config.packageJson,
-      cache,
-      executeInstall: false,
-    })
-    frameworkInstallPlans.push({
-      framework: String(framework),
-      outputPath: frameworkOutputPath,
-      depCommand: plan.depCommand,
-      devDepCommand: plan.devDepCommand,
-    })
-  }
-
-  const hasInstallCommands = frameworkInstallPlans.length > 0
-  if (hasInstallCommands) {
-    log.section("📥 Install")
-    log.item("running bun install at root")
-    await execAsync("bun install", { cwd: workspaceRoot })
-  }
-
-  log.section("⚙️ Tsconfig")
-  for (const { framework, outputPath: frameworkOutputPath } of frameworkTargets) {
-    const inputPaths = config.inputDirs[framework as F[number]]
-    if (!inputPaths) continue
-    const firstInputPath = (Array.isArray(inputPaths) ? inputPaths[0] : inputPaths) as string
-    const sourceTsconfigPath = join(basepath, firstInputPath, "tsconfig.json")
-    const userTsconfigAbsolute = resolve(basepath, config.tsconfigPath ?? "./tsconfig.json")
-
-    try {
-      await access(sourceTsconfigPath, constants.F_OK)
-
-      await generateFrameworkTsconfig({
-        framework: String(framework),
-        sourceTsconfigPath,
-        outputPath: frameworkOutputPath,
-        userTsconfigPath: userTsconfigAbsolute,
-        globalModifier: config.tsconfig?.modifier,
-        frameworkModifier: config.tsconfig?.frameworkModifiers?.[framework],
-      })
-    } catch {
-      log.warn(
-        `${formatFramework(String(framework))} skipped tsconfig generation (missing source tsconfig)`
-      )
-      log.dimItem(dimPath(sourceTsconfigPath))
-    }
-  }
-
-  // Generate ui.config.ts at rootDir
-  log.section("📝 Config")
-  log.item("generating ui.config.ts")
-  const uiConfigPath = join(basepath, config.outputDirs.rootDir, "ui.config.ts")
-  const authorString = Array.isArray(config.author)
-    ? `[${config.author.map((a) => `'${a}'`).join(", ")}]`
-    : `'${config.author}'`
-
-  const frameworksEntries = entries(config.outputDirs.frameworks)
-    .map(([framework, path]) => `  ${String(framework)}: '${path}'`)
-    .join(",\n")
-
-  // Normalize copyFiles for output
-  let copyFilesOutput = ""
-  if (config.copyFiles) {
-    const normalizedCopyFiles: Record<string, NormalizedCopyFile[]> = {}
-
-    for (const [key, files] of Object.entries(config.copyFiles)) {
-      if (files && files.length > 0) {
-        normalizedCopyFiles[key] = files.map(normalizeCopyFileEntry)
-      }
-    }
-
-    if (Object.keys(normalizedCopyFiles).length > 0) {
-      const formatFile = (f: NormalizedCopyFile) => {
-        const parts = [`src: '${f.src}'`, `dest: '${f.dest}'`, `required: ${f.required}`]
-        if (f.description) {
-          parts.push(`description: '${f.description}'`)
-        }
-        return `{ ${parts.join(", ")} }`
-      }
-
-      const copyFilesEntries = Object.entries(normalizedCopyFiles)
-        .map(
-          ([key, files]) => `    ${key}: [\n      ${files.map(formatFile).join(",\n      ")}\n    ]`
-        )
-        .join(",\n")
-
-      copyFilesOutput = `,\n  copyFiles: {\n${copyFilesEntries}\n  }`
-    }
-  }
-
-  const configLines = [
-    `  name: '${config.name}',`,
-    ...(config.url ? [`  url: '${config.url}',`] : []),
-    ...(config.author ? [`  author: ${authorString},`] : []),
-    `  frameworks: {`,
-    frameworksEntries,
-    `  },`,
-    `  version: '${config.version}'${copyFilesOutput}`,
-  ]
-
-  const uiConfigContent = `import type { UILibrary } from '@hulla/ui'
-
-export const config: UILibrary = {
-${configLines.join("\n")}
-}
-`
-
-  await mkdir(dirname(uiConfigPath), { recursive: true })
-  await writeFile(uiConfigPath, uiConfigContent, "utf-8")
-  log.item(`wrote ui.config.ts: ${dimPath(uiConfigPath)}`)
-
-  if (config.scripts.postBuild) {
-    log.section("🧪 Scripts")
-    log.item("running post-build script")
-    await execAsync(config.scripts.postBuild)
-  }
-
-  // Save cache
-  await cache.save()
-
-  // Log build metrics
-  log.section("📊 Metrics")
-  log.item(`components rebuilt: ${componentsRebuilt}`)
-  log.item(`components skipped (cache): ${componentsSkipped}`)
-  if (componentsSkipped > 0) {
-    const percentSkipped = Math.round(
-      (componentsSkipped / (componentsRebuilt + componentsSkipped)) * 100
-    )
-    log.item(`cache hit rate: ${percentSkipped}%`)
+  } finally {
+    if (stagingExists) await removeTree(stagingRoot)
   }
 }

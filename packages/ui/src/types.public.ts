@@ -2,17 +2,15 @@ import type { PackageJson, TsConfigJson } from "type-fest"
 
 export type Frameworks = readonly string[]
 
-// Entry can be simple string or object with metadata
 export type CopyFileEntry =
   | string
   | {
       src: string
-      dest?: string // Defaults to src path
-      required?: boolean // Defaults to true
-      description?: string // For CLI display
+      dest?: string
+      required?: boolean
+      description?: string
     }
 
-// Always normalized in output
 export type NormalizedCopyFile = {
   src: string
   dest: string
@@ -25,45 +23,88 @@ export type OutputDirs<F extends Frameworks> = {
   frameworks: Record<F[number], string>
 }
 
+export type PackageJsonConfig<F extends Frameworks> = {
+  base?: PackageJson
+  modifier?: (packageJson: PackageJson) => PackageJson
+  frameworkModifiers?: Partial<Record<F[number], (packageJson: PackageJson) => PackageJson>>
+}
+
+export type TsconfigConfig<F extends Frameworks> = {
+  base?: TsConfigJson
+  frameworks?: Partial<Record<F[number], TsConfigJson>>
+}
+
 export type Config<F extends Frameworks> = {
   name: string
-  url?: string
   version: string
-  author?: string | string[]
   frameworks: F
-  basePath?: string
-  tsconfigPath?: string
-  inputDirs: Record<F[number], string[] | string>
+  inputDirs: Record<F[number], string | readonly string[]>
   outputDirs: OutputDirs<F>
-  copyFiles?: Partial<Record<F[number], CopyFileEntry[]>> & { shared?: CopyFileEntry[] }
-  tsconfig?: {
-    modifier?: (config: TsConfigJson) => TsConfigJson
-    frameworkModifiers?: Partial<Record<F[number], (config: TsConfigJson) => TsConfigJson>>
+  author?: string | readonly string[]
+  basePath?: string
+  copyFiles?: Partial<Record<F[number], readonly CopyFileEntry[]>> & {
+    shared?: readonly CopyFileEntry[]
   }
-  packageJson: {
-    installDepCommand: string
-    installDevDepCommand: string
-    modifier?: (packageJson: PackageJson) => PackageJson
-    frameworkModifiers?: Partial<Record<F[number], (packageJson: PackageJson) => PackageJson>>
-  }
-  scripts: {
-    preBuild?: string
-    postBuild?: string
-  }
+  copyFilesRoot?: string
+  packageJson?: PackageJsonConfig<F>
+  tsconfig?: TsconfigConfig<F>
+  tsconfigPath?: string
+  url?: string
+}
+
+export type BuildMode = "check" | "write"
+
+export type BuildOptions = {
+  mode?: BuildMode
+  quiet?: boolean
+}
+
+export type BuildResult = {
+  changed: boolean
+  components: number
+  files: number
+  mode: BuildMode
+  outputRoot: string
 }
 
 export type UILibraryAPI<F extends Frameworks> = {
   config: Config<F>
-  build: () => Promise<void>
+  build: (options?: BuildOptions) => Promise<BuildResult>
+}
+
+export type UILibraryComponent = {
+  frameworks: string[]
 }
 
 export type UILibrary = {
+  schemaVersion: 1
   name: string
-  url?: string
-  author?: string | string[]
-  frameworks: Record<string, string>
   version: string
+  frameworks: Record<string, string>
+  components: Record<string, UILibraryComponent>
+  author?: string | readonly string[]
   copyFiles?: {
     shared?: NormalizedCopyFile[]
-  } & Record<string, NormalizedCopyFile[]>
+  } & Record<string, NormalizedCopyFile[] | undefined>
+  url?: string
+}
+
+export type UILibraryManifest = {
+  schemaVersion: 1
+  library: UILibrary
+  files: Record<string, string>
+}
+
+export class GeneratedOutputOutOfDateError extends Error {
+  readonly differences: string[]
+
+  constructor(outputRoot: string, differences: string[]) {
+    super(
+      `Generated output is out of date at ${outputRoot}:\n${differences
+        .map((difference) => `  - ${difference}`)
+        .join("\n")}`
+    )
+    this.name = "GeneratedOutputOutOfDateError"
+    this.differences = differences
+  }
 }

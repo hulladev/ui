@@ -23,6 +23,7 @@ coverage
 
 # Build Outputs
 .next/
+.astro/
 out/
 build
 dist
@@ -40,3 +41,7 @@ yarn-error.log*
 packages/components/.hulla/.cache
 apps/*/.hulla/.cache/
 .hulla/.cache/
+
+# Interrupted atomic generation
+.generated.staging-*
+generated.backup-*
