@@ -4,13 +4,17 @@
       "mode": "auto"
     }
   ],
+  "tailwindCSS.classFunctions": [
+    "cn",
+    "vn"
+  ],
   "tailwindCSS.experimental.classRegex": [
-    ["(?:ui\\.)?cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*)[\"'`]"],
     ["classes:\\s*\\{([^}]*)\\}", ":\\s*[\"'`]([^\"'`]*)[\"'`]"],
     ["base:\\s*[\"'`]([^\"'`]*)[\"'`]"],
     ["\\.css\\(([^)]*)\\)", "[\"'`]([^\"'`]*)[\"'`]"],
-    ["className[=:]\\s*[\"'`]([^\"'`]*)"]
+    ["className\\s*=\\s*[\"'`]([^\"'`]*)[\"'`]"]
   ],
+  "tailwindCSS.experimental.configFile": "packages/components/src/styles.css",
   "tailwindCSS.includeLanguages": {
     "typescript": "javascript",
     "typescriptreact": "javascript"

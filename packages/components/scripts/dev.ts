@@ -61,7 +61,7 @@ async function runBuild(): Promise<void> {
   const reason = formatChangedSummary()
   console.log(`[components:dev] rebuilding generated output (${reason})`)
 
-  const proc = Bun.spawn(["bun", "run", "build"], {
+  const proc = Bun.spawn(["bun", "run", "generate"], {
     cwd: root,
     stdout: "inherit",
     stderr: "inherit",

@@ -1,8 +1,7 @@
 import js from "@eslint/js"
 import eslintConfigPrettier from "eslint-config-prettier"
-import onlyWarn from "eslint-plugin-only-warn"
-import prettier from "eslint-plugin-prettier/recommended"
 import turboPlugin from "eslint-plugin-turbo"
+import globals from "globals"
 import tseslint from "typescript-eslint"
 
 /**
@@ -12,23 +11,31 @@ import tseslint from "typescript-eslint"
  * */
 export const config = [
   js.configs.recommended,
-  eslintConfigPrettier,
-  prettier,
   ...tseslint.configs.recommended,
   {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
     plugins: {
       turbo: turboPlugin,
     },
     rules: {
+      "@typescript-eslint/consistent-type-definitions": ["error", "type"],
       "turbo/no-undeclared-env-vars": "warn",
     },
   },
+  eslintConfigPrettier,
   {
-    plugins: {
-      onlyWarn,
-    },
-  },
-  {
-    ignores: ["dist/**", "node_modules/**"],
+    ignores: [
+      "**/.astro/**",
+      "**/.svelte-kit/**",
+      "coverage/**",
+      "dist/**",
+      "generated/**",
+      "node_modules/**",
+    ],
   },
 ]

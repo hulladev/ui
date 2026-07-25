@@ -6,9 +6,9 @@ const isConventional = pkg.config ? pkg.config["cz-emoji"]?.conventional : false
 
 // Regex for default and conventional commits.
 const RE_DEFAULT_COMMIT =
-  /^(?::.*:|(?:\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]))\s(?<emoji>\((?<scope>.*)\)\s)?.*$/gm
+  /^(?::.*:|(?:\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]))\s(?<emoji>\((?<scope>.*)\)\s)?.*$/m
 const RE_CONVENTIONAL_COMMIT =
-  /^^(?<type>\w+)(?:\((?<scope>\w+)\))?\s(?<emoji>:.*:|(?:\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]))\s.*$/gm
+  /^(?<type>\w+)(?:\((?<scope>\w+)\))?\s(?<emoji>:.*:|(?:\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]))\s.*$/m
 
 export default {
   rules: {
@@ -17,7 +17,7 @@ export default {
   plugins: [
     {
       rules: {
-        "cz-emoji": ({ raw }) => {
+        "cz-emoji": ({ raw }: { raw: string }) => {
           const isValid = isConventional
             ? RE_CONVENTIONAL_COMMIT.test(raw)
             : RE_DEFAULT_COMMIT.test(raw)

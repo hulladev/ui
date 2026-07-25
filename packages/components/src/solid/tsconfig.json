@@ -2,11 +2,11 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": ["../../tsconfig.json", "@repo/typescript-config/solid.json"],
   "compilerOptions": {
-    "composite": true,
-    "rootDir": ".."
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "paths": {
+      "@/*": ["../*"]
+    }
   },
-  "include": [
-    "./**/*",
-    "../styles/**/*"
-  ]
+  "include": ["./**/*.ts", "./**/*.tsx", "../+css/**/*.ts", "../lib/style.ts"]
 }

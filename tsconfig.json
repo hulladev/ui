@@ -2,11 +2,8 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "noEmit": true,
+    "types": ["node"]
   },
-  "include": ["src/ui.ts"]
+  "include": ["*.ts", "generated/ui.config.ts"]
 }

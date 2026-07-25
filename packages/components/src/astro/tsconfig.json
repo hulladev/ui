@@ -1,15 +1,10 @@
 {
-    "$schema": "https://json.schemastore.org/tsconfig",
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-        "composite": true,
-        "rootDir": ".."
-    },
-    "include": [
-        "./**/*",
-        "../styles/**/*",
-        "../hulla/**/*",
-        "../+css/**/*",
-        "../lib/style.ts"
-    ]
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": ["../../tsconfig.json", "astro/tsconfigs/strict"],
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["../*"]
+    }
+  },
+  "include": ["./**/*.astro", "./**/*.ts", "../+css/**/*.ts", "../lib/style.ts"]
 }

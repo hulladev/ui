@@ -1,12 +1,12 @@
 {
-    "$schema": "https://json.schemastore.org/tsconfig",
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-        "composite": true,
-        "rootDir": ".."
-    },
-    "include": [
-        "./**/*",
-        "../styles/**/*"
-    ]
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "paths": {
+      "@/*": ["../*"]
+    }
+  },
+  "include": ["./**/*.svelte", "./**/*.ts", "../+css/**/*.ts", "../lib/style.ts"]
 }

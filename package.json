@@ -3,29 +3,43 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
-    "dev:components": "turbo run dev --filter=components",
+    "dev": "turbo run dev --filter=components --filter=@hulla/catalog",
+    "dev:catalog": "bun run --cwd apps/catalog dev",
+    "dev:generator": "bun run --cwd packages/components dev",
+    "generate": "bun run --cwd packages/components generate",
+    "generate:check": "bun run --cwd packages/components generate:check",
+    "check-generated": "bun run --cwd packages/components check-generated",
     "lint": "turbo run lint",
-    "fmt": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "fmt": "prettier --write . --ignore-unknown",
+    "fmt:check": "prettier --check . --ignore-unknown",
+    "check-types": "turbo run check-types",
+    "test": "turbo run test",
+    "verify": "bun run fmt:check && bun run lint && bun run check-types && bun run test && bun run build && bun run generate:check && bun run check-generated",
+    "changeset": "changeset",
+    "version-packages": "changeset version && bun install",
+    "release": "bun run verify && changeset publish",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
+    "@commitlint/cli": "^19.8.1",
     "@hulla/ui": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@types/node": "^24.8.1",
     "commitizen": "^4.3.1",
     "cz-emoji": "1.3.2-canary.2",
     "hulla": "^0.0.0-alpha.1",
     "husky": "^9.1.7",
     "prettier": "^3.6.2",
-    "prettier-plugin-organize-imports": "^4.3.0",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-svelte": "^3.4.0",
     "turbo": "^2.5.6",
     "typescript": "5.9.2"
   },
   "packageManager": "bun@1.3.9",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "config": {
     "commitizen": {
@@ -94,13 +108,7 @@
   "workspaces": {
     "packages": [
       "apps/*",
-      "packages/*",
-      "packages/components/src/astro",
-      "packages/components/src/react",
-      "packages/components/src/solid",
-      "packages/components/src/svelte",
-      "packages/components/src/vue",
-      "generated/*"
+      "packages/*"
     ],
     "catalog": {
       "@hulla/style": "0.3.0"
