@@ -1,0 +1,27 @@
+---
+import { tableVariants } from "@/+css/table.css"
+import { cn } from "@/lib/style"
+import { resolve } from "@hulla/ui"
+import type { HTMLAttributes } from "astro/types"
+
+const $variant = resolve(tableVariants)
+
+type Props = HTMLAttributes<"table"> & {
+  variant?: typeof $variant.infer
+}
+
+const { class: className, variant = "divided", ...props } = Astro.props as Props
+---
+
+<table
+  {...props}
+  data-slot="table"
+  data-variant={variant}
+  class={cn(
+    "w-full border-separate border-spacing-0 text-left text-sm text-foreground",
+    $variant(variant),
+    className
+  )}
+>
+  <slot />
+</table>
