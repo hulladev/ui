@@ -136,6 +136,10 @@ layering. They are references, not templates to reproduce.
 
 ## Workflow
 
+Adding or updating a component must include the corresponding catalog entry in `apps/catalog`.
+Keep its preview, usage examples, generated source views, navigation, and component-specific catalog
+styling current in the same change.
+
 Before implementing a component:
 
 1. Inspect related components, shared behavior, recipes, tokens, and generated output.
@@ -152,5 +156,7 @@ Before handing off a component:
 2. Inspect the default theme in light and dark modes and at a narrow viewport.
 3. Verify that the component remains composable through native attributes, children, and the
    framework's class/style escape hatch.
-4. Run formatting, lint, type checks, generation checks, and the repository verification suite
+4. Add or update the component's catalog coverage and verify it in both contrast modes and at a
+   narrow viewport.
+5. Run formatting, lint, type checks, generation checks, and the repository verification suite
    appropriate to the change.
