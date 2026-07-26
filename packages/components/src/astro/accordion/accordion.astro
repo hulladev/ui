@@ -1,0 +1,12 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"div">
+
+const { class: className, ...props } = Astro.props as Props
+---
+
+<div {...props} data-slot="accordion" class={cn("w-full border-y border-border", className)}>
+  <slot />
+</div>
