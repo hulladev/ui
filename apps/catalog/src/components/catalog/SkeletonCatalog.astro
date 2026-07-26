@@ -1,0 +1,278 @@
+---
+import Skeleton from "../../../../../generated/astro/skeleton/skeleton.astro"
+import astroSkeletonSource from "../../../../../generated/astro/skeleton/skeleton.astro?raw"
+import reactSkeletonSource from "../../../../../generated/react/skeleton/skeleton.tsx?raw"
+import manifest from "../../../../../generated/ui.manifest.json"
+import { skeletonPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentPreview from "../ComponentPreview.astro"
+import ComponentSource from "../ComponentSource.astro"
+
+const skeleton = manifest.library.components.skeleton
+const skeletonIterations = ["repeat", "once"] as const
+const skeletonShapes = [
+  { className: "h-4 w-48", value: "line" },
+  { className: "size-16 rounded-full", value: "avatar" },
+  { className: "aspect-video w-64 max-w-full", value: "media" },
+] as const
+const skeletonVariants = ["pulse", "shimmer"] as const
+
+const skeletonSources = [
+  {
+    code: astroSkeletonSource,
+    filename: "generated/astro/skeleton/skeleton.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactSkeletonSource,
+    filename: "generated/react/skeleton/skeleton.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+
+const skeletonUsageSources = [
+  {
+    code: `---
+import Skeleton from "@/ui/skeleton/skeleton.astro"
+---
+
+<section aria-busy="true" aria-label="Loading article" class="grid gap-4">
+  <div class="flex items-center gap-3">
+    <Skeleton class="size-10 rounded-full" />
+    <div class="grid flex-1 gap-2">
+      <Skeleton class="h-3 w-32" />
+      <Skeleton class="h-2.5 w-20" />
+    </div>
+  </div>
+  <Skeleton
+    variant="shimmer"
+    class="aspect-[16/7] w-full [--skeleton-iteration-count:1]"
+  />
+  <Skeleton class="h-3 w-full" />
+  <Skeleton class="h-3 w-4/5" />
+</section>`,
+    filename: "src/components/article-loading.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Skeleton } from "@/ui/skeleton"
+
+export function ArticleLoading() {
+  return (
+    <section aria-busy="true" aria-label="Loading article" className="grid gap-4">
+      <div className="flex items-center gap-3">
+        <Skeleton className="size-10 rounded-full" />
+        <div className="grid flex-1 gap-2">
+          <Skeleton className="h-3 w-32" />
+          <Skeleton className="h-2.5 w-20" />
+        </div>
+      </div>
+      <Skeleton
+        variant="shimmer"
+        className="aspect-[16/7] w-full [--skeleton-iteration-count:1]"
+      />
+      <Skeleton className="h-3 w-full" />
+      <Skeleton className="h-3 w-4/5" />
+    </section>
+  )
+}`,
+    filename: "src/components/article-loading.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="skeleton" aria-labelledby="skeleton-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Feedback</p>
+      <h2 id="skeleton-title">Skeleton</h2>
+    </div>
+    <span class="status">Motion aware</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Skeleton component preview">
+    <div class="workbench">
+      <ComponentPreview
+        component="Skeleton"
+        hint="Decorative · aria-hidden"
+        propsLabel="Composition"
+        requirePropsView={true}
+      >
+        <div
+          slot="variants"
+          class="grid grid-cols-[minmax(0,1.35fr)_minmax(13rem,0.65fr)] gap-4 max-[760px]:grid-cols-1"
+        >
+          <section
+            aria-busy="true"
+            aria-label="Loading feature article"
+            class="grid gap-5 rounded-lg border border-border bg-surface-raised p-5 shadow-xs"
+          >
+            <div class="flex items-center gap-3">
+              <Skeleton class="size-10 shrink-0 rounded-full" />
+              <div class="grid flex-1 gap-2">
+                <Skeleton class="h-3 w-32 max-w-full" />
+                <Skeleton class="h-2.5 w-20 max-w-full" />
+              </div>
+              <Skeleton class="h-6 w-14 rounded-full" />
+            </div>
+
+            <Skeleton
+              variant="shimmer"
+              class="aspect-[16/7] w-full [--skeleton-iteration-count:1]"
+            />
+
+            <div class="grid gap-2.5">
+              <Skeleton class="h-4 w-[68%]" />
+              <Skeleton class="h-3 w-full" />
+              <Skeleton class="h-3 w-[88%]" />
+              <Skeleton class="h-3 w-[54%]" />
+            </div>
+          </section>
+
+          <section
+            aria-busy="true"
+            aria-label="Loading recent activity"
+            class="grid content-start gap-4 rounded-lg border border-border bg-surface/80 p-4"
+          >
+            <div class="flex items-center justify-between gap-4">
+              <Skeleton class="h-3 w-24" />
+              <Skeleton class="size-5 rounded-sm" />
+            </div>
+            {
+              Array.from({ length: 4 }, (_, index) => (
+                <div class="flex items-center gap-3">
+                  <Skeleton class="size-8 shrink-0 rounded-full" />
+                  <div class="grid flex-1 gap-2">
+                    <Skeleton class={`h-2.5 ${index % 2 === 0 ? "w-[82%]" : "w-[68%]"}`} />
+                    <Skeleton class="h-2 w-16" />
+                  </div>
+                </div>
+              ))
+            }
+          </section>
+        </div>
+
+        <div slot="props" class="prop-playground">
+          <div class="prop-controls">
+            <label class="prop-control">
+              <span class="label">Shape</span>
+              <select aria-label="Skeleton shape" data-skeleton-shape>
+                <option value="line" selected>Text line</option>
+                <option value="avatar">Avatar</option>
+                <option value="media">Media</option>
+              </select>
+            </label>
+
+            <label class="prop-control">
+              <span class="label">Variant</span>
+              <select aria-label="Skeleton variant" data-skeleton-variant>
+                <option value="pulse" selected>Pulse</option>
+                <option value="shimmer">Shimmer</option>
+              </select>
+            </label>
+
+            <label class="prop-control">
+              <span class="label">Iteration</span>
+              <select aria-label="Skeleton iteration" data-skeleton-iteration>
+                <option value="repeat" selected>Repeat</option>
+                <option value="once">Once</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="playground-stage">
+            {
+              skeletonShapes.map(({ className, value: shape }) =>
+                skeletonVariants.map((variant) =>
+                  skeletonIterations.map((iteration) => (
+                    <Skeleton
+                      variant={variant}
+                      class={`${className} ${
+                        iteration === "once" ? "[--skeleton-iteration-count:1]" : ""
+                      }`}
+                      data-playground-skeleton
+                      data-shape={shape}
+                      data-variant={variant}
+                      data-iteration={iteration}
+                      hidden={shape !== "line" || variant !== "pulse" || iteration !== "repeat"}
+                    />
+                  ))
+                )
+              )
+            }
+          </div>
+
+          <code class="prop-readout" data-skeleton-readout aria-live="polite"
+            >&lt;Skeleton className="h-4 w-48" /&gt;</code
+          >
+        </div>
+
+        <dl slot="facts" class="facts">
+          <div class="fact">
+            <dt class="label">Available in</dt>
+            <dd>{skeleton.frameworks.join(" · ")}</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Motion variants</dt>
+            <dd>pulse (default) · shimmer</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Run once</dt>
+            <dd>[--skeleton-iteration-count:1]</dd>
+          </div>
+        </dl>
+      </ComponentPreview>
+
+      <ComponentSource
+        component="Skeleton"
+        generatedFamilies={["skeleton"]}
+        previewSources={skeletonPreviewSources}
+        sources={skeletonSources}
+        usageSources={skeletonUsageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const shapeClasses = {
+    avatar: "size-16 rounded-full",
+    line: "h-4 w-48",
+    media: "aspect-video w-64 max-w-full",
+  } as const
+
+  const syncSkeletonPlayground = (preview: HTMLElement) => {
+    const shape = preview.querySelector<HTMLSelectElement>("[data-skeleton-shape]")?.value ?? "line"
+    const variant =
+      preview.querySelector<HTMLSelectElement>("[data-skeleton-variant]")?.value ?? "pulse"
+    const iteration =
+      preview.querySelector<HTMLSelectElement>("[data-skeleton-iteration]")?.value ?? "repeat"
+
+    preview.querySelectorAll<HTMLElement>("[data-playground-skeleton]").forEach((skeleton) => {
+      skeleton.hidden =
+        skeleton.dataset.shape !== shape ||
+        skeleton.dataset.variant !== variant ||
+        skeleton.dataset.iteration !== iteration
+    })
+
+    const readout = preview.querySelector<HTMLElement>("[data-skeleton-readout]")
+    const baseClasses = shapeClasses[shape as keyof typeof shapeClasses] ?? shapeClasses.line
+    const classes = `${baseClasses}${iteration === "once" ? " [--skeleton-iteration-count:1]" : ""}`
+    const variantProp = variant === "shimmer" ? ' variant="shimmer"' : ""
+    if (readout) {
+      readout.textContent = `<Skeleton${variantProp} className="${classes}" />`
+    }
+  }
+
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      "[data-skeleton-shape], [data-skeleton-variant], [data-skeleton-iteration]"
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="skeleton-preview"]')
+    if (preview) syncSkeletonPlayground(preview)
+  })
+</script>
