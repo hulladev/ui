@@ -41,6 +41,18 @@ export const ui = createLibrary({
         description: "Shared class and variant composition helpers",
       },
       {
+        src: "lib/layer-stack.ts",
+        description: "Internal deterministic dialog stack",
+      },
+      {
+        src: "lib/dialog.ts",
+        description: "Framework-neutral modal dialog behavior",
+      },
+      {
+        src: "lib/dropdown-menu.ts",
+        description: "Framework-neutral dropdown menu behavior",
+      },
+      {
         src: "styles.css",
         description: "Shared Hulla design tokens and Tailwind theme",
       },

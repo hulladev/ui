@@ -1,0 +1,302 @@
+---
+import Button from "../../../../../generated/astro/button/button.astro"
+import Kbd from "../../../../../generated/astro/kbd/kbd.astro"
+import Popover from "../../../../../generated/astro/popover/popover.astro"
+import astroPopoverSource from "../../../../../generated/astro/popover/popover.astro?raw"
+import reactPopoverSource from "../../../../../generated/react/popover/popover.tsx?raw"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+import ComponentSource from "../ComponentSource.astro"
+import { popoverPreviewSources } from "../../data/catalogPreviewSources"
+
+const popover = manifest.library.components.popover
+const popoverPlacements = [
+  "top-start",
+  "top",
+  "top-end",
+  "right-start",
+  "right",
+  "right-end",
+  "bottom-start",
+  "bottom",
+  "bottom-end",
+  "left-start",
+  "left",
+  "left-end",
+] as const
+
+const popoverSources = [
+  {
+    code: astroPopoverSource,
+    filename: "generated/astro/popover/popover.astro",
+    framework: "Astro · Popover",
+    language: "astro" as const,
+  },
+  {
+    code: reactPopoverSource,
+    filename: "generated/react/popover/popover.tsx",
+    framework: "React · Popover",
+    language: "tsx" as const,
+  },
+]
+
+const astroUsage = `---
+import Button from "@/ui/button/button.astro"
+import Popover from "@/ui/popover/popover.astro"
+---
+
+<Button popovertarget="account-actions">Account</Button>
+
+<Popover id="account-actions" placement="bottom-end" aria-label="Account actions">
+  <a href="/profile">View profile</a>
+  <button popovertarget="account-actions" popovertargetaction="hide">
+    Close
+  </button>
+</Popover>`
+
+const reactUsage = `import { Button } from "@/ui/button"
+import { Popover } from "@/ui/popover"
+
+export function AccountActions() {
+  return (
+    <>
+      <Button popoverTarget="account-actions">Account</Button>
+
+      <Popover
+        id="account-actions"
+        placement="bottom-end"
+        aria-label="Account actions"
+      >
+        <a href="/profile">View profile</a>
+        <button
+          popoverTarget="account-actions"
+          popoverTargetAction="hide"
+        >
+          Close
+        </button>
+      </Popover>
+    </>
+  )
+}`
+
+const usageSources = [
+  {
+    code: astroUsage,
+    filename: "src/components/account-actions.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactUsage,
+    filename: "src/components/account-actions.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="popover" aria-labelledby="popover-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Overlay</p>
+      <h2 id="popover-title">Popover</h2>
+    </div>
+    <span class="status">Native anchored</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Popover component preview">
+    <div class="workbench workbench--popover">
+      <ComponentPreview
+        component="Popover"
+        hint="Light-dismiss or press Escape"
+        requirePropsView={true}
+      >
+        <div
+          slot="variants"
+          class="relative grid min-h-72 place-items-center overflow-hidden rounded-lg bg-surface/65 after:pointer-events-none after:absolute after:size-80 after:rounded-full after:bg-primary/10 after:blur-3xl after:content-['']"
+        >
+          <div class="absolute top-5 left-5 grid max-w-80 gap-1">
+            <span class="font-mono text-xs font-medium tracking-wider uppercase"
+              >Platform-managed overlay</span
+            >
+            <strong class="tracking-tight">No portal. No position loop.</strong>
+            <p class="m-0 text-xs leading-6 text-muted-foreground">
+              The browser owns the top layer, focus relationship, dismissal, and collision fallback.
+            </p>
+          </div>
+
+          <div class="relative z-1">
+            <span
+              class="pointer-events-none absolute -inset-10 animate-[spin_18s_linear_infinite] rounded-full border border-dashed border-primary/35 motion-reduce:animate-none before:absolute before:top-[-0.25rem] before:left-1/2 before:size-2 before:rounded-full before:bg-primary before:shadow-[0_0_1rem_color-mix(in_oklab,var(--color-primary)_55%,transparent)] before:content-['']"
+              aria-hidden="true"></span>
+            <Button
+              variant="outline"
+              popovertarget="catalog-account-popover"
+              aria-label="Open account actions"
+            >
+              <span
+                class="inline-grid size-6 place-items-center rounded-full bg-primary/15 font-mono text-[0.58rem] font-medium text-primary"
+                aria-hidden="true">SH</span
+              >
+              Account
+              <span aria-hidden="true">⌄</span>
+            </Button>
+          </div>
+
+          <Popover
+            id="catalog-account-popover"
+            placement="bottom-end"
+            aria-label="Account actions"
+            class="w-68 p-1.5"
+          >
+            <div class="flex items-center gap-2.5 p-2.5">
+              <span
+                class="inline-grid size-8 place-items-center rounded-full bg-primary/15 font-mono text-xs font-medium text-primary"
+                aria-hidden="true">SH</span
+              >
+              <span class="grid min-w-0">
+                <strong class="text-sm">Samuel Hulla</strong>
+                <small class="overflow-hidden text-xs text-ellipsis text-muted-foreground">
+                  samuel@hulla.dev
+                </small>
+              </span>
+            </div>
+            <div class="m-1 h-px bg-border"></div>
+            <a
+              class="flex w-full items-center justify-between rounded-sm px-2.5 py-2 text-left text-xs no-underline hover:bg-foreground/5"
+              href="#popover"
+            >
+              View profile <Kbd class="border-0 bg-transparent px-0 shadow-none">⌘P</Kbd>
+            </a>
+            <a
+              class="flex w-full items-center justify-between rounded-sm px-2.5 py-2 text-left text-xs no-underline hover:bg-foreground/5"
+              href="#popover"
+            >
+              Workspace settings
+              <Kbd class="border-0 bg-transparent px-0 shadow-none">⌘,</Kbd>
+            </a>
+            <button
+              class="flex w-full items-center justify-between rounded-sm border-0 bg-transparent px-2.5 py-2 text-left text-xs text-foreground hover:bg-foreground/5"
+              type="button"
+              popovertarget="catalog-account-popover"
+              popovertargetaction="hide"
+            >
+              Sign out
+            </button>
+          </Popover>
+        </div>
+
+        <div slot="props" class="prop-playground">
+          <div class="prop-controls">
+            <label class="prop-control prop-control--wide">
+              <span class="label">Placement</span>
+              <select aria-label="Popover placement" data-popover-prop-placement>
+                {
+                  popoverPlacements.map((placement) => (
+                    <option value={placement} selected={placement === "bottom"}>
+                      {placement}
+                    </option>
+                  ))
+                }
+              </select>
+            </label>
+          </div>
+
+          <div class="playground-stage playground-stage--overlay">
+            {
+              popoverPlacements.map((placement) => {
+                const id = `catalog-props-popover-${placement}`
+                return (
+                  <div
+                    class="overlay-prop-case"
+                    data-popover-prop-case
+                    data-placement={placement}
+                    hidden={placement !== "bottom"}
+                  >
+                    <Button variant="outline" popovertarget={id}>
+                      Open {placement}
+                    </Button>
+                    <Popover id={id} placement={placement} class="w-68 p-1.5">
+                      <div class="flex items-center gap-2.5 p-2.5">
+                        <span
+                          class="inline-grid size-8 place-items-center rounded-full bg-primary/15 font-mono text-xs font-medium text-primary"
+                          aria-hidden="true"
+                        >
+                          SH
+                        </span>
+                        <span class="grid min-w-0">
+                          <strong class="text-sm">Anchored surface</strong>
+                          <small class="text-xs text-muted-foreground">{placement}</small>
+                        </span>
+                      </div>
+                      <button
+                        class="flex w-full items-center justify-between rounded-sm border-0 bg-transparent px-2.5 py-2 text-left text-xs text-foreground hover:bg-foreground/5"
+                        type="button"
+                        popovertarget={id}
+                        popovertargetaction="hide"
+                      >
+                        Close popover
+                      </button>
+                    </Popover>
+                  </div>
+                )
+              })
+            }
+          </div>
+
+          <code class="prop-readout" data-popover-prop-readout aria-live="polite"
+            >&lt;Popover placement="bottom" /&gt;</code
+          >
+        </div>
+
+        <dl slot="facts" class="facts">
+          <div class="fact">
+            <dt class="label">Available in</dt>
+            <dd>{popover.frameworks.join(" · ")}</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Positioning</dt>
+            <dd>12 logical placements + collision flips</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Dismissal</dt>
+            <dd>Outside press · Escape · invoker toggle</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Runtime</dt>
+            <dd>Zero component JavaScript</dd>
+          </div>
+        </dl>
+      </ComponentPreview>
+
+      <ComponentSource
+        component="Popover"
+        generatedFamilies={["popover"]}
+        previewSources={popoverPreviewSources}
+        sources={popoverSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  document.addEventListener("input", (event) => {
+    const control = (event.target as HTMLElement).closest<HTMLSelectElement>(
+      "[data-popover-prop-placement]"
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="popover-preview"]')
+    if (!control || !preview) return
+
+    preview.querySelectorAll<HTMLElement>("[data-popover-prop-case]").forEach((item) => {
+      const popover = item.querySelector<HTMLElement>("[popover]")
+      if (item.dataset.placement !== control.value && popover?.matches(":popover-open")) {
+        popover.hidePopover()
+      }
+      item.hidden = item.dataset.placement !== control.value
+    })
+
+    const readout = preview.querySelector<HTMLElement>("[data-popover-prop-readout]")
+    if (readout) readout.textContent = `<Popover placement="${control.value}" />`
+  })
+</script>

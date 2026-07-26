@@ -22,6 +22,11 @@
   scroll-behavior: smooth;
 }
 
+:root:where(.dark, [data-theme="dark"]) {
+  --showcase-glass: color-mix(in oklab, var(--color-surface) 76%, transparent);
+  --showcase-highlight: color-mix(in oklab, white 9%, transparent);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -132,6 +137,14 @@ a {
   width: 36rem;
   height: 36rem;
   background: color-mix(in oklab, var(--color-focus-ring) 8%, transparent);
+}
+
+:root:where(.dark, [data-theme="dark"]) .ambient-orb--one {
+  background: color-mix(in oklab, var(--color-primary) 9%, transparent);
+}
+
+:root:where(.dark, [data-theme="dark"]) .ambient-orb--two {
+  background: color-mix(in oklab, var(--color-focus-ring) 4%, transparent);
 }
 
 .ambient-grid {

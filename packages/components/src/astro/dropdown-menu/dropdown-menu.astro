@@ -1,0 +1,57 @@
+---
+import { popoverPlacements, popoverSurface } from "@/+css/popover.css"
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+import { resolve } from "@hulla/ui"
+
+const $placement = resolve(popoverPlacements)
+const $surface = resolve(popoverSurface)
+
+type Props = HTMLAttributes<"div"> & {
+  placement?: typeof $placement.infer
+}
+
+const {
+  class: className,
+  placement = "bottom-start",
+  popover = "auto",
+  role = "menu",
+  tabindex = -1,
+  ...props
+} = Astro.props as Props
+---
+
+<hulla-dropdown-menu
+  {...props}
+  popover={popover}
+  role={role}
+  tabindex={tabindex}
+  data-placement={placement}
+  data-slot="dropdown-menu"
+  class={cn($surface, $placement(placement), "min-w-48 max-w-72 overscroll-contain p-0", className)}
+>
+  <slot />
+</hulla-dropdown-menu>
+
+<script>
+  import { connectDropdownMenu, type DropdownMenuController } from "@/lib/dropdown-menu"
+
+  const elementName = "hulla-dropdown-menu"
+
+  if (!customElements.get(elementName)) {
+    class HullaDropdownMenuElement extends HTMLElement {
+      controller: DropdownMenuController | undefined
+
+      connectedCallback() {
+        this.controller ??= connectDropdownMenu(this)
+      }
+
+      disconnectedCallback() {
+        this.controller?.destroy()
+        this.controller = undefined
+      }
+    }
+
+    customElements.define(elementName, HullaDropdownMenuElement)
+  }
+</script>

@@ -1,0 +1,27 @@
+---
+import { cardVariants } from "@/+css/card.css"
+import { cn } from "@/lib/style"
+import { resolve } from "@hulla/ui"
+import type { HTMLAttributes } from "astro/types"
+
+const $variant = resolve(cardVariants)
+
+type Props = HTMLAttributes<"article"> & {
+  variant?: typeof $variant.infer
+}
+
+const { class: className, variant = "outline", ...props } = Astro.props as Props
+---
+
+<article
+  {...props}
+  data-slot="card"
+  data-variant={variant}
+  class={cn(
+    "group/card flex min-w-0 flex-col gap-6 rounded-lg border p-6 text-foreground",
+    $variant(variant),
+    className
+  )}
+>
+  <slot />
+</article>

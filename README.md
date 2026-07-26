@@ -63,6 +63,7 @@ bun run verify
 
 - [Contributing](./contributing.md)
 - [Component authoring](./docs/component-authoring.md)
+- [Iconography](./docs/iconography.md)
 - [Generator API and CLI](./docs/generator-api.md)
 - [Build architecture](./docs/architecture.md)
 

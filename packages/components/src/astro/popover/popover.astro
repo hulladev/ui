@@ -1,0 +1,25 @@
+---
+import { popoverPlacements, popoverSurface } from "@/+css/popover.css"
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+import { resolve } from "@hulla/ui"
+
+const $placement = resolve(popoverPlacements)
+const $surface = resolve(popoverSurface)
+
+type Props = HTMLAttributes<"div"> & {
+  placement?: typeof $placement.infer
+}
+
+const { class: className, placement = "bottom", popover = "auto", ...props } = Astro.props as Props
+---
+
+<div
+  {...props}
+  popover={popover}
+  data-placement={placement}
+  data-slot="popover"
+  class={cn($surface, $placement(placement), className)}
+>
+  <slot />
+</div>

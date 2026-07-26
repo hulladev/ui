@@ -1,0 +1,399 @@
+---
+import { Archive, Copy, Ellipsis, FolderSymlink, Pencil, Trash2 } from "@lucide/astro"
+import Button from "../../../../../generated/astro/button/button.astro"
+import DropdownMenuGroup from "../../../../../generated/astro/dropdown-menu/dropdown-menu-group.astro"
+import DropdownMenuItem from "../../../../../generated/astro/dropdown-menu/dropdown-menu-item.astro"
+import DropdownMenuLabel from "../../../../../generated/astro/dropdown-menu/dropdown-menu-label.astro"
+import DropdownMenuSeparator from "../../../../../generated/astro/dropdown-menu/dropdown-menu-separator.astro"
+import DropdownMenu from "../../../../../generated/astro/dropdown-menu/dropdown-menu.astro"
+import Kbd from "../../../../../generated/astro/kbd/kbd.astro"
+import astroDropdownMenuGroupSource from "../../../../../generated/astro/dropdown-menu/dropdown-menu-group.astro?raw"
+import astroDropdownMenuItemSource from "../../../../../generated/astro/dropdown-menu/dropdown-menu-item.astro?raw"
+import astroDropdownMenuLabelSource from "../../../../../generated/astro/dropdown-menu/dropdown-menu-label.astro?raw"
+import astroDropdownMenuSource from "../../../../../generated/astro/dropdown-menu/dropdown-menu.astro?raw"
+import reactDropdownMenuGroupSource from "../../../../../generated/react/dropdown-menu/dropdown-menu-group.tsx?raw"
+import reactDropdownMenuItemSource from "../../../../../generated/react/dropdown-menu/dropdown-menu-item.tsx?raw"
+import reactDropdownMenuLabelSource from "../../../../../generated/react/dropdown-menu/dropdown-menu-label.tsx?raw"
+import reactDropdownMenuSource from "../../../../../generated/react/dropdown-menu/dropdown-menu.tsx?raw"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+import ComponentSource from "../ComponentSource.astro"
+import { dropdownMenuPreviewSources } from "../../data/catalogPreviewSources"
+
+const dropdownMenu = manifest.library.components["dropdown-menu"]
+const catalogMenuId = "catalog-project-actions"
+const dropdownMenuPlacements = [
+  "top-start",
+  "top",
+  "top-end",
+  "right-start",
+  "right",
+  "right-end",
+  "bottom-start",
+  "bottom",
+  "bottom-end",
+  "left-start",
+  "left",
+  "left-end",
+] as const
+
+const dropdownMenuSources = [
+  {
+    code: astroDropdownMenuSource,
+    filename: "generated/astro/dropdown-menu/dropdown-menu.astro",
+    framework: "Astro · Menu",
+    language: "astro" as const,
+  },
+  {
+    code: astroDropdownMenuGroupSource,
+    filename: "generated/astro/dropdown-menu/dropdown-menu-group.astro",
+    framework: "Astro · Group",
+    language: "astro" as const,
+  },
+  {
+    code: astroDropdownMenuLabelSource,
+    filename: "generated/astro/dropdown-menu/dropdown-menu-label.astro",
+    framework: "Astro · Label",
+    language: "astro" as const,
+  },
+  {
+    code: astroDropdownMenuItemSource,
+    filename: "generated/astro/dropdown-menu/dropdown-menu-item.astro",
+    framework: "Astro · Item",
+    language: "astro" as const,
+  },
+  {
+    code: reactDropdownMenuSource,
+    filename: "generated/react/dropdown-menu/dropdown-menu.tsx",
+    framework: "React · Menu",
+    language: "tsx" as const,
+  },
+  {
+    code: reactDropdownMenuGroupSource,
+    filename: "generated/react/dropdown-menu/dropdown-menu-group.tsx",
+    framework: "React · Group",
+    language: "tsx" as const,
+  },
+  {
+    code: reactDropdownMenuLabelSource,
+    filename: "generated/react/dropdown-menu/dropdown-menu-label.tsx",
+    framework: "React · Label",
+    language: "tsx" as const,
+  },
+  {
+    code: reactDropdownMenuItemSource,
+    filename: "generated/react/dropdown-menu/dropdown-menu-item.tsx",
+    framework: "React · Item",
+    language: "tsx" as const,
+  },
+]
+
+const astroUsage = `---
+import Button from "@/ui/button/button.astro"
+import DropdownMenuGroup from "@/ui/dropdown-menu/dropdown-menu-group.astro"
+import DropdownMenuItem from "@/ui/dropdown-menu/dropdown-menu-item.astro"
+import DropdownMenuLabel from "@/ui/dropdown-menu/dropdown-menu-label.astro"
+import DropdownMenuSeparator from "@/ui/dropdown-menu/dropdown-menu-separator.astro"
+import DropdownMenu from "@/ui/dropdown-menu/dropdown-menu.astro"
+
+const menuId = "project-actions"
+---
+
+<Button popovertarget={menuId} aria-haspopup="menu">Project actions</Button>
+
+<DropdownMenu id={menuId} placement="bottom-end" aria-label="Project actions">
+  <DropdownMenuGroup aria-labelledby="project-actions-label">
+    <DropdownMenuLabel id="project-actions-label">Project</DropdownMenuLabel>
+    <DropdownMenuItem>Edit project</DropdownMenuItem>
+    <DropdownMenuItem>Duplicate</DropdownMenuItem>
+  </DropdownMenuGroup>
+  <DropdownMenuSeparator />
+  <DropdownMenuGroup aria-labelledby="danger-actions-label">
+    <DropdownMenuLabel id="danger-actions-label">Danger zone</DropdownMenuLabel>
+    <DropdownMenuItem variant="danger">Delete project</DropdownMenuItem>
+  </DropdownMenuGroup>
+</DropdownMenu>`
+
+const reactUsage = `import { useId } from "react"
+import { Button } from "@/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/ui/dropdown-menu"
+
+export function ProjectActions() {
+  const menuId = useId()
+
+  return (
+    <>
+      <Button popoverTarget={menuId} aria-haspopup="menu">
+        Project actions
+      </Button>
+
+      <DropdownMenu
+        id={menuId}
+        placement="bottom-end"
+        aria-label="Project actions"
+      >
+        <DropdownMenuGroup aria-labelledby={\`\${menuId}-project\`}>
+          <DropdownMenuLabel id={\`\${menuId}-project\`}>
+            Project
+          </DropdownMenuLabel>
+          <DropdownMenuItem>Edit project</DropdownMenuItem>
+          <DropdownMenuItem>Duplicate</DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup aria-labelledby={\`\${menuId}-danger\`}>
+          <DropdownMenuLabel id={\`\${menuId}-danger\`}>
+            Danger zone
+          </DropdownMenuLabel>
+          <DropdownMenuItem variant="danger">
+            Delete project
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenu>
+    </>
+  )
+}`
+
+const usageSources = [
+  {
+    code: astroUsage,
+    filename: "src/components/project-actions.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactUsage,
+    filename: "src/components/project-actions.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="dropdown-menu" aria-labelledby="dropdown-menu-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Pattern / Navigation</p>
+      <h2 id="dropdown-menu-title">Dropdown Menu</h2>
+    </div>
+    <span class="status">Popover powered</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Dropdown Menu component preview">
+    <div class="workbench workbench--dropdown-menu">
+      <ComponentPreview
+        component="Dropdown Menu"
+        hint="Arrow keys · typeahead · Home / End"
+        requirePropsView={true}
+      >
+        <div
+          slot="variants"
+          class="relative grid min-h-80 place-items-center overflow-hidden rounded-lg bg-surface/75 before:pointer-events-none before:absolute before:size-72 before:rounded-full before:border before:border-primary/15 before:content-['']"
+        >
+          <div class="absolute top-6 left-6 grid gap-1">
+            <span class="font-mono text-xs font-medium tracking-wider uppercase"
+              >Current project</span
+            >
+            <strong class="tracking-tight">Orbital release</strong>
+            <p class="m-0 text-xs text-muted-foreground">
+              Updated 12 minutes ago · 8 collaborators
+            </p>
+          </div>
+
+          <div
+            class="relative z-1 grid w-[min(23rem,calc(100%_-_2rem))] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-md border border-border bg-surface-raised/90 p-3 shadow-lg backdrop-blur"
+          >
+            <span
+              class="grid size-8 place-items-center rounded-sm border border-primary/20 bg-primary/10 font-mono text-[0.625rem] font-medium text-primary"
+              aria-hidden="true">OR</span
+            >
+            <span class="grid min-w-0">
+              <strong
+                class="overflow-hidden text-sm tracking-tight text-ellipsis whitespace-nowrap"
+              >
+                Orbital release
+              </strong>
+              <small class="text-xs text-muted-foreground">Engineering / Active</small>
+            </span>
+            <Button
+              size="sm"
+              variant="outline"
+              popovertarget={catalogMenuId}
+              aria-haspopup="menu"
+              aria-label="Open project actions"
+            >
+              <Ellipsis aria-hidden="true" size={16} />
+            </Button>
+          </div>
+
+          <DropdownMenu id={catalogMenuId} placement="bottom-end" aria-label="Project actions">
+            <DropdownMenuGroup aria-labelledby="catalog-project-actions-label">
+              <DropdownMenuLabel id="catalog-project-actions-label">Project</DropdownMenuLabel>
+              <DropdownMenuItem>
+                <Pencil aria-hidden="true" />
+                Rename project
+                <Kbd>↵</Kbd>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Copy aria-hidden="true" />
+                Duplicate
+                <Kbd>⌘D</Kbd>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <FolderSymlink aria-hidden="true" />
+                Move to workspace
+              </DropdownMenuItem>
+              <DropdownMenuItem disabled>
+                <Archive aria-hidden="true" />
+                Archive current release
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup aria-labelledby="catalog-danger-actions-label">
+              <DropdownMenuLabel id="catalog-danger-actions-label">Danger zone</DropdownMenuLabel>
+              <DropdownMenuItem variant="danger">
+                <Trash2 aria-hidden="true" />
+                Delete project
+                <Kbd>⌘⌫</Kbd>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenu>
+        </div>
+
+        <div slot="props" class="prop-playground">
+          <div class="prop-controls">
+            <label class="prop-control">
+              <span class="label">Placement</span>
+              <select aria-label="Dropdown Menu placement" data-menu-prop-placement>
+                {
+                  dropdownMenuPlacements.map((placement) => (
+                    <option value={placement} selected={placement === "bottom-start"}>
+                      {placement}
+                    </option>
+                  ))
+                }
+              </select>
+            </label>
+
+            <label class="prop-control">
+              <span class="label">Item variant</span>
+              <select aria-label="Dropdown Menu item variant" data-menu-prop-variant>
+                <option value="default">Default</option>
+                <option value="danger">Danger</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="playground-stage playground-stage--overlay">
+            {
+              dropdownMenuPlacements.map((placement) => {
+                const id = `catalog-props-menu-${placement}`
+                return (
+                  <div
+                    class="overlay-prop-case"
+                    data-menu-prop-case
+                    data-placement={placement}
+                    hidden={placement !== "bottom-start"}
+                  >
+                    <Button variant="outline" popovertarget={id} aria-haspopup="menu">
+                      Open {placement}
+                    </Button>
+                    <DropdownMenu id={id} placement={placement} aria-label="Props menu">
+                      <DropdownMenuItem data-menu-prop-item data-variant="default">
+                        Rename project
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        variant="danger"
+                        data-menu-prop-item
+                        data-variant="danger"
+                        hidden
+                      >
+                        Delete project
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>View activity</DropdownMenuItem>
+                    </DropdownMenu>
+                  </div>
+                )
+              })
+            }
+          </div>
+
+          <code class="prop-readout" data-menu-prop-readout aria-live="polite"
+            >&lt;DropdownMenu placement="bottom-start"&gt;…&lt;/DropdownMenu&gt;</code
+          >
+        </div>
+
+        <dl slot="facts" class="facts">
+          <div class="fact">
+            <dt class="label">Available in</dt>
+            <dd>{dropdownMenu.frameworks.join(" · ")}</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Foundation</dt>
+            <dd>Native popover + CSS anchors</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Keyboard</dt>
+            <dd>Arrows · Home / End · typeahead</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Composition</dt>
+            <dd>Groups · labels · items · separators</dd>
+          </div>
+        </dl>
+      </ComponentPreview>
+
+      <ComponentSource
+        component="Dropdown Menu"
+        generatedFamilies={["dropdown-menu"]}
+        previewSources={dropdownMenuPreviewSources}
+        sources={dropdownMenuSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncDropdownMenuPlayground = (preview: HTMLElement) => {
+    const placement =
+      preview.querySelector<HTMLSelectElement>("[data-menu-prop-placement]")?.value ??
+      "bottom-start"
+    const variant =
+      preview.querySelector<HTMLSelectElement>("[data-menu-prop-variant]")?.value ?? "default"
+
+    preview.querySelectorAll<HTMLElement>("[data-menu-prop-case]").forEach((item) => {
+      const menu = item.querySelector<HTMLElement>("[popover]")
+      if (item.dataset.placement !== placement && menu?.matches(":popover-open")) {
+        menu.hidePopover()
+      }
+      item.hidden = item.dataset.placement !== placement
+    })
+    preview.querySelectorAll<HTMLElement>("[data-menu-prop-item]").forEach((item) => {
+      item.hidden = item.dataset.variant !== variant
+    })
+
+    const readout = preview.querySelector<HTMLElement>("[data-menu-prop-readout]")
+    if (readout) {
+      readout.textContent =
+        `<DropdownMenu placement="${placement}">` +
+        `<DropdownMenuItem variant="${variant}" /></DropdownMenu>`
+    }
+  }
+
+  document.addEventListener("input", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      "[data-menu-prop-placement], [data-menu-prop-variant]"
+    )
+    const preview = control?.closest<HTMLElement>(
+      '[data-preview-component="dropdown-menu-preview"]'
+    )
+    if (preview) syncDropdownMenuPlayground(preview)
+  })
+</script>

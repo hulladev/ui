@@ -1,0 +1,865 @@
+---
+import Button from "../../../../../generated/astro/button/button.astro"
+import DialogDescription from "../../../../../generated/astro/dialog/dialog-description.astro"
+import DialogFooter from "../../../../../generated/astro/dialog/dialog-footer.astro"
+import DialogHeader from "../../../../../generated/astro/dialog/dialog-header.astro"
+import DialogTitle from "../../../../../generated/astro/dialog/dialog-title.astro"
+import Dialog from "../../../../../generated/astro/dialog/dialog.astro"
+import astroDialogSource from "../../../../../generated/astro/dialog/dialog.astro?raw"
+import reactDialogSource from "../../../../../generated/react/dialog/dialog.tsx?raw"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+import ComponentSource from "../ComponentSource.astro"
+import { dialogPreviewSources } from "../../data/catalogPreviewSources"
+
+const dialog = manifest.library.components.dialog
+
+const dialogSources = [
+  {
+    code: astroDialogSource,
+    filename: "generated/astro/dialog/dialog.astro",
+    framework: "Astro · Dialog",
+    language: "astro" as const,
+  },
+  {
+    code: reactDialogSource,
+    filename: "generated/react/dialog/dialog.tsx",
+    framework: "React · Dialog",
+    language: "tsx" as const,
+  },
+]
+
+const astroUsage = `---
+import Button from "@/ui/button/button.astro"
+import DialogDescription from "@/ui/dialog/dialog-description.astro"
+import DialogFooter from "@/ui/dialog/dialog-footer.astro"
+import DialogHeader from "@/ui/dialog/dialog-header.astro"
+import DialogTitle from "@/ui/dialog/dialog-title.astro"
+import Dialog from "@/ui/dialog/dialog.astro"
+---
+
+<Button data-open-archive>Archive release</Button>
+
+<Dialog
+  data-archive-dialog
+  variant="compact"
+  hidden
+  aria-labelledby="archive-title"
+  aria-describedby="archive-description"
+>
+  <DialogHeader>
+    <DialogTitle id="archive-title">Archive this release?</DialogTitle>
+    <DialogDescription id="archive-description">
+      It remains available in history.
+    </DialogDescription>
+  </DialogHeader>
+
+  <DialogFooter>
+    <Button variant="outline" data-close-archive>Cancel</Button>
+    <Button data-close-archive>Archive</Button>
+  </DialogFooter>
+</Dialog>
+
+<script>
+  import { onDialogDismiss } from "@/ui/lib/dialog"
+
+  // dialog: HTMLElement | null
+  const dialog = document.querySelector<HTMLElement>("[data-archive-dialog]")
+  const close = () => {
+    if (dialog) dialog.hidden = true
+  }
+
+  document.querySelector("[data-open-archive]")?.addEventListener("click", () => {
+    if (dialog) dialog.hidden = false
+  })
+  document.querySelectorAll("[data-close-archive]").forEach((button) => {
+    button.addEventListener("click", close)
+  })
+  if (dialog) onDialogDismiss(dialog, close)
+</script>`
+
+const reactUsage = `import { useState } from "react"
+import { Button } from "@/ui/button"
+import {
+  Dialog,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  type DialogDismissReason,
+} from "@/ui/dialog"
+
+export function ArchiveRelease() {
+  const [open, setOpen] = useState(false) // open: boolean
+
+  const dismiss = (_reason: DialogDismissReason) => {
+    setOpen(false)
+  }
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Archive release</Button>
+
+      {open && (
+        <Dialog
+          variant="compact"
+          aria-labelledby="archive-title"
+          aria-describedby="archive-description"
+          onDismiss={dismiss}
+        >
+          <DialogHeader>
+            <DialogTitle id="archive-title">Archive this release?</DialogTitle>
+            <DialogDescription id="archive-description">
+              It remains available in history.
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={() => setOpen(false)}>Archive</Button>
+          </DialogFooter>
+        </Dialog>
+      )}
+    </>
+  )
+}`
+
+const usageSources = [
+  {
+    code: astroUsage,
+    filename: "src/components/archive-release.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactUsage,
+    filename: "src/components/archive-release.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="dialog" aria-labelledby="dialog-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Overlay</p>
+      <h2 id="dialog-title">Dialog</h2>
+    </div>
+    <span class="status">Stack verified</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Dialog component preview">
+    <div class="workbench workbench--dialog">
+      <ComponentPreview
+        component="Dialog"
+        hint="Escape closes the top layer"
+        requirePropsView={true}
+      >
+        <div slot="variants" class="grid gap-7">
+          <div class="grid grid-cols-3 gap-3 max-[760px]:grid-cols-1" aria-label="Dialog variants">
+            <div
+              class="grid min-w-0 grid-rows-[auto_1fr_auto] gap-4 rounded-lg border border-border bg-surface p-3.5 shadow-xs max-[760px]:grid-cols-[7.5rem_minmax(0,1fr)] max-[760px]:grid-rows-[auto_auto]"
+            >
+              <div
+                class="relative grid h-25 place-items-center overflow-hidden rounded-md border border-border bg-background"
+                aria-hidden="true"
+              >
+                <span
+                  class="relative block h-[46%] w-[52%] rounded-[3px] border border-primary/35 bg-surface-raised shadow-lg"
+                ></span>
+              </div>
+              <div class="grid content-start gap-1">
+                <span class="font-mono text-xs font-medium tracking-wider uppercase"
+                  >compact / default</span
+                >
+                <strong class="text-sm tracking-tight">Focused decisions</strong>
+                <p class="m-0 text-xs leading-5 text-muted-foreground">
+                  Confirmations, forms, and short interactions.
+                </p>
+              </div>
+              <Button class="w-full max-[760px]:col-span-full" data-open-catalog-dialog>
+                Open compact
+              </Button>
+            </div>
+
+            <div
+              class="grid min-w-0 grid-rows-[auto_1fr_auto] gap-4 rounded-lg border border-border bg-surface p-3.5 shadow-xs max-[760px]:grid-cols-[7.5rem_minmax(0,1fr)] max-[760px]:grid-rows-[auto_auto]"
+            >
+              <div
+                class="grid h-25 grid-cols-[27%_1fr] place-items-stretch overflow-hidden rounded-md border border-border bg-background p-2.5"
+                aria-hidden="true"
+              >
+                <span class="block rounded-l-[3px] border border-primary/35 bg-surface"></span>
+                <span
+                  class="block rounded-r-[3px] border border-l-0 border-primary/35 bg-surface-raised"
+                ></span>
+              </div>
+              <div class="grid content-start gap-1">
+                <span class="font-mono text-xs font-medium tracking-wider uppercase">workspace</span
+                >
+                <strong class="text-sm tracking-tight">Layered tools</strong>
+                <p class="m-0 text-xs leading-5 text-muted-foreground">
+                  Dense, navigable workflows that preserve page context.
+                </p>
+              </div>
+              <Button
+                class="w-full max-[760px]:col-span-full"
+                variant="secondary"
+                data-open-workspace-dialog
+              >
+                Open workspace
+              </Button>
+            </div>
+
+            <div
+              class="grid min-w-0 grid-rows-[auto_1fr_auto] gap-4 rounded-lg border border-border bg-surface p-3.5 shadow-xs max-[760px]:grid-cols-[7.5rem_minmax(0,1fr)] max-[760px]:grid-rows-[auto_auto]"
+            >
+              <div
+                class="grid h-25 grid-rows-[0.45rem_1fr_0.45rem] place-items-stretch overflow-hidden rounded-md border border-border bg-background"
+                aria-hidden="true"
+              >
+                <span class="block border-y border-primary/35 bg-surface-raised"></span>
+                <span class="block bg-surface"></span>
+                <span class="block border-y border-primary/35 bg-surface-raised"></span>
+              </div>
+              <div class="grid content-start gap-1">
+                <span class="font-mono text-xs font-medium tracking-wider uppercase"
+                  >fullscreen</span
+                >
+                <strong class="text-sm tracking-tight">Immersive work</strong>
+                <p class="m-0 text-xs leading-5 text-muted-foreground">
+                  Viewport-scale flows with page-like hierarchy.
+                </p>
+              </div>
+              <Button
+                class="w-full max-[760px]:col-span-full"
+                variant="outline"
+                data-open-fullscreen-dialog
+              >
+                Open fullscreen
+              </Button>
+            </div>
+          </div>
+
+          <div class="overflow-hidden rounded-lg border border-border bg-surface shadow-xs">
+            <div class="flex items-center justify-between gap-4 border-b border-border px-4 py-3">
+              <span class="font-mono text-xs font-medium tracking-wider uppercase"
+                >Deterministic layer ledger</span
+              >
+              <span class="font-mono text-xs text-primary" data-overlay-layer-count>
+                0 active layers
+              </span>
+            </div>
+
+            <div class="grid gap-2.5 p-4" aria-label="Layer ordering">
+              <div
+                class="ml-8 grid w-[calc(100%_-_2rem)] grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-3.5 rounded-md border border-primary/40 bg-surface-raised px-3.5 py-3 shadow-xs max-[760px]:ml-0 max-[760px]:w-auto"
+              >
+                <span class="font-mono text-xs tracking-wider text-primary uppercase">02</span>
+                <span class="grid min-w-0 gap-0.5">
+                  <strong
+                    class="overflow-hidden text-sm font-semibold text-ellipsis whitespace-nowrap"
+                  >
+                    Nested dialog
+                  </strong>
+                  <small
+                    class="overflow-hidden text-xs text-ellipsis whitespace-nowrap text-muted-foreground"
+                  >
+                    Registered last · dismisses first
+                  </small>
+                </span>
+                <span class="font-mono text-xs tracking-wider text-primary uppercase">top</span>
+              </div>
+              <div
+                class="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-3.5 rounded-md border border-border bg-surface-raised px-3.5 py-3 shadow-xs"
+              >
+                <span class="font-mono text-xs tracking-wider text-primary uppercase">01</span>
+                <span class="grid min-w-0 gap-0.5">
+                  <strong
+                    class="overflow-hidden text-sm font-semibold text-ellipsis whitespace-nowrap"
+                  >
+                    Dialog surface
+                  </strong>
+                  <small
+                    class="overflow-hidden text-xs text-ellipsis whitespace-nowrap text-muted-foreground"
+                  >
+                    Focus trap + backdrop
+                  </small>
+                </span>
+                <span class="font-mono text-xs tracking-wider text-muted-foreground uppercase">
+                  queued
+                </span>
+              </div>
+              <div
+                class="ml-16 grid w-[calc(100%_-_4rem)] grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-3.5 rounded-md border border-border bg-surface-raised px-3.5 py-3 opacity-70 shadow-xs max-[760px]:ml-0 max-[760px]:w-auto"
+              >
+                <span class="font-mono text-xs tracking-wider text-primary uppercase">00</span>
+                <span class="grid min-w-0 gap-0.5">
+                  <strong
+                    class="overflow-hidden text-sm font-semibold text-ellipsis whitespace-nowrap"
+                  >
+                    Application
+                  </strong>
+                  <small
+                    class="overflow-hidden text-xs text-ellipsis whitespace-nowrap text-muted-foreground"
+                  >
+                    Uncontrolled by the stack
+                  </small>
+                </span>
+                <span class="font-mono text-xs tracking-wider text-muted-foreground uppercase">
+                  base
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div slot="props" class="prop-playground">
+          <div class="prop-controls">
+            <label class="prop-control">
+              <span class="label">Variant</span>
+              <select aria-label="Dialog variant" data-dialog-prop-variant>
+                <option value="compact">Compact</option>
+                <option value="workspace">Workspace</option>
+                <option value="fullscreen">Fullscreen</option>
+              </select>
+            </label>
+
+            <label class="prop-disabled">
+              <input type="checkbox" checked data-dialog-prop-dismissible />
+              <span class="toggle-track" aria-hidden="true"><span></span></span>
+              <span class="label">Dismissible</span>
+            </label>
+          </div>
+
+          <div class="playground-stage">
+            <div class="grid justify-items-center gap-2 text-center">
+              <span class="label">Live modal preview</span>
+              <strong data-dialog-prop-summary>Compact · dismissible</strong>
+              <Button data-open-props-dialog>Open dialog</Button>
+            </div>
+          </div>
+
+          <code class="prop-readout" data-dialog-prop-readout aria-live="polite"
+            >&lt;Dialog variant="compact" dismissible={true} /&gt;</code
+          >
+        </div>
+
+        <dl slot="facts" class="facts">
+          <div class="fact">
+            <dt class="label">Dialog available in</dt>
+            <dd>{dialog.frameworks.join(" · ")}</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Layout variants</dt>
+            <dd>Compact · Workspace · Fullscreen</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">State contract</dt>
+            <dd>Presence / hidden</dd>
+          </div>
+        </dl>
+      </ComponentPreview>
+
+      <ComponentSource
+        component="Dialog"
+        generatedFamilies={["dialog"]}
+        previewSources={dialogPreviewSources}
+        sources={dialogSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<Dialog
+  id="catalog-dialog"
+  hidden
+  aria-labelledby="catalog-dialog-title"
+  aria-describedby="catalog-dialog-description"
+>
+  <DialogHeader>
+    <div
+      class="flex items-center justify-between gap-4 font-mono text-xs tracking-wider text-muted-foreground uppercase"
+    >
+      <span>Layer</span>
+      <code class="text-primary" data-catalog-layer-order>pending</code>
+    </div>
+    <DialogTitle id="catalog-dialog-title">Archive this release?</DialogTitle>
+    <DialogDescription id="catalog-dialog-description">
+      The release will leave the active channel and remain available in history. This example
+      intentionally leaves state ownership in the catalog.
+    </DialogDescription>
+  </DialogHeader>
+
+  <div
+    class="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3 border-l-2 border-primary bg-primary/5 px-4 py-3 text-sm leading-6 text-muted-foreground"
+  >
+    <span class="font-mono text-primary" aria-hidden="true">↳</span>
+    <p class="m-0">
+      Dialog owns the dialog semantics, visual surface, focus management, and dismissal behavior.
+    </p>
+  </div>
+
+  <DialogFooter>
+    <Button variant="outline" data-close-catalog-dialog>Cancel</Button>
+    <Button variant="secondary" data-open-catalog-nested>Inspect nested layer</Button>
+    <Button data-close-catalog-dialog>Archive release</Button>
+  </DialogFooter>
+</Dialog>
+
+<Dialog
+  id="catalog-workspace-dialog"
+  variant="workspace"
+  hidden
+  aria-labelledby="catalog-workspace-title"
+  aria-describedby="catalog-workspace-description"
+>
+  <DialogHeader>
+    <div
+      class="flex items-start justify-between gap-6 max-[760px]:flex-col max-[760px]:items-stretch"
+    >
+      <div class="grid gap-1">
+        <span class="font-mono text-xs font-medium tracking-wider uppercase"
+          >Release workspace / 04</span
+        >
+        <DialogTitle id="catalog-workspace-title">Channel operations</DialogTitle>
+        <DialogDescription id="catalog-workspace-description">
+          Coordinate active releases without losing the catalog underneath.
+        </DialogDescription>
+      </div>
+      <Button class="max-[760px]:w-full" variant="outline" data-close-workspace-dialog>
+        Close workspace
+      </Button>
+    </div>
+  </DialogHeader>
+
+  <div
+    class="grid min-h-0 grid-cols-[13.5rem_minmax(0,1fr)] overflow-hidden max-[760px]:grid-cols-1"
+  >
+    <aside
+      class="grid content-start gap-1 border-r border-border bg-background/45 p-4 max-[760px]:flex max-[760px]:overflow-x-auto max-[760px]:border-r-0 max-[760px]:border-b max-[760px]:p-3"
+      aria-label="Release workspace navigation"
+    >
+      <span
+        class="mb-2 font-mono text-xs font-medium tracking-wider text-muted-foreground uppercase max-[760px]:hidden"
+        >Operations</span
+      >
+      <a
+        class="flex items-center justify-between gap-3 rounded-sm border border-border bg-surface-raised px-3 py-2 text-sm text-foreground no-underline max-[760px]:shrink-0"
+        href="#active"
+        aria-current="page"
+      >
+        <span>Active channel</span><strong class="font-mono text-xs font-medium">08</strong>
+      </a>
+      <a
+        class="flex items-center justify-between gap-3 rounded-sm border border-transparent px-3 py-2 text-sm text-muted-foreground no-underline hover:bg-foreground/5 max-[760px]:shrink-0"
+        href="#approvals"
+      >
+        <span>Approvals</span><strong class="font-mono text-xs font-medium">03</strong>
+      </a>
+      <a
+        class="flex items-center justify-between gap-3 rounded-sm border border-transparent px-3 py-2 text-sm text-muted-foreground no-underline hover:bg-foreground/5 max-[760px]:shrink-0"
+        href="#history"
+      >
+        <span>Release history</span><strong class="font-mono text-xs font-medium">24</strong>
+      </a>
+      <a
+        class="flex items-center justify-between gap-3 rounded-sm border border-transparent px-3 py-2 text-sm text-muted-foreground no-underline hover:bg-foreground/5 max-[760px]:shrink-0"
+        href="#settings"
+      >
+        <span>Policy</span><strong class="font-mono text-xs font-medium">↗</strong>
+      </a>
+    </aside>
+
+    <section
+      class="grid content-start gap-6 overflow-auto p-6"
+      id="active"
+      aria-labelledby="workspace-active-title"
+    >
+      <div
+        class="flex items-end justify-between gap-4 max-[760px]:flex-col max-[760px]:items-stretch"
+      >
+        <div>
+          <span class="font-mono text-xs font-medium tracking-wider uppercase">Active channel</span>
+          <h3 class="mt-1 mb-0 text-xl tracking-tight" id="workspace-active-title">
+            Eight releases in motion
+          </h3>
+        </div>
+        <Button class="max-[760px]:w-full">New release</Button>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3 max-[760px]:grid-cols-1">
+        <article class="grid gap-1 rounded-md border border-border bg-surface-raised p-4">
+          <span class="font-mono text-xs font-medium tracking-wider uppercase">Healthy</span><strong
+            class="text-2xl tracking-tight">06</strong
+          >
+          <small class="text-xs text-muted-foreground">on schedule</small>
+        </article>
+        <article class="grid gap-1 rounded-md border border-border bg-surface-raised p-4">
+          <span class="font-mono text-xs font-medium tracking-wider uppercase">Review</span><strong
+            class="text-2xl tracking-tight">02</strong
+          >
+          <small class="text-xs text-muted-foreground">need attention</small>
+        </article>
+        <article class="grid gap-1 rounded-md border border-border bg-surface-raised p-4">
+          <span class="font-mono text-xs font-medium tracking-wider uppercase">Median cycle</span
+          ><strong class="text-2xl tracking-tight">4.2d</strong>
+          <small class="text-xs text-muted-foreground">−0.8 this month</small>
+        </article>
+      </div>
+
+      <div
+        class="grid overflow-x-auto rounded-md border border-border"
+        role="table"
+        aria-label="Active releases"
+      >
+        <div
+          class="grid min-w-168 grid-cols-[minmax(9rem,1.2fr)_minmax(7rem,1fr)_minmax(7rem,0.8fr)_minmax(8rem,1fr)] items-center gap-4 border-b border-border bg-background/75 px-4 py-3 font-mono text-xs tracking-wider text-muted-foreground uppercase"
+          role="row"
+        >
+          <span role="columnheader">Release</span><span role="columnheader">Owner</span>
+          <span role="columnheader">Status</span><span role="columnheader">Window</span>
+        </div>
+        <div
+          class="grid min-w-168 grid-cols-[minmax(9rem,1.2fr)_minmax(7rem,1fr)_minmax(7rem,0.8fr)_minmax(8rem,1fr)] items-center gap-4 border-b border-border px-4 py-3 text-sm"
+          role="row"
+        >
+          <strong role="cell">Aurora 2.4</strong><span role="cell">Maya Chen</span>
+          <span class="flex items-center gap-2" role="cell"
+            ><i class="size-2 rounded-full bg-success"></i>Ready</span
+          ><span role="cell">Today · 16:00</span>
+        </div>
+        <div
+          class="grid min-w-168 grid-cols-[minmax(9rem,1.2fr)_minmax(7rem,1fr)_minmax(7rem,0.8fr)_minmax(8rem,1fr)] items-center gap-4 border-b border-border px-4 py-3 text-sm"
+          role="row"
+        >
+          <strong role="cell">Atlas mobile</strong><span role="cell">Jules Kim</span>
+          <span class="flex items-center gap-2" role="cell"
+            ><i class="size-2 rounded-full bg-warning"></i>Review</span
+          ><span role="cell">Mon · 09:30</span>
+        </div>
+        <div
+          class="grid min-w-168 grid-cols-[minmax(9rem,1.2fr)_minmax(7rem,1fr)_minmax(7rem,0.8fr)_minmax(8rem,1fr)] items-center gap-4 border-b border-border px-4 py-3 text-sm"
+          role="row"
+        >
+          <strong role="cell">Signal API</strong><span role="cell">Omar Patel</span>
+          <span class="flex items-center gap-2" role="cell"
+            ><i class="size-2 rounded-full bg-success"></i>Ready</span
+          ><span role="cell">Tue · 11:00</span>
+        </div>
+        <div
+          class="grid min-w-168 grid-cols-[minmax(9rem,1.2fr)_minmax(7rem,1fr)_minmax(7rem,0.8fr)_minmax(8rem,1fr)] items-center gap-4 px-4 py-3 text-sm"
+          role="row"
+        >
+          <strong role="cell">Console 8.1</strong><span role="cell">Ana Rios</span>
+          <span class="flex items-center gap-2" role="cell"
+            ><i class="size-2 rounded-full bg-warning"></i>Review</span
+          ><span role="cell">Wed · 18:00</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <DialogFooter>
+    <span class="mr-auto text-xs text-muted-foreground max-[760px]:hidden">
+      Workspace chrome is supplied by the dialog variant.
+    </span>
+    <Button variant="outline" data-close-workspace-dialog>Return to catalog</Button>
+  </DialogFooter>
+</Dialog>
+
+<Dialog
+  id="catalog-fullscreen-dialog"
+  variant="fullscreen"
+  hidden
+  aria-labelledby="catalog-fullscreen-title"
+  aria-describedby="catalog-fullscreen-description"
+>
+  <DialogHeader>
+    <div
+      class="flex items-start justify-between gap-6 max-[760px]:flex-col max-[760px]:items-stretch"
+    >
+      <div class="grid gap-1">
+        <span class="font-mono text-xs font-medium tracking-wider uppercase"
+          >Guided release / Step 02 of 04</span
+        >
+        <DialogTitle id="catalog-fullscreen-title">Define the rollout sequence</DialogTitle>
+        <DialogDescription id="catalog-fullscreen-description">
+          A page-like workflow presented without abandoning the current application context.
+        </DialogDescription>
+      </div>
+      <Button class="max-[760px]:w-full" variant="outline" data-close-fullscreen-dialog>
+        Save and exit
+      </Button>
+    </div>
+  </DialogHeader>
+
+  <div class="grid min-h-0 grid-cols-[14rem_minmax(0,1fr)] overflow-hidden max-[760px]:grid-cols-1">
+    <nav
+      class="border-r border-border bg-background/45 p-5 max-[760px]:border-r-0 max-[760px]:border-b max-[760px]:p-4"
+      aria-label="Release setup progress"
+    >
+      <span class="font-mono text-xs font-medium tracking-wider uppercase max-[760px]:hidden"
+        >Release setup</span
+      >
+      <ol
+        class="mt-4 grid list-none gap-2 p-0 max-[760px]:m-0 max-[760px]:flex max-[760px]:overflow-x-auto"
+      >
+        <li
+          class="grid grid-cols-[2rem_minmax(0,1fr)] gap-3 rounded-md px-3 py-2.5 text-muted-foreground max-[760px]:min-w-36"
+          data-state="complete"
+        >
+          <span class="font-mono text-xs text-success">01</span>
+          <div class="grid gap-0.5">
+            <strong class="text-sm text-foreground">Scope</strong>
+            <small class="text-xs max-[760px]:hidden">12 changes selected</small>
+          </div>
+        </li>
+        <li
+          class="grid grid-cols-[2rem_minmax(0,1fr)] gap-3 rounded-md bg-primary/10 px-3 py-2.5 text-primary max-[760px]:min-w-36"
+          aria-current="step"
+        >
+          <span class="font-mono text-xs">02</span>
+          <div class="grid gap-0.5">
+            <strong class="text-sm">Sequence</strong>
+            <small class="text-xs max-[760px]:hidden">Order the rollout</small>
+          </div>
+        </li>
+        <li
+          class="grid grid-cols-[2rem_minmax(0,1fr)] gap-3 rounded-md px-3 py-2.5 text-muted-foreground max-[760px]:min-w-36"
+        >
+          <span class="font-mono text-xs">03</span>
+          <div class="grid gap-0.5">
+            <strong class="text-sm text-foreground">Safeguards</strong>
+            <small class="text-xs max-[760px]:hidden">Limits and checks</small>
+          </div>
+        </li>
+        <li
+          class="grid grid-cols-[2rem_minmax(0,1fr)] gap-3 rounded-md px-3 py-2.5 text-muted-foreground max-[760px]:min-w-36"
+        >
+          <span class="font-mono text-xs">04</span>
+          <div class="grid gap-0.5">
+            <strong class="text-sm text-foreground">Review</strong>
+            <small class="text-xs max-[760px]:hidden">Confirm and schedule</small>
+          </div>
+        </li>
+      </ol>
+    </nav>
+
+    <section
+      class="grid content-start gap-6 overflow-auto p-8 max-[760px]:p-6"
+      aria-labelledby="sequence-title"
+    >
+      <div
+        class="flex items-end justify-between gap-4 max-[760px]:flex-col max-[760px]:items-stretch"
+      >
+        <div>
+          <span class="font-mono text-xs font-medium tracking-wider uppercase">Sequence</span>
+          <h3 class="mt-1 mb-0 text-xl tracking-tight" id="sequence-title">
+            Move from low risk to broad exposure.
+          </h3>
+        </div>
+        <span class="font-mono text-xs text-muted-foreground"> Estimated duration · 42 min </span>
+      </div>
+
+      <div class="grid gap-3">
+        <article
+          class="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-4 rounded-md border border-border bg-surface-raised p-4"
+        >
+          <span class="font-mono text-xs text-primary">01</span><div class="grid gap-0.5">
+            <strong>Internal cohort</strong><p class="m-0 text-sm text-muted-foreground">
+              Team accounts and synthetic traffic.
+            </p>
+          </div><code class="font-mono text-xs text-primary">5%</code>
+        </article>
+        <article
+          class="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-4 rounded-md border border-border bg-surface-raised p-4"
+        >
+          <span class="font-mono text-xs text-primary">02</span><div class="grid gap-0.5">
+            <strong>Early access</strong><p class="m-0 text-sm text-muted-foreground">
+              Opted-in workspaces with live monitoring.
+            </p>
+          </div><code class="font-mono text-xs text-primary">20%</code>
+        </article>
+        <article
+          class="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-4 rounded-md border border-border bg-surface-raised p-4"
+        >
+          <span class="font-mono text-xs text-primary">03</span><div class="grid gap-0.5">
+            <strong>General rollout</strong><p class="m-0 text-sm text-muted-foreground">
+              Remaining accounts across all regions.
+            </p>
+          </div><code class="font-mono text-xs text-primary">75%</code>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <DialogFooter>
+    <Button variant="outline" data-close-fullscreen-dialog>Cancel</Button>
+    <Button variant="secondary">Save draft</Button>
+    <Button>Continue to safeguards</Button>
+  </DialogFooter>
+</Dialog>
+
+<Dialog
+  id="catalog-nested-dialog"
+  hidden
+  aria-labelledby="catalog-nested-title"
+  aria-describedby="catalog-nested-description"
+>
+  <DialogHeader>
+    <div
+      class="flex items-center justify-between gap-4 font-mono text-xs tracking-wider text-muted-foreground uppercase"
+    >
+      <span>Top layer</span>
+      <code class="text-primary" data-catalog-nested-order>pending</code>
+    </div>
+    <DialogTitle id="catalog-nested-title">Ordering is structural.</DialogTitle>
+    <DialogDescription id="catalog-nested-description">
+      This layer registered second, so it receives Escape and focus before the dialog underneath it.
+    </DialogDescription>
+  </DialogHeader>
+
+  <DialogFooter>
+    <Button autofocus data-close-catalog-nested>Return to dialog</Button>
+  </DialogFooter>
+</Dialog>
+
+<script>
+  import { onDialogDismiss } from "../../../../../generated/astro/lib/dialog"
+
+  const catalogDialog = document.querySelector<HTMLElement>("#catalog-dialog")
+  const catalogWorkspaceDialog = document.querySelector<HTMLElement>("#catalog-workspace-dialog")
+  const catalogFullscreenDialog = document.querySelector<HTMLElement>("#catalog-fullscreen-dialog")
+  const catalogNestedDialog = document.querySelector<HTMLElement>("#catalog-nested-dialog")
+  const layerCount = document.querySelector<HTMLElement>("[data-overlay-layer-count]")
+  const catalogLayerOrder = document.querySelector<HTMLElement>("[data-catalog-layer-order]")
+  const catalogNestedOrder = document.querySelector<HTMLElement>("[data-catalog-nested-order]")
+  const dialogPropsPreview = document.querySelector<HTMLElement>(
+    '[data-preview-component="dialog-preview"]'
+  )
+
+  const getPropsDialog = () => {
+    const variant =
+      dialogPropsPreview?.querySelector<HTMLSelectElement>("[data-dialog-prop-variant]")?.value ??
+      "compact"
+    const dialog =
+      variant === "workspace"
+        ? catalogWorkspaceDialog
+        : variant === "fullscreen"
+          ? catalogFullscreenDialog
+          : catalogDialog
+    return { dialog, variant }
+  }
+
+  const syncDialogProps = () => {
+    if (!dialogPropsPreview) return
+    const { variant } = getPropsDialog()
+    const dismissible =
+      dialogPropsPreview.querySelector<HTMLInputElement>("[data-dialog-prop-dismissible]")
+        ?.checked ?? true
+    const summary = dialogPropsPreview.querySelector<HTMLElement>("[data-dialog-prop-summary]")
+    const readout = dialogPropsPreview.querySelector<HTMLElement>("[data-dialog-prop-readout]")
+    if (summary) summary.textContent = `${variant} · ${dismissible ? "dismissible" : "locked"}`
+    if (readout) {
+      readout.textContent = `<Dialog variant="${variant}" dismissible={${dismissible}} />`
+    }
+  }
+
+  const syncLayerLedger = () => {
+    const count = document.querySelectorAll("[data-slot='dialog-overlay']:not([hidden])").length
+    if (layerCount) layerCount.textContent = `${count} active layer${count === 1 ? "" : "s"}`
+
+    const dialogOrder = catalogDialog?.dataset.layerOrder
+    const nestedOrder = catalogNestedDialog?.dataset.layerOrder
+    if (catalogLayerOrder) {
+      catalogLayerOrder.textContent = dialogOrder === undefined ? "pending" : `order ${dialogOrder}`
+    }
+    if (catalogNestedOrder) {
+      catalogNestedOrder.textContent =
+        nestedOrder === undefined ? "pending" : `order ${nestedOrder}`
+    }
+  }
+
+  const closeCatalogNested = () => {
+    if (catalogNestedDialog) catalogNestedDialog.hidden = true
+  }
+
+  const closeCatalogDialog = () => {
+    closeCatalogNested()
+    if (catalogDialog) catalogDialog.hidden = true
+  }
+
+  const closeWorkspaceDialog = () => {
+    if (catalogWorkspaceDialog) catalogWorkspaceDialog.hidden = true
+  }
+
+  const closeFullscreenDialog = () => {
+    if (catalogFullscreenDialog) catalogFullscreenDialog.hidden = true
+  }
+
+  document.querySelector("[data-open-catalog-dialog]")?.addEventListener("click", () => {
+    if (catalogDialog) catalogDialog.hidden = false
+  })
+  document.querySelector("[data-open-workspace-dialog]")?.addEventListener("click", () => {
+    if (catalogWorkspaceDialog) catalogWorkspaceDialog.hidden = false
+  })
+  document.querySelector("[data-open-fullscreen-dialog]")?.addEventListener("click", () => {
+    if (catalogFullscreenDialog) catalogFullscreenDialog.hidden = false
+  })
+  document.querySelector("[data-open-catalog-nested]")?.addEventListener("click", () => {
+    if (catalogNestedDialog) catalogNestedDialog.hidden = false
+  })
+  document.querySelector("[data-open-props-dialog]")?.addEventListener("click", () => {
+    const { dialog } = getPropsDialog()
+    const dismissible =
+      dialogPropsPreview?.querySelector<HTMLInputElement>("[data-dialog-prop-dismissible]")
+        ?.checked ?? true
+    if (dialog) {
+      dialog.dataset.dismissible = String(dismissible)
+      dialog.hidden = false
+    }
+  })
+  dialogPropsPreview?.addEventListener("input", (event) => {
+    if (
+      (event.target as HTMLElement).matches(
+        "[data-dialog-prop-variant], [data-dialog-prop-dismissible]"
+      )
+    ) {
+      syncDialogProps()
+    }
+  })
+  document.querySelectorAll("[data-close-catalog-dialog]").forEach((button) => {
+    button.addEventListener("click", closeCatalogDialog)
+  })
+  document.querySelectorAll("[data-close-workspace-dialog]").forEach((button) => {
+    button.addEventListener("click", closeWorkspaceDialog)
+  })
+  document.querySelectorAll("[data-close-fullscreen-dialog]").forEach((button) => {
+    button.addEventListener("click", closeFullscreenDialog)
+  })
+  document
+    .querySelector("[data-close-catalog-nested]")
+    ?.addEventListener("click", closeCatalogNested)
+
+  if (catalogDialog) onDialogDismiss(catalogDialog, closeCatalogDialog)
+  if (catalogWorkspaceDialog) onDialogDismiss(catalogWorkspaceDialog, closeWorkspaceDialog)
+  if (catalogFullscreenDialog) onDialogDismiss(catalogFullscreenDialog, closeFullscreenDialog)
+  if (catalogNestedDialog) onDialogDismiss(catalogNestedDialog, closeCatalogNested)
+
+  const layerObserver = new MutationObserver(syncLayerLedger)
+  ;[catalogDialog, catalogWorkspaceDialog, catalogFullscreenDialog, catalogNestedDialog].forEach(
+    (dialog) => {
+      if (!dialog) return
+      layerObserver.observe(dialog, {
+        attributeFilter: ["data-layer-order", "hidden"],
+      })
+    }
+  )
+  syncDialogProps()
+  syncLayerLedger()
+</script>

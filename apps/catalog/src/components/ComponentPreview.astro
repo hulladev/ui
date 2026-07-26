@@ -3,6 +3,7 @@ type Props = {
   component: string
   hint?: string
   propsLabel?: string
+  requirePropsView: true
   variantsLabel?: string
 }
 
@@ -10,10 +11,15 @@ const {
   component,
   hint = "Tab focus",
   propsLabel = "Props",
-  variantsLabel = "Variants",
+  requirePropsView,
+  variantsLabel = "Examples",
 } = Astro.props
 const previewId = `${component.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}-preview`
 const hasProps = Astro.slots.has("props")
+
+if (requirePropsView && !hasProps) {
+  throw new Error(`ComponentPreview for "${component}" requires an interactive slot="props" view.`)
+}
 ---
 
 <div class="preview-pane" data-component-preview data-preview-component={previewId}>
@@ -51,26 +57,13 @@ const hasProps = Astro.slots.has("props")
     </div>
 
     <div class="bench-actions">
-      <fieldset class="background-picker">
-        <legend class="sr-only">Canvas background</legend>
-        <span aria-hidden="true">Background</span>
-        <button
-          type="button"
-          aria-pressed="true"
-          data-canvas-background="grid"
-          title="Use grid background"
-        >
-          Grid
-        </button>
-        <button
-          type="button"
-          aria-pressed="false"
-          data-canvas-background="plain"
-          title="Use plain background"
-        >
-          Plain
-        </button>
-      </fieldset>
+      <label class="canvas-background-control">
+        <span>Canvas</span>
+        <select aria-label="Canvas background" data-canvas-background-select>
+          <option value="grid" selected>Grid</option>
+          <option value="plain">Plain</option>
+        </select>
+      </label>
       <span class="bench-hint">{hint}</span>
     </div>
   </header>
@@ -106,40 +99,50 @@ const hasProps = Astro.slots.has("props")
 </div>
 
 <script>
+  type CanvasBackground = "grid" | "plain"
+
+  const setCanvasBackground = (value: CanvasBackground) => {
+    document.querySelectorAll<HTMLElement>("[data-preview-canvas]").forEach((canvas) => {
+      canvas.dataset.background = value
+    })
+    document
+      .querySelectorAll<HTMLSelectElement>("[data-canvas-background-select]")
+      .forEach((select) => {
+        select.value = value
+      })
+    try {
+      window.localStorage.setItem("hulla-catalog-canvas-background", value)
+    } catch {
+      // The synchronized setting still works when storage is unavailable.
+    }
+  }
+
+  document.addEventListener("change", (event) => {
+    const select = (event.target as HTMLElement).closest<HTMLSelectElement>(
+      "[data-canvas-background-select]"
+    )
+    if (select?.value === "grid" || select?.value === "plain") {
+      setCanvasBackground(select.value)
+    }
+  })
+
   document.addEventListener("click", (event) => {
     const target = event.target as HTMLElement
-    const preview = target.closest<HTMLElement>("[data-component-preview]")
-    if (!preview) return
-
     const tab = target.closest<HTMLButtonElement>("[data-preview-tab]")
-    if (tab) {
-      const mode = tab.dataset.previewTab
-      if (!mode) return
+    if (!tab) return
 
-      preview.querySelectorAll<HTMLButtonElement>("[data-preview-tab]").forEach((item) => {
-        item.setAttribute("aria-selected", String(item === tab))
-        item.tabIndex = item === tab ? 0 : -1
-      })
-      preview.querySelectorAll<HTMLElement>("[data-preview-panel]").forEach((panel) => {
-        panel.hidden = panel.dataset.previewPanel !== mode
-      })
-      preview.dispatchEvent(
-        new CustomEvent("previewmodechange", { bubbles: true, detail: { mode } })
-      )
-      return
-    }
+    const preview = tab.closest<HTMLElement>("[data-component-preview]")
+    const mode = tab.dataset.previewTab
+    if (!mode || !preview) return
 
-    const background = target.closest<HTMLButtonElement>("[data-canvas-background]")
-    if (!background) return
-
-    const value = background.dataset.canvasBackground
-    const canvas = preview.querySelector<HTMLElement>("[data-preview-canvas]")
-    if (!value || !canvas) return
-
-    canvas.dataset.background = value
-    preview.querySelectorAll<HTMLButtonElement>("[data-canvas-background]").forEach((item) => {
-      item.setAttribute("aria-pressed", String(item === background))
+    preview.querySelectorAll<HTMLButtonElement>("[data-preview-tab]").forEach((item) => {
+      item.setAttribute("aria-selected", String(item === tab))
+      item.tabIndex = item === tab ? 0 : -1
     })
+    preview.querySelectorAll<HTMLElement>("[data-preview-panel]").forEach((panel) => {
+      panel.hidden = panel.dataset.previewPanel !== mode
+    })
+    preview.dispatchEvent(new CustomEvent("previewmodechange", { bubbles: true, detail: { mode } }))
   })
 
   document.addEventListener("keydown", (event) => {
@@ -165,4 +168,14 @@ const hasProps = Astro.slots.has("props")
     tabs[nextIndex]?.click()
     tabs[nextIndex]?.focus()
   })
+
+  let initialBackground: CanvasBackground = "grid"
+  try {
+    if (window.localStorage.getItem("hulla-catalog-canvas-background") === "plain") {
+      initialBackground = "plain"
+    }
+  } catch {
+    // Use the default grid background.
+  }
+  setCanvasBackground(initialBackground)
 </script>

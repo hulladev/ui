@@ -1,0 +1,218 @@
+---
+import Button from "../../../../../generated/astro/button/button.astro"
+import astroButtonSource from "../../../../../generated/astro/button/button.astro?raw"
+import reactButtonSource from "../../../../../generated/react/button/button.tsx?raw"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+import ComponentSource from "../ComponentSource.astro"
+import { buttonPreviewSources } from "../../data/catalogPreviewSources"
+
+const button = manifest.library.components.button
+const buttonSizes = ["sm", "md", "lg"] as const
+const buttonVariants = ["primary", "secondary", "outline"] as const
+const buttonSources = [
+  {
+    code: astroButtonSource,
+    filename: "generated/astro/button/button.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactButtonSource,
+    filename: "generated/react/button/button.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+
+const buttonUsageSources = [
+  {
+    code: `---
+import Button from "@/ui/button/button.astro"
+---
+
+<div class="flex items-center gap-3">
+  <Button>Save changes</Button>
+  <Button variant="outline" size="sm">Cancel</Button>
+  <Button variant="secondary" disabled>Publishing…</Button>
+</div>`,
+    filename: "src/components/button-demo.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Button } from "@/ui/button"
+
+export function ButtonDemo() {
+  return (
+    <div className="flex items-center gap-3">
+      <Button>Save changes</Button>
+      <Button variant="outline" size="sm">Cancel</Button>
+      <Button variant="secondary" disabled>
+        Publishing…
+      </Button>
+    </div>
+  )
+}`,
+    filename: "src/components/button-demo.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="button" aria-labelledby="button-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Action</p>
+      <h2 id="button-title">Button</h2>
+    </div>
+    <span class="status">Generated cleanly</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Button component preview">
+    <div class="workbench">
+      <ComponentPreview component="Button" requirePropsView={true}>
+        <div slot="variants" class="grid gap-5">
+          {
+            buttonVariants.map((variant) => (
+              <div class="grid grid-cols-[4.25rem_repeat(3,minmax(0,auto))] items-center justify-center gap-3 max-[760px]:grid-cols-3 max-[760px]:gap-2">
+                <span class="font-mono text-xs font-medium tracking-wider text-muted-foreground uppercase max-[760px]:col-span-full">
+                  {variant}
+                </span>
+                {buttonSizes.map((size) => (
+                  <Button size={size} variant={variant}>
+                    {size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
+                  </Button>
+                ))}
+              </div>
+            ))
+          }
+          <div
+            class="grid grid-cols-[4.25rem_minmax(0,auto)] items-center justify-center gap-3 border-t border-border pt-5 max-[760px]:grid-cols-1 max-[760px]:gap-2"
+          >
+            <span
+              class="font-mono text-xs font-medium tracking-wider text-muted-foreground uppercase"
+              >Disabled</span
+            >
+            <Button disabled>Unavailable</Button>
+          </div>
+        </div>
+
+        <div slot="props" class="prop-playground">
+          <div class="prop-controls">
+            <label class="prop-control">
+              <span class="label">Variant</span>
+              <select aria-label="Button variant" data-button-prop-variant>
+                <option value="primary">Primary</option>
+                <option value="secondary">Secondary</option>
+                <option value="outline">Outline</option>
+              </select>
+            </label>
+
+            <label class="prop-control">
+              <span class="label">Size</span>
+              <select aria-label="Button size" data-button-prop-size>
+                <option value="sm">Small</option>
+                <option value="md" selected>Medium</option>
+                <option value="lg">Large</option>
+              </select>
+            </label>
+
+            <label class="prop-disabled">
+              <input type="checkbox" data-button-prop-disabled />
+              <span class="toggle-track" aria-hidden="true"><span></span></span>
+              <span class="label">Disabled</span>
+            </label>
+          </div>
+
+          <div class="playground-stage">
+            {
+              buttonVariants.map((variant) =>
+                buttonSizes.map((size) => (
+                  <Button
+                    variant={variant}
+                    size={size}
+                    data-playground-button
+                    data-variant={variant}
+                    data-size={size}
+                    hidden={variant !== "primary" || size !== "md"}
+                  >
+                    Preview action
+                  </Button>
+                ))
+              )
+            }
+          </div>
+
+          <code class="prop-readout" data-prop-readout aria-live="polite"
+            >&lt;Button variant="primary" size="md" /&gt;</code
+          >
+        </div>
+
+        <dl slot="facts" class="facts">
+          <div class="fact">
+            <dt class="label">Available in</dt>
+            <dd>{button.frameworks.join(" · ")}</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Source mode</dt>
+            <dd>CLI-owned code</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Build contract</dt>
+            <dd>Atomic + verified</dd>
+          </div>
+        </dl>
+      </ComponentPreview>
+
+      <ComponentSource
+        component="Button"
+        generatedFamilies={["button"]}
+        previewSources={buttonPreviewSources}
+        sources={buttonSources}
+        usageSources={buttonUsageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncButtonPlayground = (preview: HTMLElement) => {
+    const variant =
+      preview.querySelector<HTMLSelectElement>("[data-button-prop-variant]")?.value ?? "primary"
+    const size = preview.querySelector<HTMLSelectElement>("[data-button-prop-size]")?.value ?? "md"
+    const disabled =
+      preview.querySelector<HTMLInputElement>("[data-button-prop-disabled]")?.checked ?? false
+
+    preview.querySelectorAll<HTMLButtonElement>("[data-playground-button]").forEach((button) => {
+      const selected = button.dataset.variant === variant && button.dataset.size === size
+      button.hidden = !selected
+      button.disabled = disabled
+    })
+
+    const readout = preview.querySelector<HTMLElement>("[data-prop-readout]")
+    if (readout) {
+      readout.textContent = `<Button variant="${variant}" size="${size}"${disabled ? " disabled" : ""} />`
+    }
+  }
+
+  document.addEventListener("previewmodechange", (event) => {
+    const preview = (event.target as HTMLElement).closest<HTMLElement>(
+      '[data-preview-component="button-preview"]'
+    )
+    if (preview && (event as CustomEvent<{ mode?: string }>).detail.mode === "props") {
+      syncButtonPlayground(preview)
+    }
+  })
+
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      ["[data-button-prop-variant]", "[data-button-prop-size]", "[data-button-prop-disabled]"].join(
+        ","
+      )
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="button-preview"]')
+    if (preview) syncButtonPlayground(preview)
+  })
+</script>

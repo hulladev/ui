@@ -1,4 +1,10 @@
 ---
+import Button from "../../../../generated/astro/button/button.astro"
+import DialogDescription from "../../../../generated/astro/dialog/dialog-description.astro"
+import DialogFooter from "../../../../generated/astro/dialog/dialog-footer.astro"
+import DialogHeader from "../../../../generated/astro/dialog/dialog-header.astro"
+import DialogTitle from "../../../../generated/astro/dialog/dialog-title.astro"
+import Dialog from "../../../../generated/astro/dialog/dialog.astro"
 import "../styles/showcase.css"
 
 const activity = [
@@ -155,7 +161,7 @@ const integrations = ["Linear", "Notion", "Slack", "Figma", "Drive"]
                     <h3>Confirm the migration window</h3>
                     <p>Platform and Support are aligned. Customer Success needs final timing.</p>
                   </div>
-                  <button type="button" aria-label="Open decision">↗</button>
+                  <button type="button" aria-label="Open decision" data-open-decision>↗</button>
                 </div>
 
                 <div class="activity-list">
@@ -354,8 +360,87 @@ const integrations = ["Linear", "Notion", "Slack", "Figma", "Drive"]
       <div><a href="/">Component catalog</a><a href="#main">Back to top ↑</a></div>
     </footer>
 
+    <Dialog
+      id="decision-dialog"
+      hidden
+      aria-labelledby="decision-title"
+      aria-describedby="decision-description"
+    >
+      <DialogHeader>
+        <p class="micro-label">Decision / Migration window</p>
+        <DialogTitle id="decision-title">Confirm the migration window</DialogTitle>
+        <DialogDescription id="decision-description">
+          Platform and Support are ready for the proposed window. Confirming now will notify
+          Customer Success and schedule the operational checklist.
+        </DialogDescription>
+      </DialogHeader>
+
+      <div class="grid gap-3 rounded-md bg-foreground/5 p-4 text-sm">
+        <div class="flex items-center justify-between gap-4">
+          <span class="text-muted-foreground">Window</span>
+          <strong>Sunday · 02:00–04:00 UTC</strong>
+        </div>
+        <div class="flex items-center justify-between gap-4">
+          <span class="text-muted-foreground">Expected impact</span>
+          <strong>12 minutes read-only</strong>
+        </div>
+      </div>
+
+      <DialogFooter>
+        <Button variant="outline" data-close-decision>Not yet</Button>
+        <Button variant="secondary" data-open-impact>Review impact</Button>
+        <Button data-confirm-decision>Confirm window</Button>
+      </DialogFooter>
+    </Dialog>
+
+    <Dialog
+      id="impact-dialog"
+      class="max-w-md"
+      hidden
+      aria-labelledby="impact-title"
+      aria-describedby="impact-description"
+    >
+      <DialogHeader>
+        <p class="micro-label">Nested layer / Impact</p>
+        <DialogTitle id="impact-title">Twelve minutes, read-only.</DialogTitle>
+        <DialogDescription id="impact-description">
+          Active sessions remain connected. Writes queue automatically and resume when the migration
+          completes.
+        </DialogDescription>
+      </DialogHeader>
+
+      <DialogFooter>
+        <Button autofocus data-close-impact>Back to decision</Button>
+      </DialogFooter>
+    </Dialog>
+
     <script>
+      import { onDialogDismiss } from "../../../../generated/astro/lib/dialog"
+
       const toggle = document.querySelector<HTMLInputElement>("#theme-toggle")
+      const decisionDialog = document.querySelector<HTMLElement>("#decision-dialog")
+      const impactDialog = document.querySelector<HTMLElement>("#impact-dialog")
+
+      const hideDecision = () => {
+        if (decisionDialog) decisionDialog.hidden = true
+      }
+
+      const hideImpact = () => {
+        if (impactDialog) impactDialog.hidden = true
+      }
+
+      document.querySelector("[data-open-decision]")?.addEventListener("click", () => {
+        if (decisionDialog) decisionDialog.hidden = false
+      })
+      document.querySelector("[data-close-decision]")?.addEventListener("click", hideDecision)
+      document.querySelector("[data-confirm-decision]")?.addEventListener("click", hideDecision)
+      document.querySelector("[data-open-impact]")?.addEventListener("click", () => {
+        if (impactDialog) impactDialog.hidden = false
+      })
+      document.querySelector("[data-close-impact]")?.addEventListener("click", hideImpact)
+
+      if (decisionDialog) onDialogDismiss(decisionDialog, hideDecision)
+      if (impactDialog) onDialogDismiss(impactDialog, hideImpact)
 
       const syncToggle = () => {
         if (toggle) toggle.checked = document.documentElement.dataset.theme === "light"

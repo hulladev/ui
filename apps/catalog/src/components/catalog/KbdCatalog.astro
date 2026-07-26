@@ -1,0 +1,218 @@
+---
+import Kbd from "../../../../../generated/astro/kbd/kbd.astro"
+import astroKbdSource from "../../../../../generated/astro/kbd/kbd.astro?raw"
+import reactKbdSource from "../../../../../generated/react/kbd/kbd.tsx?raw"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+import ComponentSource from "../ComponentSource.astro"
+import { kbdPreviewSources } from "../../data/catalogPreviewSources"
+
+const kbd = manifest.library.components.kbd
+const shortcuts = [
+  { action: "Open command menu", keys: ["⌘", "K"] },
+  { action: "Quick switch project", keys: ["⌘", "P"] },
+  { action: "Close current view", keys: ["Esc"] },
+] as const
+
+const kbdSources = [
+  {
+    code: astroKbdSource,
+    filename: "generated/astro/kbd/kbd.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactKbdSource,
+    filename: "generated/react/kbd/kbd.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+
+const kbdUsageSources = [
+  {
+    code: `---
+import Kbd from "@/ui/kbd/kbd.astro"
+---
+
+<p>
+  Press <Kbd>⌘</Kbd> + <Kbd>K</Kbd> to open the command menu.
+</p>`,
+    filename: "src/components/shortcut-hint.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Kbd } from "@/ui/kbd"
+
+export function ShortcutHint() {
+  return (
+    <p>
+      Press <Kbd>⌘</Kbd> + <Kbd>K</Kbd> to open the command menu.
+    </p>
+  )
+}`,
+    filename: "src/components/shortcut-hint.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="kbd" aria-labelledby="kbd-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Typography</p>
+      <h2 id="kbd-title">Kbd</h2>
+    </div>
+    <span class="status">Native semantics</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Kbd component preview">
+    <div class="workbench workbench--kbd">
+      <ComponentPreview component="Kbd" hint="Non-interactive" requirePropsView={true}>
+        <div slot="variants" class="grid gap-4">
+          <div
+            class="relative grid gap-6 overflow-hidden rounded-lg border border-border bg-surface-raised p-[1.35rem] shadow-xs before:absolute before:top-0 before:left-[1.35rem] before:h-0.5 before:w-12 before:bg-primary before:content-['']"
+          >
+            <div class="flex items-center gap-3">
+              <span
+                class="grid size-8 place-items-center rounded-sm bg-primary/10 font-mono text-sm text-primary"
+                aria-hidden="true">⌘</span
+              >
+              <span class="grid gap-0.5">
+                <strong class="text-sm">Command menu</strong>
+                <small class="text-xs text-muted-foreground">
+                  Navigate without leaving the keyboard
+                </small>
+              </span>
+            </div>
+
+            <p class="m-0 text-sm leading-7 text-muted-foreground">
+              Press
+              <span
+                class="mx-1 inline-flex items-center gap-1 align-middle"
+                aria-label="Command plus K"
+              >
+                <Kbd>⌘</Kbd>
+                <span class="font-mono text-xs text-muted-foreground" aria-hidden="true">+</span>
+                <Kbd>K</Kbd>
+              </span>
+              from anywhere.
+            </p>
+          </div>
+
+          <div
+            class="overflow-hidden rounded-md border border-border bg-surface/85"
+            aria-label="Example keyboard shortcuts"
+          >
+            {
+              shortcuts.map(({ action, keys }) => (
+                <div class="flex items-center justify-between gap-4 border-t border-border px-3.5 py-3 first:border-t-0">
+                  <span class="text-xs text-muted-foreground">{action}</span>
+                  <span class="inline-flex items-center gap-1 align-middle">
+                    {keys.map((key) => (
+                      <Kbd>{key}</Kbd>
+                    ))}
+                  </span>
+                </div>
+              ))
+            }
+          </div>
+
+          <div class="flex items-center justify-between gap-4 pt-1" aria-label="Common key labels">
+            <span
+              class="font-mono text-xs font-medium tracking-wider text-muted-foreground uppercase"
+              >Key labels</span
+            >
+            <span class="flex flex-wrap justify-end gap-2">
+              <Kbd>Esc</Kbd>
+              <Kbd>Shift</Kbd>
+              <Kbd aria-label="Arrow up">↑</Kbd>
+              <Kbd>Enter</Kbd>
+            </span>
+          </div>
+        </div>
+
+        <div slot="props" class="prop-playground">
+          <div class="prop-controls">
+            <label class="prop-control">
+              <span class="label">Key label</span>
+              <input type="text" value="⌘ K" maxlength="12" data-kbd-prop-content />
+            </label>
+
+            <label class="prop-control">
+              <span class="label">Class override</span>
+              <select aria-label="Kbd class override" data-kbd-prop-tone>
+                <option value="default">Default</option>
+                <option value="strong">text-foreground</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="playground-stage">
+            <Kbd data-playground-kbd data-tone="default">⌘ K</Kbd>
+            <Kbd class="text-foreground" data-playground-kbd data-tone="strong" hidden>⌘ K</Kbd>
+          </div>
+
+          <code class="prop-readout" data-kbd-prop-readout aria-live="polite"
+            >&lt;Kbd&gt;⌘ K&lt;/Kbd&gt;</code
+          >
+        </div>
+
+        <dl slot="facts" class="facts">
+          <div class="fact">
+            <dt class="label">Available in</dt>
+            <dd>{kbd.frameworks.join(" · ")}</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Native element</dt>
+            <dd>kbd · no implicit role</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Custom props</dt>
+            <dd>none · native attributes</dd>
+          </div>
+        </dl>
+      </ComponentPreview>
+
+      <ComponentSource
+        component="Kbd"
+        generatedFamilies={["kbd"]}
+        previewSources={kbdPreviewSources}
+        sources={kbdSources}
+        usageSources={kbdUsageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncKbdPlayground = (preview: HTMLElement) => {
+    const content =
+      preview.querySelector<HTMLInputElement>("[data-kbd-prop-content]")?.value.trim() || "Key"
+    const tone =
+      preview.querySelector<HTMLSelectElement>("[data-kbd-prop-tone]")?.value ?? "default"
+
+    preview.querySelectorAll<HTMLElement>("[data-playground-kbd]").forEach((kbd) => {
+      kbd.hidden = kbd.dataset.tone !== tone
+      kbd.textContent = content
+    })
+
+    const readout = preview.querySelector<HTMLElement>("[data-kbd-prop-readout]")
+    if (readout) {
+      readout.textContent =
+        tone === "strong"
+          ? `<Kbd className="text-foreground">${content}</Kbd>`
+          : `<Kbd>${content}</Kbd>`
+    }
+  }
+
+  document.addEventListener("input", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      "[data-kbd-prop-content], [data-kbd-prop-tone]"
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="kbd-preview"]')
+    if (preview) syncKbdPlayground(preview)
+  })
+</script>

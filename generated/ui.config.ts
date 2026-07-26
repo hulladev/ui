@@ -12,13 +12,34 @@ export const config = {
     vue: "./vue",
   },
   components: {
+    alert: {
+      frameworks: ["astro", "react"],
+    },
+    badge: {
+      frameworks: ["astro", "react"],
+    },
     button: {
+      frameworks: ["astro", "react"],
+    },
+    card: {
+      frameworks: ["astro", "react"],
+    },
+    dialog: {
+      frameworks: ["astro", "react"],
+    },
+    "dropdown-menu": {
       frameworks: ["astro", "react"],
     },
     field: {
       frameworks: ["astro", "react"],
     },
     input: {
+      frameworks: ["astro", "react"],
+    },
+    kbd: {
+      frameworks: ["astro", "react"],
+    },
+    popover: {
       frameworks: ["astro", "react"],
     },
     select: {
@@ -33,6 +54,24 @@ export const config = {
         dest: "lib/style.ts",
         required: true,
         description: "Shared class and variant composition helpers",
+      },
+      {
+        src: "lib/layer-stack.ts",
+        dest: "lib/layer-stack.ts",
+        required: true,
+        description: "Internal deterministic dialog stack",
+      },
+      {
+        src: "lib/dialog.ts",
+        dest: "lib/dialog.ts",
+        required: true,
+        description: "Framework-neutral modal dialog behavior",
+      },
+      {
+        src: "lib/dropdown-menu.ts",
+        dest: "lib/dropdown-menu.ts",
+        required: true,
+        description: "Framework-neutral dropdown menu behavior",
       },
       {
         src: "styles.css",

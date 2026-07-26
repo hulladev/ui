@@ -1,0 +1,87 @@
+---
+import { vn, cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+const $overlayVariant = vn({
+  compact: "p-4",
+  workspace: "p-2 sm:p-6",
+  fullscreen: "p-0",
+})
+const $variant = vn({
+  compact:
+    "max-w-lg rounded-lg border border-border p-6 shadow-[0_1.5rem_5rem_-1.75rem_oklch(0_0_0/0.28)] dark:border-foreground/15 dark:bg-surface-raised/84 dark:shadow-[0_1.75rem_7rem_-2rem_oklch(0_0_0/0.9),inset_0_1px_0_oklch(1_0_0/0.08)] dark:backdrop-blur-2xl",
+  workspace:
+    "flex h-[calc(100dvh-1rem)] max-w-[90rem] flex-col rounded-lg border border-border shadow-[0_1.5rem_5rem_-1.75rem_oklch(0_0_0/0.28)] dark:border-foreground/15 dark:bg-surface-raised/88 dark:shadow-[0_1.75rem_7rem_-2rem_oklch(0_0_0/0.9),inset_0_1px_0_oklch(1_0_0/0.08)] dark:backdrop-blur-2xl sm:h-[calc(100dvh-3rem)]",
+  fullscreen: "flex h-dvh max-w-none flex-col rounded-none border-0 shadow-none",
+})
+
+type Props = HTMLAttributes<"div"> & {
+  dismissible?: boolean
+  variant?: typeof $variant.infer
+}
+
+const {
+  "aria-modal": ariaModal = true,
+  class: className,
+  dismissible = true,
+  hidden = false,
+  role = "dialog",
+  style,
+  tabindex = -1,
+  variant = "compact",
+  ...props
+} = Astro.props as Props
+---
+
+<hulla-dialog
+  {...props}
+  hidden={hidden}
+  aria-modal={ariaModal}
+  data-dismissible={dismissible}
+  data-slot="dialog-overlay"
+  data-state={hidden ? "closed" : "open"}
+  data-variant={variant}
+  role={role}
+  tabindex={tabindex}
+  class={cn(
+    "fixed inset-0 z-[calc(var(--hulla-layer-base,1000)+var(--hulla-layer-order,0))] grid max-h-dvh place-items-center overflow-y-auto overscroll-contain bg-foreground/40 backdrop-blur-[3px] focus:outline-none motion-reduce:backdrop-blur-none dark:bg-background/72 dark:backdrop-blur-[8px] [&[hidden]]:hidden",
+    $overlayVariant(variant)
+  )}
+>
+  <div
+    data-slot="dialog"
+    data-variant={variant}
+    tabindex="-1"
+    class={cn(
+      "group/dialog relative my-auto w-full overflow-hidden bg-surface-raised text-foreground focus:outline-none",
+      $variant(variant),
+      className
+    )}
+    style={style}
+  >
+    <slot />
+  </div>
+</hulla-dialog>
+
+<script>
+  import { connectDialog, type DialogController } from "@/lib/dialog"
+
+  const elementName = "hulla-dialog"
+
+  if (!customElements.get(elementName)) {
+    class HullaDialogElement extends HTMLElement {
+      controller: DialogController | undefined
+
+      connectedCallback() {
+        this.controller ??= connectDialog(this)
+      }
+
+      disconnectedCallback() {
+        this.controller?.destroy()
+        this.controller = undefined
+      }
+    }
+
+    customElements.define(elementName, HullaDialogElement)
+  }
+</script>

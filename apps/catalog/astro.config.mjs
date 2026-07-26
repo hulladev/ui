@@ -53,13 +53,8 @@ export default defineConfig({
   vite: {
     plugins: [reloadGeneratedOutput(), tailwindcss()],
     resolve: {
+      dedupe: ["@hulla/style", "@lucide/astro", "tailwind-merge"],
       alias: {
-        "@hulla/style": fileURLToPath(
-          new URL("./node_modules/@hulla/style/dist/es/index.mjs", import.meta.url)
-        ),
-        "tailwind-merge": fileURLToPath(
-          new URL("./node_modules/tailwind-merge/dist/bundle-mjs.mjs", import.meta.url)
-        ),
         "@": fileURLToPath(new URL("../../generated/astro", import.meta.url)),
       },
     },

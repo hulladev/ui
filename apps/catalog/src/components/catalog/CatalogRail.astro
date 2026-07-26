@@ -1,0 +1,43 @@
+---
+type Props = {
+  frameworkCount: number
+  schemaVersion: number
+}
+
+const { frameworkCount, schemaVersion } = Astro.props
+---
+
+<aside class="rail glass-panel" aria-label="Catalog navigation">
+  <a class="brand" href="/">
+    <span class="brand-mark">h.</span>
+    <span class="eyebrow">UI Foundry / 001</span>
+  </a>
+
+  <nav class="rail-nav">
+    <a href="#button" aria-current="page"><span>Button</span><span>01</span></a>
+    <a href="#badge"><span>Badge</span><span>02</span></a>
+    <a href="#kbd"><span>Kbd</span><span>03</span></a>
+    <a href="#input"><span>Input + Field</span><span>04</span></a>
+    <a href="#select"><span>Select</span><span>05</span></a>
+    <a href="#popover"><span>Popover</span><span>06</span></a>
+    <a href="#dropdown-menu"><span>Dropdown Menu</span><span>07</span></a>
+    <a href="#dialog"><span>Dialog</span><span>08</span></a>
+    <a href="#card"><span>Card</span><span>09</span></a>
+    <a href="#alert"><span>Alert</span><span>10</span></a>
+    <a href="/showcase"><span>Default theme example</span><span>↗</span></a>
+    <a href="https://hulla.dev/docs/ui"><span>Documentation</span><span>↗</span></a>
+  </nav>
+
+  <div class="rail-footer">
+    <label class="contrast-toggle label" for="contrast">
+      <input id="contrast" type="checkbox" />
+      Dark theme
+    </label>
+
+    <p class="rail-note">
+      Generated output<br />
+      {frameworkCount} framework targets<br />
+      Manifest schema v{schemaVersion}
+    </p>
+  </div>
+</aside>
