@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title">
+  <title id="title">Abstract portrait of Sora</title>
+  <rect width="160" height="160" fill="#d7e4ff"/>
+  <path fill="#849fdb" d="M0 118 56 62l104 88v10H0z"/>
+  <circle cx="84" cy="67" r="36" fill="#edb68e"/>
+  <path fill="#172443" d="M48 69c0-30 17-47 42-47 28 0 42 20 42 49-13-5-26-18-31-31-8 14-27 25-53 29Z"/>
+  <path fill="#21345f" d="M36 160c4-39 20-58 48-58s49 19 55 58Z"/>
+  <circle cx="72" cy="69" r="3" fill="#172443"/>
+  <circle cx="101" cy="69" r="3" fill="#172443"/>
+  <path d="M78 84c6 5 12 5 18 0" fill="none" stroke="#9a554b" stroke-linecap="round" stroke-width="3"/>
+</svg>

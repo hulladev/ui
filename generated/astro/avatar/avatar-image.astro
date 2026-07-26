@@ -1,0 +1,33 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"img"> & {
+  alt: string
+}
+
+const { alt, class: className, ...props } = Astro.props as Props
+---
+
+<img
+  {...props}
+  alt={alt}
+  data-slot="avatar-image"
+  data-status="loading"
+  class={cn("absolute inset-0 size-full object-cover data-[status=error]:hidden", className)}
+/>
+
+<script>
+  document.querySelectorAll<HTMLImageElement>('[data-slot="avatar-image"]').forEach((image) => {
+    const setStatus = (status: "error" | "loaded") => {
+      image.dataset.status = status
+    }
+
+    image.addEventListener("load", () => setStatus("loaded"))
+    image.addEventListener("error", () => setStatus("error"))
+
+    if (image.complete) {
+      setStatus(image.naturalWidth > 0 ? "loaded" : "error")
+    }
+  })
+</script>
