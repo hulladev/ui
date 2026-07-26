@@ -1,0 +1,78 @@
+---
+import { floatingLayer } from "@/+css/floating-layer.css"
+import { cn } from "@/lib/style"
+import type { Placement } from "@floating-ui/dom"
+import { resolve } from "@hulla/ui"
+import type { HTMLAttributes } from "astro/types"
+
+const $layer = resolve(floatingLayer)
+
+type Props = HTMLAttributes<"div"> & {
+  closeDelay?: number
+  openDelay?: number
+  placement?: Placement
+  triggerId: string
+}
+
+const {
+  class: className,
+  closeDelay = 100,
+  openDelay = 180,
+  placement = "top",
+  popover = "hint",
+  role = "tooltip",
+  triggerId,
+  ...props
+} = Astro.props as Props
+---
+
+<hulla-tooltip
+  {...props}
+  popover={popover}
+  role={role}
+  data-close-delay={closeDelay}
+  data-open-delay={openDelay}
+  data-placement={placement}
+  data-slot="tooltip"
+  data-trigger-id={triggerId}
+  class={cn(
+    $layer,
+    "max-w-72 rounded-sm border border-foreground/10 bg-foreground px-2 py-1 font-sans text-xs leading-5 font-medium text-background shadow-lg",
+    className
+  )}
+>
+  <slot />
+</hulla-tooltip>
+
+<script>
+  import { connectFloatingLayer, type FloatingLayerController } from "@/lib/floating-layer"
+  import type { Placement } from "@floating-ui/dom"
+
+  const elementName = "hulla-tooltip"
+
+  if (!customElements.get(elementName)) {
+    class HullaTooltipElement extends HTMLElement {
+      controller: FloatingLayerController | undefined
+
+      connectedCallback() {
+        const triggerId = this.dataset.triggerId
+        if (!triggerId) return
+
+        this.controller ??= connectFloatingLayer(this, {
+          closeDelay: Number(this.dataset.closeDelay ?? 100),
+          offset: 7,
+          openDelay: Number(this.dataset.openDelay ?? 180),
+          placement: (this.dataset.placement ?? "top") as Placement,
+          triggerId,
+        })
+      }
+
+      disconnectedCallback() {
+        this.controller?.destroy()
+        this.controller = undefined
+      }
+    }
+
+    customElements.define(elementName, HullaTooltipElement)
+  }
+</script>

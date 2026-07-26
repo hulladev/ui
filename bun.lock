@@ -7,6 +7,7 @@
       "devDependencies": {
         "@changesets/cli": "^2.29.8",
         "@commitlint/cli": "^19.8.1",
+        "@floating-ui/dom": "catalog:",
         "@hulla/ui": "workspace:*",
         "@repo/eslint-config": "workspace:*",
         "@repo/typescript-config": "workspace:*",
@@ -26,6 +27,7 @@
       "name": "@hulla/catalog",
       "version": "0.0.0",
       "dependencies": {
+        "@floating-ui/dom": "catalog:",
         "@fontsource-variable/schibsted-grotesk": "^5.3.0",
         "@fontsource/ibm-plex-mono": "^5.3.0",
         "@hulla/style": "catalog:",
@@ -48,6 +50,7 @@
       "name": "components",
       "version": "0.0.0",
       "dependencies": {
+        "@floating-ui/dom": "catalog:",
         "@fontsource-variable/schibsted-grotesk": "^5.3.0",
         "@fontsource/ibm-plex-mono": "^5.3.0",
         "@hulla/style": "catalog:",
@@ -120,6 +123,7 @@
     },
   },
   "catalog": {
+    "@floating-ui/dom": "^1.7.6",
     "@hulla/style": "0.3.0",
   },
   "packages": {
@@ -314,6 +318,12 @@
     "@eslint/object-schema": ["@eslint/object-schema@2.1.7", "", {}, "sha512-VtAOaymWVfZcmZbp6E2mympDIHvyjXs/12LqWYjVw6qjrfF+VK+fyG33kChz3nnK+SU5/NeHOqrTEHS8sXO3OA=="],
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.4.1", "", { "dependencies": { "@eslint/core": "^0.17.0", "levn": "^0.4.1" } }, "sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA=="],
+
+    "@floating-ui/core": ["@floating-ui/core@1.8.0", "", { "dependencies": { "@floating-ui/utils": "^0.2.12" } }, "sha512-0CIZ5itps/8x7BG8dEIhs53BvCUH2PCoogtakwRTut+Arm58sJooJ0AuZhLw2HJYIR5cMLNPBSS728sPho2khQ=="],
+
+    "@floating-ui/dom": ["@floating-ui/dom@1.8.0", "", { "dependencies": { "@floating-ui/core": "^1.8.0", "@floating-ui/utils": "^0.2.12" } }, "sha512-yXSrzeHZBTZadLOlfyhCkJHNeLJnHRnRInwdZ40L7ZiaAtrBwoYlsDrX3v5zB1Utk7CLfzcOVnVVWoXEky7Ceg=="],
+
+    "@floating-ui/utils": ["@floating-ui/utils@0.2.12", "", {}, "sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww=="],
 
     "@fontsource-variable/schibsted-grotesk": ["@fontsource-variable/schibsted-grotesk@5.3.0", "", {}, "sha512-ndS6H/KICWANchlHF3q4UdZD+xrZ3Ji0rUobIuXlgvDUzDfqZDsVuXPXZb636nJZMHE9zZ9Fmwgqazm8hMB50Q=="],
 

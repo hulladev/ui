@@ -1,0 +1,75 @@
+---
+import { cn } from "@/lib/style"
+import type { Placement } from "@floating-ui/dom"
+import type { HTMLAttributes } from "astro/types"
+
+const $layer =
+  "fixed top-0 left-0 m-0 invisible pointer-events-none scale-[0.98] opacity-0 transition-[display,opacity,overlay,transform,visibility] duration-150 ease-out [transition-behavior:allow-discrete] [&[data-positioned=true]:popover-open]:visible [&[data-positioned=true]:popover-open]:pointer-events-auto [&[data-positioned=true]:popover-open]:scale-100 [&[data-positioned=true]:popover-open]:opacity-100 motion-reduce:transition-none"
+
+type Props = HTMLAttributes<"div"> & {
+  closeDelay?: number
+  openDelay?: number
+  placement?: Placement
+  triggerId: string
+}
+
+const {
+  class: className,
+  closeDelay = 300,
+  openDelay = 200,
+  placement = "bottom-start",
+  popover = "hint",
+  triggerId,
+  ...props
+} = Astro.props as Props
+---
+
+<hulla-hover-card
+  {...props}
+  popover={popover}
+  data-close-delay={closeDelay}
+  data-open-delay={openDelay}
+  data-placement={placement}
+  data-slot="hover-card"
+  data-trigger-id={triggerId}
+  class={cn(
+    $layer,
+    "max-h-[calc(100vh-1rem)] w-80 max-w-[calc(100vw-1rem)] overflow-auto rounded-md border border-border/85 bg-surface-raised p-4 text-sm text-foreground shadow-xl ring-1 ring-foreground/5",
+    className
+  )}
+>
+  <slot />
+</hulla-hover-card>
+
+<script>
+  import { connectFloatingLayer, type FloatingLayerController } from "@/lib/floating-layer"
+  import type { Placement } from "@floating-ui/dom"
+
+  const elementName = "hulla-hover-card"
+
+  if (!customElements.get(elementName)) {
+    class HullaHoverCardElement extends HTMLElement {
+      controller: FloatingLayerController | undefined
+
+      connectedCallback() {
+        const triggerId = this.dataset.triggerId
+        if (!triggerId) return
+
+        this.controller ??= connectFloatingLayer(this, {
+          closeDelay: Number(this.dataset.closeDelay ?? 300),
+          offset: 10,
+          openDelay: Number(this.dataset.openDelay ?? 200),
+          placement: (this.dataset.placement ?? "bottom-start") as Placement,
+          triggerId,
+        })
+      }
+
+      disconnectedCallback() {
+        this.controller?.destroy()
+        this.controller = undefined
+      }
+    }
+
+    customElements.define(elementName, HullaHoverCardElement)
+  }
+</script>

@@ -53,6 +53,10 @@ export const ui = createLibrary({
         description: "Framework-neutral dropdown menu behavior",
       },
       {
+        src: "lib/floating-layer.ts",
+        description: "Shared hover, focus, and Floating UI positioning behavior",
+      },
+      {
         src: "styles.css",
         description: "Shared Hulla design tokens and Tailwind theme",
       },
@@ -67,6 +71,7 @@ export const ui = createLibrary({
       withPackageJsonUpdates(packageJson, {
         dependencies: {
           ...packageJson.dependencies,
+          "@floating-ui/dom": "catalog:",
           "@fontsource-variable/schibsted-grotesk": "^5.3.0",
           "@fontsource/ibm-plex-mono": "^5.3.0",
           "@hulla/style": "catalog:",

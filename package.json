@@ -23,6 +23,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
     "@commitlint/cli": "^19.8.1",
+    "@floating-ui/dom": "catalog:",
     "@hulla/ui": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
@@ -111,6 +112,7 @@
       "packages/*"
     ],
     "catalog": {
+      "@floating-ui/dom": "^1.7.6",
       "@hulla/style": "0.3.0"
     }
   }
