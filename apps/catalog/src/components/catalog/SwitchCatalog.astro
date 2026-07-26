@@ -1,0 +1,269 @@
+---
+import FieldDescription from "../../../../../generated/astro/field/field-description.astro"
+import FieldLabel from "../../../../../generated/astro/field/field-label.astro"
+import Field from "../../../../../generated/astro/field/field.astro"
+import Switch from "../../../../../generated/astro/switch/switch.astro"
+import astroSwitchSource from "../../../../../generated/astro/switch/switch.astro?raw"
+import reactSwitchSource from "../../../../../generated/react/switch/switch.tsx?raw"
+import manifest from "../../../../../generated/ui.manifest.json"
+import { switchPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentPreview from "../ComponentPreview.astro"
+import ComponentSource from "../ComponentSource.astro"
+
+const switchComponent = manifest.library.components.switch
+const preferences = [
+  {
+    checked: true,
+    description: "Receive a compact summary every Monday morning.",
+    id: "weekly-digest",
+    label: "Weekly digest",
+  },
+  {
+    checked: false,
+    description: "Surface desktop alerts when a teammate mentions you.",
+    id: "desktop-alerts",
+    label: "Desktop alerts",
+  },
+] as const
+
+const switchSources = [
+  {
+    code: astroSwitchSource,
+    filename: "generated/astro/switch/switch.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactSwitchSource,
+    filename: "generated/react/switch/switch.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+
+const switchUsageSources = [
+  {
+    code: `---
+import FieldDescription from "@/ui/field/field-description.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import Switch from "@/ui/switch/switch.astro"
+---
+
+<Field class="grid-cols-[1fr_auto] items-center gap-x-5">
+  <div>
+    <FieldLabel for="weekly-digest">Weekly digest</FieldLabel>
+    <FieldDescription id="weekly-digest-help">
+      Receive a summary every Monday morning.
+    </FieldDescription>
+  </div>
+  <Switch
+    id="weekly-digest"
+    name="weeklyDigest"
+    aria-describedby="weekly-digest-help"
+    checked
+  />
+</Field>`,
+    filename: "src/components/digest-preference.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Field, FieldDescription, FieldLabel } from "@/ui/field"
+import { Switch } from "@/ui/switch"
+
+export function DigestPreference() {
+  return (
+    <Field className="grid-cols-[1fr_auto] items-center gap-x-5">
+      <div>
+        <FieldLabel htmlFor="weekly-digest">Weekly digest</FieldLabel>
+        <FieldDescription id="weekly-digest-help">
+          Receive a summary every Monday morning.
+        </FieldDescription>
+      </div>
+      <Switch
+        id="weekly-digest"
+        name="weeklyDigest"
+        aria-describedby="weekly-digest-help"
+        defaultChecked
+      />
+    </Field>
+  )
+}`,
+    filename: "src/components/digest-preference.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="switch" aria-labelledby="switch-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Form</p>
+      <h2 id="switch-title">Switch</h2>
+    </div>
+    <span class="status">Native control</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Switch component preview">
+    <div class="workbench workbench--switch">
+      <ComponentPreview component="Switch" hint="Click or press Space" requirePropsView={true}>
+        <div slot="variants" class="grid gap-4">
+          <div
+            class="overflow-hidden rounded-lg border border-border bg-surface-raised shadow-xs"
+            aria-label="Notification preferences"
+          >
+            {
+              preferences.map(({ checked, description, id, label }) => (
+                <Field class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-5 border-t border-border px-4 py-4 first:border-t-0">
+                  <div class="grid gap-0.5">
+                    <FieldLabel for={id}>{label}</FieldLabel>
+                    <FieldDescription id={`${id}-description`}>{description}</FieldDescription>
+                  </div>
+                  <Switch
+                    id={id}
+                    name={id}
+                    aria-describedby={`${id}-description`}
+                    checked={checked}
+                  />
+                </Field>
+              ))
+            }
+          </div>
+
+          <div
+            class="grid grid-cols-2 gap-3 border-t border-border pt-5 max-[480px]:grid-cols-1"
+            aria-label="Switch states"
+          >
+            <Field
+              class="grid grid-cols-[1fr_auto] items-center rounded-md bg-foreground/[0.04] px-3.5 py-3"
+            >
+              <FieldLabel for="switch-unchecked">Unchecked</FieldLabel>
+              <Switch id="switch-unchecked" />
+            </Field>
+            <Field
+              class="grid grid-cols-[1fr_auto] items-center rounded-md bg-foreground/[0.04] px-3.5 py-3"
+            >
+              <FieldLabel for="switch-checked">Checked</FieldLabel>
+              <Switch id="switch-checked" checked />
+            </Field>
+            <Field
+              class="grid grid-cols-[1fr_auto] items-center rounded-md bg-foreground/[0.04] px-3.5 py-3"
+            >
+              <FieldLabel for="switch-disabled">Disabled</FieldLabel>
+              <Switch id="switch-disabled" disabled />
+            </Field>
+            <Field
+              class="grid grid-cols-[1fr_auto] items-center rounded-md bg-foreground/[0.04] px-3.5 py-3"
+            >
+              <FieldLabel for="switch-invalid">Invalid</FieldLabel>
+              <Switch id="switch-invalid" aria-invalid="true" />
+            </Field>
+          </div>
+        </div>
+
+        <div slot="props" class="prop-playground">
+          <div class="prop-controls">
+            <label class="prop-control">
+              <span class="label">Checked</span>
+              <select aria-label="Switch checked state" data-switch-checked>
+                <option value="true" selected>On</option>
+                <option value="false">Off</option>
+              </select>
+            </label>
+
+            <label class="prop-control">
+              <span class="label">Availability</span>
+              <select aria-label="Switch availability" data-switch-disabled>
+                <option value="false" selected>Enabled</option>
+                <option value="true">Disabled</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="playground-stage">
+            <Field class="grid w-full max-w-sm grid-cols-[1fr_auto] items-center gap-x-5">
+              <div>
+                <FieldLabel for="playground-switch">Sync activity</FieldLabel>
+                <FieldDescription id="playground-switch-help">
+                  Keep this workspace current across devices.
+                </FieldDescription>
+              </div>
+              <Switch
+                id="playground-switch"
+                aria-describedby="playground-switch-help"
+                checked
+                data-playground-switch
+              />
+            </Field>
+          </div>
+
+          <code class="prop-readout" data-switch-readout aria-live="polite"
+            >&lt;Switch defaultChecked aria-label="Sync activity" /&gt;</code
+          >
+        </div>
+
+        <dl slot="facts" class="facts">
+          <div class="fact">
+            <dt class="label">Available in</dt>
+            <dd>{switchComponent.frameworks.join(" · ")}</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Native element</dt>
+            <dd>input[type=checkbox] · role=switch</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Custom props</dt>
+            <dd>none · native attributes</dd>
+          </div>
+        </dl>
+      </ComponentPreview>
+
+      <ComponentSource
+        component="Switch"
+        generatedFamilies={["switch"]}
+        previewSources={switchPreviewSources}
+        sources={switchSources}
+        usageSources={switchUsageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncSwitchPlayground = (preview: HTMLElement) => {
+    const switchElement = preview.querySelector<HTMLInputElement>("[data-playground-switch]")
+    const checkedSelect = preview.querySelector<HTMLSelectElement>("[data-switch-checked]")
+    const disabledSelect = preview.querySelector<HTMLSelectElement>("[data-switch-disabled]")
+    if (!switchElement || !checkedSelect || !disabledSelect) return
+
+    switchElement.checked = checkedSelect.value === "true"
+    switchElement.disabled = disabledSelect.value === "true"
+
+    const readout = preview.querySelector<HTMLElement>("[data-switch-readout]")
+    if (readout) {
+      const props = [
+        switchElement.checked ? "defaultChecked" : "",
+        switchElement.disabled ? "disabled" : "",
+        'aria-label="Sync activity"',
+      ].filter(Boolean)
+      readout.textContent = `<Switch ${props.join(" ")} />`
+    }
+  }
+
+  document.addEventListener("change", (event) => {
+    const target = event.target as HTMLElement
+    const preview = target.closest<HTMLElement>('[data-preview-component="switch-preview"]')
+    if (!preview) return
+
+    if (target.matches("[data-playground-switch]")) {
+      const checkedSelect = preview.querySelector<HTMLSelectElement>("[data-switch-checked]")
+      if (checkedSelect && target instanceof HTMLInputElement) {
+        checkedSelect.value = String(target.checked)
+      }
+    }
+
+    syncSwitchPlayground(preview)
+  })
+</script>
