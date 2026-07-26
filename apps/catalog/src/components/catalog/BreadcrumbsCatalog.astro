@@ -1,0 +1,190 @@
+---
+import BreadcrumbItem from "../../../../../generated/astro/breadcrumbs/breadcrumb-item.astro"
+import Breadcrumbs from "../../../../../generated/astro/breadcrumbs/breadcrumbs.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import { breadcrumbsPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentPreview from "../ComponentPreview.astro"
+import ComponentSource from "../ComponentSource.astro"
+
+const breadcrumbs = manifest.library.components.breadcrumbs
+
+const usageSources = [
+  {
+    code: `---
+import BreadcrumbItem from "@/ui/breadcrumbs/breadcrumb-item.astro"
+import Breadcrumbs from "@/ui/breadcrumbs/breadcrumbs.astro"
+---
+
+<Breadcrumbs>
+  <BreadcrumbItem><a href="/projects">Projects</a></BreadcrumbItem>
+  <BreadcrumbItem><a href="/projects/atlas">Atlas</a></BreadcrumbItem>
+  <BreadcrumbItem aria-current="page">Settings</BreadcrumbItem>
+</Breadcrumbs>`,
+    filename: "src/components/project-breadcrumbs.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { BreadcrumbItem, Breadcrumbs } from "@/ui/breadcrumbs"
+
+export function ProjectBreadcrumbs() {
+  return (
+    <Breadcrumbs>
+      <BreadcrumbItem><a href="/projects">Projects</a></BreadcrumbItem>
+      <BreadcrumbItem><a href="/projects/atlas">Atlas</a></BreadcrumbItem>
+      <BreadcrumbItem aria-current="page">Settings</BreadcrumbItem>
+    </Breadcrumbs>
+  )
+}`,
+    filename: "src/components/project-breadcrumbs.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="breadcrumbs" aria-labelledby="breadcrumbs-section-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Navigation</p>
+      <h2 id="breadcrumbs-section-title">Breadcrumbs</h2>
+    </div>
+    <span class="status">Two-part composition</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Breadcrumbs component preview">
+    <div class="workbench">
+      <ComponentPreview
+        component="Breadcrumbs"
+        hint="Tab through links"
+        propsLabel="Composition"
+        requirePropsView={true}
+        variantsLabel="Routes"
+      >
+        <div slot="variants" class="grid gap-8">
+          <section
+            class="grid gap-5 rounded-lg border border-border bg-surface-raised p-5 shadow-xs"
+          >
+            <div class="flex items-start justify-between gap-6">
+              <div class="grid gap-1">
+                <span class="font-mono text-[0.65rem] tracking-widest text-primary uppercase">
+                  Project route
+                </span>
+                <h3 class="text-xl font-semibold tracking-[-0.03em]">Atlas settings</h3>
+              </div>
+              <span class="font-mono text-xs text-muted-foreground">/04</span>
+            </div>
+
+            <Breadcrumbs>
+              <BreadcrumbItem><a href="#breadcrumbs">Workspace</a></BreadcrumbItem>
+              <BreadcrumbItem><a href="#breadcrumbs">Projects</a></BreadcrumbItem>
+              <BreadcrumbItem><a href="#breadcrumbs">Atlas</a></BreadcrumbItem>
+              <BreadcrumbItem aria-current="page">Settings</BreadcrumbItem>
+            </Breadcrumbs>
+          </section>
+
+          <div class="grid grid-cols-2 gap-8 max-[760px]:grid-cols-1">
+            <section class="grid content-start gap-3">
+              <span class="font-mono text-xs text-muted-foreground">Collapsed history</span>
+              <Breadcrumbs aria-label="Documentation breadcrumb">
+                <BreadcrumbItem><a href="#breadcrumbs">Docs</a></BreadcrumbItem>
+                <BreadcrumbItem>
+                  <span aria-hidden="true" class="font-mono tracking-[0.12em]">···</span>
+                  <span class="sr-only">More pages</span>
+                </BreadcrumbItem>
+                <BreadcrumbItem><a href="#breadcrumbs">Components</a></BreadcrumbItem>
+                <BreadcrumbItem aria-current="page">Breadcrumbs</BreadcrumbItem>
+              </Breadcrumbs>
+            </section>
+
+            <section class="grid content-start gap-3">
+              <span class="font-mono text-xs text-muted-foreground">Compact route</span>
+              <Breadcrumbs aria-label="Release breadcrumb">
+                <BreadcrumbItem><a href="#breadcrumbs">Releases</a></BreadcrumbItem>
+                <BreadcrumbItem><a href="#breadcrumbs">v2.8.0</a></BreadcrumbItem>
+                <BreadcrumbItem aria-current="page">Checks</BreadcrumbItem>
+              </Breadcrumbs>
+            </section>
+          </div>
+        </div>
+
+        <div slot="props" class="prop-playground">
+          <div class="prop-controls">
+            <label class="prop-control prop-control--wide">
+              <span class="label">Composition</span>
+              <select aria-label="Breadcrumbs composition" data-breadcrumbs-composition>
+                <option value="full" selected>Full path</option>
+                <option value="collapsed">Collapsed path</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="playground-stage">
+            <Breadcrumbs data-playground-breadcrumbs data-composition="full">
+              <BreadcrumbItem><a href="#breadcrumbs">Workspace</a></BreadcrumbItem>
+              <BreadcrumbItem><a href="#breadcrumbs">Projects</a></BreadcrumbItem>
+              <BreadcrumbItem aria-current="page">Atlas</BreadcrumbItem>
+            </Breadcrumbs>
+
+            <Breadcrumbs data-playground-breadcrumbs data-composition="collapsed" hidden>
+              <BreadcrumbItem><a href="#breadcrumbs">Workspace</a></BreadcrumbItem>
+              <BreadcrumbItem>
+                <span aria-hidden="true" class="font-mono tracking-[0.12em]">···</span>
+                <span class="sr-only">More pages</span>
+              </BreadcrumbItem>
+              <BreadcrumbItem aria-current="page">Atlas</BreadcrumbItem>
+            </Breadcrumbs>
+          </div>
+
+          <code class="prop-readout" data-breadcrumbs-readout aria-live="polite"
+            >&lt;Breadcrumbs&gt;…full path…&lt;/Breadcrumbs&gt;</code
+          >
+        </div>
+
+        <dl slot="facts" class="facts">
+          <div class="fact">
+            <dt class="label">Available in</dt>
+            <dd>{breadcrumbs.frameworks.join(" · ")}</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Public parts</dt>
+            <dd>Breadcrumbs · BreadcrumbItem</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Custom props</dt>
+            <dd>none · native links</dd>
+          </div>
+        </dl>
+      </ComponentPreview>
+
+      <ComponentSource
+        component="Breadcrumbs"
+        generatedFamilies={["breadcrumbs"]}
+        previewSources={breadcrumbsPreviewSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest<HTMLSelectElement>(
+      "[data-breadcrumbs-composition]"
+    )
+    if (!control) return
+
+    const preview = control.closest<HTMLElement>('[data-preview-component="breadcrumbs-preview"]')
+    preview
+      ?.querySelectorAll<HTMLElement>("[data-playground-breadcrumbs]")
+      .forEach((breadcrumbs) => {
+        breadcrumbs.hidden = breadcrumbs.dataset.composition !== control.value
+      })
+
+    const readout = preview?.querySelector<HTMLElement>("[data-breadcrumbs-readout]")
+    if (readout) {
+      const description = control.value === "collapsed" ? "…collapsed path…" : "…full path…"
+      readout.textContent = `<Breadcrumbs>${description}</Breadcrumbs>`
+    }
+  })
+</script>
