@@ -1,0 +1,35 @@
+---
+import { separatorOrientations, separatorVariants } from "@/+css/separator.css"
+import { cn } from "@/lib/style"
+import { resolve } from "@hulla/ui"
+import type { HTMLAttributes } from "astro/types"
+
+const $orientation = resolve(separatorOrientations)
+const $variant = resolve(separatorVariants)
+
+type Props = HTMLAttributes<"hr"> & {
+  orientation?: typeof $orientation.infer
+  variant?: typeof $variant.infer
+}
+
+const {
+  class: className,
+  orientation = "horizontal",
+  variant = "solid",
+  ...props
+} = Astro.props as Props
+---
+
+<hr
+  {...props}
+  aria-orientation={orientation === "vertical" ? "vertical" : undefined}
+  data-orientation={orientation}
+  data-slot="separator"
+  data-variant={variant}
+  class={cn(
+    "m-0 shrink-0 border-border bg-transparent",
+    $orientation(orientation),
+    $variant(variant),
+    className
+  )}
+/>

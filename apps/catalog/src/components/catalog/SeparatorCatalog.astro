@@ -1,0 +1,265 @@
+---
+import Separator from "../../../../../generated/astro/separator/separator.astro"
+import astroSeparatorSource from "../../../../../generated/astro/separator/separator.astro?raw"
+import reactSeparatorSource from "../../../../../generated/react/separator/separator.tsx?raw"
+import manifest from "../../../../../generated/ui.manifest.json"
+import { separatorPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentPreview from "../ComponentPreview.astro"
+import ComponentSource from "../ComponentSource.astro"
+
+const separator = manifest.library.components.separator
+const separatorOrientations = ["horizontal", "vertical"] as const
+const separatorVariants = ["solid", "dashed", "dotted"] as const
+
+const separatorSources = [
+  {
+    code: astroSeparatorSource,
+    filename: "generated/astro/separator/separator.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactSeparatorSource,
+    filename: "generated/react/separator/separator.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+
+const separatorUsageSources = [
+  {
+    code: `---
+import Separator from "@/ui/separator/separator.astro"
+---
+
+<article>
+  <header>
+    <h2>Project Atlas</h2>
+    <p>Design system migration</p>
+  </header>
+  <Separator class="my-4" />
+  <dl class="flex h-10 items-center gap-4">
+    <div>
+      <dt>Status</dt>
+      <dd>Active</dd>
+    </div>
+    <Separator orientation="vertical" />
+    <div>
+      <dt>Owner</dt>
+      <dd>Sora Kim</dd>
+    </div>
+  </dl>
+</article>`,
+    filename: "src/components/project-summary.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Separator } from "@/ui/separator"
+
+export function ProjectSummary() {
+  return (
+    <article>
+      <header>
+        <h2>Project Atlas</h2>
+        <p>Design system migration</p>
+      </header>
+      <Separator className="my-4" />
+      <dl className="flex h-10 items-center gap-4">
+        <div>
+          <dt>Status</dt>
+          <dd>Active</dd>
+        </div>
+        <Separator orientation="vertical" />
+        <div>
+          <dt>Owner</dt>
+          <dd>Sora Kim</dd>
+        </div>
+      </dl>
+    </article>
+  )
+}`,
+    filename: "src/components/project-summary.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="separator" aria-labelledby="separator-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Structure</p>
+      <h2 id="separator-title">Separator</h2>
+    </div>
+    <span class="status">Native semantics</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Separator component preview">
+    <div class="workbench workbench--separator">
+      <ComponentPreview
+        component="Separator"
+        hint="hr · implicit separator"
+        requirePropsView={true}
+      >
+        <div slot="variants" class="grid gap-4">
+          <article
+            class="overflow-hidden rounded-lg border border-border bg-surface-raised shadow-xs"
+          >
+            <header class="grid gap-1 p-5">
+              <span class="font-mono text-[0.6875rem] tracking-wider text-primary uppercase"
+                >Project pulse</span
+              >
+              <h3 class="m-0 text-base font-semibold tracking-tight">Atlas migration</h3>
+              <p class="m-0 text-xs text-muted-foreground">
+                Component coverage across the active workspace.
+              </p>
+            </header>
+
+            <Separator />
+
+            <dl class="m-0 flex h-20 items-stretch px-5 py-4">
+              <div class="grid flex-1 content-center gap-1">
+                <dt class="font-mono text-[0.65rem] tracking-wider text-muted-foreground uppercase">
+                  Coverage
+                </dt>
+                <dd class="m-0 text-sm font-semibold">84%</dd>
+              </div>
+              <Separator orientation="vertical" />
+              <div class="grid flex-1 content-center gap-1 pl-5">
+                <dt class="font-mono text-[0.65rem] tracking-wider text-muted-foreground uppercase">
+                  Review
+                </dt>
+                <dd class="m-0 text-sm font-semibold">Thursday</dd>
+              </div>
+            </dl>
+          </article>
+
+          <div
+            class="grid gap-5 rounded-md border border-border bg-surface/85 p-4"
+            aria-label="Separator visual variants"
+          >
+            {
+              separatorVariants.map((variant) => (
+                <div class="grid grid-cols-[4.5rem_minmax(0,1fr)] items-center gap-3">
+                  <span class="font-mono text-[0.6875rem] tracking-wider text-muted-foreground uppercase">
+                    {variant}
+                  </span>
+                  <Separator variant={variant} />
+                </div>
+              ))
+            }
+          </div>
+
+          <div
+            class="flex h-20 items-stretch justify-center gap-5 rounded-md border border-border bg-surface/85 px-4 py-3"
+          >
+            <span class="self-center text-xs text-muted-foreground">Overview</span>
+            <Separator orientation="vertical" variant="solid" />
+            <span class="self-center text-xs text-muted-foreground">Activity</span>
+            <Separator orientation="vertical" variant="dashed" />
+            <span class="self-center text-xs text-muted-foreground">Settings</span>
+          </div>
+        </div>
+
+        <div slot="props" class="prop-playground">
+          <div class="prop-controls">
+            <label class="prop-control">
+              <span class="label">Variant</span>
+              <select aria-label="Separator variant" data-separator-prop-variant>
+                {separatorVariants.map((variant) => <option value={variant}>{variant}</option>)}
+              </select>
+            </label>
+
+            <label class="prop-control">
+              <span class="label">Orientation</span>
+              <select aria-label="Separator orientation" data-separator-prop-orientation>
+                {
+                  separatorOrientations.map((orientation) => (
+                    <option value={orientation}>{orientation}</option>
+                  ))
+                }
+              </select>
+            </label>
+          </div>
+
+          <div class="playground-stage">
+            {
+              separatorOrientations.map((orientation) =>
+                separatorVariants.map((variant) => (
+                  <div
+                    class:list={[
+                      "items-center",
+                      orientation === "vertical" ? "flex h-24 w-48" : "grid w-48",
+                    ]}
+                    data-playground-separator
+                    data-orientation={orientation}
+                    data-variant={variant}
+                    hidden={orientation !== "horizontal" || variant !== "solid"}
+                  >
+                    <Separator orientation={orientation} variant={variant} />
+                  </div>
+                ))
+              )
+            }
+          </div>
+
+          <code class="prop-readout" data-separator-prop-readout aria-live="polite"
+            >&lt;Separator variant="solid" orientation="horizontal" /&gt;</code
+          >
+        </div>
+
+        <dl slot="facts" class="facts">
+          <div class="fact">
+            <dt class="label">Available in</dt>
+            <dd>{separator.frameworks.join(" · ")}</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Native element</dt>
+            <dd>hr · implicit separator role</dd>
+          </div>
+          <div class="fact">
+            <dt class="label">Custom props</dt>
+            <dd>variant · orientation</dd>
+          </div>
+        </dl>
+      </ComponentPreview>
+
+      <ComponentSource
+        component="Separator"
+        generatedFamilies={["separator"]}
+        previewSources={separatorPreviewSources}
+        sources={separatorSources}
+        usageSources={separatorUsageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncSeparatorPlayground = (preview: HTMLElement) => {
+    const variant =
+      preview.querySelector<HTMLSelectElement>("[data-separator-prop-variant]")?.value ?? "solid"
+    const orientation =
+      preview.querySelector<HTMLSelectElement>("[data-separator-prop-orientation]")?.value ??
+      "horizontal"
+
+    preview.querySelectorAll<HTMLElement>("[data-playground-separator]").forEach((separator) => {
+      separator.hidden =
+        separator.dataset.variant !== variant || separator.dataset.orientation !== orientation
+    })
+
+    const readout = preview.querySelector<HTMLElement>("[data-separator-prop-readout]")
+    if (readout) {
+      readout.textContent = `<Separator variant="${variant}" orientation="${orientation}" />`
+    }
+  }
+
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      "[data-separator-prop-variant], [data-separator-prop-orientation]"
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="separator-preview"]')
+    if (preview) syncSeparatorPlayground(preview)
+  })
+</script>
