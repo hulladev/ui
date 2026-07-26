@@ -1,7 +1,10 @@
 ---
+import AvatarFallback from "../../../../../generated/astro/avatar/avatar-fallback.astro"
+import Avatar from "../../../../../generated/astro/avatar/avatar.astro"
 import Button from "../../../../../generated/astro/button/button.astro"
 import Kbd from "../../../../../generated/astro/kbd/kbd.astro"
 import Popover from "../../../../../generated/astro/popover/popover.astro"
+import Separator from "../../../../../generated/astro/separator/separator.astro"
 import astroPopoverSource from "../../../../../generated/astro/popover/popover.astro?raw"
 import reactPopoverSource from "../../../../../generated/react/popover/popover.tsx?raw"
 import manifest from "../../../../../generated/ui.manifest.json"
@@ -49,9 +52,13 @@ import Popover from "@/ui/popover/popover.astro"
 
 <Popover id="account-actions" placement="bottom-end" aria-label="Account actions">
   <a href="/profile">View profile</a>
-  <button popovertarget="account-actions" popovertargetaction="hide">
+  <Button
+    variant="outline"
+    popovertarget="account-actions"
+    popovertargetaction="hide"
+  >
     Close
-  </button>
+  </Button>
 </Popover>`
 
 const reactUsage = `import { Button } from "@/ui/button"
@@ -68,12 +75,13 @@ export function AccountActions() {
         aria-label="Account actions"
       >
         <a href="/profile">View profile</a>
-        <button
+        <Button
+          variant="outline"
           popoverTarget="account-actions"
           popoverTargetAction="hide"
         >
           Close
-        </button>
+        </Button>
       </Popover>
     </>
   )
@@ -134,10 +142,10 @@ const usageSources = [
               popovertarget="catalog-account-popover"
               aria-label="Open account actions"
             >
-              <span
-                class="inline-grid size-6 place-items-center rounded-full bg-primary/15 font-mono text-[0.58rem] font-medium text-primary"
-                aria-hidden="true">SH</span
-              >
+              <Avatar class="size-6" aria-hidden="true">
+                <AvatarFallback class="bg-primary/15 text-[0.58rem] text-primary">SH</AvatarFallback
+                >
+              </Avatar>
               Account
               <span aria-hidden="true">⌄</span>
             </Button>
@@ -150,10 +158,9 @@ const usageSources = [
             class="w-68 p-1.5"
           >
             <div class="flex items-center gap-2.5 p-2.5">
-              <span
-                class="inline-grid size-8 place-items-center rounded-full bg-primary/15 font-mono text-xs font-medium text-primary"
-                aria-hidden="true">SH</span
-              >
+              <Avatar aria-hidden="true">
+                <AvatarFallback class="bg-primary/15 text-primary">SH</AvatarFallback>
+              </Avatar>
               <span class="grid min-w-0">
                 <strong class="text-sm">Samuel Hulla</strong>
                 <small class="overflow-hidden text-xs text-ellipsis text-muted-foreground">
@@ -161,7 +168,7 @@ const usageSources = [
                 </small>
               </span>
             </div>
-            <div class="m-1 h-px bg-border"></div>
+            <Separator class="my-1" />
             <a
               class="flex w-full items-center justify-between rounded-sm px-2.5 py-2 text-left text-xs no-underline hover:bg-foreground/5"
               href="#popover"
@@ -175,14 +182,15 @@ const usageSources = [
               Workspace settings
               <Kbd class="border-0 bg-transparent px-0 shadow-none">⌘,</Kbd>
             </a>
-            <button
+            <Button
+              variant="outline"
+              size="sm"
               class="flex w-full items-center justify-between rounded-sm border-0 bg-transparent px-2.5 py-2 text-left text-xs text-foreground hover:bg-foreground/5"
-              type="button"
               popovertarget="catalog-account-popover"
               popovertargetaction="hide"
             >
               Sign out
-            </button>
+            </Button>
           </Popover>
         </div>
 
@@ -218,25 +226,23 @@ const usageSources = [
                     </Button>
                     <Popover id={id} placement={placement} class="w-68 p-1.5">
                       <div class="flex items-center gap-2.5 p-2.5">
-                        <span
-                          class="inline-grid size-8 place-items-center rounded-full bg-primary/15 font-mono text-xs font-medium text-primary"
-                          aria-hidden="true"
-                        >
-                          SH
-                        </span>
+                        <Avatar aria-hidden="true">
+                          <AvatarFallback class="bg-primary/15 text-primary">SH</AvatarFallback>
+                        </Avatar>
                         <span class="grid min-w-0">
                           <strong class="text-sm">Anchored surface</strong>
                           <small class="text-xs text-muted-foreground">{placement}</small>
                         </span>
                       </div>
-                      <button
+                      <Button
+                        variant="outline"
+                        size="sm"
                         class="flex w-full items-center justify-between rounded-sm border-0 bg-transparent px-2.5 py-2 text-left text-xs text-foreground hover:bg-foreground/5"
-                        type="button"
                         popovertarget={id}
                         popovertargetaction="hide"
                       >
                         Close popover
-                      </button>
+                      </Button>
                     </Popover>
                   </div>
                 )

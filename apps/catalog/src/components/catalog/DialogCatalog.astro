@@ -1,10 +1,17 @@
 ---
+import Badge from "../../../../../generated/astro/badge/badge.astro"
 import Button from "../../../../../generated/astro/button/button.astro"
 import DialogDescription from "../../../../../generated/astro/dialog/dialog-description.astro"
 import DialogFooter from "../../../../../generated/astro/dialog/dialog-footer.astro"
 import DialogHeader from "../../../../../generated/astro/dialog/dialog-header.astro"
 import DialogTitle from "../../../../../generated/astro/dialog/dialog-title.astro"
 import Dialog from "../../../../../generated/astro/dialog/dialog.astro"
+import TableBody from "../../../../../generated/astro/table/table-body.astro"
+import TableCell from "../../../../../generated/astro/table/table-cell.astro"
+import TableHead from "../../../../../generated/astro/table/table-head.astro"
+import TableHeader from "../../../../../generated/astro/table/table-header.astro"
+import TableRow from "../../../../../generated/astro/table/table-row.astro"
+import Table from "../../../../../generated/astro/table/table.astro"
 import astroDialogSource from "../../../../../generated/astro/dialog/dialog.astro?raw"
 import reactDialogSource from "../../../../../generated/react/dialog/dialog.tsx?raw"
 import manifest from "../../../../../generated/ui.manifest.json"
@@ -512,54 +519,43 @@ const usageSources = [
         </article>
       </div>
 
-      <div
-        class="grid overflow-x-auto rounded-md border border-border"
-        role="table"
-        aria-label="Active releases"
-      >
-        <div
-          class="grid min-w-168 grid-cols-[minmax(9rem,1.2fr)_minmax(7rem,1fr)_minmax(7rem,0.8fr)_minmax(8rem,1fr)] items-center gap-4 border-b border-border bg-background/75 px-4 py-3 font-mono text-xs tracking-wider text-muted-foreground uppercase"
-          role="row"
-        >
-          <span role="columnheader">Release</span><span role="columnheader">Owner</span>
-          <span role="columnheader">Status</span><span role="columnheader">Window</span>
-        </div>
-        <div
-          class="grid min-w-168 grid-cols-[minmax(9rem,1.2fr)_minmax(7rem,1fr)_minmax(7rem,0.8fr)_minmax(8rem,1fr)] items-center gap-4 border-b border-border px-4 py-3 text-sm"
-          role="row"
-        >
-          <strong role="cell">Aurora 2.4</strong><span role="cell">Maya Chen</span>
-          <span class="flex items-center gap-2" role="cell"
-            ><i class="size-2 rounded-full bg-success"></i>Ready</span
-          ><span role="cell">Today · 16:00</span>
-        </div>
-        <div
-          class="grid min-w-168 grid-cols-[minmax(9rem,1.2fr)_minmax(7rem,1fr)_minmax(7rem,0.8fr)_minmax(8rem,1fr)] items-center gap-4 border-b border-border px-4 py-3 text-sm"
-          role="row"
-        >
-          <strong role="cell">Atlas mobile</strong><span role="cell">Jules Kim</span>
-          <span class="flex items-center gap-2" role="cell"
-            ><i class="size-2 rounded-full bg-warning"></i>Review</span
-          ><span role="cell">Mon · 09:30</span>
-        </div>
-        <div
-          class="grid min-w-168 grid-cols-[minmax(9rem,1.2fr)_minmax(7rem,1fr)_minmax(7rem,0.8fr)_minmax(8rem,1fr)] items-center gap-4 border-b border-border px-4 py-3 text-sm"
-          role="row"
-        >
-          <strong role="cell">Signal API</strong><span role="cell">Omar Patel</span>
-          <span class="flex items-center gap-2" role="cell"
-            ><i class="size-2 rounded-full bg-success"></i>Ready</span
-          ><span role="cell">Tue · 11:00</span>
-        </div>
-        <div
-          class="grid min-w-168 grid-cols-[minmax(9rem,1.2fr)_minmax(7rem,1fr)_minmax(7rem,0.8fr)_minmax(8rem,1fr)] items-center gap-4 px-4 py-3 text-sm"
-          role="row"
-        >
-          <strong role="cell">Console 8.1</strong><span role="cell">Ana Rios</span>
-          <span class="flex items-center gap-2" role="cell"
-            ><i class="size-2 rounded-full bg-warning"></i>Review</span
-          ><span role="cell">Wed · 18:00</span>
-        </div>
+      <div class="overflow-x-auto rounded-md border border-border">
+        <Table variant="divided" class="min-w-168" aria-label="Active releases">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Release</TableHead>
+              <TableHead>Owner</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Window</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableHead scope="row">Aurora 2.4</TableHead>
+              <TableCell>Maya Chen</TableCell>
+              <TableCell><Badge variant="success" size="sm">Ready</Badge></TableCell>
+              <TableCell>Today · 16:00</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableHead scope="row">Atlas mobile</TableHead>
+              <TableCell>Jules Kim</TableCell>
+              <TableCell><Badge variant="warning" size="sm">Review</Badge></TableCell>
+              <TableCell>Mon · 09:30</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableHead scope="row">Signal API</TableHead>
+              <TableCell>Omar Patel</TableCell>
+              <TableCell><Badge variant="success" size="sm">Ready</Badge></TableCell>
+              <TableCell>Tue · 11:00</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableHead scope="row">Console 8.1</TableHead>
+              <TableCell>Ana Rios</TableCell>
+              <TableCell><Badge variant="warning" size="sm">Review</Badge></TableCell>
+              <TableCell>Wed · 18:00</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </section>
   </div>
