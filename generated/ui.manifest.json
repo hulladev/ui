@@ -12,16 +12,28 @@
       "vue": "./vue"
     },
     "components": {
+      "accordion": {
+        "frameworks": ["astro", "react"]
+      },
       "alert": {
         "frameworks": ["astro", "react"]
       },
+      "avatar": {
+        "frameworks": ["astro", "react"]
+      },
       "badge": {
+        "frameworks": ["astro", "react"]
+      },
+      "breadcrumbs": {
         "frameworks": ["astro", "react"]
       },
       "button": {
         "frameworks": ["astro", "react"]
       },
       "card": {
+        "frameworks": ["astro", "react"]
+      },
+      "checkbox": {
         "frameworks": ["astro", "react"]
       },
       "dialog": {
@@ -31,6 +43,9 @@
         "frameworks": ["astro", "react"]
       },
       "field": {
+        "frameworks": ["astro", "react"]
+      },
+      "hover-card": {
         "frameworks": ["astro", "react"]
       },
       "input": {
@@ -43,6 +58,21 @@
         "frameworks": ["astro", "react"]
       },
       "select": {
+        "frameworks": ["astro", "react"]
+      },
+      "separator": {
+        "frameworks": ["astro", "react"]
+      },
+      "skeleton": {
+        "frameworks": ["astro", "react"]
+      },
+      "switch": {
+        "frameworks": ["astro", "react"]
+      },
+      "table": {
+        "frameworks": ["astro", "react"]
+      },
+      "tooltip": {
         "frameworks": ["astro", "react"]
       }
     },
@@ -74,6 +104,12 @@
           "description": "Framework-neutral dropdown menu behavior"
         },
         {
+          "src": "lib/floating-layer.ts",
+          "dest": "lib/floating-layer.ts",
+          "required": true,
+          "description": "Shared hover, focus, and Floating UI positioning behavior"
+        },
+        {
           "src": "styles.css",
           "dest": "styles.css",
           "required": true,
@@ -84,14 +120,26 @@
     "url": "https://hulla.dev/docs/ui"
   },
   "files": {
+    "astro/accordion/accordion-content.astro": "b9f6a43765902b458b3446058a0f2006b57c264f743fe2dcf8a9f4ed17abcbc9",
+    "astro/accordion/accordion-item.astro": "57b881ffc0b9b3fe5dad655ddb321bc817d5d05f63b87ea51960b198aa1f208c",
+    "astro/accordion/accordion-trigger.astro": "78bec65ecf510dadf71ef4d9d8552e78e95fd8952f8eae6c586fe25b953a6f66",
+    "astro/accordion/accordion.astro": "6cbc3bfe95ac1574bcd39c2dc1f46a7a58ef8febd5ffedc2185cf5682d474bf4",
+    "astro/accordion/package.json": "bc358d242cd374057c5933ad0221d1f2743c3aab1f3180e2acc09c1f20a89110",
     "astro/alert/alert-description.astro": "9292033833379cd3ad767a92e36c44955e6f79573477142ed65778d69055e9cf",
     "astro/alert/alert-icon.astro": "cfbd67b92b4662332c33cbc363ab3d826e9dee61f06e6b0c40ac65e79271358f",
     "astro/alert/alert-title.astro": "efc0a1d588055c93574edb9d6a7d840f91d3d3e00db0279ce8ec37b68734e4e1",
     "astro/alert/alert.astro": "d8ec2998ddd53fe27332ba0c86fa46a065ce2318183327e69fe3fb371ecd9970",
     "astro/alert/package.json": "cec22939652f7ee4f33f675041b88c86839fe5946703a5cd9c54dcabeff186bf",
+    "astro/avatar/avatar-fallback.astro": "01f3b83295b59be3458223cf217b4bc6442c4eba34e6df3529091b6105e69f9c",
+    "astro/avatar/avatar-image.astro": "50bea3e6ac948b92e5d75013202370bf71a192dd5a07de28dc18d32748761163",
+    "astro/avatar/avatar.astro": "76cab80f8a8ea0d60303f5d71353d1d592a196278615abe869e96c5d031a9ce3",
+    "astro/avatar/package.json": "d787e4ef021aaebac2bb743c82d5d3ed9e05a877e30878e208e10069436e186e",
     "astro/badge/badge.astro": "1d97e7eda90604beac87ddf67635a0a4ea6f853719a5a15d8df617377bf5c9dd",
     "astro/badge/package.json": "a8bbd7cd67b44f1dbfdb3e7ecd59e9c0de40ecbd85f233aa05b7a0c8bdc32cbf",
-    "astro/button/button.astro": "1f6cdb4e3fb7ad3507ff2f546fec9fd0fa7b8c0cae2efbafbb8e833510a843ca",
+    "astro/breadcrumbs/breadcrumb-item.astro": "8f667c86ed690757443a02801b05692956a9d37c79ee9c61091f867687389be3",
+    "astro/breadcrumbs/breadcrumbs.astro": "83364ec317fe04cc80ed650f791d6c7fe9d90ef972f387ebdda53f9ee6fa888b",
+    "astro/breadcrumbs/package.json": "6d12badac1e5de64e670289116d1e13ebf2fde40a92671a037a426f8e8bb9427",
+    "astro/button/button.astro": "aac8b1761a3efe319e9b8ab17297e9c9ac783deaf84d1842c0ccebd5d4159d8b",
     "astro/button/package.json": "b7f614c54781aa37fd86ed439ca0fe6c06ade1a4cd806c30cce2377dd6890fd1",
     "astro/card/card-content.astro": "2b6aed87def3665f91b72545a58660e9bd652a0f1197a7c8cd8f5b08108ad5b0",
     "astro/card/card-description.astro": "855ccf3ced7bff80cdb4fed0ccb2701b4151d208a7a25b91440ef2671a25ae21",
@@ -100,6 +148,8 @@
     "astro/card/card-title.astro": "a8c8b4c6d3dac74e6bd8b3647bc0a3115ef0825b6cd5e9842d3b70c0d7d9fb75",
     "astro/card/card.astro": "8152e340e57482de3738f94a06b8bc74278e716a218957d24c879abef6789be8",
     "astro/card/package.json": "f9526d4b301489efe543562cef67945237a871a63e23fad8cb7e4755d8fe4316",
+    "astro/checkbox/checkbox.astro": "f98f7d2943158d9de6724e64a5798fc87d6c4aecc1edcf0ee454f8a40331cc38",
+    "astro/checkbox/package.json": "260889b88338375bc5aa77f690662350381cdad863348c75e2dd2d861354d12c",
     "astro/dialog/dialog-description.astro": "f2c72b1392494f92d880b71d3fd20016df81665f438805a87be5476bb570aec1",
     "astro/dialog/dialog-footer.astro": "4ad6b1e1bd47ccced76f613cd6e18146f04a5981d24781b1f2e07460517bffd7",
     "astro/dialog/dialog-header.astro": "5db5e490969d7053c073a76df4f38b0fdfe52c324e6941b655f50dd45c2bb17a",
@@ -117,31 +167,68 @@
     "astro/field/field-label.astro": "4812f28914d83505af3ec3350a8d07a83fafdc10bedd02ba0370b3ba77206a70",
     "astro/field/field.astro": "646de49c88d24b94532f83d7428ecc1b60c3e17e1ca13ddd04601fd83f5aa28f",
     "astro/field/package.json": "cb577548a90e99c25732561b123f14e2235eb4061f44d48d680ebbf3fa7b243d",
+    "astro/hover-card/hover-card.astro": "29c664aa63c6ac202f56d9ebd2b549f589bb8a4d2da080a74d9df7f90ae84f73",
+    "astro/hover-card/package.json": "e76d16c5ad53cb8ffbf750e772f3c649d00c500b893c9d793c76e79a2f4f969a",
+    "astro/input/input-adornment.astro": "91d1719835b39cdb8358cada284a1a4ed4b1bd2e0ba13c7dac4b77f0fd21e0c6",
+    "astro/input/input-group.astro": "e1192072c33f385696560a6d1272e4d6b84f9fef38f640e0d729ba147b3c488b",
     "astro/input/input.astro": "06f5cf6e59a627d8c38cc3a9f3846f9f5afcd7139dbe9889c6d937ed2181ff82",
     "astro/input/package.json": "7f37d483a0819672d662024832cfabc1d5b728e585b5062dfb6721d3efb9e8a0",
     "astro/kbd/kbd.astro": "f769db23d97b1f72bc4197e93d13b03980f336b0adef43a45358083220ceb96b",
     "astro/kbd/package.json": "ff495e8175cbb30887fd262664fec45cc651763836e8545956e91160709255e7",
     "astro/lib/dialog.ts": "0c4473cbd599092827019c18e91cb37c51d6594fbcba11dfc791684d242c0788",
     "astro/lib/dropdown-menu.ts": "77b5e95999c7a171f377ed88cb553c40fd12e9c46183e1516806780e9b8beff5",
+    "astro/lib/floating-layer.ts": "7580f76c6072630324987c294dc59ce545c1548060c5cef5ca191c5deb73067a",
     "astro/lib/layer-stack.ts": "99c1234521dd1670f0cf5bc04a4c59c4aac011c0606ef817b9a432263148d911",
     "astro/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
-    "astro/package.json": "729beabe39fd3999678130c873b8c0a485a7fff6c0d401e505abf1b663a2a23b",
+    "astro/package.json": "72f1b768392616c047ebb26f52cb7c3b34524d38570986222695d376d8fad26d",
     "astro/popover/package.json": "5e541b9efc01d35f9452e766d3a567356dc8718365483ec3e657cb1684b002a3",
     "astro/popover/popover.astro": "1b44f765c5b43b6bfaaddf28030f9941916ba5a2f15a171585c31089918c02f9",
     "astro/select/package.json": "40c8c24724b564e91f04d57917f907fe773190245b726a7986b1f877cc8bfbc8",
     "astro/select/select.astro": "f323a510f0d4f61f3a3c6bd120824fe848974593f5a23d7cc0c2a215ea182f7d",
-    "astro/styles.css": "81dd5211e3eabec7b16ce8372b5571f2ac4132764528a51b1b2e5b45606e3c10",
+    "astro/separator/package.json": "5dd7ae5ed628b8f6417f41c826be49f5c06f25d0347d4e9c62fe4a0d8a662bce",
+    "astro/separator/separator.astro": "d06adde9627437ee88a54dc36fd39b92f456f9187f5360f12bb846d221ce5b78",
+    "astro/skeleton/package.json": "394b5cc01e83a5a40f73eacb47931ec0b5de51686551074cfbf1436d80b6d7a1",
+    "astro/skeleton/skeleton.astro": "683918599463b3885e8783d6b0a4850546097345a63068ca86143997a944aeee",
+    "astro/styles.css": "2157e5353a1c643864e3e10fe8f506e8796e210ddb4d46bd6948cb18683b334f",
+    "astro/switch/package.json": "2cb8ae051a62e18b3c778bf7be44adaa22646cb934ed2e59e6ce815d751019be",
+    "astro/switch/switch.astro": "f14ed6a78d9f4e9ca2ab06f23ee6cc365df0d2027ac6644829767e5db1679d32",
+    "astro/table/package.json": "7da5eb91be9f95e3aaf0fcef8b7df0639981883269574432b89ff89e2486f964",
+    "astro/table/table-body.astro": "e3e81f9823f7fe533f214279dff7c05ce3d33154adba3e81849554b758b4a16e",
+    "astro/table/table-caption.astro": "a63401026d437c72dbde03572f9e90decae0d7a936515edefbf73747389e0c61",
+    "astro/table/table-cell.astro": "f55a64608518c0dbdf435d5f10b920cbb869a0b5d47fc1306c9649b39ea2276e",
+    "astro/table/table-footer.astro": "240d2fd207a692e4079e871cd12315dedfdd4a7f64a29b0feeb02c2d87389448",
+    "astro/table/table-head.astro": "903dd144d485b79d5a662135b5f7a6809488ea8932493aca8b6ab23a628e907c",
+    "astro/table/table-header.astro": "52d7388f03508aef526d4d69754857bfe3d3a57c5f271129d111c1c1c6573804",
+    "astro/table/table-row.astro": "8758f93adb8569fa1bbadc0256fcb5ddd2bb84930318349a0b85a8b2f03714f7",
+    "astro/table/table.astro": "059bacdf2a91d5742c55f5032e365ae04237592e7a2d2c7289c2297420c2be3e",
+    "astro/tooltip/package.json": "0559fa6fd3b064ca247e9a65007ce0b9f5f891150372a7d6a5b62d82d63c8f8c",
+    "astro/tooltip/tooltip.astro": "ed0f4c169d30d678193d37c30f7a82ae9f3d010ee500b69d82f7a0d91b867571",
     "astro/tsconfig.json": "c318190eb7fdf055d44be992e36362f6f8a6e0ceb83244218970f88faee1093c",
+    "react/accordion/accordion-content.tsx": "b5a5647fed8a47090f1ac693172bbc4c77704f49f0ba748851b1bedb49a3ac45",
+    "react/accordion/accordion-item.tsx": "5db2f51c035ab322b58136e2a640590aa5729a9704dd8fe2e8295e427b6fce6a",
+    "react/accordion/accordion-trigger.tsx": "24f9ac8b8dd5e754b6555a126b261402aa692914fdbbf53eaa1572cbc2afdb0e",
+    "react/accordion/accordion.tsx": "33a1d036111a5226a3e701f1e50fc5eb8226d63b4b8461cdc0237b668e13881d",
+    "react/accordion/index.tsx": "3888b06bcdb7acf30a2cef9e17774f32bd0e2551181b71e8df2e60c828271f1a",
+    "react/accordion/package.json": "bc358d242cd374057c5933ad0221d1f2743c3aab1f3180e2acc09c1f20a89110",
     "react/alert/alert-description.tsx": "547057b406470c6df9d65b7492f88b857624011681b651630ba33d199e125864",
     "react/alert/alert-icon.tsx": "904ea20945bc48d16ef531bf1a3cc5b9cc8a1dd1d3698fb4fe9545bc93252cf7",
     "react/alert/alert-title.tsx": "34c3fefe78c80d7508b3cf89e316dfe6a00119c42245d15d3f37c536fe0da0a1",
     "react/alert/alert.tsx": "d23c3285c7a08a823c999a80f9fe852982bb29e0be04289ff9d72559ccb1e831",
     "react/alert/index.tsx": "61d741995ecee2eecf4cacb083a16af9f6d951053dd7589b1592d6b1eb25f322",
     "react/alert/package.json": "cec22939652f7ee4f33f675041b88c86839fe5946703a5cd9c54dcabeff186bf",
+    "react/avatar/avatar-fallback.tsx": "3d636801da25058e1ce0c9b8a658bf521be103cc272b40b1243204ed7790c8ae",
+    "react/avatar/avatar-image.tsx": "cd9f8378e6e6dc13b56391ea7987d6203f17df0a9db2f5d9e6ba28d1137b58e3",
+    "react/avatar/avatar.tsx": "54b6d1911b767dae9c6d414b700223eac06177f6b0f8c174920561bfe5548804",
+    "react/avatar/index.tsx": "59b4530f550dee174db0d851f563fcad4208fb20929af02b3b786c4b4b13e2b8",
+    "react/avatar/package.json": "d787e4ef021aaebac2bb743c82d5d3ed9e05a877e30878e208e10069436e186e",
     "react/badge/badge.tsx": "645289d41e9383ba866f9d65e3201db4aed27c041b8a4c2fd7104c5021d33275",
     "react/badge/index.tsx": "58caaaf0c3a0750b39d00dcb5486093aebbd154606a4c49af8cf87edfd7607e0",
     "react/badge/package.json": "a8bbd7cd67b44f1dbfdb3e7ecd59e9c0de40ecbd85f233aa05b7a0c8bdc32cbf",
-    "react/button/button.tsx": "ffed59bc4c90c7681fc4feeddc991676f0dba3a1eac519cc23ccc556508e9879",
+    "react/breadcrumbs/breadcrumb-item.tsx": "30b1f3e1fcf6fe5be03d9fbac38b35fef3a723c6ecf616b90470a6270478159e",
+    "react/breadcrumbs/breadcrumbs.tsx": "58c8bc813bc7f0280df450c0ce297035261132ccaab84b197023c6eef3e81175",
+    "react/breadcrumbs/index.tsx": "03bf249b047c9137da503f8bad217fa2eddcff912e07b7c4114cf6920de2395a",
+    "react/breadcrumbs/package.json": "6d12badac1e5de64e670289116d1e13ebf2fde40a92671a037a426f8e8bb9427",
+    "react/button/button.tsx": "d844365d3c14a1af46e30b4a42ae19ceb1c0d60f523e527644cc803b3806f89a",
     "react/button/index.tsx": "af34b9af96acc5b433c667d1faf5c5f79cd169ef33a47d3e27b6d6f94ced22c3",
     "react/button/package.json": "b7f614c54781aa37fd86ed439ca0fe6c06ade1a4cd806c30cce2377dd6890fd1",
     "react/card/card-content.tsx": "30b86ffe17b1c5a1a8991828886cb28bacb16984606f41c0fe20c6487da5f017",
@@ -152,6 +239,9 @@
     "react/card/card.tsx": "133e5810fde91d677bfe73862c8f391e42921be53001b2febff4e22b1e5a91d7",
     "react/card/index.tsx": "ea0af15e17cf10b3373f1716b777b8f434b5da15d76b5ff7a53906641d3de96b",
     "react/card/package.json": "f9526d4b301489efe543562cef67945237a871a63e23fad8cb7e4755d8fe4316",
+    "react/checkbox/checkbox.tsx": "0e49176251f287b381718effa04cf159558dd83a5d19db7f42bf7afa192bbfdc",
+    "react/checkbox/index.tsx": "adce3165cc2e5c3e8c820c74317c821e9cb73cb2924c4e697b294fc3e5a60a3e",
+    "react/checkbox/package.json": "260889b88338375bc5aa77f690662350381cdad863348c75e2dd2d861354d12c",
     "react/dialog/dialog-description.tsx": "d157fb0346a9b2abdbae00b4e13a04941b239d365a71971896fc081dd6db9543",
     "react/dialog/dialog-footer.tsx": "b34958515ff0816b9e2e368a365c5cd99c5c0f5115c629146b9f3ec298304f53",
     "react/dialog/dialog-header.tsx": "fe0dcebb0d62a22298fe91a17ccbd79f57ba8fe1d0a333c51fe01fdde4499b45",
@@ -172,7 +262,12 @@
     "react/field/field.tsx": "66a072eec1202f6ebf139b62d607c3b83816948747de37bd98e01998eb0f901f",
     "react/field/index.tsx": "ada81ecc130111e321ecb18ab2e7817ecac2f0e36042950fe34ef1805db41a3b",
     "react/field/package.json": "cb577548a90e99c25732561b123f14e2235eb4061f44d48d680ebbf3fa7b243d",
-    "react/input/index.tsx": "3116182228536c5b9f9a84ad00741dbbf40ba9fc3c037d1742ba387b0c34e539",
+    "react/hover-card/hover-card.tsx": "edd3bf9a16ec2d4fdf0dff245fda716c097b2b685e94736c96d222289a6994c1",
+    "react/hover-card/index.tsx": "c193845feff6fa0a1be609ab143c7a719467805230976a8685a15e994d19a096",
+    "react/hover-card/package.json": "e76d16c5ad53cb8ffbf750e772f3c649d00c500b893c9d793c76e79a2f4f969a",
+    "react/input/index.tsx": "1b8db892396f13b18ed121da6eb45579c5cf2ec70a65952bd8c3f0d07eaeffe0",
+    "react/input/input-adornment.tsx": "07e7facbba9d024d474491d64954fc218acf743c494bda9f7ee8dee5d286b1a6",
+    "react/input/input-group.tsx": "1d5c243d26e385fdeca5b8783555b2e9ae96b18f503d7dd280fa19f20ff89d78",
     "react/input/input.tsx": "015a8fdf6acf8215003547ea64e77c7387d4dd6be59fa4f2710635e902e53722",
     "react/input/package.json": "7f37d483a0819672d662024832cfabc1d5b728e585b5062dfb6721d3efb9e8a0",
     "react/kbd/index.tsx": "4c8f3e4992c89aa1cee6b7dc122711aacac85ad78b8f848cb13a834f67ed82d9",
@@ -180,38 +275,64 @@
     "react/kbd/package.json": "ff495e8175cbb30887fd262664fec45cc651763836e8545956e91160709255e7",
     "react/lib/dialog.ts": "0c4473cbd599092827019c18e91cb37c51d6594fbcba11dfc791684d242c0788",
     "react/lib/dropdown-menu.ts": "77b5e95999c7a171f377ed88cb553c40fd12e9c46183e1516806780e9b8beff5",
+    "react/lib/floating-layer.ts": "7580f76c6072630324987c294dc59ce545c1548060c5cef5ca191c5deb73067a",
     "react/lib/layer-stack.ts": "99c1234521dd1670f0cf5bc04a4c59c4aac011c0606ef817b9a432263148d911",
     "react/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
-    "react/package.json": "84263571f414a10d33698b948854fecf7422d49195ddf1cb3f2e094609494b1b",
+    "react/package.json": "ff657ec4ec61ca373284f3f3c5e68342f0495547a114e6ada3f540606152e782",
     "react/popover/index.tsx": "f804efd927af02ab26a38a3ac62b1051c8e96a6b3e943215dfabcbd7793ded61",
     "react/popover/package.json": "5e541b9efc01d35f9452e766d3a567356dc8718365483ec3e657cb1684b002a3",
     "react/popover/popover.tsx": "8e617a45e831256ed5042846125f80ca906505c8cfa398fe21b0748b2c7e63f9",
     "react/select/index.tsx": "7d8cc28708a89dc3269a7213cb5898b2767eec6d7c85d4bbceea36f7df0ca426",
     "react/select/package.json": "40c8c24724b564e91f04d57917f907fe773190245b726a7986b1f877cc8bfbc8",
     "react/select/select.tsx": "1b4634754f9cf8a2c50cff611a3c96cb0ef1f94e560a8acfcdf85265d8f3f45f",
-    "react/styles.css": "81dd5211e3eabec7b16ce8372b5571f2ac4132764528a51b1b2e5b45606e3c10",
+    "react/separator/index.tsx": "c756fb0059b0d231c8a45691be566a43de183cc4a415f5d5182c71d453804336",
+    "react/separator/package.json": "5dd7ae5ed628b8f6417f41c826be49f5c06f25d0347d4e9c62fe4a0d8a662bce",
+    "react/separator/separator.tsx": "c04158e1e6a0bac3d7e8ef6cdc355ab0b30d3045b37e845037c662826924f738",
+    "react/skeleton/index.tsx": "5dfcd9a3782d969030ab3f30a8445ea02d6645cc0325956d91bad626c69cbb44",
+    "react/skeleton/package.json": "394b5cc01e83a5a40f73eacb47931ec0b5de51686551074cfbf1436d80b6d7a1",
+    "react/skeleton/skeleton.tsx": "9fa2d4f31b3fb5af8f53feb1d71f1c3250bf2df943ea9f16c9868dd13d861ed4",
+    "react/styles.css": "2157e5353a1c643864e3e10fe8f506e8796e210ddb4d46bd6948cb18683b334f",
+    "react/switch/index.tsx": "7b45f4e5c0eb12fb1683d10e1f4a5d992a94aa47878824a3f54d68d6c8dddea6",
+    "react/switch/package.json": "2cb8ae051a62e18b3c778bf7be44adaa22646cb934ed2e59e6ce815d751019be",
+    "react/switch/switch.tsx": "12f8d2bfd070b08d4495e0e134c577ed44857d00c207809331f733c3cfc0375d",
+    "react/table/index.tsx": "b952bd5ca3b384f12a57f4394b79af0f11292c48ce85dd63d3ffe4a9841e2366",
+    "react/table/package.json": "7da5eb91be9f95e3aaf0fcef8b7df0639981883269574432b89ff89e2486f964",
+    "react/table/table-body.tsx": "a4d54aa09b65c63bb325b5d1539761b742b71dd6fe1c2801ff8595d24acada03",
+    "react/table/table-caption.tsx": "aa0669ca1bf51c1e921322589fb68691ba2ddd525f210531a365a8ae6dd14f59",
+    "react/table/table-cell.tsx": "2b20db1d1bfbc1229f9e7465c73eb9ebb2721c96f4618b0510e2302c3e85f736",
+    "react/table/table-footer.tsx": "7701b15c54e9ae41e0507c9e5e918d1c42ef2abf0d082463bae81f3ac8140d5c",
+    "react/table/table-head.tsx": "ebf0396fedd6f2fff36169d769cee8734aab570769fa4ccc8a6fcd7c93efbe90",
+    "react/table/table-header.tsx": "89a56ea52df665065b144337d4bf96a4963e65cd30b702923ec7ca815f4cd8a7",
+    "react/table/table-row.tsx": "c108ab7dc2e990e285b3627b8d946e9d39650f958f0efff7e75b1bc450f10bf6",
+    "react/table/table.tsx": "531a2cbd527f03548da3cb4a87db81db480470f27a95f54a7ac59694edda44f1",
+    "react/tooltip/index.tsx": "72adb579c7efd98b33712c48a5ccbb804780983fdf674ba48ef87a168bb64f76",
+    "react/tooltip/package.json": "0559fa6fd3b064ca247e9a65007ce0b9f5f891150372a7d6a5b62d82d63c8f8c",
+    "react/tooltip/tooltip.tsx": "346da2c5452de48833c0bb9096524a6b2d4bc1fa7d18f8a1bb3b7562607d343b",
     "react/tsconfig.json": "a8e5bae18429ccac746feb8fa00a6aabac25b622dbbe3b678ee81eba87ae361d",
     "solid/lib/dialog.ts": "0c4473cbd599092827019c18e91cb37c51d6594fbcba11dfc791684d242c0788",
     "solid/lib/dropdown-menu.ts": "77b5e95999c7a171f377ed88cb553c40fd12e9c46183e1516806780e9b8beff5",
+    "solid/lib/floating-layer.ts": "7580f76c6072630324987c294dc59ce545c1548060c5cef5ca191c5deb73067a",
     "solid/lib/layer-stack.ts": "99c1234521dd1670f0cf5bc04a4c59c4aac011c0606ef817b9a432263148d911",
     "solid/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
-    "solid/package.json": "5553851ea2c8547e2993d2357bd7342a604137160c2ec528c1617bf48b2f6218",
-    "solid/styles.css": "81dd5211e3eabec7b16ce8372b5571f2ac4132764528a51b1b2e5b45606e3c10",
+    "solid/package.json": "c04c83d9bdc3a40b9f88b7c3fb2c8b7b099688f865563bc773a14bbda2b2491c",
+    "solid/styles.css": "2157e5353a1c643864e3e10fe8f506e8796e210ddb4d46bd6948cb18683b334f",
     "solid/tsconfig.json": "37e941a49cbc375f8dfc37529cbc03fbba8f5c9497683e0654099144e6f4a15d",
     "svelte/lib/dialog.ts": "0c4473cbd599092827019c18e91cb37c51d6594fbcba11dfc791684d242c0788",
     "svelte/lib/dropdown-menu.ts": "77b5e95999c7a171f377ed88cb553c40fd12e9c46183e1516806780e9b8beff5",
+    "svelte/lib/floating-layer.ts": "7580f76c6072630324987c294dc59ce545c1548060c5cef5ca191c5deb73067a",
     "svelte/lib/layer-stack.ts": "99c1234521dd1670f0cf5bc04a4c59c4aac011c0606ef817b9a432263148d911",
     "svelte/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
-    "svelte/package.json": "c3747e26bcc102b860fd4d3371cd81fb1cc13568d830d541e72afeaf6767aa92",
-    "svelte/styles.css": "81dd5211e3eabec7b16ce8372b5571f2ac4132764528a51b1b2e5b45606e3c10",
+    "svelte/package.json": "53dce88a9663d332d4f7881b01d65306ece2ee12dad2a7470e89a088c7ad9462",
+    "svelte/styles.css": "2157e5353a1c643864e3e10fe8f506e8796e210ddb4d46bd6948cb18683b334f",
     "svelte/tsconfig.json": "f62ec89e196b417b33c95ae1dea8d61d35eb4411da96d44615a6bc5ffa159400",
-    "ui.config.ts": "1dad594b586a589ded7da15a783ee191c5dd771cd18bad2559ac60c3b625079e",
+    "ui.config.ts": "6c39fbc18384f447909511f74ea7ab9accfb458ecfa572b429f41ddd7b003b4c",
     "vue/lib/dialog.ts": "0c4473cbd599092827019c18e91cb37c51d6594fbcba11dfc791684d242c0788",
     "vue/lib/dropdown-menu.ts": "77b5e95999c7a171f377ed88cb553c40fd12e9c46183e1516806780e9b8beff5",
+    "vue/lib/floating-layer.ts": "7580f76c6072630324987c294dc59ce545c1548060c5cef5ca191c5deb73067a",
     "vue/lib/layer-stack.ts": "99c1234521dd1670f0cf5bc04a4c59c4aac011c0606ef817b9a432263148d911",
     "vue/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
-    "vue/package.json": "bad87abcda4da5b5ff58cea8b8d28d50a9370ddb5c9ec45ce83364e2392da0fd",
-    "vue/styles.css": "81dd5211e3eabec7b16ce8372b5571f2ac4132764528a51b1b2e5b45606e3c10",
+    "vue/package.json": "f2364fc50d96d5ce7aced93da8589feabc7ea9284e66057cb1b0adf5dfe76f1e",
+    "vue/styles.css": "2157e5353a1c643864e3e10fe8f506e8796e210ddb4d46bd6948cb18683b334f",
     "vue/tsconfig.json": "af330e55f24d82f4a8f7dd783978d46b0c2b1e7db66050b7dbcadd6c09759154"
   }
 }

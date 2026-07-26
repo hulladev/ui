@@ -12,16 +12,28 @@ export const config = {
     vue: "./vue",
   },
   components: {
+    accordion: {
+      frameworks: ["astro", "react"],
+    },
     alert: {
       frameworks: ["astro", "react"],
     },
+    avatar: {
+      frameworks: ["astro", "react"],
+    },
     badge: {
+      frameworks: ["astro", "react"],
+    },
+    breadcrumbs: {
       frameworks: ["astro", "react"],
     },
     button: {
       frameworks: ["astro", "react"],
     },
     card: {
+      frameworks: ["astro", "react"],
+    },
+    checkbox: {
       frameworks: ["astro", "react"],
     },
     dialog: {
@@ -31,6 +43,9 @@ export const config = {
       frameworks: ["astro", "react"],
     },
     field: {
+      frameworks: ["astro", "react"],
+    },
+    "hover-card": {
       frameworks: ["astro", "react"],
     },
     input: {
@@ -43,6 +58,21 @@ export const config = {
       frameworks: ["astro", "react"],
     },
     select: {
+      frameworks: ["astro", "react"],
+    },
+    separator: {
+      frameworks: ["astro", "react"],
+    },
+    skeleton: {
+      frameworks: ["astro", "react"],
+    },
+    switch: {
+      frameworks: ["astro", "react"],
+    },
+    table: {
+      frameworks: ["astro", "react"],
+    },
+    tooltip: {
       frameworks: ["astro", "react"],
     },
   },
@@ -72,6 +102,12 @@ export const config = {
         dest: "lib/dropdown-menu.ts",
         required: true,
         description: "Framework-neutral dropdown menu behavior",
+      },
+      {
+        src: "lib/floating-layer.ts",
+        dest: "lib/floating-layer.ts",
+        required: true,
+        description: "Shared hover, focus, and Floating UI positioning behavior",
       },
       {
         src: "styles.css",
