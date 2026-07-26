@@ -1,4 +1,6 @@
 ---
+import Switch from "../../../../../generated/astro/switch/switch.astro"
+
 type Props = {
   frameworkCount: number
   schemaVersion: number
@@ -15,22 +17,31 @@ const { frameworkCount, schemaVersion } = Astro.props
 
   <nav class="rail-nav">
     <a href="#button" aria-current="page"><span>Button</span><span>01</span></a>
-    <a href="#badge"><span>Badge</span><span>02</span></a>
-    <a href="#kbd"><span>Kbd</span><span>03</span></a>
-    <a href="#input"><span>Input + Field</span><span>04</span></a>
-    <a href="#select"><span>Select</span><span>05</span></a>
-    <a href="#popover"><span>Popover</span><span>06</span></a>
-    <a href="#dropdown-menu"><span>Dropdown Menu</span><span>07</span></a>
-    <a href="#dialog"><span>Dialog</span><span>08</span></a>
-    <a href="#card"><span>Card</span><span>09</span></a>
-    <a href="#alert"><span>Alert</span><span>10</span></a>
+    <a href="#avatar"><span>Avatar</span><span>02</span></a>
+    <a href="#badge"><span>Badge</span><span>03</span></a>
+    <a href="#breadcrumbs"><span>Breadcrumbs</span><span>04</span></a>
+    <a href="#kbd"><span>Kbd</span><span>05</span></a>
+    <a href="#skeleton"><span>Skeleton</span><span>06</span></a>
+    <a href="#separator"><span>Separator</span><span>07</span></a>
+    <a href="#input"><span>Input + Field</span><span>08</span></a>
+    <a href="#checkbox"><span>Checkbox</span><span>09</span></a>
+    <a href="#switch"><span>Switch</span><span>10</span></a>
+    <a href="#select"><span>Select</span><span>11</span></a>
+    <a href="#popover"><span>Popover</span><span>12</span></a>
+    <a href="#floating"><span>Tooltip + HoverCard</span><span>13</span></a>
+    <a href="#dropdown-menu"><span>Dropdown Menu</span><span>14</span></a>
+    <a href="#dialog"><span>Dialog</span><span>15</span></a>
+    <a href="#accordion"><span>Accordion</span><span>16</span></a>
+    <a href="#card"><span>Card</span><span>17</span></a>
+    <a href="#table"><span>Table</span><span>18</span></a>
+    <a href="#alert"><span>Alert</span><span>19</span></a>
     <a href="/showcase"><span>Default theme example</span><span>↗</span></a>
     <a href="https://hulla.dev/docs/ui"><span>Documentation</span><span>↗</span></a>
   </nav>
 
   <div class="rail-footer">
     <label class="contrast-toggle label" for="contrast">
-      <input id="contrast" type="checkbox" />
+      <Switch id="contrast" />
       Dark theme
     </label>
 

@@ -1,16 +1,25 @@
 ---
+import AccordionCatalog from "../components/catalog/AccordionCatalog.astro"
 import AlertCatalog from "../components/catalog/AlertCatalog.astro"
+import AvatarCatalog from "../components/catalog/AvatarCatalog.astro"
 import BadgeCatalog from "../components/catalog/BadgeCatalog.astro"
+import BreadcrumbsCatalog from "../components/catalog/BreadcrumbsCatalog.astro"
 import ButtonCatalog from "../components/catalog/ButtonCatalog.astro"
 import CardCatalog from "../components/catalog/CardCatalog.astro"
 import CatalogHeader from "../components/catalog/CatalogHeader.astro"
 import CatalogRail from "../components/catalog/CatalogRail.astro"
+import CheckboxCatalog from "../components/catalog/CheckboxCatalog.astro"
 import InputFieldCatalog from "../components/catalog/InputFieldCatalog.astro"
 import DialogCatalog from "../components/catalog/DialogCatalog.astro"
 import DropdownMenuCatalog from "../components/catalog/DropdownMenuCatalog.astro"
+import FloatingCatalog from "../components/catalog/FloatingCatalog.astro"
 import KbdCatalog from "../components/catalog/KbdCatalog.astro"
 import PopoverCatalog from "../components/catalog/PopoverCatalog.astro"
 import SelectCatalog from "../components/catalog/SelectCatalog.astro"
+import SeparatorCatalog from "../components/catalog/SeparatorCatalog.astro"
+import SkeletonCatalog from "../components/catalog/SkeletonCatalog.astro"
+import SwitchCatalog from "../components/catalog/SwitchCatalog.astro"
+import TableCatalog from "../components/catalog/TableCatalog.astro"
 import manifest from "../../../../generated/ui.manifest.json"
 import "../styles/catalog.css"
 
@@ -37,14 +46,23 @@ const frameworkCount = Object.keys(manifest.library.frameworks).length
       <main class="content" id="main">
         <CatalogHeader />
         <ButtonCatalog />
+        <AvatarCatalog />
         <BadgeCatalog />
+        <BreadcrumbsCatalog />
         <KbdCatalog />
+        <SkeletonCatalog />
+        <SeparatorCatalog />
         <InputFieldCatalog />
+        <CheckboxCatalog />
+        <SwitchCatalog />
         <SelectCatalog />
         <PopoverCatalog />
+        <FloatingCatalog />
         <DropdownMenuCatalog />
         <DialogCatalog />
+        <AccordionCatalog />
         <CardCatalog />
+        <TableCatalog />
         <AlertCatalog />
       </main>
     </div>
