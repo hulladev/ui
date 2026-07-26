@@ -1,0 +1,28 @@
+---
+import { formControlGroupSizes, formControlGroupVariants } from "@/+css/form-control.css"
+import { cn } from "@/lib/style"
+import { resolve } from "@hulla/ui"
+import type { HTMLAttributes } from "astro/types"
+
+const $size = resolve(formControlGroupSizes)
+const $variant = resolve(formControlGroupVariants)
+
+type Props = HTMLAttributes<"div"> & {
+  controlSize?: typeof $size.infer
+  variant?: typeof $variant.infer
+}
+const { class: className, controlSize = "md", variant = "outline", ...props } = Astro.props as Props
+---
+
+<div
+  {...props}
+  data-slot="input-group"
+  class={cn(
+    "group/input-group flex w-full min-w-0 items-center overflow-hidden text-foreground antialiased transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none has-[[data-slot=control]:disabled]:cursor-not-allowed has-[[data-slot=control]:disabled]:opacity-55 [&>[data-slot=control]]:h-full [&>[data-slot=control]]:flex-1 [&>[data-slot=control]]:rounded-none [&>[data-slot=control]]:border-0 [&>[data-slot=control]]:bg-transparent [&>[data-slot=control]]:shadow-none [&>[data-slot=control]:disabled]:opacity-100 [&>[data-slot=control]]:hover:border-0 [&>[data-slot=control]]:hover:bg-transparent [&>[data-slot=control]]:focus-visible:border-0 [&>[data-slot=control]]:focus-visible:bg-transparent [&>[data-slot=input-adornment]+[data-slot=control]]:pl-0 [&>[data-slot=control]:has(+[data-slot=input-adornment])]:pr-0",
+    $size(controlSize),
+    $variant(variant),
+    className
+  )}
+>
+  <slot />
+</div>

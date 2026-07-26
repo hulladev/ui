@@ -10,7 +10,7 @@ export const buttonVariants = vn({
 })
 
 export const buttonSizes = vn({
-  sm: "h-8 gap-1.5 rounded-sm px-2.5 text-[0.8125rem]",
-  md: "h-9 gap-1.5 rounded-sm px-3.5 text-sm",
-  lg: "h-12 gap-2 rounded-md px-5 text-base",
+  sm: "gap-1.5 rounded-sm px-2 py-1.5 text-[0.8125rem]",
+  md: "gap-1.5 rounded-sm px-3 py-2 text-sm",
+  lg: "gap-2 rounded-md px-3.5 py-2 text-base",
 })

@@ -1,12 +1,21 @@
 ---
+import { AtSign, Copy, Search } from "@lucide/astro"
+import Button from "../../../../../generated/astro/button/button.astro"
 import FieldDescription from "../../../../../generated/astro/field/field-description.astro"
 import FieldError from "../../../../../generated/astro/field/field-error.astro"
 import FieldLabel from "../../../../../generated/astro/field/field-label.astro"
 import Field from "../../../../../generated/astro/field/field.astro"
+import InputAdornment from "../../../../../generated/astro/input/input-adornment.astro"
+import InputGroup from "../../../../../generated/astro/input/input-group.astro"
 import Input from "../../../../../generated/astro/input/input.astro"
+import Kbd from "../../../../../generated/astro/kbd/kbd.astro"
 import astroFieldSource from "../../../../../generated/astro/field/field.astro?raw"
+import astroInputAdornmentSource from "../../../../../generated/astro/input/input-adornment.astro?raw"
+import astroInputGroupSource from "../../../../../generated/astro/input/input-group.astro?raw"
 import astroInputSource from "../../../../../generated/astro/input/input.astro?raw"
 import reactFieldSource from "../../../../../generated/react/field/field.tsx?raw"
+import reactInputAdornmentSource from "../../../../../generated/react/input/input-adornment.tsx?raw"
+import reactInputGroupSource from "../../../../../generated/react/input/input-group.tsx?raw"
 import reactInputSource from "../../../../../generated/react/input/input.tsx?raw"
 import manifest from "../../../../../generated/ui.manifest.json"
 import ComponentPreview from "../ComponentPreview.astro"
@@ -31,6 +40,30 @@ const inputSources = [
     language: "tsx" as const,
   },
   {
+    code: astroInputGroupSource,
+    filename: "generated/astro/input/input-group.astro",
+    framework: "Astro · InputGroup",
+    language: "astro" as const,
+  },
+  {
+    code: reactInputGroupSource,
+    filename: "generated/react/input/input-group.tsx",
+    framework: "React · InputGroup",
+    language: "tsx" as const,
+  },
+  {
+    code: astroInputAdornmentSource,
+    filename: "generated/astro/input/input-adornment.astro",
+    framework: "Astro · InputAdornment",
+    language: "astro" as const,
+  },
+  {
+    code: reactInputAdornmentSource,
+    filename: "generated/react/input/input-adornment.tsx",
+    framework: "React · InputAdornment",
+    language: "tsx" as const,
+  },
+  {
     code: astroFieldSource,
     filename: "generated/astro/field/field.astro",
     framework: "Astro · Field",
@@ -50,23 +83,20 @@ const inputUsageSources = [
 import FieldDescription from "@/ui/field/field-description.astro"
 import FieldLabel from "@/ui/field/field-label.astro"
 import Field from "@/ui/field/field.astro"
+import InputAdornment from "@/ui/input/input-adornment.astro"
+import InputGroup from "@/ui/input/input-group.astro"
 import Input from "@/ui/input/input.astro"
 ---
 
 <Field>
-  <FieldLabel for="workspace-name">Workspace name</FieldLabel>
-  <Input
-    id="workspace-name"
-    name="workspace"
-    placeholder="Orbit command"
-    aria-describedby="workspace-help"
-    required
-  />
-  <FieldDescription id="workspace-help">
-    This appears in invitations and shared links.
-  </FieldDescription>
+  <FieldLabel for="website">Website</FieldLabel>
+  <InputGroup>
+    <InputAdornment aria-hidden="true">https://</InputAdornment>
+    <Input id="website" name="website" placeholder="hulla.dev" />
+  </InputGroup>
+  <FieldDescription>Enter a domain without the protocol.</FieldDescription>
 </Field>`,
-    filename: "src/components/workspace-field.astro",
+    filename: "src/components/website-field.astro",
     framework: "Astro",
     language: "astro" as const,
   },
@@ -76,26 +106,21 @@ import Input from "@/ui/input/input.astro"
   FieldDescription,
   FieldLabel,
 } from "@/ui/field"
-import { Input } from "@/ui/input"
+import { Input, InputAdornment, InputGroup } from "@/ui/input"
 
-export function WorkspaceField() {
+export function WebsiteField() {
   return (
     <Field>
-      <FieldLabel htmlFor="workspace-name">Workspace name</FieldLabel>
-      <Input
-        id="workspace-name"
-        name="workspace"
-        placeholder="Orbit command"
-        aria-describedby="workspace-help"
-        required
-      />
-      <FieldDescription id="workspace-help">
-        This appears in invitations and shared links.
-      </FieldDescription>
+      <FieldLabel htmlFor="website">Website</FieldLabel>
+      <InputGroup>
+        <InputAdornment aria-hidden="true">https://</InputAdornment>
+        <Input id="website" name="website" placeholder="hulla.dev" />
+      </InputGroup>
+      <FieldDescription>Enter a domain without the protocol.</FieldDescription>
     </Field>
   )
 }`,
-    filename: "src/components/workspace-field.tsx",
+    filename: "src/components/website-field.tsx",
     framework: "React",
     language: "tsx" as const,
   },
@@ -156,6 +181,60 @@ export function WorkspaceField() {
                 </Field>
               ))
             }
+          </div>
+
+          <div class="grid gap-5 border-t border-border pt-8" aria-label="Input adornments">
+            <div
+              class="flex items-baseline justify-between gap-4 text-sm text-muted-foreground max-[760px]:flex-col max-[760px]:items-start"
+            >
+              <span class="font-mono text-xs font-medium tracking-wider uppercase"
+                >Composed adornments</span
+              >
+              <span>Text, icons, hints, and shared actions</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-x-4 gap-y-6 max-[760px]:grid-cols-1">
+              <Field>
+                <FieldLabel for="input-group-search">Search</FieldLabel>
+                <InputGroup>
+                  <InputAdornment aria-hidden="true"><Search /></InputAdornment>
+                  <Input id="input-group-search" type="search" placeholder="Projects and people…" />
+                  <InputAdornment aria-hidden="true"><Kbd>⌘ K</Kbd></InputAdornment>
+                </InputGroup>
+              </Field>
+
+              <Field>
+                <FieldLabel for="input-group-email">Email</FieldLabel>
+                <InputGroup variant="filled">
+                  <InputAdornment aria-hidden="true"><AtSign /></InputAdornment>
+                  <Input id="input-group-email" type="email" placeholder="name@company.com" />
+                </InputGroup>
+              </Field>
+
+              <Field>
+                <FieldLabel for="input-group-budget">Monthly budget</FieldLabel>
+                <InputGroup>
+                  <InputAdornment aria-hidden="true">$</InputAdornment>
+                  <Input id="input-group-budget" inputmode="decimal" value="4,800" />
+                  <InputAdornment aria-hidden="true">USD</InputAdornment>
+                </InputGroup>
+              </Field>
+
+              <Field>
+                <FieldLabel for="input-group-token">API token</FieldLabel>
+                <InputGroup>
+                  <Input id="input-group-token" value="hulla_live_7F2K" readonly />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    aria-label="Copy API token"
+                    class="h-full rounded-none border-0 bg-transparent px-3 text-muted-foreground shadow-none hover:border-0 hover:bg-foreground/5 focus-visible:-outline-offset-2"
+                  >
+                    <Copy aria-hidden="true" class="size-4" />
+                  </Button>
+                </InputGroup>
+              </Field>
+            </div>
           </div>
 
           <div class="grid gap-5 border-t border-border pt-8" aria-label="Native input types">
@@ -240,13 +319,16 @@ export function WorkspaceField() {
 
             <Field>
               <FieldLabel for="contact-email">Contact email</FieldLabel>
-              <Input
-                id="contact-email"
-                type="email"
-                value="not-an-email"
-                aria-invalid="true"
-                aria-describedby="contact-email-error"
-              />
+              <InputGroup>
+                <InputAdornment aria-hidden="true"><AtSign /></InputAdornment>
+                <Input
+                  id="contact-email"
+                  type="email"
+                  value="not-an-email"
+                  aria-invalid="true"
+                  aria-describedby="contact-email-error"
+                />
+              </InputGroup>
               <FieldError id="contact-email-error">Enter a valid work email.</FieldError>
             </Field>
 
