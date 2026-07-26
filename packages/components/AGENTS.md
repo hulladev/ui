@@ -140,6 +140,12 @@ Adding or updating a component must include the corresponding catalog entry in `
 Keep its preview, usage examples, generated source views, navigation, and component-specific catalog
 styling current in the same change.
 
+The catalog's rendered source view must be the raw source that actually produces the canvas. Do not
+add a hand-authored React/Astro equivalent to the rendered view; put small copy-ready translations
+under the explicitly minimal view instead. When a new component replaces markup already present in
+another preview or showcase, migrate that composition to the shared component as part of the same
+change.
+
 Before implementing a component:
 
 1. Inspect related components, shared behavior, recipes, tokens, and generated output.
@@ -158,5 +164,8 @@ Before handing off a component:
    framework's class/style escape hatch.
 4. Add or update the component's catalog coverage and verify it in both contrast modes and at a
    narrow viewport.
-5. Run formatting, lint, type checks, generation checks, and the repository verification suite
+5. Confirm the rendered source is derived directly from the rendering file, and keep any simplified
+   copy-ready example under the minimal source view.
+6. Audit existing examples and showcases for facsimiles superseded by the component.
+7. Run formatting, lint, type checks, generation checks, and the repository verification suite
    appropriate to the change.
