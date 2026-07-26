@@ -56,8 +56,8 @@ const sourceGroups: {
   ...(hasPreview
     ? [
         {
-          description: "Preview code",
-          label: "Visible",
+          description: "Exact rendered source",
+          label: "Rendered",
           mode: "visible" as const,
           sources: previewSources,
         },
@@ -66,7 +66,7 @@ const sourceGroups: {
   ...(hasUsage
     ? [
         {
-          description: "Quick start",
+          description: "Copy-ready composition",
           label: "Minimal",
           mode: "minimal" as const,
           sources: usageSources,
@@ -86,7 +86,10 @@ const records = sourceGroups.flatMap(({ mode, sources: groupSources }) =>
 const frameworks = (["React", "Astro"] as const).filter((framework) =>
   records.some((record) => record.framework === framework)
 )
-const initialFramework: Framework = frameworks.includes("React") ? "React" : "Astro"
+const initialModeFrameworks = frameworks.filter((framework) =>
+  records.some((record) => record.mode === initialMode && record.framework === framework)
+)
+const initialFramework: Framework = initialModeFrameworks.includes("React") ? "React" : "Astro"
 const firstSource =
   records.find((record) => record.mode === initialMode && record.framework === initialFramework) ??
   records[0]
@@ -106,7 +109,15 @@ const fileIconTone = (source: SourceRecord) =>
           <select data-source-framework-select aria-label={`${component} framework`}>
             {
               frameworks.map((framework) => (
-                <option value={framework} selected={framework === initialFramework}>
+                <option
+                  value={framework}
+                  selected={framework === initialFramework}
+                  disabled={
+                    !records.some(
+                      (record) => record.mode === initialMode && record.framework === framework
+                    )
+                  }
+                >
                   {framework}
                 </option>
               ))
@@ -285,7 +296,11 @@ const fileIconTone = (source: SourceRecord) =>
             ? "Types ready"
             : firstSource?.language === "css"
               ? "Demo styles"
-              : "Exact render"
+              : firstSource?.mode === "minimal"
+                ? "Minimal example"
+                : firstSource?.mode === "generated"
+                  ? "Generated source"
+                  : "Exact render"
         }
       </span>
     </div>
@@ -466,6 +481,7 @@ declare module "react" {
     "aria-labelledby"?: string
     "aria-modal"?: boolean | "false" | "true"
     accept?: string
+    alt?: string
     children?: ReactNode
     className?: string
     defaultValue?: string | number | readonly string[]
@@ -481,6 +497,8 @@ declare module "react" {
     multiple?: boolean
     name?: string
     onClick?: (...args: unknown[]) => void
+    onError?: (...args: unknown[]) => void
+    onLoad?: (...args: unknown[]) => void
     placeholder?: string
     popover?: "auto" | "hint" | "manual"
     popoverTarget?: string
@@ -489,6 +507,7 @@ declare module "react" {
     required?: boolean
     role?: string
     size?: number | string
+    src?: string
     strokeWidth?: number
     style?: Record<string, string | number>
     tabIndex?: number
@@ -556,6 +575,27 @@ declare module "@/lib/dropdown-menu" {
   export function connectDropdownMenu(element: HTMLElement): { destroy(): void }
 }
 
+declare module "@/lib/floating-layer" {
+  export function connectFloatingLayer(
+    element: HTMLElement,
+    options: {
+      closeDelay: number
+      offset: number
+      openDelay: number
+      placement: import("@floating-ui/dom").Placement
+      triggerId: string
+    }
+  ): { destroy(): void }
+}
+
+declare module "@floating-ui/dom" {
+  export type Placement =
+    | "top" | "top-start" | "top-end"
+    | "right" | "right-start" | "right-end"
+    | "bottom" | "bottom-start" | "bottom-end"
+    | "left" | "left-start" | "left-end"
+}
+
 declare module "lucide-react" {
   export type LucideProps = import("react").SVGAttributes<SVGSVGElement> & {
     size?: number | string
@@ -579,6 +619,26 @@ declare module "@/ui/button" {
   export function Button(props: ButtonProps): JSX.Element
 }
 
+declare module "@/ui/avatar" {
+  type NativeAvatarProps = import("react").ComponentPropsWithoutRef<"span">
+  type NativeImageProps = import("react").ComponentPropsWithoutRef<"img">
+  export type AvatarProps = NativeAvatarProps & {
+    /** Controls the avatar diameter and fallback text scale. @default "md" */
+    size?: "sm" | "md" | "lg"
+  }
+  export type AvatarFallbackProps = NativeAvatarProps
+  export type AvatarImageProps = NativeImageProps & {
+    /** Describes the person when the image carries the avatar's accessible name. */
+    alt: string
+  }
+  /** A composable identity image with a load-safe fallback. */
+  export function Avatar(props: AvatarProps): JSX.Element
+  /** Initials or a compact mark displayed beneath the avatar image. */
+  export function AvatarFallback(props: AvatarFallbackProps): JSX.Element
+  /** A native image that yields to the fallback when loading fails. */
+  export function AvatarImage(props: AvatarImageProps): JSX.Element
+}
+
 declare module "@/ui/badge" {
   type NativeBadgeProps = import("react").ComponentPropsWithoutRef<"span">
   export type BadgeProps = NativeBadgeProps & {
@@ -591,6 +651,15 @@ declare module "@/ui/badge" {
   export function Badge(props: BadgeProps): JSX.Element
 }
 
+declare module "@/ui/breadcrumbs" {
+  export type BreadcrumbsProps = import("react").ComponentPropsWithoutRef<"nav">
+  export type BreadcrumbItemProps = import("react").ComponentPropsWithoutRef<"li">
+  /** A named navigation landmark containing an ordered page hierarchy. */
+  export function Breadcrumbs(props: BreadcrumbsProps): JSX.Element
+  /** A native list item containing a link, omitted levels, or the current page. */
+  export function BreadcrumbItem(props: BreadcrumbItemProps): JSX.Element
+}
+
 declare module "@/ui/kbd" {
   export type KbdProps = import("react").ComponentPropsWithoutRef<"kbd">
   /** Displays a keyboard input using the semantic kbd element. */
@@ -599,14 +668,34 @@ declare module "@/ui/kbd" {
 
 declare module "@/ui/input" {
   type NativeInputProps = import("react").ComponentPropsWithoutRef<"input">
+  type NativeInputGroupProps = import("react").ComponentPropsWithoutRef<"div">
+  type NativeInputAdornmentProps = import("react").ComponentPropsWithoutRef<"span">
   export type InputProps = NativeInputProps & {
     /** Controls the input height and text size. @default "md" */
     controlSize?: "sm" | "md" | "lg"
     /** Selects the border and surface treatment. @default "outline" */
     variant?: "outline" | "filled" | "underline"
   }
+  export type InputGroupProps = NativeInputGroupProps & {
+    /** Controls the group height and text size. @default "md" */
+    controlSize?: "sm" | "md" | "lg"
+    /** Selects the unified border and surface treatment. @default "outline" */
+    variant?: "outline" | "filled" | "underline"
+  }
+  export type InputAdornmentProps = NativeInputAdornmentProps
   /** A styled native input that preserves native input types and attributes. */
   export function Input(props: InputProps): JSX.Element
+  /** Presents an input and its adjacent content as one composed control. */
+  export function InputGroup(props: InputGroupProps): JSX.Element
+  /** Non-interactive text or icon content adjacent to a grouped input. */
+  export function InputAdornment(props: InputAdornmentProps): JSX.Element
+}
+
+declare module "@/ui/switch" {
+  type NativeSwitchProps = import("react").ComponentPropsWithoutRef<"input">
+  export type SwitchProps = NativeSwitchProps
+  /** A native checkbox with switch semantics and platform form behavior. */
+  export function Switch(props: SwitchProps): JSX.Element
 }
 
 declare module "@/ui/field" {
@@ -652,6 +741,40 @@ declare module "@/ui/popover" {
   }
   /** A native top-layer popover positioned with CSS anchors. */
   export function Popover(props: PopoverProps): JSX.Element
+}
+
+declare module "@/ui/tooltip" {
+  type NativeDivProps = Omit<import("react").ComponentPropsWithoutRef<"div">, "popover">
+  export type TooltipProps = NativeDivProps & {
+    /** Delay before the tooltip closes after hover or focus leaves. @default 100 */
+    closeDelay?: number
+    /** Delay before pointer hover opens the tooltip. Keyboard focus opens immediately. @default 180 */
+    openDelay?: number
+    /** Preferred placement before collision handling. @default "top" */
+    placement?: import("@floating-ui/dom").Placement
+    popover?: "" | "auto" | "hint" | "manual"
+    /** The id of the element that triggers and anchors the tooltip. */
+    triggerId: string
+  }
+  /** Descriptive, non-interactive content shown on pointer hover or keyboard focus. */
+  export function Tooltip(props: TooltipProps): JSX.Element
+}
+
+declare module "@/ui/hover-card" {
+  type NativeDivProps = Omit<import("react").ComponentPropsWithoutRef<"div">, "popover">
+  export type HoverCardProps = NativeDivProps & {
+    /** Delay before the card closes after pointer and focus leave both elements. @default 300 */
+    closeDelay?: number
+    /** Delay before pointer hover opens the card. Keyboard focus opens immediately. @default 200 */
+    openDelay?: number
+    /** Preferred placement before collision handling. @default "bottom-start" */
+    placement?: import("@floating-ui/dom").Placement
+    popover?: "" | "auto" | "hint" | "manual"
+    /** The id of the element that triggers and anchors the hover card. */
+    triggerId: string
+  }
+  /** Rich supplementary content shown on pointer hover or keyboard focus. */
+  export function HoverCard(props: HoverCardProps): JSX.Element
 }
 
 declare module "@/ui/dropdown-menu" {
@@ -720,6 +843,24 @@ declare module "@/ui/card" {
   export function CardDescription(props: import("react").ComponentPropsWithoutRef<"p">): JSX.Element
   export function CardContent(props: NativeDivProps): JSX.Element
   export function CardFooter(props: import("react").ComponentPropsWithoutRef<"footer">): JSX.Element
+}
+
+declare module "@/ui/accordion" {
+  type NativeDivProps = import("react").ComponentPropsWithoutRef<"div">
+  type NativeDetailsProps = import("react").ComponentPropsWithoutRef<"details">
+  type NativeSummaryProps = import("react").ComponentPropsWithoutRef<"summary">
+  export type AccordionProps = NativeDivProps
+  export type AccordionItemProps = NativeDetailsProps
+  export type AccordionTriggerProps = NativeSummaryProps
+  export type AccordionContentProps = NativeDivProps
+  /** Groups related native disclosure items without owning their state. */
+  export function Accordion(props: AccordionProps): JSX.Element
+  /** A native details element whose open and name attributes control disclosure state. */
+  export function AccordionItem(props: AccordionItemProps): JSX.Element
+  /** A native summary element that toggles its containing item. */
+  export function AccordionTrigger(props: AccordionTriggerProps): JSX.Element
+  /** Composable content revealed by the containing item. */
+  export function AccordionContent(props: AccordionContentProps): JSX.Element
 }
 
 declare module "@/ui/alert" {
@@ -1198,16 +1339,20 @@ declare module "@/ui/alert" {
         diagnostics.textContent =
           record?.language === "css"
             ? "Demo styles"
-            : record?.mode === "generated"
-              ? "Generated source"
-              : "Exact render"
+            : record?.mode === "minimal"
+              ? "Minimal example"
+              : record?.mode === "generated"
+                ? "Generated source"
+                : "Exact render"
         diagnostics.dataset.state = "idle"
         diagnostics.title =
           record?.language === "css"
             ? "All catalog CSS is exposed so demo-only styles are never hidden."
-            : record?.mode === "generated"
-              ? "This is the generated component file shipped to consumers."
-              : "This is the exact Astro file used to render the catalog example."
+            : record?.mode === "minimal"
+              ? "This is a deliberately small, copy-ready composition rather than the rendered catalog source."
+              : record?.mode === "generated"
+                ? "This is the generated component file shipped to consumers."
+                : "This is the exact Astro file used to render the catalog example."
         return
       }
 
@@ -1226,6 +1371,12 @@ declare module "@/ui/alert" {
       } else {
         diagnostics.textContent = "Types ready"
         diagnostics.dataset.state = "ready"
+        diagnostics.title =
+          records[activeIndex]?.mode === "minimal"
+            ? "This is a deliberately small, copy-ready composition rather than the rendered catalog source."
+            : records[activeIndex]?.mode === "generated"
+              ? "This is the generated component file shipped to consumers."
+              : "This is the exact source used to render the catalog example."
       }
     }
 
@@ -1245,7 +1396,14 @@ declare module "@/ui/alert" {
         tab.setAttribute("aria-selected", String(selected))
         tab.tabIndex = selected ? 0 : -1
       })
-      if (frameworkSelect) frameworkSelect.value = activeFramework
+      if (frameworkSelect) {
+        frameworkSelect.value = activeFramework
+        Array.from(frameworkSelect.options).forEach((option) => {
+          option.disabled = !records.some(
+            (record) => record.mode === activeMode && record.framework === option.value
+          )
+        })
+      }
       tabGroups.forEach((group) => {
         group.hidden = group.dataset.sourceFiles !== `${activeFramework}:${activeMode}`
       })
