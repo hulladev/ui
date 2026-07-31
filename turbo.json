@@ -1,5 +1,6 @@
 {
   "$schema": "https://turborepo.com/schema.json",
+  "globalEnv": ["CI"],
   "ui": "tui",
   "tasks": {
     "build": {
@@ -19,6 +20,11 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "@hulla/catalog#dev": {
+      "cache": false,
+      "persistent": true,
+      "with": ["components#dev"]
     }
   }
 }

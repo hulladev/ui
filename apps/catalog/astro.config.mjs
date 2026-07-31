@@ -1,47 +1,52 @@
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
-import { watch } from "node:fs"
+import { statSync } from "node:fs"
 import { fileURLToPath } from "node:url"
-import { basename, dirname } from "node:path"
 
 const generatedRoot = fileURLToPath(new URL("../../generated", import.meta.url))
-const generatedParent = dirname(generatedRoot)
-const generatedDirectory = basename(generatedRoot)
+const generatedAstroRoot = fileURLToPath(new URL("../../generated/astro", import.meta.url))
 
 function reloadGeneratedOutput() {
   let refreshTimer
+
+  const generatedIdentity = () => {
+    try {
+      const stats = statSync(generatedRoot)
+      return `${stats.dev}:${stats.ino}:${stats.mtimeMs}`
+    } catch {
+      return undefined
+    }
+  }
 
   return {
     name: "hulla:reload-generated-output",
     configureServer(server) {
       if (!server.httpServer) return
 
-      server.watcher.add(generatedRoot)
-
       const refresh = () => {
         clearTimeout(refreshTimer)
         refreshTimer = setTimeout(() => {
-          // The generator swaps the complete output tree atomically. Reattach the
-          // watcher to the new directory and discard modules loaded from the old one.
-          server.watcher.add(generatedRoot)
+          // Discard modules loaded from the previous generated tree.
           server.moduleGraph.invalidateAll()
           server.ws.send({ type: "full-reload", path: "*" })
         }, 100)
       }
 
-      const onGeneratedFileChange = (_event, path) => {
-        if (path === generatedRoot || path.startsWith(`${generatedRoot}/`)) refresh()
-      }
-      const generatedParentWatcher = watch(generatedParent, (_event, filename) => {
-        if (filename?.toString() === generatedDirectory) refresh()
-      })
+      let previousIdentity = generatedIdentity()
+      const generatedOutputPoller = setInterval(() => {
+        const nextIdentity = generatedIdentity()
+        if (!nextIdentity) return
 
-      server.watcher.on("all", onGeneratedFileChange)
+        if (previousIdentity && previousIdentity !== nextIdentity) {
+          refresh()
+        }
+
+        previousIdentity = nextIdentity
+      }, 250)
 
       const cleanup = () => {
         clearTimeout(refreshTimer)
-        generatedParentWatcher.close()
-        server.watcher.off("all", onGeneratedFileChange)
+        clearInterval(generatedOutputPoller)
       }
 
       server.httpServer.once("close", cleanup)
@@ -52,10 +57,23 @@ function reloadGeneratedOutput() {
 export default defineConfig({
   vite: {
     plugins: [reloadGeneratedOutput(), tailwindcss()],
+    server: {
+      watch: {
+        // The desktop development environment can inherit macOS's 256-file
+        // descriptor soft limit. Polling keeps Astro reliable under that limit.
+        usePolling: true,
+        interval: 250,
+        // The lightweight identity poller above detects uigen's atomic swap,
+        // so Vite does not need a watcher for every generated file.
+        ignored: (filePath) =>
+          filePath === generatedRoot || filePath.startsWith(`${generatedRoot}/`),
+      },
+    },
     resolve: {
       dedupe: ["@hulla/style", "@lucide/astro", "tailwind-merge"],
       alias: {
-        "@": fileURLToPath(new URL("../../generated/astro", import.meta.url)),
+        "@/ui": generatedAstroRoot,
+        "@": generatedAstroRoot,
       },
     },
   },
