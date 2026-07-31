@@ -1,0 +1,192 @@
+---
+import Button from "@/ui/button/button.astro"
+import Toast from "@/ui/toast/toast.astro"
+import ToastAction from "@/ui/toast/toast-action.astro"
+import ToastClose from "@/ui/toast/toast-close.astro"
+import ToastDescription from "@/ui/toast/toast-description.astro"
+import ToastProgress from "@/ui/toast/toast-progress.astro"
+import ToastTitle from "@/ui/toast/toast-title.astro"
+import Toaster from "@/ui/toast/toaster.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const toastComponent = manifest.library.components.toast
+const examples = [
+  {
+    description: "Your changes are ready for the next deploy.",
+    title: "Draft saved",
+    variant: "note",
+  },
+  {
+    description: "Production is now running release 2.4.0.",
+    title: "Deployment complete",
+    variant: "success",
+  },
+  {
+    description: "Rotate the token before the current session expires.",
+    title: "Token expires soon",
+    variant: "warning",
+  },
+  {
+    description: "The deployment could not reach the build service.",
+    title: "Deployment failed",
+    variant: "danger",
+  },
+] as const
+---
+
+<ComponentPreview component="Toast" hint="Live region · pause on hover" requirePropsView={true}>
+  <ol slot="variants" class="toast-example-stack" aria-label="Toast variants">
+    {
+      examples.map(({ description, title, variant }, index) => (
+        <Toast variant={variant} data-paused="true">
+          <div class="min-w-0">
+            <ToastTitle>{title}</ToastTitle>
+            <ToastDescription>{description}</ToastDescription>
+          </div>
+          <ToastClose />
+          {index === 0 && <ToastAction>View changes</ToastAction>}
+          <ToastProgress duration={5000} />
+        </Toast>
+      ))
+    }
+  </ol>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls prop-controls--toast">
+      <label class="prop-control">
+        <span class="label">Position</span>
+        <select aria-label="Toast position" data-toast-prop-position>
+          <option value="top-left">Top left</option>
+          <option value="top-center">Top center</option>
+          <option value="top-right">Top right</option>
+          <option value="bottom-left">Bottom left</option>
+          <option value="bottom-center">Bottom center</option>
+          <option value="bottom-right" selected>Bottom right</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Duration</span>
+        <select aria-label="Toast duration" data-toast-prop-duration>
+          <option value="2500">2.5 seconds</option>
+          <option value="5000" selected>5 seconds</option>
+          <option value="0">Persistent</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Variant</span>
+        <select aria-label="Toast variant" data-toast-prop-variant>
+          <option value="note">Note</option>
+          <option value="success" selected>Success</option>
+          <option value="warning">Warning</option>
+          <option value="danger">Danger</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage toast-playground-stage" data-toast-stage>
+      <div class="toast-trigger-panel">
+        <span class="label">The utility call decides how the notification enters the queue</span>
+        <Button type="button" data-toast-push>Push toast</Button>
+        <Button type="button" variant="outline" data-toast-replace>Replace queue</Button>
+        <Button type="button" variant="outline" data-toast-dismiss-all>Dismiss all</Button>
+      </div>
+      <Toaster
+        class="!absolute"
+        duration={5000}
+        limit={4}
+        position="bottom-right"
+        data-catalog-toaster
+      />
+    </div>
+
+    <code class="prop-readout" data-toast-prop-readout aria-live="polite"
+      >&lt;Toaster position="bottom-right" duration={5000} /&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{toastComponent.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Queue API</dt>
+      <dd>toast.push · toast.replace</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Timing</dt>
+      <dd>global · per toast · persistent</dd>
+    </div>
+  </dl>
+</ComponentPreview>
+
+<script>
+  import { toast, type ToastPosition, type ToastVariant } from "@/ui/lib/toast"
+
+  let catalogToastCount = 0
+
+  const getToastPreview = (target: Element) =>
+    target.closest<HTMLElement>('[data-preview-component="toast-preview"]')
+
+  const syncToastPlayground = (preview: HTMLElement) => {
+    const position =
+      (preview.querySelector<HTMLSelectElement>("[data-toast-prop-position]")
+        ?.value as ToastPosition) ?? "bottom-right"
+    const duration = Number(
+      preview.querySelector<HTMLSelectElement>("[data-toast-prop-duration]")?.value ?? 5000
+    )
+    const toaster = preview.querySelector<HTMLElement>("[data-catalog-toaster]")
+    const readout = preview.querySelector<HTMLElement>("[data-toast-prop-readout]")
+
+    if (toaster) {
+      toaster.dataset.position = position
+      toaster.dataset.duration = String(duration)
+    }
+    if (readout) {
+      readout.textContent = `<Toaster position="${position}" duration={${duration}} />`
+    }
+  }
+
+  document.addEventListener("input", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      "[data-toast-prop-position], [data-toast-prop-duration]"
+    )
+    const preview = control && getToastPreview(control)
+    if (preview) syncToastPlayground(preview)
+  })
+
+  document.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement
+    const push = target.closest("[data-toast-push]")
+    const replace = target.closest("[data-toast-replace]")
+    const dismiss = target.closest("[data-toast-dismiss-all]")
+    const preview = getToastPreview(target)
+    if (!preview || (!push && !replace && !dismiss)) return
+
+    if (dismiss) {
+      toast.dismiss()
+      return
+    }
+
+    const variant =
+      (preview.querySelector<HTMLSelectElement>("[data-toast-prop-variant]")
+        ?.value as ToastVariant) ?? "success"
+    catalogToastCount += 1
+    const operation = replace ? "replace" : "push"
+    const title = `Release ${catalogToastCount} queued`
+    toast[operation]({
+      description:
+        "The utility call decides whether this notification joins or replaces the queue.",
+      title,
+      variant,
+    })
+
+    const readout = preview.querySelector<HTMLElement>("[data-toast-prop-readout]")
+    if (readout) {
+      readout.textContent = `toast.${operation}({ title: "${title}", variant: "${variant}" })`
+    }
+  })
+</script>

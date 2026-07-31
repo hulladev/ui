@@ -1,0 +1,126 @@
+---
+import astroToastSource from "../../../../../generated/astro/toast/toast.astro?raw"
+import astroToastProgressSource from "../../../../../generated/astro/toast/toast-progress.astro?raw"
+import astroToasterSource from "../../../../../generated/astro/toast/toaster.astro?raw"
+import reactToastSource from "../../../../../generated/react/toast/toast.tsx?raw"
+import reactToasterSource from "../../../../../generated/react/toast/toaster.tsx?raw"
+import toastUtilitySource from "../../../../../generated/react/lib/toast.ts?raw"
+import { toastPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import ToastPreview from "../previews/ToastPreview.astro"
+
+const toastSources = [
+  {
+    code: astroToastSource,
+    filename: "generated/astro/toast/toast.astro",
+    framework: "Astro · Toast",
+    language: "astro" as const,
+  },
+  {
+    code: astroToasterSource,
+    filename: "generated/astro/toast/toaster.astro",
+    framework: "Astro · Toaster",
+    language: "astro" as const,
+  },
+  {
+    code: astroToastProgressSource,
+    filename: "generated/astro/toast/toast-progress.astro",
+    framework: "Astro · ToastProgress",
+    language: "astro" as const,
+  },
+  {
+    code: reactToastSource,
+    filename: "generated/react/toast/toast.tsx",
+    framework: "React · Toast",
+    language: "tsx" as const,
+  },
+  {
+    code: reactToasterSource,
+    filename: "generated/react/toast/toaster.tsx",
+    framework: "React · Toaster",
+    language: "tsx" as const,
+  },
+  {
+    code: toastUtilitySource,
+    filename: "generated/react/lib/toast.ts",
+    framework: "Shared · toast utility",
+    language: "tsx" as const,
+  },
+]
+
+const usageSources = [
+  {
+    code: `---
+import Toaster from "@/ui/toast/toaster.astro"
+---
+
+<Toaster position="top-right" duration={5000} />
+
+<script>
+  import { toast } from "@/ui/lib/toast"
+
+  document.querySelector("#save")?.addEventListener("click", () => {
+    toast.push({
+      description: "Your latest settings are now active.",
+      duration: 3500,
+      title: "Changes saved",
+      variant: "success",
+    })
+  })
+</script>`,
+    filename: "src/layouts/App.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Toaster, toast } from "@/ui/toast"
+
+export function App() {
+  return (
+    <>
+      <button
+        onClick={() =>
+          toast.push({
+            description: "Your latest settings are now active.",
+            duration: 3500,
+            title: "Changes saved",
+            variant: "success",
+          })
+        }
+      >
+        Save
+      </button>
+      <Toaster position="top-right" duration={5000} />
+    </>
+  )
+}`,
+    filename: "src/App.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="toast" aria-labelledby="toast-section-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Feedback</p>
+      <h2 id="toast-section-title">Toast</h2>
+    </div>
+    <span class="status">Queued live region</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Toast component preview">
+    <div class="workbench workbench--toast">
+      <ToastPreview />
+
+      <ComponentSource
+        component="Toast"
+        generatedFamilies={["toast"]}
+        previewSources={toastPreviewSources}
+        sources={toastSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
