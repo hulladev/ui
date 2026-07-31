@@ -1,0 +1,89 @@
+---
+import { collapsiblePreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import CollapsiblePreview from "../previews/CollapsiblePreview.astro"
+
+const usageSources = [
+  {
+    code: `---
+import Collapsible from "@/ui/collapsible/collapsible.astro"
+import CollapsibleContent from "@/ui/collapsible/collapsible-content.astro"
+import CollapsibleTrigger from "@/ui/collapsible/collapsible-trigger.astro"
+---
+
+<Collapsible open>
+  <CollapsibleTrigger>Deployment details</CollapsibleTrigger>
+  <CollapsibleContent>
+    Deploys from the main branch after checks pass.
+  </CollapsibleContent>
+</Collapsible>`,
+    filename: "src/components/deployment-details.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/ui/collapsible"
+
+export function DeploymentDetails() {
+  return (
+    <Collapsible open>
+      <CollapsibleTrigger>Deployment details</CollapsibleTrigger>
+      <CollapsibleContent>
+        Deploys from the main branch after checks pass.
+      </CollapsibleContent>
+    </Collapsible>
+  )
+}`,
+    filename: "src/components/deployment-details.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="collapsible" aria-labelledby="collapsible-section-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Disclosure</p>
+      <h2 id="collapsible-section-title">Collapsible</h2>
+    </div>
+    <span class="status">Natively nestable</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Collapsible component preview">
+    <div class="workbench workbench--collapsible">
+      <CollapsiblePreview />
+
+      <ComponentSource
+        component="Collapsible"
+        generatedFamilies={["collapsible"]}
+        previewSources={collapsiblePreviewSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncCollapsiblePlayground = (preview: HTMLElement) => {
+    const open =
+      preview.querySelector<HTMLInputElement>("[data-collapsible-prop-open]")?.checked ?? true
+    const collapsible = preview.querySelector<HTMLDetailsElement>("[data-playground-collapsible]")
+    if (collapsible) collapsible.open = open
+
+    const readout = preview.querySelector<HTMLElement>("[data-collapsible-prop-readout]")
+    if (readout) {
+      readout.textContent = `<Collapsible${open ? " open" : ""}>…</Collapsible>`
+    }
+  }
+
+  document.addEventListener("input", (event) => {
+    const control = (event.target as HTMLElement).closest("[data-collapsible-prop-open]")
+    const preview = control?.closest<HTMLElement>('[data-preview-component="collapsible-preview"]')
+    if (preview) syncCollapsiblePlayground(preview)
+  })
+</script>
