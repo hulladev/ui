@@ -1,0 +1,127 @@
+---
+import { tabsPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import TabsPreview from "../previews/TabsPreview.astro"
+
+const usageSources = [
+  {
+    code: `---
+import TabsContent from "@/ui/tabs/tabs-content.astro"
+import TabsList from "@/ui/tabs/tabs-list.astro"
+import TabsTrigger from "@/ui/tabs/tabs-trigger.astro"
+import Tabs from "@/ui/tabs/tabs.astro"
+---
+
+<Tabs defaultValue="overview">
+  <TabsList aria-label="Project">
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="activity">Activity</TabsTrigger>
+    <TabsTrigger value="settings" disabled>Settings</TabsTrigger>
+  </TabsList>
+  <TabsContent value="overview">Project summary</TabsContent>
+  <TabsContent value="activity">Recent activity</TabsContent>
+  <TabsContent value="settings">Project settings</TabsContent>
+</Tabs>`,
+    filename: "src/components/project-tabs.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/ui/tabs"
+
+export function ProjectTabs() {
+  return (
+    <Tabs defaultValue="overview">
+      <TabsList aria-label="Project">
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="activity">Activity</TabsTrigger>
+        <TabsTrigger value="settings" disabled>Settings</TabsTrigger>
+      </TabsList>
+      <TabsContent value="overview">Project summary</TabsContent>
+      <TabsContent value="activity">Recent activity</TabsContent>
+      <TabsContent value="settings">Project settings</TabsContent>
+    </Tabs>
+  )
+}`,
+    filename: "src/components/project-tabs.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="tabs" aria-labelledby="tabs-section-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Navigation</p>
+      <h2 id="tabs-section-title">Tabs</h2>
+    </div>
+    <span class="status">Roving focus</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Tabs component preview">
+    <div class="workbench workbench--tabs">
+      <TabsPreview />
+
+      <ComponentSource
+        component="Tabs"
+        generatedFamilies={["tabs"]}
+        previewSources={tabsPreviewSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  type TabsElement = HTMLElement & { value: string }
+
+  const syncTabsPlayground = (preview: HTMLElement, selectValue = true) => {
+    const tabs = preview.querySelector<TabsElement>("[data-playground-tabs]")
+    const valueControl = preview.querySelector<HTMLSelectElement>("[data-tabs-value]")
+    const activationControl = preview.querySelector<HTMLSelectElement>("[data-tabs-activation]")
+    const disabledControl = preview.querySelector<HTMLInputElement>("[data-tabs-disabled]")
+    const eventsTab = preview.querySelector<HTMLButtonElement>("[data-playground-tabs-events]")
+    if (!tabs || !valueControl || !activationControl || !disabledControl || !eventsTab) return
+
+    tabs.dataset.activationMode = activationControl.value
+    eventsTab.disabled = disabledControl.checked
+
+    if (selectValue && valueControl.value !== "disabled") {
+      tabs.value = valueControl.value
+    }
+
+    if (eventsTab.disabled && tabs.value === "events") {
+      tabs.value = "overview"
+      valueControl.value = "overview"
+    }
+
+    const readout = preview.querySelector<HTMLElement>("[data-tabs-readout]")
+    if (readout) {
+      readout.textContent = `<Tabs defaultValue="${tabs.value}" activationMode="${activationControl.value}">…</Tabs>`
+    }
+  }
+
+  document.addEventListener("change", (event) => {
+    const target = event.target as HTMLElement
+    const preview = target.closest<HTMLElement>('[data-preview-component="tabs-preview"]')
+    if (!preview) return
+    syncTabsPlayground(preview)
+  })
+
+  document.addEventListener("hulla-tabs-value-change", (event) => {
+    const target = event.target as HTMLElement
+    const preview = target.closest<HTMLElement>('[data-preview-component="tabs-preview"]')
+    if (!preview || !target.matches("[data-playground-tabs]")) return
+
+    const value = (event as CustomEvent<{ value: string }>).detail.value
+    const valueControl = preview.querySelector<HTMLSelectElement>("[data-tabs-value]")
+    if (valueControl) valueControl.value = value
+    syncTabsPlayground(preview, false)
+  })
+</script>

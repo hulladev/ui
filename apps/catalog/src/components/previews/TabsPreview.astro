@@ -1,0 +1,172 @@
+---
+import Badge from "@/ui/badge/badge.astro"
+import Button from "@/ui/button/button.astro"
+import TabsContent from "@/ui/tabs/tabs-content.astro"
+import TabsList from "@/ui/tabs/tabs-list.astro"
+import TabsTrigger from "@/ui/tabs/tabs-trigger.astro"
+import Tabs from "@/ui/tabs/tabs.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const tabsComponent = manifest.library.components.tabs
+---
+
+<ComponentPreview component="Tabs" hint="← → · Home · End" requirePropsView={true}>
+  <div slot="variants" class="grid gap-8">
+    <Tabs
+      defaultValue="activity"
+      class="rounded-lg border border-border bg-surface px-4 pt-2 pb-5 shadow-xs"
+    >
+      <TabsList aria-label="Project details">
+        <TabsTrigger value="activity">
+          Activity
+          <Badge class="min-w-5 justify-center px-1.5">12</Badge>
+        </TabsTrigger>
+        <TabsTrigger value="deployments">Deployments</TabsTrigger>
+        <TabsTrigger value="settings">Settings</TabsTrigger>
+        <TabsTrigger value="archived" disabled>Archived</TabsTrigger>
+      </TabsList>
+
+      <TabsContent value="activity" class="px-1">
+        <div class="grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
+          <div class="grid gap-1">
+            <p class="m-0 font-medium">Quietly shipping the details</p>
+            <p class="m-0 max-w-xl text-muted-foreground">
+              Three interface refinements landed today. Keyboard behavior and contrast checks passed
+              before merge.
+            </p>
+          </div>
+          <Badge variant="success">Healthy</Badge>
+        </div>
+      </TabsContent>
+
+      <TabsContent value="deployments" class="px-1">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p class="m-0 font-medium">Production</p>
+            <p class="m-0 text-muted-foreground">main · deployed 18 minutes ago</p>
+          </div>
+          <Button variant="outline" size="sm">View deployment</Button>
+        </div>
+      </TabsContent>
+
+      <TabsContent value="settings" class="px-1">
+        <div class="grid gap-1">
+          <p class="m-0 font-medium">Project access</p>
+          <p class="m-0 text-muted-foreground">
+            Members of the workspace can view this project by default.
+          </p>
+        </div>
+      </TabsContent>
+
+      <TabsContent value="archived" class="px-1">
+        Archived projects remain available for ninety days.
+      </TabsContent>
+    </Tabs>
+
+    <div class="grid gap-2">
+      <p class="m-0 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground">
+        Vertical · manual activation
+      </p>
+      <Tabs
+        defaultValue="general"
+        orientation="vertical"
+        activationMode="manual"
+        class="max-w-xl gap-5 rounded-lg border border-border bg-surface p-3 shadow-xs"
+      >
+        <TabsList aria-label="Workspace settings">
+          <TabsTrigger value="general">General</TabsTrigger>
+          <TabsTrigger value="members">Members</TabsTrigger>
+          <TabsTrigger value="billing">Billing</TabsTrigger>
+        </TabsList>
+        <TabsContent value="general" class="py-2">
+          <p class="m-0 font-medium">Workspace profile</p>
+          <p class="m-0 text-muted-foreground">Naming, visibility, and default project access.</p>
+        </TabsContent>
+        <TabsContent value="members" class="py-2">
+          <p class="m-0 font-medium">Member access</p>
+          <p class="m-0 text-muted-foreground">Roles, invitations, and sign-in requirements.</p>
+        </TabsContent>
+        <TabsContent value="billing" class="py-2">
+          <p class="m-0 font-medium">Billing details</p>
+          <p class="m-0 text-muted-foreground">Plan, payment method, and invoice history.</p>
+        </TabsContent>
+      </Tabs>
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Selection</span>
+        <select aria-label="Selected tab" data-tabs-value>
+          <option value="overview" selected>Overview</option>
+          <option value="events">Events</option>
+          <option value="disabled">Disabled</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Activation</span>
+        <select aria-label="Tab activation mode" data-tabs-activation>
+          <option value="automatic" selected>Automatic</option>
+          <option value="manual">Manual</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="prop-controls prop-controls--toggles">
+      <label class="prop-disabled">
+        <input type="checkbox" data-tabs-disabled />
+        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <span class="label">Disable Events</span>
+      </label>
+    </div>
+
+    <div class="playground-stage block">
+      <Tabs
+        defaultValue="overview"
+        data-playground-tabs
+        class="mx-auto w-full max-w-lg rounded-lg border border-border bg-surface px-4 pt-2 pb-5 shadow-xs"
+      >
+        <TabsList aria-label="Playground sections">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="events" data-playground-tabs-events>Events</TabsTrigger>
+          <TabsTrigger value="disabled" disabled>Disabled</TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview" class="px-1">
+          A compact overview of the current workspace.
+        </TabsContent>
+        <TabsContent value="events" class="px-1">
+          Recent changes and operational events.
+        </TabsContent>
+        <TabsContent value="disabled" class="px-1">
+          This panel cannot be selected while its tab is disabled.
+        </TabsContent>
+      </Tabs>
+    </div>
+
+    <code class="prop-readout" data-tabs-readout aria-live="polite"
+      >&lt;Tabs defaultValue="overview" activationMode="automatic"&gt;…&lt;/Tabs&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{tabsComponent.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Semantics</dt>
+      <dd>tablist · tab · tabpanel</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Activation</dt>
+      <dd>automatic · manual</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">State hooks</dt>
+      <dd>data-state · data-value · data-orientation</dd>
+    </div>
+  </dl>
+</ComponentPreview>
