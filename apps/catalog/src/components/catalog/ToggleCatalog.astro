@@ -1,0 +1,100 @@
+---
+import { togglePreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import TogglePreview from "../previews/TogglePreview.astro"
+
+const usageSources = [
+  {
+    code: `---
+import ToggleGroup from "@/ui/toggle/toggle-group.astro"
+import Toggle from "@/ui/toggle/toggle.astro"
+---
+
+<ToggleGroup type="multiple" defaultValue={["bold"]} aria-label="Formatting">
+  <Toggle value="bold">Bold</Toggle>
+  <Toggle value="italic">Italic</Toggle>
+  <Toggle value="code">Code</Toggle>
+</ToggleGroup>`,
+    filename: "src/components/formatting-controls.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Toggle, ToggleGroup } from "@/ui/toggle"
+
+export function FormattingControls() {
+  return (
+    <ToggleGroup type="multiple" defaultValue={["bold"]} aria-label="Formatting">
+      <Toggle value="bold">Bold</Toggle>
+      <Toggle value="italic">Italic</Toggle>
+      <Toggle value="code">Code</Toggle>
+    </ToggleGroup>
+  )
+}`,
+    filename: "src/components/formatting-controls.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="toggle" aria-labelledby="toggle-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Control</p>
+      <h2 id="toggle-title">Toggle & Toggle Group</h2>
+    </div>
+    <span class="status">Pressed state</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Toggle component preview">
+    <div class="workbench">
+      <TogglePreview />
+
+      <ComponentSource
+        component="Toggle"
+        generatedFamilies={["toggle"]}
+        previewSources={togglePreviewSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncTogglePlayground = (preview: HTMLElement) => {
+    const variant =
+      preview.querySelector<HTMLSelectElement>("[data-toggle-variant]")?.value ?? "default"
+    const size = preview.querySelector<HTMLSelectElement>("[data-toggle-size]")?.value ?? "md"
+
+    preview.querySelectorAll<HTMLButtonElement>("[data-playground-toggle]").forEach((toggle) => {
+      toggle.toggleAttribute(
+        "hidden",
+        toggle.dataset.playgroundVariant !== variant || toggle.dataset.playgroundSize !== size
+      )
+    })
+
+    const activeToggle = preview.querySelector<HTMLButtonElement>(
+      `[data-playground-toggle][data-playground-variant="${variant}"][data-playground-size="${size}"]`
+    )
+    const readout = preview.querySelector<HTMLElement>("[data-toggle-readout]")
+    if (readout) {
+      const pressed = activeToggle?.getAttribute("aria-pressed") === "true" ? " pressed" : ""
+      readout.textContent = `<Toggle variant="${variant}" size="${size}"${pressed}>Pin release</Toggle>`
+    }
+  }
+
+  document.addEventListener("change", (event) => {
+    const preview = (event.target as HTMLElement).closest<HTMLElement>(
+      '[data-preview-component="toggle-preview"]'
+    )
+    if (preview) syncTogglePlayground(preview)
+  })
+
+  document.addEventListener("hulla-toggle-pressed-change", (event) => {
+    const preview = (event.target as HTMLElement).closest<HTMLElement>(
+      '[data-preview-component="toggle-preview"]'
+    )
+    if (preview) syncTogglePlayground(preview)
+  })
+</script>

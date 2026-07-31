@@ -1,0 +1,66 @@
+---
+import { toggleSizes, toggleVariants } from "@/+css/toggle.css"
+import { cn } from "@/lib/style"
+import { resolve } from "@hulla/ui"
+import type { HTMLAttributes } from "astro/types"
+
+const $size = resolve(toggleSizes)
+const $variant = resolve(toggleVariants)
+
+type Props = Omit<HTMLAttributes<"button">, "aria-pressed"> & {
+  defaultPressed?: boolean
+  pressed?: boolean
+  size?: typeof $size.infer
+  variant?: typeof $variant.infer
+}
+
+const {
+  class: className,
+  defaultPressed = false,
+  pressed,
+  size = "md",
+  type = "button",
+  variant = "default",
+  ...props
+} = Astro.props as Props
+
+const initialPressed = pressed ?? defaultPressed
+---
+
+<button
+  {...props}
+  aria-pressed={initialPressed}
+  type={type}
+  data-size={size}
+  data-slot="toggle"
+  data-state={initialPressed ? "on" : "off"}
+  data-variant={variant}
+  class={cn(
+    "inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap border font-medium leading-none outline-none transition-[background-color,border-color,color,box-shadow,transform] duration-150 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring active:translate-y-px disabled:pointer-events-none disabled:opacity-40 motion-reduce:transition-none motion-reduce:active:translate-y-0 [&_svg]:pointer-events-none [&_svg]:size-[1em] [&_svg]:shrink-0",
+    $variant(variant),
+    $size(size),
+    className
+  )}
+>
+  <slot />
+</button>
+
+<script>
+  import { connectToggle, type ToggleController } from "@/lib/toggle"
+
+  const controllers = new WeakMap<HTMLButtonElement, ToggleController>()
+
+  const connectToggles = () => {
+    document.querySelectorAll<HTMLButtonElement>("[data-slot='toggle']").forEach((toggle) => {
+      if (!controllers.has(toggle)) controllers.set(toggle, connectToggle(toggle))
+    })
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", connectToggles, { once: true })
+  } else {
+    connectToggles()
+  }
+
+  document.addEventListener("astro:page-load", connectToggles)
+</script>

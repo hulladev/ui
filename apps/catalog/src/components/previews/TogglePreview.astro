@@ -1,0 +1,136 @@
+---
+import ToggleGroup from "@/ui/toggle/toggle-group.astro"
+import Toggle from "@/ui/toggle/toggle.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const toggle = manifest.library.components.toggle
+const sizes = ["sm", "md", "lg"] as const
+const variants = ["default", "outline"] as const
+---
+
+<ComponentPreview
+  component="Toggle"
+  hint="Press state · standalone or grouped"
+  propsLabel="Visual axes"
+  requirePropsView={true}
+>
+  <div slot="variants" class="grid gap-4">
+    <section
+      class="grid gap-4 rounded-lg border border-border bg-surface-raised p-4 shadow-xs"
+      aria-labelledby="toggle-formatting-title"
+    >
+      <div class="flex items-start justify-between gap-6 max-[560px]:flex-col">
+        <div class="grid gap-1">
+          <span class="font-mono text-[0.6875rem] tracking-wider text-primary uppercase"
+            >Composer controls</span
+          >
+          <h3 id="toggle-formatting-title" class="m-0 text-sm font-semibold">Text formatting</h3>
+          <p class="m-0 max-w-sm text-xs leading-relaxed text-muted-foreground">
+            Each control exposes its persistent state through <code>aria-pressed</code>.
+          </p>
+        </div>
+
+        <ToggleGroup type="multiple" defaultValue={["bold", "code"]} aria-label="Text formatting">
+          <Toggle value="bold" variant="outline" aria-label="Bold"
+            ><strong aria-hidden="true">B</strong></Toggle
+          >
+          <Toggle value="italic" variant="outline" aria-label="Italic"
+            ><em aria-hidden="true">I</em></Toggle
+          >
+          <Toggle value="code" variant="outline" aria-label="Inline code"
+            ><span class="font-mono" aria-hidden="true">&lt;/&gt;</span></Toggle
+          >
+        </ToggleGroup>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3">
+        <ToggleGroup type="single" defaultValue="list" required aria-label="Document view">
+          <Toggle value="list" size="sm">List</Toggle>
+          <Toggle value="board" size="sm">Board</Toggle>
+          <Toggle value="timeline" size="sm">Timeline</Toggle>
+        </ToggleGroup>
+
+        <Toggle defaultPressed variant="outline" size="sm">
+          <span class="size-1.5 rounded-full bg-success" aria-hidden="true"></span>
+          Follow live
+        </Toggle>
+      </div>
+    </section>
+
+    <div class="grid grid-cols-2 gap-3 max-[600px]:grid-cols-1" aria-label="Toggle variants">
+      {
+        variants.map((variant) => (
+          <div class="flex items-center justify-between gap-3 rounded-md border border-border bg-surface/80 px-3 py-2">
+            <span class="font-mono text-[0.6875rem] text-muted-foreground">{variant}</span>
+            <Toggle variant={variant} defaultPressed>
+              Pinned
+            </Toggle>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Variant</span>
+        <select aria-label="Toggle variant" data-toggle-variant>
+          {variants.map((variant) => <option value={variant}>{variant}</option>)}
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Size</span>
+        <select aria-label="Toggle size" data-toggle-size>
+          {
+            sizes.map((size) => (
+              <option value={size} selected={size === "md"}>
+                {size}
+              </option>
+            ))
+          }
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage">
+      {
+        variants.map((variant) =>
+          sizes.map((size) => (
+            <Toggle
+              variant={variant}
+              size={size}
+              data-playground-toggle
+              data-playground-size={size}
+              data-playground-variant={variant}
+              hidden={variant !== "default" || size !== "md"}
+            >
+              Pin release
+            </Toggle>
+          ))
+        )
+      }
+    </div>
+
+    <code class="prop-readout" data-toggle-readout aria-live="polite"
+      >&lt;Toggle variant="default" size="md"&gt;Pin release&lt;/Toggle&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{toggle.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Native element</dt>
+      <dd>button · aria-pressed</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Group modes</dt>
+      <dd>single · multiple</dd>
+    </div>
+  </dl>
+</ComponentPreview>
