@@ -1,0 +1,130 @@
+---
+import astroDraggableSource from "../../../../../generated/astro/draggable/draggable.astro?raw"
+import reactDraggableSource from "../../../../../generated/react/draggable/draggable.tsx?raw"
+import { draggablePreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import DraggablePreview from "../previews/DraggablePreview.astro"
+
+const sources = [
+  {
+    code: astroDraggableSource,
+    filename: "generated/astro/draggable/draggable.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactDraggableSource,
+    filename: "generated/react/draggable/draggable.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+
+const astroUsage = `---
+import DragHandle from "@/ui/draggable/drag-handle.astro"
+import Draggable from "@/ui/draggable/draggable.astro"
+---
+
+<div class="relative h-96 overflow-hidden">
+  <Draggable boundaryPadding={16} class="absolute top-8 left-8">
+    <DragHandle aria-label="Move inspector">Inspector</DragHandle>
+  </Draggable>
+</div>
+
+<!-- Opt out, use the viewport, or target a closest ancestor: -->
+<Draggable boundary="none">...</Draggable>
+<Draggable boundary="viewport" boundaryPadding={24}>...</Draggable>
+<Draggable boundarySelector="[data-workspace]">...</Draggable>`
+
+const reactUsage = `import { DragHandle, Draggable } from "@/ui/draggable"
+
+export function Inspector() {
+  return (
+    <div className="relative h-96 overflow-hidden">
+      <Draggable
+        boundaryPadding={16}
+        className="absolute left-8 top-8"
+        onMoveEnd={({ x, y }) => console.log({ x, y })}
+      >
+        <DragHandle aria-label="Move inspector">Inspector</DragHandle>
+      </Draggable>
+    </div>
+  )
+}`
+
+const usageSources = [
+  {
+    code: astroUsage,
+    filename: "src/components/inspector.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactUsage,
+    filename: "src/components/inspector.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="draggable" aria-labelledby="draggable-section-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Spatial interaction</p>
+      <h2 id="draggable-section-title">Draggable</h2>
+    </div>
+    <span class="status">Pointer + keyboard</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Draggable component preview">
+    <div class="workbench workbench--spatial">
+      <DraggablePreview />
+
+      <ComponentSource
+        component="Draggable"
+        generatedFamilies={["draggable"]}
+        previewSources={draggablePreviewSources}
+        sources={sources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  document.addEventListener("hulla:move", (event) => {
+    const stage = (event.target as HTMLElement).closest<HTMLElement>("[data-draggable-stage]")
+    const detail = (event as CustomEvent<{ x: number; y: number }>).detail
+    const readout = stage?.querySelector<HTMLElement>("[data-drag-position]")
+    if (readout) readout.textContent = `x ${Math.round(detail.x)} · y ${Math.round(detail.y)}`
+  })
+
+  document.addEventListener("click", (event) => {
+    const reset = (event.target as HTMLElement).closest<HTMLElement>("[data-drag-reset]")
+    const stage = reset?.closest<HTMLElement>("[data-draggable-stage]")
+    const draggable = stage?.querySelector<HTMLElement>('[data-slot="draggable"]')
+    if (!draggable) return
+
+    draggable.style.removeProperty("--hulla-drag-x")
+    draggable.style.removeProperty("--hulla-drag-y")
+    const position = stage?.querySelector<HTMLElement>("[data-drag-position]")
+    if (position) position.textContent = "x 0 · y 0"
+  })
+
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest<HTMLSelectElement>(
+      "[data-draggable-prop-axis]"
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="draggable-preview"]')
+    if (!control || !preview) return
+
+    preview.querySelectorAll<HTMLElement>("[data-playground-draggable]").forEach((example) => {
+      example.hidden = example.dataset.playgroundAxis !== control.value
+    })
+    const readout = preview.querySelector<HTMLElement>("[data-draggable-prop-readout]")
+    if (readout) {
+      readout.textContent = `<Draggable axis="${control.value}" boundary="parent" boundaryPadding={8}>`
+    }
+  })
+</script>

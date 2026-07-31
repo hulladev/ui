@@ -1,0 +1,117 @@
+---
+import Button from "@/ui/button/button.astro"
+import CardContent from "@/ui/card/card-content.astro"
+import CardDescription from "@/ui/card/card-description.astro"
+import CardHeader from "@/ui/card/card-header.astro"
+import CardTitle from "@/ui/card/card-title.astro"
+import Card from "@/ui/card/card.astro"
+import Resizable from "@/ui/resizable/resizable.astro"
+import ResizeHandle from "@/ui/resizable/resize-handle.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const resizable = manifest.library.components.resizable
+const edges = ["east", "south", "south-east"] as const
+---
+
+<ComponentPreview
+  component="Resizable"
+  hint="Pointer · arrows · Shift"
+  requirePropsView={true}
+  variantsLabel="Contained"
+>
+  <div slot="variants" class="spatial-stage resizable-stage" data-resizable-stage>
+    <span class="spatial-origin" aria-hidden="true"></span>
+
+    <Resizable
+      boundaryPadding={12}
+      class="resizable-panel h-[15rem] w-[18rem] min-h-[12rem] min-w-[15rem] max-h-[20rem] max-w-[25rem]"
+    >
+      <Card variant="elevated" class="h-full gap-4 overflow-hidden p-4">
+        <CardHeader class="gap-2">
+          <span class="font-mono text-[0.6875rem] tracking-wider uppercase">Canvas / Panel</span>
+          <CardTitle class="text-lg">Resize the workspace</CardTitle>
+          <CardDescription>
+            Pull any visible edge or corner. CSS min/max and parent bounds are both respected.
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent class="mt-auto">
+          <dl class="spatial-telemetry">
+            <div>
+              <dt>Width</dt>
+              <dd data-resize-width>288 px</dd>
+            </div>
+            <div>
+              <dt>Height</dt>
+              <dd data-resize-height>240 px</dd>
+            </div>
+          </dl>
+        </CardContent>
+      </Card>
+
+      <ResizeHandle edge="north" aria-label="Resize workspace from top" />
+      <ResizeHandle edge="north-east" aria-label="Resize workspace from top right" />
+      <ResizeHandle edge="east" aria-label="Resize workspace from right" />
+      <ResizeHandle edge="south-east" aria-label="Resize workspace from bottom right" />
+      <ResizeHandle edge="south" aria-label="Resize workspace from bottom" />
+      <ResizeHandle edge="south-west" aria-label="Resize workspace from bottom left" />
+      <ResizeHandle edge="west" aria-label="Resize workspace from left" />
+      <ResizeHandle edge="north-west" aria-label="Resize workspace from top left" />
+    </Resizable>
+
+    <Button size="sm" variant="outline" class="absolute right-3 bottom-3 z-10" data-resize-reset>
+      Reset
+    </Button>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control prop-control--wide">
+        <span class="label">Handle</span>
+        <select aria-label="Resize handle edge" data-resizable-prop-edge>
+          {edges.map((edge) => <option value={edge}>{edge}</option>)}
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage spatial-playground resizable-playground">
+      {
+        edges.map((edge) => (
+          <Resizable
+            boundaryPadding={8}
+            class="h-28 w-40 min-h-20 min-w-28 max-h-40 max-w-56"
+            data-playground-resizable
+            data-playground-edge={edge}
+            hidden={edge !== "east"}
+          >
+            <div class="spatial-playground-card h-full w-full">
+              <strong>Resize me</strong>
+              <small>{edge}</small>
+            </div>
+            <ResizeHandle edge={edge} aria-label={`Resize card from ${edge}`} />
+          </Resizable>
+        ))
+      }
+    </div>
+
+    <code class="prop-readout" data-resizable-prop-readout aria-live="polite"
+      >&lt;ResizeHandle edge="east" /&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{resizable.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Default bounds</dt>
+      <dd>Parent content box</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Size limits</dt>
+      <dd>Bounds + CSS min/max</dd>
+    </div>
+  </dl>
+</ComponentPreview>

@@ -1,0 +1,157 @@
+---
+import astroResizableSource from "../../../../../generated/astro/resizable/resizable.astro?raw"
+import reactResizableSource from "../../../../../generated/react/resizable/resizable.tsx?raw"
+import { resizablePreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import ResizablePreview from "../previews/ResizablePreview.astro"
+
+const sources = [
+  {
+    code: astroResizableSource,
+    filename: "generated/astro/resizable/resizable.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactResizableSource,
+    filename: "generated/react/resizable/resizable.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+
+const astroUsage = `---
+import Resizable from "@/ui/resizable/resizable.astro"
+import ResizeHandle from "@/ui/resizable/resize-handle.astro"
+---
+
+<div class="relative h-96 overflow-hidden">
+  <Resizable
+    boundaryPadding={16}
+    class="h-56 w-72 min-h-40 min-w-56 max-h-80 max-w-md"
+  >
+    <p>Resizable content</p>
+    <ResizeHandle edge="east" aria-label="Resize width" />
+    <ResizeHandle edge="south" aria-label="Resize height" />
+    <ResizeHandle edge="south-east" aria-label="Resize panel" />
+  </Resizable>
+</div>
+
+<!-- Reach through wrappers to a specific containing ancestor: -->
+<Resizable boundarySelector="[data-workspace]">...</Resizable>`
+
+const reactUsage = `import { Resizable, ResizeHandle } from "@/ui/resizable"
+
+export function Panel() {
+  return (
+    <div className="relative h-96 overflow-hidden">
+      <Resizable
+        boundaryPadding={16}
+        className="h-56 w-72 min-h-40 min-w-56 max-h-80 max-w-md"
+      >
+        <p>Resizable content</p>
+        <ResizeHandle edge="south-east" aria-label="Resize panel" />
+      </Resizable>
+    </div>
+  )
+}`
+
+const usageSources = [
+  {
+    code: astroUsage,
+    filename: "src/components/panel.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactUsage,
+    filename: "src/components/panel.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="resizable" aria-labelledby="resizable-section-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Spatial interaction</p>
+      <h2 id="resizable-section-title">Resizable</h2>
+    </div>
+    <span class="status">8 handles</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Resizable component preview">
+    <div class="workbench workbench--spatial">
+      <ResizablePreview />
+
+      <ComponentSource
+        component="Resizable"
+        generatedFamilies={["resizable"]}
+        previewSources={resizablePreviewSources}
+        sources={sources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const formatMetric = (value: number) => `${Math.round(value)} px`
+
+  const syncResizeMetrics = (stage: HTMLElement) => {
+    const resizable = stage.querySelector<HTMLElement>('[data-slot="resizable"]')
+    if (!resizable) return
+
+    const rect = resizable.getBoundingClientRect()
+    const width = stage.querySelector<HTMLElement>("[data-resize-width]")
+    const height = stage.querySelector<HTMLElement>("[data-resize-height]")
+    if (width) width.textContent = formatMetric(rect.width)
+    if (height) height.textContent = formatMetric(rect.height)
+  }
+
+  const syncAllResizeMetrics = () => {
+    document
+      .querySelectorAll<HTMLElement>("[data-resizable-stage]")
+      .forEach((stage) => syncResizeMetrics(stage))
+  }
+
+  document.addEventListener("hulla:resize", (event) => {
+    const stage = (event.target as HTMLElement).closest<HTMLElement>("[data-resizable-stage]")
+    const detail = (event as CustomEvent<{ height: number; width: number }>).detail
+    const width = stage?.querySelector<HTMLElement>("[data-resize-width]")
+    const height = stage?.querySelector<HTMLElement>("[data-resize-height]")
+    if (width) width.textContent = formatMetric(detail.width)
+    if (height) height.textContent = formatMetric(detail.height)
+  })
+
+  document.addEventListener("click", (event) => {
+    const reset = (event.target as HTMLElement).closest<HTMLElement>("[data-resize-reset]")
+    const stage = reset?.closest<HTMLElement>("[data-resizable-stage]")
+    const resizable = stage?.querySelector<HTMLElement>('[data-slot="resizable"]')
+    if (!stage || !resizable) return
+
+    resizable.style.removeProperty("--hulla-resize-x")
+    resizable.style.removeProperty("--hulla-resize-y")
+    resizable.style.removeProperty("width")
+    resizable.style.removeProperty("height")
+    requestAnimationFrame(() => syncResizeMetrics(stage))
+  })
+
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest<HTMLSelectElement>(
+      "[data-resizable-prop-edge]"
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="resizable-preview"]')
+    if (!control || !preview) return
+
+    preview.querySelectorAll<HTMLElement>("[data-playground-resizable]").forEach((example) => {
+      example.hidden = example.dataset.playgroundEdge !== control.value
+    })
+    const readout = preview.querySelector<HTMLElement>("[data-resizable-prop-readout]")
+    if (readout) readout.textContent = `<ResizeHandle edge="${control.value}" />`
+  })
+
+  window.addEventListener("resize", syncAllResizeMetrics)
+  syncAllResizeMetrics()
+</script>

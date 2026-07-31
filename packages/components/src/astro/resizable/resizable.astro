@@ -1,0 +1,69 @@
+---
+import { cn } from "@/lib/style"
+import type { DraggableBoundary } from "@/lib/spatial-interaction"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"div"> & {
+  boundary?: DraggableBoundary
+  boundaryPadding?: number
+  boundarySelector?: string
+  keyboardStep?: number
+}
+
+const {
+  boundary = "parent",
+  boundaryPadding = 0,
+  boundarySelector,
+  class: className,
+  keyboardStep = 10,
+  ...props
+} = Astro.props as Props
+---
+
+<hulla-resizable
+  {...props}
+  data-boundary={boundary}
+  data-boundary-padding={boundaryPadding}
+  data-boundary-selector={boundarySelector}
+  data-keyboard-step={keyboardStep}
+  data-slot="resizable"
+  data-state="idle"
+  class={cn(
+    "relative block box-border min-w-0 [translate:var(--hulla-resize-x,0px)_var(--hulla-resize-y,0px)] data-[state=resizing]:select-none",
+    className
+  )}
+>
+  <slot />
+</hulla-resizable>
+
+<script>
+  import {
+    connectResizable,
+    type DraggableBoundary,
+    type ResizableController,
+  } from "@/lib/spatial-interaction"
+
+  const elementName = "hulla-resizable"
+
+  if (!customElements.get(elementName)) {
+    class HullaResizableElement extends HTMLElement {
+      controller: ResizableController | undefined
+
+      connectedCallback() {
+        this.controller ??= connectResizable(this, {
+          boundary: (this.dataset.boundary as DraggableBoundary | undefined) ?? "parent",
+          boundaryPadding: Number(this.dataset.boundaryPadding),
+          boundarySelector: this.dataset.boundarySelector,
+          keyboardStep: Number(this.dataset.keyboardStep),
+        })
+      }
+
+      disconnectedCallback() {
+        this.controller?.destroy()
+        this.controller = undefined
+      }
+    }
+
+    customElements.define(elementName, HullaResizableElement)
+  }
+</script>

@@ -1,0 +1,74 @@
+---
+import { cn } from "@/lib/style"
+import type { DraggableAxis, DraggableBoundary } from "@/lib/spatial-interaction"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"div"> & {
+  axis?: DraggableAxis
+  boundary?: DraggableBoundary
+  boundaryPadding?: number
+  boundarySelector?: string
+  keyboardStep?: number
+}
+
+const {
+  axis = "both",
+  boundary = "parent",
+  boundaryPadding = 0,
+  boundarySelector,
+  class: className,
+  keyboardStep = 10,
+  ...props
+} = Astro.props as Props
+---
+
+<hulla-draggable
+  {...props}
+  data-axis={axis}
+  data-boundary={boundary}
+  data-boundary-padding={boundaryPadding}
+  data-boundary-selector={boundarySelector}
+  data-keyboard-step={keyboardStep}
+  data-slot="draggable"
+  data-state="idle"
+  class={cn(
+    "block [translate:var(--hulla-drag-x,0px)_var(--hulla-drag-y,0px)] data-[state=dragging]:z-[1] data-[state=dragging]:select-none",
+    className
+  )}
+>
+  <slot />
+</hulla-draggable>
+
+<script>
+  import {
+    connectDraggable,
+    type DraggableAxis,
+    type DraggableBoundary,
+    type DraggableController,
+  } from "@/lib/spatial-interaction"
+
+  const elementName = "hulla-draggable"
+
+  if (!customElements.get(elementName)) {
+    class HullaDraggableElement extends HTMLElement {
+      controller: DraggableController | undefined
+
+      connectedCallback() {
+        this.controller ??= connectDraggable(this, {
+          axis: (this.dataset.axis as DraggableAxis | undefined) ?? "both",
+          boundary: (this.dataset.boundary as DraggableBoundary | undefined) ?? "parent",
+          boundaryPadding: Number(this.dataset.boundaryPadding),
+          boundarySelector: this.dataset.boundarySelector,
+          keyboardStep: Number(this.dataset.keyboardStep),
+        })
+      }
+
+      disconnectedCallback() {
+        this.controller?.destroy()
+        this.controller = undefined
+      }
+    }
+
+    customElements.define(elementName, HullaDraggableElement)
+  }
+</script>
