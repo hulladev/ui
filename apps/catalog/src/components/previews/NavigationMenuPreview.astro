@@ -1,0 +1,340 @@
+---
+import Badge from "@/ui/badge/badge.astro"
+import NavigationMenuContent from "@/ui/navigation-menu/navigation-menu-content.astro"
+import NavigationMenuItem from "@/ui/navigation-menu/navigation-menu-item.astro"
+import NavigationMenuLink from "@/ui/navigation-menu/navigation-menu-link.astro"
+import NavigationMenuList from "@/ui/navigation-menu/navigation-menu-list.astro"
+import NavigationMenuTrigger from "@/ui/navigation-menu/navigation-menu-trigger.astro"
+import NavigationMenu from "@/ui/navigation-menu/navigation-menu.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const navigationMenu = manifest.library.components["navigation-menu"]
+
+const productLinks = [
+  {
+    description: "A living map of every initiative, owner, and dependency.",
+    index: "01",
+    label: "Atlas",
+  },
+  {
+    description: "Turn research fragments into durable team knowledge.",
+    index: "02",
+    label: "Fieldnotes",
+  },
+  {
+    description: "A calm, decision-first view of product momentum.",
+    index: "03",
+    label: "Signals",
+  },
+] as const
+
+const solutionLinks = [
+  {
+    description: "One place for planning, reviews, and the release trail.",
+    label: "Product teams",
+  },
+  {
+    description: "Connect systems work to the outcomes it unlocks.",
+    label: "Engineering",
+  },
+  {
+    description: "Keep the narrative and the numbers in the same room.",
+    label: "Leadership",
+  },
+  {
+    description: "Start with proven structures, then make them yours.",
+    label: "Browse templates",
+  },
+] as const
+---
+
+<ComponentPreview
+  component="Navigation Menu"
+  hint="Hover · focus · ← → · Esc"
+  requirePropsView={true}
+>
+  <div
+    slot="variants"
+    class="relative min-h-[32rem] overflow-hidden rounded-lg border border-border bg-surface"
+  >
+    <div
+      class="pointer-events-none absolute inset-0 opacity-60 [background-image:linear-gradient(to_right,color-mix(in_oklab,var(--color-border)_55%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklab,var(--color-border)_55%,transparent)_1px,transparent_1px)] [background-size:3rem_3rem] [mask-image:linear-gradient(to_bottom,black,transparent_72%)]"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div
+      class="relative z-10 border-b border-border bg-surface-raised/88 px-4 py-3 backdrop-blur-xl"
+    >
+      <NavigationMenu aria-label="Primary navigation" class="mx-auto w-full max-w-4xl">
+        <NavigationMenuList class="w-full bg-transparent p-0 shadow-none ring-0">
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              href="#navigation-menu"
+              class="mr-3 min-h-10 items-center px-1 py-2 hover:bg-transparent"
+              aria-label="Northstar home"
+            >
+              <span
+                class="grid size-7 place-items-center rounded-sm bg-foreground text-[0.6rem] font-semibold tracking-[0.04em] text-background"
+                aria-hidden="true">NS</span
+              >
+              <span class="text-sm font-semibold tracking-[-0.025em]">Northstar</span>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem value="product">
+            <NavigationMenuTrigger>Product</NavigationMenuTrigger>
+            <NavigationMenuContent class="w-[min(100%,calc(100vw-2rem))]">
+              <div class="grid gap-2 sm:grid-cols-[1.05fr_1.5fr]">
+                <NavigationMenuLink
+                  href="#navigation-menu"
+                  class="group relative min-h-64 overflow-hidden bg-foreground p-5 text-background hover:bg-foreground"
+                >
+                  <span class="relative z-1 mt-auto grid gap-3 self-end">
+                    <span
+                      class="font-mono text-[0.65rem] font-medium tracking-[0.14em] text-background/60 uppercase"
+                      >New workspace</span
+                    >
+                    <strong class="text-2xl leading-none tracking-[-0.045em]">
+                      See the whole field.
+                    </strong>
+                    <span class="max-w-52 text-xs leading-5 text-background/65">
+                      Northstar 2.0 turns scattered work into a clear operating picture.
+                    </span>
+                    <Badge class="mt-2 w-fit border-background/20 bg-background/10 text-background"
+                      >Explore the release →</Badge
+                    >
+                  </span>
+                  <span
+                    class="absolute -top-12 -right-12 size-48 rounded-full border border-background/20 transition-transform duration-500 group-hover/navigation-link:scale-110"
+                    aria-hidden="true"></span>
+                  <span
+                    class="absolute top-14 right-8 size-20 rounded-full border border-background/30"
+                    aria-hidden="true"></span>
+                </NavigationMenuLink>
+
+                <div class="grid content-start">
+                  {
+                    productLinks.map((link) => (
+                      <NavigationMenuLink href="#navigation-menu" class="group">
+                        <span class="mt-0.5 font-mono text-[0.625rem] text-muted-foreground">
+                          {link.index}
+                        </span>
+                        <span class="grid min-w-0 gap-0.5">
+                          <strong class="text-sm font-medium tracking-[-0.015em]">
+                            {link.label}
+                            <span
+                              class="ml-1 inline-block text-muted-foreground transition-transform group-hover/navigation-link:translate-x-1"
+                              aria-hidden="true"
+                            >
+                              →
+                            </span>
+                          </strong>
+                          <span class="text-xs leading-5 text-muted-foreground">
+                            {link.description}
+                          </span>
+                        </span>
+                      </NavigationMenuLink>
+                    ))
+                  }
+                </div>
+              </div>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem value="solutions">
+            <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
+            <NavigationMenuContent class="w-[min(100%,calc(100vw-2rem))]">
+              <div class="grid gap-2 sm:grid-cols-[12rem_1fr]">
+                <div class="grid content-between gap-8 p-4">
+                  <span class="font-mono text-[0.65rem] tracking-[0.13em] text-primary uppercase"
+                    >By the work</span
+                  >
+                  <p class="m-0 text-lg leading-snug font-medium tracking-[-0.03em]">
+                    Made for teams whose best work crosses the org chart.
+                  </p>
+                </div>
+                <div class="grid sm:grid-cols-2">
+                  {
+                    solutionLinks.map((link) => (
+                      <NavigationMenuLink href="#navigation-menu">
+                        <span class="grid gap-1">
+                          <strong class="text-sm font-medium">{link.label}</strong>
+                          <span class="text-xs leading-5 text-muted-foreground">
+                            {link.description}
+                          </span>
+                        </span>
+                      </NavigationMenuLink>
+                    ))
+                  }
+                </div>
+              </div>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              href="#navigation-menu"
+              class="min-h-10 items-center px-3.5 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
+              >Customers</NavigationMenuLink
+            >
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              href="#navigation-menu"
+              class="ml-auto min-h-10 items-center bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+              >Get started <span aria-hidden="true">↗</span></NavigationMenuLink
+            >
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
+    </div>
+
+    <div class="relative grid place-items-center px-8 py-24 text-center">
+      <span class="font-mono text-[0.65rem] tracking-[0.14em] text-primary uppercase"
+        >Navigation, with room to breathe</span
+      >
+      <p class="mt-4 max-w-md text-2xl leading-tight font-medium tracking-[-0.045em]">
+        Hover Product or Solutions to open the shared navigation surface.
+      </p>
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Open delay</span>
+        <select aria-label="Navigation Menu open delay" data-navigation-menu-open-delay>
+          <option value="0">None</option>
+          <option value="90" selected>90 ms</option>
+          <option value="250">250 ms</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Close delay</span>
+        <select aria-label="Navigation Menu close delay" data-navigation-menu-close-delay>
+          <option value="0">None</option>
+          <option value="180" selected>180 ms</option>
+          <option value="500">500 ms</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="prop-controls prop-controls--toggles">
+      <label class="prop-disabled">
+        <input type="checkbox" data-navigation-menu-disabled />
+        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <span class="label">Disable Solutions</span>
+      </label>
+    </div>
+
+    <div class="playground-stage min-h-72 items-start overflow-visible pt-8">
+      <NavigationMenu
+        aria-label="Playground navigation"
+        class="mx-auto"
+        data-playground-navigation-menu
+      >
+        <NavigationMenuList>
+          <NavigationMenuItem value="product">
+            <NavigationMenuTrigger>Product</NavigationMenuTrigger>
+            <NavigationMenuContent class="w-[min(28rem,calc(100vw-4rem))]">
+              <div class="grid sm:grid-cols-2">
+                <NavigationMenuLink href="#navigation-menu">
+                  <span class="grid gap-1">
+                    <strong>Atlas</strong>
+                    <span class="text-xs text-muted-foreground">Plan across teams.</span>
+                  </span>
+                </NavigationMenuLink>
+                <NavigationMenuLink href="#navigation-menu">
+                  <span class="grid gap-1">
+                    <strong>Signals</strong>
+                    <span class="text-xs text-muted-foreground">Read product momentum.</span>
+                  </span>
+                </NavigationMenuLink>
+              </div>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          <NavigationMenuItem value="solutions">
+            <NavigationMenuTrigger data-playground-solutions-trigger
+              >Solutions</NavigationMenuTrigger
+            >
+            <NavigationMenuContent class="w-[min(28rem,calc(100vw-4rem))]">
+              <NavigationMenuLink href="#navigation-menu">
+                <span class="grid gap-1">
+                  <strong>Product teams</strong>
+                  <span class="text-xs text-muted-foreground">
+                    Shape, review, and ship in one trail.
+                  </span>
+                </span>
+              </NavigationMenuLink>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
+    </div>
+
+    <code class="prop-readout" data-navigation-menu-readout aria-live="polite"
+      >&lt;NavigationMenu openDelay=&#123;90&#125;
+      closeDelay=&#123;180&#125;&gt;…&lt;/NavigationMenu&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{navigationMenu.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Semantics</dt>
+      <dd>nav · list · disclosure · region</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Open with</dt>
+      <dd>hover · focus · click · Arrow Down</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">State hooks</dt>
+      <dd>data-state · data-value</dd>
+    </div>
+  </dl>
+</ComponentPreview>
+
+<script>
+  const syncNavigationMenuPlayground = (preview: HTMLElement) => {
+    const menu = preview.querySelector<HTMLElement>("[data-playground-navigation-menu]")
+    const openDelay =
+      preview.querySelector<HTMLSelectElement>("[data-navigation-menu-open-delay]")?.value ?? "90"
+    const closeDelay =
+      preview.querySelector<HTMLSelectElement>("[data-navigation-menu-close-delay]")?.value ?? "180"
+    const disabled =
+      preview.querySelector<HTMLInputElement>("[data-navigation-menu-disabled]")?.checked ?? false
+    const solutionsTrigger = preview.querySelector<HTMLButtonElement>(
+      "[data-playground-solutions-trigger]"
+    )
+    if (!menu || !solutionsTrigger) return
+
+    menu.dataset.openDelay = openDelay
+    menu.dataset.closeDelay = closeDelay
+    solutionsTrigger.disabled = disabled
+
+    const readout = preview.querySelector<HTMLElement>("[data-navigation-menu-readout]")
+    if (readout) {
+      readout.textContent =
+        `<NavigationMenu openDelay={${openDelay}} closeDelay={${closeDelay}}>` +
+        "…</NavigationMenu>"
+    }
+  }
+
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      "[data-navigation-menu-open-delay], [data-navigation-menu-close-delay], [data-navigation-menu-disabled]"
+    )
+    const preview = control?.closest<HTMLElement>(
+      '[data-preview-component="navigation-menu-preview"]'
+    )
+    if (preview) syncNavigationMenuPlayground(preview)
+  })
+</script>

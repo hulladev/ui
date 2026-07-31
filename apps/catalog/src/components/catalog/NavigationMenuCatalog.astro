@@ -1,0 +1,95 @@
+---
+import { navigationMenuPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import NavigationMenuPreview from "../previews/NavigationMenuPreview.astro"
+
+const usageSources = [
+  {
+    code: `---
+import NavigationMenuContent from "@/ui/navigation-menu/navigation-menu-content.astro"
+import NavigationMenuItem from "@/ui/navigation-menu/navigation-menu-item.astro"
+import NavigationMenuLink from "@/ui/navigation-menu/navigation-menu-link.astro"
+import NavigationMenuList from "@/ui/navigation-menu/navigation-menu-list.astro"
+import NavigationMenuTrigger from "@/ui/navigation-menu/navigation-menu-trigger.astro"
+import NavigationMenu from "@/ui/navigation-menu/navigation-menu.astro"
+---
+
+<NavigationMenu aria-label="Primary navigation">
+  <NavigationMenuList>
+    <NavigationMenuItem value="product">
+      <NavigationMenuTrigger>Product</NavigationMenuTrigger>
+      <NavigationMenuContent>
+        <NavigationMenuLink href="/product/atlas">Atlas</NavigationMenuLink>
+        <NavigationMenuLink href="/product/signals">Signals</NavigationMenuLink>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+    <NavigationMenuItem>
+      <NavigationMenuLink href="/pricing">Pricing</NavigationMenuLink>
+    </NavigationMenuItem>
+  </NavigationMenuList>
+</NavigationMenu>`,
+    filename: "src/components/site-navigation.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/ui/navigation-menu"
+
+export function SiteNavigation() {
+  return (
+    <NavigationMenu aria-label="Primary navigation">
+      <NavigationMenuList>
+        <NavigationMenuItem value="product">
+          <NavigationMenuTrigger>Product</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <NavigationMenuLink href="/product/atlas">Atlas</NavigationMenuLink>
+            <NavigationMenuLink href="/product/signals">Signals</NavigationMenuLink>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink href="/pricing">Pricing</NavigationMenuLink>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
+  )
+}`,
+    filename: "src/components/site-navigation.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section
+  class="component-section"
+  id="navigation-menu"
+  aria-labelledby="navigation-menu-section-title"
+>
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Pattern / Navigation</p>
+      <h2 id="navigation-menu-section-title">Navigation Menu</h2>
+    </div>
+    <span class="status">Hover intent</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Navigation Menu component preview">
+    <div class="workbench workbench--navigation-menu">
+      <NavigationMenuPreview />
+
+      <ComponentSource
+        component="Navigation Menu"
+        generatedFamilies={["navigation-menu"]}
+        previewSources={navigationMenuPreviewSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
