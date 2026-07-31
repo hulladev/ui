@@ -17,15 +17,15 @@ export const formControlSizes = vn({
 
 export const formControlGroupVariants = vn({
   outline:
-    "border border-border bg-surface shadow-xs hover:border-foreground/25 focus-within:border-primary has-[[data-slot=control][aria-invalid=true]]:border-danger",
+    "border border-border bg-surface shadow-xs hover:border-foreground/25 focus-within:border-primary has-[[data-control][aria-invalid=true]]:border-danger",
   filled:
-    "border border-transparent bg-foreground/[0.055] shadow-none hover:bg-foreground/[0.075] focus-within:border-primary/55 focus-within:bg-surface has-[[data-slot=control][aria-invalid=true]]:border-danger/65 has-[[data-slot=control][aria-invalid=true]]:bg-danger/[0.055]",
+    "border border-transparent bg-foreground/[0.055] shadow-none hover:bg-foreground/[0.075] focus-within:border-primary/55 focus-within:bg-surface has-[[data-control][aria-invalid=true]]:border-danger/65 has-[[data-control][aria-invalid=true]]:bg-danger/[0.055]",
   underline:
-    "rounded-none border-0 border-b border-border bg-transparent shadow-none hover:border-foreground/35 focus-within:border-primary has-[[data-slot=control][aria-invalid=true]]:border-danger",
+    "rounded-none border-0 border-b border-border bg-transparent shadow-none hover:border-foreground/35 focus-within:border-primary has-[[data-control][aria-invalid=true]]:border-danger",
 })
 
 export const formControlGroupSizes = vn({
-  sm: "h-8 rounded-sm text-[0.8125rem] [&>[data-slot=input-adornment]]:px-2.5 [&>[data-slot=control]]:px-2.5",
-  md: "h-10 rounded-md text-sm [&>[data-slot=input-adornment]]:px-3 [&>[data-slot=control]]:px-3",
-  lg: "h-12 rounded-md text-base [&>[data-slot=input-adornment]]:px-3.5 [&>[data-slot=control]]:px-3.5",
+  sm: "h-8 rounded-sm text-[0.8125rem] [&>[data-slot=input-adornment]]:px-2.5 [&>[data-control]]:px-2.5",
+  md: "h-10 rounded-md text-sm [&>[data-slot=input-adornment]]:px-3 [&>[data-control]]:px-3",
+  lg: "h-12 rounded-md text-base [&>[data-slot=input-adornment]]:px-3.5 [&>[data-control]]:px-3.5",
 })

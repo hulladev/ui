@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type InputAdornmentProps = ComponentPropsWithoutRef<"span">
+export type InputAdornmentProps = ComponentPropsWithRef<"span">
 
 export function InputAdornment({ children, className, ...props }: InputAdornmentProps) {
   return (

@@ -1,12 +1,12 @@
 import { formControlGroupSizes, formControlGroupVariants } from "@/+css/form-control.css"
 import { cn } from "@/lib/style"
 import { resolve } from "@hulla/ui"
-import type { ComponentPropsWithoutRef, ReactNode } from "react"
+import type { ComponentPropsWithRef, ReactNode } from "react"
 
 const $size = resolve(formControlGroupSizes)
 const $variant = resolve(formControlGroupVariants)
 
-export type InputGroupProps = Omit<ComponentPropsWithoutRef<"div">, "children"> & {
+export type InputGroupProps = Omit<ComponentPropsWithRef<"div">, "children"> & {
   children: ReactNode
   controlSize?: typeof $size.infer
   variant?: typeof $variant.infer
@@ -24,7 +24,7 @@ export function InputGroup({
       {...props}
       data-slot="input-group"
       className={cn(
-        "group/input-group flex w-full min-w-0 items-center overflow-hidden text-foreground antialiased transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none has-[[data-slot=control]:disabled]:cursor-not-allowed has-[[data-slot=control]:disabled]:opacity-55 [&>[data-slot=control]]:h-full [&>[data-slot=control]]:flex-1 [&>[data-slot=control]]:rounded-none [&>[data-slot=control]]:border-0 [&>[data-slot=control]]:bg-transparent [&>[data-slot=control]]:shadow-none [&>[data-slot=control]:disabled]:opacity-100 [&>[data-slot=control]]:hover:border-0 [&>[data-slot=control]]:hover:bg-transparent [&>[data-slot=control]]:focus-visible:border-0 [&>[data-slot=control]]:focus-visible:bg-transparent [&>[data-slot=input-adornment]+[data-slot=control]]:pl-0 [&>[data-slot=control]:has(+[data-slot=input-adornment])]:pr-0",
+        "group/input-group flex w-full min-w-0 items-center overflow-hidden text-foreground antialiased transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none has-[[data-control]:disabled]:cursor-not-allowed has-[[data-control]:disabled]:opacity-55 [&>[data-control]]:h-full [&>[data-control]]:flex-1 [&>[data-control]]:rounded-none [&>[data-control]]:border-0 [&>[data-control]]:bg-transparent [&>[data-control]]:shadow-none [&>[data-control]:disabled]:opacity-100 [&>[data-control]]:hover:border-0 [&>[data-control]]:hover:bg-transparent [&>[data-control]]:focus-visible:border-0 [&>[data-control]]:focus-visible:bg-transparent [&>[data-slot=input-adornment]+[data-control]]:pl-0 [&>[data-control]:has(+[data-slot=input-adornment])]:pr-0",
         $size(controlSize),
         $variant(variant),
         className

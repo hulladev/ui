@@ -1,0 +1,185 @@
+---
+import astroInputAdornmentSource from "../../../../../generated/astro/input/input-adornment.astro?raw"
+import astroInputGroupSource from "../../../../../generated/astro/input/input-group.astro?raw"
+import astroInputSource from "../../../../../generated/astro/input/input.astro?raw"
+import reactInputAdornmentSource from "../../../../../generated/react/input/input-adornment.tsx?raw"
+import reactInputGroupSource from "../../../../../generated/react/input/input-group.tsx?raw"
+import reactInputSource from "../../../../../generated/react/input/input.tsx?raw"
+import { inputPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import InputPreview from "../previews/InputPreview.astro"
+
+const inputSources = [
+  {
+    code: astroInputSource,
+    filename: "generated/astro/input/input.astro",
+    framework: "Astro · Input",
+    language: "astro" as const,
+  },
+  {
+    code: reactInputSource,
+    filename: "generated/react/input/input.tsx",
+    framework: "React · Input",
+    language: "tsx" as const,
+  },
+  {
+    code: astroInputGroupSource,
+    filename: "generated/astro/input/input-group.astro",
+    framework: "Astro · InputGroup",
+    language: "astro" as const,
+  },
+  {
+    code: reactInputGroupSource,
+    filename: "generated/react/input/input-group.tsx",
+    framework: "React · InputGroup",
+    language: "tsx" as const,
+  },
+  {
+    code: astroInputAdornmentSource,
+    filename: "generated/astro/input/input-adornment.astro",
+    framework: "Astro · InputAdornment",
+    language: "astro" as const,
+  },
+  {
+    code: reactInputAdornmentSource,
+    filename: "generated/react/input/input-adornment.tsx",
+    framework: "React · InputAdornment",
+    language: "tsx" as const,
+  },
+]
+
+const inputUsageSources = [
+  {
+    code: `---
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import InputAdornment from "@/ui/input/input-adornment.astro"
+import InputGroup from "@/ui/input/input-group.astro"
+import Input from "@/ui/input/input.astro"
+---
+
+<Field>
+  <FieldLabel for="website">Website</FieldLabel>
+  <InputGroup>
+    <InputAdornment aria-hidden="true">https://</InputAdornment>
+    <Input id="website" name="website" placeholder="hulla.dev" />
+  </InputGroup>
+</Field>`,
+    filename: "src/components/website-input.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Field, FieldLabel } from "@/ui/field"
+import { Input, InputAdornment, InputGroup } from "@/ui/input"
+
+export function WebsiteInput() {
+  return (
+    <Field>
+      <FieldLabel htmlFor="website">Website</FieldLabel>
+      <InputGroup>
+        <InputAdornment aria-hidden="true">https://</InputAdornment>
+        <Input id="website" name="website" placeholder="hulla.dev" />
+      </InputGroup>
+    </Field>
+  )
+}`,
+    filename: "src/components/website-input.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="input" aria-labelledby="input-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Form control</p>
+      <h2 id="input-title">Input</h2>
+    </div>
+    <span class="status">Native control</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Input component preview">
+    <div class="workbench workbench--input">
+      <InputPreview />
+
+      <ComponentSource
+        component="Input"
+        generatedFamilies={["input"]}
+        previewSources={inputPreviewSources}
+        sources={inputSources}
+        usageSources={inputUsageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncInputPlayground = (preview: HTMLElement) => {
+    const variant =
+      preview.querySelector<HTMLSelectElement>("[data-input-prop-variant]")?.value ?? "outline"
+    const controlSize =
+      preview.querySelector<HTMLSelectElement>("[data-input-prop-control-size]")?.value ?? "md"
+    const state =
+      preview.querySelector<HTMLSelectElement>("[data-input-prop-state]")?.value ?? "default"
+
+    preview.querySelectorAll<HTMLInputElement>("[data-playground-input]").forEach((input) => {
+      const selected = input.dataset.variant === variant && input.dataset.size === controlSize
+      input.hidden = !selected
+      input.disabled = !selected || state === "disabled"
+      input.readOnly = selected && state === "readonly"
+      input.tabIndex = selected ? 0 : -1
+
+      if (selected && state === "invalid") {
+        input.setAttribute("aria-invalid", "true")
+        input.setAttribute("aria-describedby", "input-prop-error")
+      } else if (selected) {
+        input.removeAttribute("aria-invalid")
+        input.setAttribute("aria-describedby", "input-prop-description")
+      }
+    })
+
+    const label = preview.querySelector<HTMLLabelElement>("[data-playground-label]")
+    if (label) label.htmlFor = `input-playground-${variant}-${controlSize}`
+
+    const description = preview.querySelector<HTMLElement>("[data-playground-description]")
+    const error = preview.querySelector<HTMLElement>("[data-playground-error]")
+    if (description) description.hidden = state === "invalid"
+    if (error) error.hidden = state !== "invalid"
+
+    const stateProp =
+      state === "invalid"
+        ? ' aria-invalid="true"'
+        : state === "disabled"
+          ? " disabled"
+          : state === "readonly"
+            ? " readOnly"
+            : ""
+    const readout = preview.querySelector<HTMLElement>("[data-prop-readout]")
+    if (readout) {
+      readout.textContent = `<Input variant="${variant}" controlSize="${controlSize}"${stateProp} />`
+    }
+  }
+
+  document.addEventListener("previewmodechange", (event) => {
+    const preview = (event.target as HTMLElement).closest<HTMLElement>(
+      '[data-preview-component="input-preview"]'
+    )
+    if (preview && (event as CustomEvent<{ mode?: string }>).detail.mode === "props") {
+      syncInputPlayground(preview)
+    }
+  })
+
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      [
+        "[data-input-prop-variant]",
+        "[data-input-prop-control-size]",
+        "[data-input-prop-state]",
+      ].join(",")
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="input-preview"]')
+    if (preview) syncInputPlayground(preview)
+  })
+</script>

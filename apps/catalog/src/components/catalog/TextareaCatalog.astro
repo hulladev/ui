@@ -1,0 +1,169 @@
+---
+import astroTextareaSource from "../../../../../generated/astro/textarea/textarea.astro?raw"
+import reactTextareaSource from "../../../../../generated/react/textarea/textarea.tsx?raw"
+import { textareaPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import TextareaPreview from "../previews/TextareaPreview.astro"
+
+const textareaSources = [
+  {
+    code: astroTextareaSource,
+    filename: "generated/astro/textarea/textarea.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactTextareaSource,
+    filename: "generated/react/textarea/textarea.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+
+const textareaUsageSources = [
+  {
+    code: `---
+import FieldDescription from "@/ui/field/field-description.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import Textarea from "@/ui/textarea/textarea.astro"
+---
+
+<Field>
+  <FieldLabel for="release-summary">Release summary</FieldLabel>
+  <Textarea
+    id="release-summary"
+    name="releaseSummary"
+    aria-describedby="release-summary-help"
+    placeholder="What changed in this release?"
+  />
+  <FieldDescription id="release-summary-help">
+    Keep it concise; this appears in the activity feed.
+  </FieldDescription>
+</Field>`,
+    filename: "src/components/release-summary.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Field, FieldDescription, FieldLabel } from "@/ui/field"
+import { Textarea } from "@/ui/textarea"
+
+export function ReleaseSummary() {
+  return (
+    <Field>
+      <FieldLabel htmlFor="release-summary">Release summary</FieldLabel>
+      <Textarea
+        id="release-summary"
+        name="releaseSummary"
+        aria-describedby="release-summary-help"
+        placeholder="What changed in this release?"
+      />
+      <FieldDescription id="release-summary-help">
+        Keep it concise; this appears in the activity feed.
+      </FieldDescription>
+    </Field>
+  )
+}`,
+    filename: "src/components/release-summary.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="textarea" aria-labelledby="textarea-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Form</p>
+      <h2 id="textarea-title">Textarea</h2>
+    </div>
+    <span class="status">Native control</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Textarea component preview">
+    <div class="workbench workbench--textarea">
+      <TextareaPreview />
+
+      <ComponentSource
+        component="Textarea"
+        generatedFamilies={["textarea"]}
+        previewSources={textareaPreviewSources}
+        sources={textareaSources}
+        usageSources={textareaUsageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncTextareaPlayground = (preview: HTMLElement) => {
+    const variant =
+      preview.querySelector<HTMLSelectElement>("[data-textarea-prop-variant]")?.value ?? "outline"
+    const controlSize =
+      preview.querySelector<HTMLSelectElement>("[data-textarea-prop-control-size]")?.value ?? "md"
+    const state =
+      preview.querySelector<HTMLSelectElement>("[data-textarea-prop-state]")?.value ?? "default"
+
+    preview
+      .querySelectorAll<HTMLTextAreaElement>("[data-playground-textarea]")
+      .forEach((textarea) => {
+        const selected =
+          textarea.dataset.variant === variant && textarea.dataset.size === controlSize
+        textarea.hidden = !selected
+        textarea.disabled = !selected || state === "disabled"
+        textarea.readOnly = selected && state === "readonly"
+        textarea.tabIndex = selected ? 0 : -1
+
+        if (selected && state === "invalid") {
+          textarea.setAttribute("aria-invalid", "true")
+          textarea.setAttribute("aria-describedby", "textarea-prop-error")
+        } else if (selected) {
+          textarea.removeAttribute("aria-invalid")
+          textarea.setAttribute("aria-describedby", "textarea-prop-description")
+        }
+      })
+
+    const label = preview.querySelector<HTMLLabelElement>("[data-playground-label]")
+    if (label) label.htmlFor = `textarea-playground-${variant}-${controlSize}`
+
+    const description = preview.querySelector<HTMLElement>("[data-playground-description]")
+    const error = preview.querySelector<HTMLElement>("[data-playground-error]")
+    if (description) description.hidden = state === "invalid"
+    if (error) error.hidden = state !== "invalid"
+
+    const stateProp =
+      state === "invalid"
+        ? ' aria-invalid="true"'
+        : state === "disabled"
+          ? " disabled"
+          : state === "readonly"
+            ? " readOnly"
+            : ""
+    const readout = preview.querySelector<HTMLElement>("[data-prop-readout]")
+    if (readout) {
+      readout.textContent = `<Textarea variant="${variant}" controlSize="${controlSize}"${stateProp} />`
+    }
+  }
+
+  document.addEventListener("previewmodechange", (event) => {
+    const preview = (event.target as HTMLElement).closest<HTMLElement>(
+      '[data-preview-component="textarea-preview"]'
+    )
+    if (preview && (event as CustomEvent<{ mode?: string }>).detail.mode === "props") {
+      syncTextareaPlayground(preview)
+    }
+  })
+
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      [
+        "[data-textarea-prop-variant]",
+        "[data-textarea-prop-control-size]",
+        "[data-textarea-prop-state]",
+      ].join(",")
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="textarea-preview"]')
+    if (preview) syncTextareaPlayground(preview)
+  })
+</script>

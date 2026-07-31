@@ -1,0 +1,199 @@
+---
+import FieldDescription from "@/ui/field/field-description.astro"
+import FieldError from "@/ui/field/field-error.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import Textarea from "@/ui/textarea/textarea.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const textareaComponent = manifest.library.components.textarea
+const textareaSizes = ["sm", "md", "lg"] as const
+const textareaVariants = ["outline", "filled", "underline"] as const
+---
+
+<ComponentPreview component="Textarea" hint="Tab to focus · drag to resize" requirePropsView={true}>
+  <div slot="variants" class="grid gap-8">
+    <div class="grid gap-5" aria-label="Textarea style variants">
+      {
+        textareaVariants.map((variant) => (
+          <Field>
+            <div class="flex items-baseline justify-between gap-4">
+              <FieldLabel for={`textarea-variant-${variant}`}>{variant}</FieldLabel>
+              <span class="font-mono text-[0.6875rem] tracking-[0.08em] text-muted-foreground uppercase">
+                {variant === "outline"
+                  ? "Structured"
+                  : variant === "filled"
+                    ? "Quiet"
+                    : "Editorial"}
+              </span>
+            </div>
+            <Textarea
+              id={`textarea-variant-${variant}`}
+              variant={variant}
+              placeholder={
+                variant === "outline"
+                  ? "Share the context behind this decision…"
+                  : variant === "filled"
+                    ? "Add a private note for your team…"
+                    : "Write a short project summary…"
+              }
+            />
+          </Field>
+        ))
+      }
+    </div>
+
+    <div class="grid gap-5 border-t border-border pt-8" aria-label="Textarea sizes">
+      <div
+        class="flex items-baseline justify-between gap-4 text-sm text-muted-foreground max-[760px]:flex-col max-[760px]:items-start"
+      >
+        <span class="font-mono text-xs font-medium tracking-wider uppercase">Control size</span>
+        <span>Padding, type, line height, and minimum height scale together</span>
+      </div>
+      <div class="grid grid-cols-3 items-start gap-4 max-[760px]:grid-cols-1">
+        {
+          textareaSizes.map((size) => (
+            <Field>
+              <FieldLabel for={`textarea-size-${size}`}>{size}</FieldLabel>
+              <Textarea
+                id={`textarea-size-${size}`}
+                controlSize={size}
+                placeholder={`${size} textarea`}
+              />
+            </Field>
+          ))
+        }
+      </div>
+    </div>
+
+    <div
+      class="grid grid-cols-2 gap-x-4 gap-y-6 border-t border-border pt-8 max-[760px]:grid-cols-1"
+      aria-label="Textarea states"
+    >
+      <Field>
+        <FieldLabel for="textarea-description">Release summary</FieldLabel>
+        <Textarea
+          id="textarea-description"
+          name="releaseSummary"
+          aria-describedby="textarea-description-help"
+          placeholder="What changed in this release?"
+        />
+        <FieldDescription id="textarea-description-help">
+          Keep it concise; this appears in the activity feed.
+        </FieldDescription>
+      </Field>
+
+      <Field>
+        <FieldLabel for="textarea-invalid">Change rationale</FieldLabel>
+        <Textarea
+          id="textarea-invalid"
+          name="rationale"
+          aria-invalid="true"
+          aria-describedby="textarea-invalid-error"
+          placeholder="Explain why this change is needed…"
+        />
+        <FieldError id="textarea-invalid-error">Add a rationale before continuing.</FieldError>
+      </Field>
+
+      <Field>
+        <FieldLabel for="textarea-disabled">Archived note</FieldLabel>
+        <Textarea id="textarea-disabled" value="Editing is unavailable after archival." disabled />
+        <FieldDescription>This note belongs to an archived project.</FieldDescription>
+      </Field>
+
+      <Field>
+        <FieldLabel for="textarea-readonly">Generated summary</FieldLabel>
+        <Textarea
+          id="textarea-readonly"
+          value="Three tasks completed. One review remains."
+          variant="filled"
+          readonly
+        />
+        <FieldDescription>Updated automatically from project activity.</FieldDescription>
+      </Field>
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Variant</span>
+        <select aria-label="Textarea variant" data-textarea-prop-variant>
+          <option value="outline">Outline</option>
+          <option value="filled">Filled</option>
+          <option value="underline">Underline</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Size</span>
+        <select aria-label="Textarea size" data-textarea-prop-control-size>
+          <option value="sm">Small</option>
+          <option value="md" selected>Medium</option>
+          <option value="lg">Large</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">State</span>
+        <select aria-label="Textarea state" data-textarea-prop-state>
+          <option value="default">Default</option>
+          <option value="invalid">Invalid</option>
+          <option value="disabled">Disabled</option>
+          <option value="readonly">Read only</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage">
+      <Field class="w-full max-w-lg">
+        <FieldLabel for="textarea-playground-outline-md" data-playground-label>
+          Project context
+        </FieldLabel>
+        {
+          textareaVariants.map((variant) =>
+            textareaSizes.map((size) => (
+              <Textarea
+                id={`textarea-playground-${variant}-${size}`}
+                variant={variant}
+                controlSize={size}
+                aria-describedby="textarea-prop-description"
+                data-playground-textarea
+                data-variant={variant}
+                data-size={size}
+                hidden={variant !== "outline" || size !== "md"}
+                value="Capture the assumptions, constraints, and open questions that shaped this decision."
+              />
+            ))
+          )
+        }
+        <FieldDescription id="textarea-prop-description" data-playground-description>
+          Markdown is supported.
+        </FieldDescription>
+        <FieldError id="textarea-prop-error" data-playground-error hidden>
+          Add project context before continuing.
+        </FieldError>
+      </Field>
+    </div>
+
+    <code class="prop-readout" data-prop-readout aria-live="polite"
+      >&lt;Textarea variant="outline" controlSize="md" /&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{textareaComponent.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Native element</dt>
+      <dd>textarea · native value and resize behavior</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Custom props</dt>
+      <dd>variant · controlSize</dd>
+    </div>
+  </dl>
+</ComponentPreview>

@@ -1,0 +1,313 @@
+---
+import { AtSign, Copy, Search } from "@lucide/astro"
+import Button from "@/ui/button/button.astro"
+import FieldDescription from "@/ui/field/field-description.astro"
+import FieldError from "@/ui/field/field-error.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import InputAdornment from "@/ui/input/input-adornment.astro"
+import InputGroup from "@/ui/input/input-group.astro"
+import Input from "@/ui/input/input.astro"
+import Kbd from "@/ui/kbd/kbd.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const field = manifest.library.components.field
+const input = manifest.library.components.input
+const inputSizes = ["sm", "md", "lg"] as const
+const inputVariants = ["outline", "filled", "underline"] as const
+---
+
+<ComponentPreview component="Input" hint="Tab through controls" requirePropsView={true}>
+  <div slot="variants" class="grid gap-8">
+    <div class="grid gap-4" aria-label="Input style variants">
+      {
+        inputVariants.map((variant) => (
+          <Field>
+            <FieldLabel for={`input-variant-${variant}`}>{variant}</FieldLabel>
+            <Input
+              id={`input-variant-${variant}`}
+              variant={variant}
+              placeholder={
+                variant === "outline"
+                  ? "name@company.com"
+                  : variant === "filled"
+                    ? "Search by title…"
+                    : "Workspace name"
+              }
+            />
+          </Field>
+        ))
+      }
+    </div>
+
+    <div
+      class="grid grid-cols-3 items-end gap-4 border-t border-border pt-8 max-[760px]:grid-cols-1"
+      aria-label="Input sizes"
+    >
+      {
+        inputSizes.map((size) => (
+          <Field>
+            <FieldLabel for={`input-size-${size}`}>{size}</FieldLabel>
+            <Input id={`input-size-${size}`} controlSize={size} placeholder={`${size} input`} />
+          </Field>
+        ))
+      }
+    </div>
+
+    <div class="grid gap-5 border-t border-border pt-8" aria-label="Input adornments">
+      <div
+        class="flex items-baseline justify-between gap-4 text-sm text-muted-foreground max-[760px]:flex-col max-[760px]:items-start"
+      >
+        <span class="font-mono text-xs font-medium tracking-wider uppercase"
+          >Composed adornments</span
+        >
+        <span>Text, icons, hints, and shared actions</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-x-4 gap-y-6 max-[760px]:grid-cols-1">
+        <Field>
+          <FieldLabel for="input-group-search">Search</FieldLabel>
+          <InputGroup>
+            <InputAdornment aria-hidden="true"><Search /></InputAdornment>
+            <Input id="input-group-search" type="search" placeholder="Projects and people…" />
+            <InputAdornment aria-hidden="true"><Kbd>⌘ K</Kbd></InputAdornment>
+          </InputGroup>
+        </Field>
+
+        <Field>
+          <FieldLabel for="input-group-email">Email</FieldLabel>
+          <InputGroup variant="filled">
+            <InputAdornment aria-hidden="true"><AtSign /></InputAdornment>
+            <Input id="input-group-email" type="email" placeholder="name@company.com" />
+          </InputGroup>
+        </Field>
+
+        <Field>
+          <FieldLabel for="input-group-budget">Monthly budget</FieldLabel>
+          <InputGroup>
+            <InputAdornment aria-hidden="true">$</InputAdornment>
+            <Input id="input-group-budget" inputmode="decimal" value="4,800" />
+            <InputAdornment aria-hidden="true">USD</InputAdornment>
+          </InputGroup>
+        </Field>
+
+        <Field>
+          <FieldLabel for="input-group-token">API token</FieldLabel>
+          <InputGroup>
+            <Input id="input-group-token" value="hulla_live_7F2K" readonly />
+            <Button
+              variant="outline"
+              size="sm"
+              aria-label="Copy API token"
+              class="h-full rounded-none border-0 bg-transparent px-3 text-muted-foreground shadow-none hover:border-0 hover:bg-foreground/5 focus-visible:-outline-offset-2"
+            >
+              <Copy aria-hidden="true" class="size-4" />
+            </Button>
+          </InputGroup>
+        </Field>
+      </div>
+    </div>
+
+    <div class="grid gap-5 border-t border-border pt-8" aria-label="Native input types">
+      <div
+        class="flex items-baseline justify-between gap-4 text-sm text-muted-foreground max-[760px]:flex-col max-[760px]:items-start"
+      >
+        <span class="font-mono text-xs font-medium tracking-wider uppercase">Native types</span>
+        <span>One primitive, browser-native behavior</span>
+      </div>
+      <div class="grid grid-cols-2 gap-4 max-[760px]:grid-cols-1">
+        <Field>
+          <FieldLabel for="input-date">Date</FieldLabel>
+          <Input id="input-date" type="date" value="2026-07-25" />
+        </Field>
+
+        <Field>
+          <FieldLabel for="input-time">Time</FieldLabel>
+          <Input id="input-time" type="time" value="09:30" />
+        </Field>
+
+        <Field>
+          <FieldLabel for="input-datetime">Date + time</FieldLabel>
+          <Input
+            id="input-datetime"
+            type="datetime-local"
+            value="2026-07-25T09:30"
+            variant="filled"
+          />
+        </Field>
+
+        <Field>
+          <FieldLabel for="input-month">Month</FieldLabel>
+          <Input id="input-month" type="month" value="2026-07" variant="filled" />
+        </Field>
+
+        <Field>
+          <FieldLabel for="input-number">Seats</FieldLabel>
+          <Input id="input-number" type="number" value="3" min="1" max="99" />
+        </Field>
+
+        <Field>
+          <FieldLabel for="input-search">Search</FieldLabel>
+          <Input id="input-search" type="search" placeholder="Search projects…" />
+        </Field>
+
+        <div class="col-span-full max-[760px]:col-span-1">
+          <Field>
+            <FieldLabel for="input-file">Attachments</FieldLabel>
+            <Input
+              id="input-file"
+              type="file"
+              accept=".pdf,image/*"
+              multiple
+              aria-describedby="input-file-description"
+            />
+            <FieldDescription id="input-file-description">
+              PDF or image · multiple files accepted
+            </FieldDescription>
+          </Field>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="grid grid-cols-2 gap-x-4 gap-y-6 border-t border-border pt-8 max-[760px]:grid-cols-1"
+      aria-label="Input states"
+    >
+      <Field>
+        <FieldLabel for="project-code">Project code</FieldLabel>
+        <Input
+          id="project-code"
+          required
+          placeholder="e.g. ORB-142"
+          aria-describedby="project-code-description"
+        />
+        <FieldDescription id="project-code-description">
+          Used in generated issue keys.
+        </FieldDescription>
+      </Field>
+
+      <Field>
+        <FieldLabel for="contact-email">Contact email</FieldLabel>
+        <InputGroup>
+          <InputAdornment aria-hidden="true"><AtSign /></InputAdornment>
+          <Input
+            id="contact-email"
+            type="email"
+            value="not-an-email"
+            aria-invalid="true"
+            aria-describedby="contact-email-error"
+          />
+        </InputGroup>
+        <FieldError id="contact-email-error">Enter a valid work email.</FieldError>
+      </Field>
+
+      <Field>
+        <FieldLabel for="region">Region</FieldLabel>
+        <Input id="region" value="Europe / Prague" disabled aria-describedby="region-description" />
+        <FieldDescription id="region-description">
+          Inherited from your organization.
+        </FieldDescription>
+      </Field>
+
+      <Field>
+        <FieldLabel for="account-id">Account ID</FieldLabel>
+        <Input
+          id="account-id"
+          value="acc_01HX9R2Q"
+          readOnly
+          variant="filled"
+          aria-describedby="account-id-description"
+        />
+        <FieldDescription id="account-id-description">Read-only system value.</FieldDescription>
+      </Field>
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls prop-controls--input">
+      <label class="prop-control">
+        <span class="label">Variant</span>
+        <select aria-label="Input variant" data-input-prop-variant>
+          <option value="outline">Outline</option>
+          <option value="filled">Filled</option>
+          <option value="underline">Underline</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Size</span>
+        <select aria-label="Input size" data-input-prop-control-size>
+          <option value="sm">Small</option>
+          <option value="md" selected>Medium</option>
+          <option value="lg">Large</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">State</span>
+        <select aria-label="Input state" data-input-prop-state>
+          <option value="default">Default</option>
+          <option value="invalid">Invalid</option>
+          <option value="disabled">Disabled</option>
+          <option value="readonly">Read only</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage playground-stage--field">
+      <Field>
+        <FieldLabel for="input-playground-outline-md" data-playground-label>
+          Workspace name
+        </FieldLabel>
+        {
+          inputVariants.map((variant) =>
+            inputSizes.map((size) => {
+              const selected = variant === "outline" && size === "md"
+              return (
+                <Input
+                  id={`input-playground-${variant}-${size}`}
+                  variant={variant}
+                  controlSize={size}
+                  value="Orbit command"
+                  aria-describedby={selected ? "input-prop-description" : undefined}
+                  data-playground-input
+                  data-variant={variant}
+                  data-size={size}
+                  disabled={!selected}
+                  hidden={!selected}
+                  tabindex={selected ? 0 : -1}
+                />
+              )
+            })
+          )
+        }
+        <FieldDescription id="input-prop-description" data-playground-description>
+          This is how the field appears in context.
+        </FieldDescription>
+        <FieldError id="input-prop-error" data-playground-error hidden>
+          A workspace with this name already exists.
+        </FieldError>
+      </Field>
+    </div>
+
+    <code class="prop-readout" data-prop-readout aria-live="polite"
+      >&lt;Input variant="outline" controlSize="md" /&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{input.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Composes with</dt>
+      <dd>{field.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">A11y contract</dt>
+      <dd>Native + linked</dd>
+    </div>
+  </dl>
+</ComponentPreview>

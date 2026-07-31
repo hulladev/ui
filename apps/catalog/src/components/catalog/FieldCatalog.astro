@@ -1,0 +1,189 @@
+---
+import astroFieldDescriptionSource from "../../../../../generated/astro/field/field-description.astro?raw"
+import astroFieldErrorSource from "../../../../../generated/astro/field/field-error.astro?raw"
+import astroFieldLabelSource from "../../../../../generated/astro/field/field-label.astro?raw"
+import astroFieldSource from "../../../../../generated/astro/field/field.astro?raw"
+import reactFieldDescriptionSource from "../../../../../generated/react/field/field-description.tsx?raw"
+import reactFieldErrorSource from "../../../../../generated/react/field/field-error.tsx?raw"
+import reactFieldLabelSource from "../../../../../generated/react/field/field-label.tsx?raw"
+import reactFieldSource from "../../../../../generated/react/field/field.tsx?raw"
+import { fieldPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import FieldPreview from "../previews/FieldPreview.astro"
+
+const fieldSources = [
+  {
+    code: astroFieldSource,
+    filename: "generated/astro/field/field.astro",
+    framework: "Astro · Field",
+    language: "astro" as const,
+  },
+  {
+    code: reactFieldSource,
+    filename: "generated/react/field/field.tsx",
+    framework: "React · Field",
+    language: "tsx" as const,
+  },
+  {
+    code: astroFieldLabelSource,
+    filename: "generated/astro/field/field-label.astro",
+    framework: "Astro · FieldLabel",
+    language: "astro" as const,
+  },
+  {
+    code: reactFieldLabelSource,
+    filename: "generated/react/field/field-label.tsx",
+    framework: "React · FieldLabel",
+    language: "tsx" as const,
+  },
+  {
+    code: astroFieldDescriptionSource,
+    filename: "generated/astro/field/field-description.astro",
+    framework: "Astro · FieldDescription",
+    language: "astro" as const,
+  },
+  {
+    code: reactFieldDescriptionSource,
+    filename: "generated/react/field/field-description.tsx",
+    framework: "React · FieldDescription",
+    language: "tsx" as const,
+  },
+  {
+    code: astroFieldErrorSource,
+    filename: "generated/astro/field/field-error.astro",
+    framework: "Astro · FieldError",
+    language: "astro" as const,
+  },
+  {
+    code: reactFieldErrorSource,
+    filename: "generated/react/field/field-error.tsx",
+    framework: "React · FieldError",
+    language: "tsx" as const,
+  },
+]
+
+const fieldUsageSources = [
+  {
+    code: `---
+import FieldDescription from "@/ui/field/field-description.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import Input from "@/ui/input/input.astro"
+---
+
+<Field>
+  <FieldLabel for="workspace">Workspace name</FieldLabel>
+  <Input
+    id="workspace"
+    name="workspace"
+    required
+    aria-describedby="workspace-description"
+  />
+  <FieldDescription id="workspace-description">
+    Used in your workspace URL.
+  </FieldDescription>
+</Field>`,
+    filename: "src/components/workspace-field.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Field, FieldDescription, FieldLabel } from "@/ui/field"
+import { Input } from "@/ui/input"
+
+export function WorkspaceField() {
+  return (
+    <Field>
+      <FieldLabel htmlFor="workspace">Workspace name</FieldLabel>
+      <Input
+        id="workspace"
+        name="workspace"
+        required
+        aria-describedby="workspace-description"
+      />
+      <FieldDescription id="workspace-description">
+        Used in your workspace URL.
+      </FieldDescription>
+    </Field>
+  )
+}`,
+    filename: "src/components/workspace-field.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="field" aria-labelledby="field-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Form structure</p>
+      <h2 id="field-title">Field</h2>
+    </div>
+    <span class="status">Linked anatomy</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Field component preview">
+    <div class="workbench workbench--field">
+      <FieldPreview />
+
+      <ComponentSource
+        component="Field"
+        generatedFamilies={["field"]}
+        previewSources={fieldPreviewSources}
+        sources={fieldSources}
+        usageSources={fieldUsageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncFieldPlayground = (preview: HTMLElement) => {
+    const state =
+      preview.querySelector<HTMLSelectElement>("[data-field-prop-state]")?.value ?? "description"
+    const required =
+      preview.querySelector<HTMLSelectElement>("[data-field-prop-required]")?.value === "true"
+    const input = preview.querySelector<HTMLInputElement>("[data-field-playground-input]")
+    const description = preview.querySelector<HTMLElement>("[data-field-playground-description]")
+    const error = preview.querySelector<HTMLElement>("[data-field-playground-error]")
+    if (!input || !description || !error) return
+
+    input.required = required
+    input.disabled = state === "disabled"
+    input.toggleAttribute("aria-invalid", state === "error")
+    input.setAttribute(
+      "aria-describedby",
+      state === "error" ? "field-playground-error" : "field-playground-description"
+    )
+    description.hidden = state === "error"
+    error.hidden = state !== "error"
+
+    const readout = preview.querySelector<HTMLElement>("[data-field-readout]")
+    if (readout) {
+      const childProps = [
+        required ? "required" : "",
+        state === "disabled" ? "disabled" : "",
+        state === "error" ? 'aria-invalid="true"' : "",
+      ].filter(Boolean)
+      readout.textContent = `<Field><FieldLabel>…</FieldLabel><Input ${childProps.join(" ")} /></Field>`
+    }
+  }
+
+  document.addEventListener("previewmodechange", (event) => {
+    const preview = (event.target as HTMLElement).closest<HTMLElement>(
+      '[data-preview-component="field-preview"]'
+    )
+    if (preview && (event as CustomEvent<{ mode?: string }>).detail.mode === "props") {
+      syncFieldPlayground(preview)
+    }
+  })
+
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      "[data-field-prop-state], [data-field-prop-required]"
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="field-preview"]')
+    if (preview) syncFieldPlayground(preview)
+  })
+</script>

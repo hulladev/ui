@@ -1,0 +1,145 @@
+---
+import FieldDescription from "@/ui/field/field-description.astro"
+import FieldError from "@/ui/field/field-error.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import Input from "@/ui/input/input.astro"
+import Textarea from "@/ui/textarea/textarea.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const field = manifest.library.components.field
+---
+
+<ComponentPreview component="Field" hint="Tab through controls" requirePropsView={true}>
+  <div slot="variants" class="grid gap-6">
+    <div class="grid grid-cols-2 gap-5 max-[760px]:grid-cols-1">
+      <Field>
+        <FieldLabel for="field-project-name">Project name</FieldLabel>
+        <Input
+          id="field-project-name"
+          required
+          placeholder="Orbit"
+          aria-describedby="field-project-description"
+        />
+        <FieldDescription id="field-project-description">
+          Required fields inherit the label marker from their control.
+        </FieldDescription>
+      </Field>
+
+      <Field>
+        <FieldLabel for="field-owner-email">Owner email</FieldLabel>
+        <Input
+          id="field-owner-email"
+          type="email"
+          value="not-an-email"
+          aria-invalid="true"
+          aria-describedby="field-owner-error"
+        />
+        <FieldError id="field-owner-error">Enter a valid work email.</FieldError>
+      </Field>
+
+      <Field>
+        <FieldLabel for="field-region">Region</FieldLabel>
+        <Input
+          id="field-region"
+          value="Europe / Prague"
+          disabled
+          aria-describedby="field-region-description"
+        />
+        <FieldDescription id="field-region-description">
+          The whole field reflects its disabled control.
+        </FieldDescription>
+      </Field>
+
+      <Field>
+        <FieldLabel for="field-notes">Release notes</FieldLabel>
+        <Textarea
+          id="field-notes"
+          rows={3}
+          placeholder="What changed?"
+          aria-describedby="field-notes-description"
+        />
+        <FieldDescription id="field-notes-description">
+          Field anatomy works with any form primitive.
+        </FieldDescription>
+      </Field>
+    </div>
+
+    <div class="grid gap-3 border-t border-border pt-6" aria-label="Field anatomy">
+      <span class="font-mono text-xs font-medium tracking-wider text-primary uppercase">
+        Anatomy
+      </span>
+      <div
+        class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 rounded-lg border border-border bg-surface-raised/75 p-5 text-sm"
+      >
+        <code class="text-primary">FieldLabel</code>
+        <span class="text-muted-foreground">Names the associated control.</span>
+        <code class="text-primary">Control</code>
+        <span class="text-muted-foreground">Input, Textarea, Select, or another primitive.</span>
+        <code class="text-primary">FieldDescription</code>
+        <span class="text-muted-foreground">Adds stable supporting guidance.</span>
+        <code class="text-primary">FieldError</code>
+        <span class="text-muted-foreground">Replaces guidance when validation fails.</span>
+      </div>
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Message</span>
+        <select aria-label="Field message" data-field-prop-state>
+          <option value="description" selected>Description</option>
+          <option value="error">Error</option>
+          <option value="disabled">Disabled</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Requirement</span>
+        <select aria-label="Field requirement" data-field-prop-required>
+          <option value="false" selected>Optional</option>
+          <option value="true">Required</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage playground-stage--field">
+      <Field>
+        <FieldLabel for="field-playground-input">Workspace name</FieldLabel>
+        <Input
+          id="field-playground-input"
+          value="Orbit command"
+          aria-describedby="field-playground-description"
+          data-field-playground-input
+        />
+        <FieldDescription id="field-playground-description" data-field-playground-description>
+          Used in generated project URLs.
+        </FieldDescription>
+        <FieldError id="field-playground-error" data-field-playground-error hidden>
+          A workspace with this name already exists.
+        </FieldError>
+      </Field>
+    </div>
+
+    <code class="prop-readout" data-field-readout aria-live="polite"
+      >&lt;Field&gt;&lt;FieldLabel&gt;…&lt;/FieldLabel&gt;&lt;Input /&gt;&lt;/Field&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{field.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Anatomy</dt>
+      <dd>Label · Description · Error</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">State</dt>
+      <dd>Inherited from its control</dd>
+    </div>
+  </dl>
+</ComponentPreview>
