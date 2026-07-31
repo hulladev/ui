@@ -1,0 +1,118 @@
+---
+import astroSpinnerSource from "../../../../../generated/astro/spinner/spinner.astro?raw"
+import reactSpinnerSource from "../../../../../generated/react/spinner/spinner.tsx?raw"
+import { spinnerPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import SpinnerPreview from "../previews/SpinnerPreview.astro"
+
+const spinnerSources = [
+  {
+    code: astroSpinnerSource,
+    filename: "generated/astro/spinner/spinner.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactSpinnerSource,
+    filename: "generated/react/spinner/spinner.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+
+const spinnerUsageSources = [
+  {
+    code: `---
+import Spinner from "@/ui/spinner/spinner.astro"
+---
+
+<div role="status" class="inline-flex items-center gap-2">
+  <Spinner />
+  <span>Saving changes…</span>
+</div>`,
+    filename: "src/components/save-status.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Spinner } from "@/ui/spinner"
+
+export function SaveStatus() {
+  return (
+    <div role="status" className="inline-flex items-center gap-2">
+      <Spinner />
+      <span>Saving changes…</span>
+    </div>
+  )
+}`,
+    filename: "src/components/save-status.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="spinner" aria-labelledby="spinner-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Feedback</p>
+      <h2 id="spinner-title">Spinner</h2>
+    </div>
+    <span class="status">Indeterminate</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Spinner component preview">
+    <div class="workbench">
+      <SpinnerPreview />
+
+      <ComponentSource
+        component="Spinner"
+        generatedFamilies={["spinner"]}
+        previewSources={spinnerPreviewSources}
+        sources={spinnerSources}
+        usageSources={spinnerUsageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const spinnerClasses = {
+    size: {
+      sm: "size-4",
+      md: "size-5",
+      lg: "size-7",
+    },
+    tone: {
+      foreground: "text-foreground",
+      primary: "text-primary",
+      success: "text-success",
+    },
+  } as const
+
+  const syncSpinnerPlayground = (preview: HTMLElement) => {
+    const size = preview.querySelector<HTMLSelectElement>("[data-spinner-size]")?.value ?? "sm"
+    const tone =
+      preview.querySelector<HTMLSelectElement>("[data-spinner-tone]")?.value ?? "foreground"
+
+    preview.querySelectorAll<SVGElement>("[data-playground-spinner]").forEach((spinner) => {
+      spinner.toggleAttribute(
+        "hidden",
+        spinner.dataset.size !== size || spinner.dataset.tone !== tone
+      )
+    })
+
+    const readout = preview.querySelector<HTMLElement>("[data-spinner-readout]")
+    const sizeClass = spinnerClasses.size[size as keyof typeof spinnerClasses.size]
+    const toneClass = spinnerClasses.tone[tone as keyof typeof spinnerClasses.tone]
+    if (readout) readout.textContent = `<Spinner className="${sizeClass} ${toneClass}" />`
+  }
+
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      "[data-spinner-size], [data-spinner-tone]"
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="spinner-preview"]')
+    if (preview) syncSpinnerPlayground(preview)
+  })
+</script>

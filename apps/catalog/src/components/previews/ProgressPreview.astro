@@ -1,0 +1,138 @@
+---
+import Progress from "@/ui/progress/progress.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const progress = manifest.library.components.progress
+const progressTones = [
+  { className: "text-primary", label: "Primary", value: "primary" },
+  { className: "text-success", label: "Success", value: "success" },
+  { className: "text-warning", label: "Warning", value: "warning" },
+] as const
+---
+
+<ComponentPreview
+  component="Progress"
+  hint="progress · determinate or indeterminate"
+  propsLabel="Native state"
+  requirePropsView={true}
+>
+  <div slot="variants" class="grid gap-4">
+    <section
+      class="grid gap-4 rounded-lg border border-border bg-surface-raised p-5 shadow-xs"
+      aria-labelledby="upload-progress-title"
+    >
+      <div class="flex items-end justify-between gap-5">
+        <div class="grid gap-1">
+          <span class="font-mono text-[0.6875rem] tracking-wider text-primary uppercase"
+            >Release bundle</span
+          >
+          <h3 id="upload-progress-title" class="m-0 text-sm font-semibold">Uploading assets</h3>
+          <p class="m-0 text-xs text-muted-foreground">34 of 50 files secured</p>
+        </div>
+        <strong class="font-mono text-lg font-medium tracking-tight text-primary">68%</strong>
+      </div>
+      <Progress value={68} max={100} aria-labelledby="upload-progress-title">68%</Progress>
+    </section>
+
+    <div class="grid grid-cols-3 gap-3 max-[640px]:grid-cols-1">
+      <div class="grid gap-2.5 rounded-md border border-border bg-surface/80 p-3.5">
+        <div class="flex items-center justify-between gap-3 text-xs">
+          <span>Coverage</span>
+          <span class="font-mono text-muted-foreground">84%</span>
+        </div>
+        <Progress value={84} max={100} aria-label="Coverage">84%</Progress>
+      </div>
+      <div class="grid gap-2.5 rounded-md border border-border bg-surface/80 p-3.5">
+        <div class="flex items-center justify-between gap-3 text-xs">
+          <span>Verified</span>
+          <span class="font-mono text-muted-foreground">100%</span>
+        </div>
+        <Progress value={100} max={100} aria-label="Verified" class="text-success">100%</Progress>
+      </div>
+      <div class="grid gap-2.5 rounded-md border border-border bg-surface/80 p-3.5">
+        <div class="flex items-center justify-between gap-3 text-xs">
+          <span>Budget</span>
+          <span class="font-mono text-muted-foreground">91%</span>
+        </div>
+        <Progress value={91} max={100} aria-label="Budget" class="text-warning">91%</Progress>
+      </div>
+    </div>
+
+    <div class="grid gap-2 rounded-md border border-border bg-surface/80 px-4 py-3.5">
+      <div class="flex items-center justify-between gap-3 text-xs">
+        <span id="index-progress-label">Preparing local index</span>
+        <span class="text-muted-foreground">Estimating…</span>
+      </div>
+      <Progress aria-labelledby="index-progress-label">Preparing local index</Progress>
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">State</span>
+        <select aria-label="Progress state" data-progress-state>
+          <option value="determinate">Determinate</option>
+          <option value="indeterminate">Indeterminate</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Value</span>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value="68"
+          aria-label="Progress value"
+          data-progress-value
+        />
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Color class</span>
+        <select aria-label="Progress color class" data-progress-tone>
+          {progressTones.map(({ label, value }) => <option value={value}>{label}</option>)}
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage">
+      {
+        progressTones.map(({ className, value: tone }) => (
+          <Progress
+            value={68}
+            max={100}
+            aria-label="Example progress"
+            class={`w-64 max-w-full ${className}`}
+            data-playground-progress
+            data-tone={tone}
+            hidden={tone !== "primary"}
+          >
+            68%
+          </Progress>
+        ))
+      }
+    </div>
+
+    <code class="prop-readout" data-progress-readout aria-live="polite"
+      >&lt;Progress value=&#123;68&#125; max=&#123;100&#125; className="text-primary" /&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{progress.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Native element</dt>
+      <dd>progress · implicit progressbar role</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Indeterminate</dt>
+      <dd>omit the value attribute</dd>
+    </div>
+  </dl>
+</ComponentPreview>

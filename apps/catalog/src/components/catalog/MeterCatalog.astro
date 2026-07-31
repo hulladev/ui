@@ -1,0 +1,98 @@
+---
+import { meterPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import MeterPreview from "../previews/MeterPreview.astro"
+
+const usageSources = [
+  {
+    code: `---
+import Meter from "@/ui/meter/meter.astro"
+---
+
+<label>
+  Storage used
+  <Meter value={18.4} min={0} max={24} low={12} high={21} optimum={8}>
+    18.4 GB of 24 GB
+  </Meter>
+</label>`,
+    filename: "src/components/storage-meter.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Meter } from "@/ui/meter"
+
+export function StorageMeter() {
+  return (
+    <label>
+      Storage used
+      <Meter value={18.4} min={0} max={24} low={12} high={21} optimum={8}>
+        18.4 GB of 24 GB
+      </Meter>
+    </label>
+  )
+}`,
+    filename: "src/components/storage-meter.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="meter" aria-labelledby="meter-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Feedback</p>
+      <h2 id="meter-title">Meter</h2>
+    </div>
+    <span class="status">Native thresholds</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Meter component preview">
+    <div class="workbench">
+      <MeterPreview />
+
+      <ComponentSource
+        component="Meter"
+        generatedFamilies={["meter"]}
+        previewSources={meterPreviewSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncMeterPlayground = (preview: HTMLElement) => {
+    const meter = preview.querySelector<HTMLMeterElement>("[data-playground-meter]")
+    const valueControl = preview.querySelector<HTMLInputElement>("[data-meter-value]")
+    const optimumControl = preview.querySelector<HTMLSelectElement>("[data-meter-optimum]")
+    if (!meter || !valueControl || !optimumControl) return
+
+    meter.value = Number(valueControl.value)
+    meter.optimum = Number(optimumControl.value)
+    meter.textContent = `${valueControl.value}%`
+
+    const output = preview.querySelector<HTMLOutputElement>("[data-meter-output]")
+    if (output) output.value = `${valueControl.value} / 100`
+
+    const readout = preview.querySelector<HTMLElement>("[data-meter-readout]")
+    if (readout) {
+      readout.textContent = `<Meter value={${valueControl.value}} min={0} max={100} optimum={${optimumControl.value}} />`
+    }
+  }
+
+  document.addEventListener("input", (event) => {
+    const preview = (event.target as HTMLElement).closest<HTMLElement>(
+      '[data-preview-component="meter-preview"]'
+    )
+    if (preview) syncMeterPlayground(preview)
+  })
+
+  document.addEventListener("change", (event) => {
+    const preview = (event.target as HTMLElement).closest<HTMLElement>(
+      '[data-preview-component="meter-preview"]'
+    )
+    if (preview) syncMeterPlayground(preview)
+  })
+</script>

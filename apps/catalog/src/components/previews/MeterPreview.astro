@@ -1,0 +1,158 @@
+---
+import Meter from "@/ui/meter/meter.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const meter = manifest.library.components.meter
+const signals = [
+  {
+    detail: "18.4 GB of 24 GB",
+    high: 21,
+    label: "Storage",
+    low: 12,
+    max: 24,
+    optimum: 8,
+    value: 18.4,
+  },
+  {
+    detail: "84 / 100",
+    high: 100,
+    label: "Release confidence",
+    low: 60,
+    max: 100,
+    optimum: 100,
+    value: 84,
+  },
+  {
+    detail: "3 of 10",
+    high: 7,
+    label: "Open incidents",
+    low: 3,
+    max: 10,
+    optimum: 0,
+    value: 3,
+  },
+] as const
+---
+
+<ComponentPreview
+  component="Meter"
+  hint="Native measurement · semantic thresholds"
+  propsLabel="Native range"
+  requirePropsView={true}
+>
+  <div slot="variants" class="grid gap-4">
+    <section
+      class="overflow-hidden rounded-lg border border-border bg-surface-raised shadow-xs"
+      aria-label="System measurements"
+    >
+      <header class="flex items-end justify-between gap-4 border-b border-border px-5 py-4">
+        <div class="grid gap-1">
+          <span class="font-mono text-[0.6875rem] tracking-wider text-primary uppercase"
+            >Capacity report</span
+          >
+          <h3 class="m-0 text-sm font-semibold">System headroom</h3>
+        </div>
+        <span class="font-mono text-xs text-muted-foreground">Updated now</span>
+      </header>
+
+      <div
+        class="grid grid-cols-3 divide-x divide-border max-[680px]:grid-cols-1 max-[680px]:divide-x-0 max-[680px]:divide-y"
+      >
+        {
+          signals.map(({ detail, high, label, low, max, optimum, value }) => (
+            <div class="grid gap-3 px-5 py-4">
+              <div class="flex items-baseline justify-between gap-3">
+                <span class="text-xs text-muted-foreground">{label}</span>
+                <strong class="font-mono text-xs font-medium">{detail}</strong>
+              </div>
+              <Meter
+                aria-label={label}
+                value={value}
+                min={0}
+                max={max}
+                low={low}
+                high={high}
+                optimum={optimum}
+              >
+                {detail}
+              </Meter>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <div class="grid gap-2 rounded-md border border-border bg-surface/80 px-4 py-3.5">
+      <div class="flex items-center justify-between gap-4 text-xs">
+        <span id="meter-threshold-label">API error budget remaining</span>
+        <span class="font-mono text-success">72%</span>
+      </div>
+      <Meter
+        aria-labelledby="meter-threshold-label"
+        value={72}
+        min={0}
+        max={100}
+        low={25}
+        high={60}
+        optimum={100}>72%</Meter
+      >
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Value</span>
+        <input type="range" min="0" max="100" value="72" data-meter-value />
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Optimum</span>
+        <select aria-label="Meter optimum" data-meter-optimum>
+          <option value="100" selected>Higher is better</option>
+          <option value="0">Lower is better</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage">
+      <div class="grid w-72 max-w-full gap-2">
+        <div class="flex justify-between gap-4 text-xs">
+          <span>Signal quality</span>
+          <output class="font-mono text-muted-foreground" data-meter-output>72 / 100</output>
+        </div>
+        <Meter
+          value={72}
+          min={0}
+          max={100}
+          low={25}
+          high={60}
+          optimum={100}
+          aria-label="Signal quality"
+          data-playground-meter>72%</Meter
+        >
+      </div>
+    </div>
+
+    <code class="prop-readout" data-meter-readout aria-live="polite"
+      >&lt;Meter value=&#123;72&#125; min=&#123;0&#125; max=&#123;100&#125; optimum=&#123;100&#125;
+      /&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{meter.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Native element</dt>
+      <dd>meter · implicit meter role</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Custom props</dt>
+      <dd>none · native thresholds</dd>
+    </div>
+  </dl>
+</ComponentPreview>

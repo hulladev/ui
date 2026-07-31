@@ -1,0 +1,31 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"svg">
+
+const {
+  class: className,
+  "aria-hidden": ariaHidden = "true",
+  focusable = "false",
+  ...props
+} = Astro.props as Props
+---
+
+<svg
+  {...props}
+  aria-hidden={ariaHidden}
+  focusable={focusable}
+  viewBox="0 0 24 24"
+  fill="none"
+  data-slot="spinner"
+  class={cn(
+    "inline-block size-4 shrink-0 animate-spin align-[-0.125em] motion-reduce:animate-none",
+    className
+  )}
+>
+  <slot />
+  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.25" opacity="0.2"></circle>
+  <path d="M12 3a9 9 0 0 1 9 9" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"
+  ></path>
+</svg>

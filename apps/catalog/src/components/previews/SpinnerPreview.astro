@@ -1,0 +1,137 @@
+---
+import Button from "@/ui/button/button.astro"
+import Spinner from "@/ui/spinner/spinner.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const spinner = manifest.library.components.spinner
+const spinnerSizes = [
+  { className: "size-4", label: "Small", value: "sm" },
+  { className: "size-5", label: "Medium", value: "md" },
+  { className: "size-7", label: "Large", value: "lg" },
+] as const
+const spinnerTones = [
+  { className: "text-foreground", label: "Foreground", value: "foreground" },
+  { className: "text-primary", label: "Primary", value: "primary" },
+  { className: "text-success", label: "Success", value: "success" },
+] as const
+---
+
+<ComponentPreview
+  component="Spinner"
+  hint="Decorative SVG · motion aware"
+  propsLabel="Class composition"
+  requirePropsView={true}
+>
+  <div slot="variants" class="grid gap-4">
+    <section
+      class="relative overflow-hidden rounded-lg border border-border bg-surface-raised p-5 shadow-xs"
+      aria-labelledby="spinner-preview-title"
+    >
+      <div
+        class="absolute top-0 right-0 h-full w-24 bg-[radial-gradient(circle_at_100%_0%,color-mix(in_oklab,var(--color-primary)_18%,transparent),transparent_70%)]"
+        aria-hidden="true"
+      >
+      </div>
+      <div class="relative flex items-start justify-between gap-6">
+        <div class="grid gap-1">
+          <span class="font-mono text-[0.6875rem] tracking-wider text-primary uppercase"
+            >Background task</span
+          >
+          <h3 id="spinner-preview-title" class="m-0 text-sm font-semibold">Indexing workspace</h3>
+          <p class="m-0 max-w-sm text-xs leading-relaxed text-muted-foreground">
+            Search remains available while the index catches up.
+          </p>
+        </div>
+        <div role="status" class="flex items-center gap-2 text-xs text-muted-foreground">
+          <Spinner class="text-primary" />
+          <span>Working</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="flex flex-wrap items-center gap-3">
+      <Button aria-busy="true" disabled>
+        <Spinner />
+        Publishing…
+      </Button>
+      <Button variant="outline" aria-busy="true" disabled>
+        <Spinner class="text-primary" />
+        Checking
+      </Button>
+      <span role="status" class="ml-auto inline-flex items-center gap-2 text-xs text-success">
+        <Spinner class="size-3.5" />
+        Connecting securely
+      </span>
+    </div>
+
+    <div
+      class="flex items-end justify-between gap-6 rounded-md border border-border bg-surface/80 px-5 py-4"
+      aria-label="Spinner scale"
+    >
+      {
+        spinnerSizes.map(({ className, label }) => (
+          <div class="grid justify-items-center gap-2 text-primary">
+            <Spinner class={className} />
+            <span class="font-mono text-[0.625rem] tracking-wider text-muted-foreground uppercase">
+              {label}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Size class</span>
+        <select aria-label="Spinner size class" data-spinner-size>
+          {spinnerSizes.map(({ label, value }) => <option value={value}>{label}</option>)}
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Color class</span>
+        <select aria-label="Spinner color class" data-spinner-tone>
+          {spinnerTones.map(({ label, value }) => <option value={value}>{label}</option>)}
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage">
+      {
+        spinnerSizes.map(({ className: sizeClass, value: size }) =>
+          spinnerTones.map(({ className: toneClass, value: tone }) => (
+            <Spinner
+              class={`${sizeClass} ${toneClass}`}
+              data-playground-spinner
+              data-size={size}
+              data-tone={tone}
+              hidden={size !== "sm" || tone !== "foreground"}
+            />
+          ))
+        )
+      }
+    </div>
+
+    <code class="prop-readout" data-spinner-readout aria-live="polite"
+      >&lt;Spinner className="size-4 text-foreground" /&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{spinner.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Native element</dt>
+      <dd>svg · aria-hidden by default</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Custom props</dt>
+      <dd>none · native SVG attributes</dd>
+    </div>
+  </dl>
+</ComponentPreview>
