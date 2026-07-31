@@ -8,6 +8,10 @@ import DialogHeader from "../../../../generated/astro/dialog/dialog-header.astro
 import DialogTitle from "../../../../generated/astro/dialog/dialog-title.astro"
 import Dialog from "../../../../generated/astro/dialog/dialog.astro"
 import Kbd from "../../../../generated/astro/kbd/kbd.astro"
+import NavigationMenuItem from "../../../../generated/astro/navigation-menu/navigation-menu-item.astro"
+import NavigationMenuLink from "../../../../generated/astro/navigation-menu/navigation-menu-link.astro"
+import NavigationMenuList from "../../../../generated/astro/navigation-menu/navigation-menu-list.astro"
+import NavigationMenu from "../../../../generated/astro/navigation-menu/navigation-menu.astro"
 import Switch from "../../../../generated/astro/switch/switch.astro"
 import "../styles/showcase.css"
 
@@ -55,11 +59,26 @@ const integrations = ["Linear", "Notion", "Slack", "Figma", "Drive"]
         <span>ORBIT</span>
       </a>
 
-      <nav class="site-links" aria-label="Primary navigation">
-        <a href="#system">System</a>
-        <a href="#method">Method</a>
-        <a href="#stories">Stories</a>
-      </nav>
+      <NavigationMenu class="site-links" aria-label="Primary navigation">
+        <NavigationMenuList class="m-0 gap-7 bg-transparent p-0 shadow-none ring-0">
+          <NavigationMenuItem>
+            <NavigationMenuLink class="p-0 hover:bg-transparent active:translate-y-0" href="#system"
+              >System</NavigationMenuLink
+            >
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink class="p-0 hover:bg-transparent active:translate-y-0" href="#method"
+              >Method</NavigationMenuLink
+            >
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              class="p-0 hover:bg-transparent active:translate-y-0"
+              href="#stories">Stories</NavigationMenuLink
+            >
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
 
       <div class="nav-actions">
         <span class="system-state"><span></span>Systems nominal</span>
@@ -407,7 +426,7 @@ const integrations = ["Linear", "Notion", "Slack", "Figma", "Drive"]
 
     <Dialog
       id="impact-dialog"
-      class="max-w-md"
+      contentClass="max-w-md"
       hidden
       aria-labelledby="impact-title"
       aria-describedby="impact-description"

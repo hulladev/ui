@@ -1,4 +1,7 @@
 ---
+import Resizable from "@/ui/resizable/resizable.astro"
+import ResizeHandle from "@/ui/resizable/resize-handle.astro"
+
 type Props = {
   component: string
   hint?: string
@@ -22,7 +25,12 @@ if (requirePropsView && !hasProps) {
 }
 ---
 
-<div class="preview-pane" data-component-preview data-preview-component={previewId}>
+<Resizable
+  class="preview-pane catalog-preview-resizable"
+  data-catalog-preview-resizable
+  data-component-preview
+  data-preview-component={previewId}
+>
   <header class="bench-bar label">
     <div class="preview-heading">
       <span>Live canvas</span>
@@ -96,7 +104,14 @@ if (requirePropsView && !hasProps) {
   </div>
 
   <slot name="facts" />
-</div>
+
+  <ResizeHandle
+    edge="east"
+    class="catalog-split-handle"
+    aria-label={`Resize ${component} example and code panels`}
+    title="Resize example and code panels"
+  />
+</Resizable>
 
 <script>
   type CanvasBackground = "grid" | "plain"

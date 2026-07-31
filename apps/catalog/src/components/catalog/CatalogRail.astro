@@ -1,5 +1,25 @@
 ---
-import Switch from "../../../../../generated/astro/switch/switch.astro"
+import { Blocks, Boxes, FileText, Gauge, Moon } from "@lucide/astro"
+import Collapsible from "@/ui/collapsible/collapsible.astro"
+import CollapsibleContent from "@/ui/collapsible/collapsible-content.astro"
+import Sidebar from "@/ui/sidebar/sidebar.astro"
+import SidebarContent from "@/ui/sidebar/sidebar-content.astro"
+import SidebarFooter from "@/ui/sidebar/sidebar-footer.astro"
+import SidebarGroup from "@/ui/sidebar/sidebar-group.astro"
+import SidebarGroupLabel from "@/ui/sidebar/sidebar-group-label.astro"
+import SidebarGroupTrigger from "@/ui/sidebar/sidebar-group-trigger.astro"
+import SidebarHeader from "@/ui/sidebar/sidebar-header.astro"
+import SidebarMenu from "@/ui/sidebar/sidebar-menu.astro"
+import SidebarMenuBadge from "@/ui/sidebar/sidebar-menu-badge.astro"
+import SidebarMenuItem from "@/ui/sidebar/sidebar-menu-item.astro"
+import SidebarMenuLink from "@/ui/sidebar/sidebar-menu-link.astro"
+import Switch from "@/ui/switch/switch.astro"
+import {
+  catalogResources,
+  catalogSectionGroups,
+  catalogSections,
+  type CatalogSectionGroup,
+} from "../../data/catalogNavigation"
 
 type Props = {
   frameworkCount: number
@@ -7,48 +27,116 @@ type Props = {
 }
 
 const { frameworkCount, schemaVersion } = Astro.props
+
+const catalogGroupIcons = {
+  Foundations: Boxes,
+  Forms: FileText,
+  "Navigation & overlays": Blocks,
+  "Layout & feedback": Gauge,
+} satisfies Record<CatalogSectionGroup, typeof Boxes>
 ---
 
-<aside class="rail glass-panel" aria-label="Catalog navigation">
-  <a class="brand" href="/">
-    <span class="brand-mark">h.</span>
-    <span class="eyebrow">UI Foundry / 001</span>
-  </a>
+<Sidebar class="rail w-full" aria-label="Catalog navigation">
+  <SidebarHeader>
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <SidebarMenuLink href="/" class="min-h-12 text-foreground">
+          <span
+            class="grid size-9 shrink-0 place-items-center rounded-md bg-primary font-sans text-lg font-semibold tracking-[-0.08em] text-primary-foreground shadow-sm"
+            aria-hidden="true"
+          >
+            h.
+          </span>
+          <span class="grid min-w-0">
+            <strong class="truncate text-sm leading-5">Hulla UI</strong>
+            <span class="truncate font-mono text-[0.625rem] text-muted-foreground uppercase">
+              Component foundry
+            </span>
+          </span>
+        </SidebarMenuLink>
+      </SidebarMenuItem>
+    </SidebarMenu>
+  </SidebarHeader>
 
-  <nav class="rail-nav">
-    <a href="#button" aria-current="page"><span>Button</span><span>01</span></a>
-    <a href="#avatar"><span>Avatar</span><span>02</span></a>
-    <a href="#badge"><span>Badge</span><span>03</span></a>
-    <a href="#breadcrumbs"><span>Breadcrumbs</span><span>04</span></a>
-    <a href="#kbd"><span>Kbd</span><span>05</span></a>
-    <a href="#skeleton"><span>Skeleton</span><span>06</span></a>
-    <a href="#separator"><span>Separator</span><span>07</span></a>
-    <a href="#input"><span>Input + Field</span><span>08</span></a>
-    <a href="#checkbox"><span>Checkbox</span><span>09</span></a>
-    <a href="#switch"><span>Switch</span><span>10</span></a>
-    <a href="#select"><span>Select</span><span>11</span></a>
-    <a href="#popover"><span>Popover</span><span>12</span></a>
-    <a href="#floating"><span>Tooltip + HoverCard</span><span>13</span></a>
-    <a href="#dropdown-menu"><span>Dropdown Menu</span><span>14</span></a>
-    <a href="#dialog"><span>Dialog</span><span>15</span></a>
-    <a href="#accordion"><span>Accordion</span><span>16</span></a>
-    <a href="#card"><span>Card</span><span>17</span></a>
-    <a href="#table"><span>Table</span><span>18</span></a>
-    <a href="#alert"><span>Alert</span><span>19</span></a>
-    <a href="/showcase"><span>Default theme example</span><span>↗</span></a>
-    <a href="https://hulla.dev/docs/ui"><span>Documentation</span><span>↗</span></a>
-  </nav>
+  <SidebarContent aria-label="Component catalog" data-catalog-nav>
+    {
+      catalogSectionGroups.map((group) => {
+        const groupSections = catalogSections.filter((item) => item.group === group)
+        const GroupIcon = catalogGroupIcons[group]
 
-  <div class="rail-footer">
-    <label class="contrast-toggle label" for="contrast">
-      <Switch id="contrast" />
-      Dark theme
-    </label>
+        return (
+          <SidebarGroup aria-label={`${group} components`}>
+            <Collapsible open>
+              <SidebarGroupTrigger>
+                <GroupIcon size={13} aria-hidden="true" />
+                {group}
+              </SidebarGroupTrigger>
+              <CollapsibleContent>
+                <SidebarMenu>
+                  {groupSections.map(({ href, label }) => {
+                    const index = catalogSections.findIndex((item) => item.href === href)
 
-    <p class="rail-note">
-      Generated output<br />
-      {frameworkCount} framework targets<br />
+                    return (
+                      <SidebarMenuItem>
+                        <SidebarMenuLink
+                          href={href}
+                          aria-current={index === 0 ? "page" : undefined}
+                        >
+                          <GroupIcon aria-hidden="true" />
+                          <span>{label}</span>
+                        </SidebarMenuLink>
+                        <SidebarMenuBadge>{String(index + 1).padStart(2, "0")}</SidebarMenuBadge>
+                      </SidebarMenuItem>
+                    )
+                  })}
+                </SidebarMenu>
+              </CollapsibleContent>
+            </Collapsible>
+          </SidebarGroup>
+        )
+      })
+    }
+
+    <SidebarGroup>
+      <SidebarGroupLabel class="gap-2">
+        <FileText size={13} aria-hidden="true" />
+        Resources
+      </SidebarGroupLabel>
+      <SidebarMenu>
+        {
+          catalogResources.map(({ href, label }) => (
+            <SidebarMenuItem>
+              <SidebarMenuLink href={href}>
+                <FileText aria-hidden="true" />
+                <span>{label}</span>
+              </SidebarMenuLink>
+              <SidebarMenuBadge aria-hidden="true">↗</SidebarMenuBadge>
+            </SidebarMenuItem>
+          ))
+        }
+      </SidebarMenu>
+    </SidebarGroup>
+  </SidebarContent>
+
+  <SidebarFooter>
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <label
+          class="flex min-h-9 w-full cursor-pointer items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm leading-5 text-muted-foreground transition-colors duration-150 hover:bg-foreground/[0.055] hover:text-foreground"
+          for="contrast"
+        >
+          <Moon aria-hidden="true" />
+          <span>Dark theme</span>
+          <Switch class="ml-auto" id="contrast" />
+        </label>
+      </SidebarMenuItem>
+    </SidebarMenu>
+
+    <p
+      class="m-0 px-2.5 pt-2 font-mono text-[0.625rem] leading-relaxed tracking-[0.075em] text-muted-foreground uppercase"
+    >
+      Generated output · {frameworkCount} targets<br />
       Manifest schema v{schemaVersion}
     </p>
-  </div>
-</aside>
+  </SidebarFooter>
+</Sidebar>
