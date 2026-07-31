@@ -53,12 +53,70 @@ export const ui = createLibrary({
         description: "Framework-neutral dropdown menu behavior",
       },
       {
+        src: "lib/navigation-menu.ts",
+        description: "Framework-neutral navigation menu disclosure behavior",
+      },
+      {
+        src: "lib/combobox.ts",
+        description: "Framework-neutral editable combobox and listbox behavior",
+      },
+      {
+        src: "lib/command.ts",
+        description: "Framework-neutral command menu filtering and keyboard behavior",
+      },
+      {
+        src: "lib/select.ts",
+        description: "Framework-neutral select and listbox behavior",
+      },
+      {
         src: "lib/floating-layer.ts",
         description: "Shared hover, focus, and Floating UI positioning behavior",
       },
       {
+        src: "lib/spatial-interaction.ts",
+        description: "Framework-neutral draggable and resizable element behavior",
+      },
+      {
+        src: "lib/range-slider.ts",
+        description: "Framework-neutral two-thumb range slider behavior",
+      },
+      {
+        src: "lib/tabs.ts",
+        description: "Framework-neutral tabs selection and keyboard behavior",
+      },
+      {
+        src: "lib/toggle.ts",
+        description: "Framework-neutral toggle and toggle group state behavior",
+      },
+      {
+        src: "lib/tree-view.ts",
+        description: "Framework-neutral tree view focus, selection, and disclosure behavior",
+      },
+      {
+        src: "lib/calendar.ts",
+        description: "Framework-neutral ISO calendar rendering and selection behavior",
+      },
+      {
+        src: "lib/date-picker.ts",
+        description: "Framework-neutral date and local date-time picker behavior",
+      },
+      {
+        src: "lib/time-picker.ts",
+        description: "Framework-neutral local time picker behavior",
+      },
+      {
+        src: "lib/toast.ts",
+        description: "Framework-neutral toast store, utility API, and presentation contract",
+      },
+      {
         src: "styles.css",
         description: "Shared Hulla design tokens and Tailwind theme",
+      },
+    ],
+    solid: [
+      {
+        src: "lib/solid.ts",
+        description: "Solid lifecycle and ref helpers for controller-backed components",
       },
     ],
   },
