@@ -1,45 +1,118 @@
-import { vn, cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import {
+  connectSelect,
+  SELECT_VALUE_CHANGE_EVENT,
+  type SelectController,
+  type SelectValue,
+  type SelectValueChangeDetail,
+} from "@/lib/select"
+import { cn } from "@/lib/style"
+import { useEffect, useImperativeHandle, useRef, type ComponentPropsWithRef } from "react"
 
-const $size = vn({
-  sm: "h-8 rounded-sm px-2.5 text-[0.8125rem] [&[type=file]]:leading-[1.875rem] file:text-[0.8125rem]",
-  md: "h-10 rounded-md px-3 text-sm [&[type=file]]:leading-[2.375rem] file:text-sm",
-  lg: "h-12 rounded-md px-3.5 text-base [&[type=file]]:leading-[2.875rem] file:text-base",
-})
-const $variant = vn({
-  outline:
-    "border border-border bg-surface shadow-xs hover:border-foreground/25 focus-visible:border-primary aria-invalid:border-danger aria-invalid:hover:border-danger",
-  filled:
-    "border border-transparent bg-foreground/[0.055] shadow-none hover:bg-foreground/[0.075] focus-visible:border-primary/55 focus-visible:bg-surface aria-invalid:border-danger/65 aria-invalid:bg-danger/[0.055]",
-  underline:
-    "rounded-none border-0 border-b border-border bg-transparent px-0 shadow-none hover:border-foreground/35 focus-visible:border-primary aria-invalid:border-danger",
-})
-
-export type SelectProps = ComponentPropsWithoutRef<"select"> & {
-  controlSize?: typeof $size.infer
-  variant?: typeof $variant.infer
+type SelectBaseProps = Omit<ComponentPropsWithRef<"div">, "defaultValue"> & {
+  defaultValue?: SelectValue
+  disabled?: boolean
+  form?: string
+  name?: string
+  required?: boolean
 }
 
-export function Select({
-  children,
-  className,
-  controlSize = "md",
-  variant = "outline",
-  ...props
-}: SelectProps) {
+type SingleSelectProps = {
+  multiple?: false
+  onValueChange?: (value: string) => void
+  value?: string
+}
+
+type MultipleSelectProps = {
+  multiple: true
+  onValueChange?: (value: string[]) => void
+  value?: string[]
+}
+
+export type SelectProps = SelectBaseProps & (SingleSelectProps | MultipleSelectProps)
+
+export function Select(props: SelectProps) {
+  const {
+    children,
+    className,
+    defaultValue,
+    disabled = false,
+    form,
+    multiple = false,
+    name,
+    onValueChange,
+    required = false,
+    value,
+    ...rootProps
+  } = props
+  const elementRef = useRef<HTMLDivElement>(null)
+  useImperativeHandle(props.ref, () => elementRef.current as HTMLDivElement, [])
+  const controllerRef = useRef<SelectController>(null)
+  const valueRef = useRef(value)
+  const onValueChangeRef = useRef(onValueChange)
+  valueRef.current = value
+  onValueChangeRef.current = onValueChange
+
+  useEffect(() => {
+    const element = elementRef.current
+    if (!element) return
+
+    const controller = connectSelect(element)
+    controllerRef.current = controller
+
+    const handleValueChange = (event: Event) => {
+      const nextValue = (event as CustomEvent<SelectValueChangeDetail>).detail.value
+      if (Array.isArray(nextValue)) {
+        ;(onValueChangeRef.current as MultipleSelectProps["onValueChange"])?.(nextValue)
+      } else {
+        ;(onValueChangeRef.current as SingleSelectProps["onValueChange"])?.(nextValue)
+      }
+
+      if (valueRef.current !== undefined) {
+        queueMicrotask(() => controller.setValue(valueRef.current as SelectValue))
+      }
+    }
+
+    element.addEventListener(SELECT_VALUE_CHANGE_EVENT, handleValueChange)
+
+    return () => {
+      element.removeEventListener(SELECT_VALUE_CHANGE_EVENT, handleValueChange)
+      controller.destroy()
+      controllerRef.current = null
+    }
+  }, [])
+
+  useEffect(() => {
+    const controller = controllerRef.current
+    if (!controller) return
+    controller.refresh()
+    if (value !== undefined) controller.setValue(value)
+  }, [disabled, multiple, value])
+
+  const initialValue = value ?? defaultValue ?? (multiple ? [] : "")
+
   return (
-    <select
-      {...props}
-      data-slot="control"
-      className={cn(
-        "block w-full min-w-0 cursor-pointer text-foreground antialiased transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-55 [&[multiple]]:h-auto [&[multiple]]:cursor-default [&[multiple]]:py-2",
-        $size(controlSize),
-        $variant(variant),
-        "pr-9 [&[multiple]]:pr-3",
-        className
-      )}
+    <div
+      {...rootProps}
+      ref={elementRef}
+      data-disabled={disabled ? "true" : "false"}
+      data-initial-value={JSON.stringify(initialValue)}
+      data-multiple={multiple ? "true" : "false"}
+      data-slot="select"
+      className={cn("relative grid w-full min-w-0", className)}
     >
       {children}
-    </select>
+      <select
+        aria-hidden="true"
+        data-slot="select-native-control"
+        disabled={disabled}
+        form={form}
+        inert
+        multiple={multiple}
+        name={name}
+        required={required}
+        tabIndex={-1}
+        className="pointer-events-none absolute bottom-0 left-0 size-px opacity-0"
+      />
+    </div>
   )
 }

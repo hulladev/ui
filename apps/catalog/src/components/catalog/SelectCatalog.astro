@@ -1,33 +1,7 @@
 ---
-import FieldDescription from "../../../../../generated/astro/field/field-description.astro"
-import FieldError from "../../../../../generated/astro/field/field-error.astro"
-import FieldLabel from "../../../../../generated/astro/field/field-label.astro"
-import Field from "../../../../../generated/astro/field/field.astro"
-import Select from "../../../../../generated/astro/select/select.astro"
-import astroSelectSource from "../../../../../generated/astro/select/select.astro?raw"
-import reactSelectSource from "../../../../../generated/react/select/select.tsx?raw"
-import manifest from "../../../../../generated/ui.manifest.json"
-import ComponentPreview from "../ComponentPreview.astro"
 import ComponentSource from "../ComponentSource.astro"
+import SelectPreview from "../previews/SelectPreview.astro"
 import { selectPreviewSources } from "../../data/catalogPreviewSources"
-
-const select = manifest.library.components.select
-const selectSizes = ["sm", "md", "lg"] as const
-const selectVariants = ["outline", "filled", "underline"] as const
-const selectSources = [
-  {
-    code: astroSelectSource,
-    filename: "generated/astro/select/select.astro",
-    framework: "Astro",
-    language: "astro" as const,
-  },
-  {
-    code: reactSelectSource,
-    filename: "generated/react/select/select.tsx",
-    framework: "React",
-    language: "tsx" as const,
-  },
-]
 
 const selectUsageSources = [
   {
@@ -35,18 +9,34 @@ const selectUsageSources = [
 import FieldDescription from "@/ui/field/field-description.astro"
 import FieldLabel from "@/ui/field/field-label.astro"
 import Field from "@/ui/field/field.astro"
+import InputAdornment from "@/ui/input/input-adornment.astro"
+import InputGroup from "@/ui/input/input-group.astro"
+import SelectContent from "@/ui/select/select-content.astro"
+import SelectGroupLabel from "@/ui/select/select-group-label.astro"
+import SelectGroup from "@/ui/select/select-group.astro"
+import SelectOption from "@/ui/select/select-option.astro"
+import SelectTrigger from "@/ui/select/select-trigger.astro"
+import SelectValue from "@/ui/select/select-value.astro"
 import Select from "@/ui/select/select.astro"
 ---
 
 <Field>
-  <FieldLabel for="team">Team</FieldLabel>
-  <Select id="team" name="team" aria-describedby="team-help">
-    <option value="">Choose a team</option>
-    <optgroup label="Product">
-      <option value="design">Design</option>
-      <option value="engineering">Engineering</option>
-    </optgroup>
-    <option value="operations">Operations</option>
+  <FieldLabel for="team-trigger">Team</FieldLabel>
+  <Select name="team" defaultValue="engineering">
+    <InputGroup>
+      <InputAdornment aria-hidden="true">Team</InputAdornment>
+      <SelectTrigger id="team-trigger" aria-describedby="team-help">
+        <SelectValue placeholder="Choose a team" />
+      </SelectTrigger>
+    </InputGroup>
+    <SelectContent>
+      <SelectGroup>
+        <SelectGroupLabel>Product</SelectGroupLabel>
+        <SelectOption value="design">Design</SelectOption>
+        <SelectOption value="engineering">Engineering</SelectOption>
+      </SelectGroup>
+      <SelectOption value="operations">Operations</SelectOption>
+    </SelectContent>
   </Select>
   <FieldDescription id="team-help">
     Controls which workspace you join.
@@ -62,19 +52,36 @@ import Select from "@/ui/select/select.astro"
   FieldDescription,
   FieldLabel,
 } from "@/ui/field"
-import { Select } from "@/ui/select"
+import { InputAdornment, InputGroup } from "@/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectGroupLabel,
+  SelectOption,
+  SelectTrigger,
+  SelectValue,
+} from "@/ui/select"
 
 export function TeamSelect() {
   return (
     <Field>
-      <FieldLabel htmlFor="team">Team</FieldLabel>
-      <Select id="team" name="team" aria-describedby="team-help">
-        <option value="">Choose a team</option>
-        <optgroup label="Product">
-          <option value="design">Design</option>
-          <option value="engineering">Engineering</option>
-        </optgroup>
-        <option value="operations">Operations</option>
+      <FieldLabel htmlFor="team-trigger">Team</FieldLabel>
+      <Select name="team" defaultValue="engineering">
+        <InputGroup>
+          <InputAdornment aria-hidden="true">Team</InputAdornment>
+          <SelectTrigger id="team-trigger" aria-describedby="team-help">
+            <SelectValue placeholder="Choose a team" />
+          </SelectTrigger>
+        </InputGroup>
+        <SelectContent>
+          <SelectGroup>
+            <SelectGroupLabel>Product</SelectGroupLabel>
+            <SelectOption value="design">Design</SelectOption>
+            <SelectOption value="engineering">Engineering</SelectOption>
+          </SelectGroup>
+          <SelectOption value="operations">Operations</SelectOption>
+        </SelectContent>
       </Select>
       <FieldDescription id="team-help">
         Controls which workspace you join.
@@ -95,210 +102,17 @@ export function TeamSelect() {
       <p class="eyebrow">Primitive / Choice</p>
       <h2 id="select-title">Select</h2>
     </div>
-    <span class="status">Generated cleanly</span>
+    <span class="status">Custom + native</span>
   </div>
 
   <article class="bench glass-panel" aria-label="Select component preview">
     <div class="workbench workbench--select">
-      <ComponentPreview component="Select" hint="Open with Space" requirePropsView={true}>
-        <div slot="variants" class="grid gap-8">
-          <div class="grid gap-4" aria-label="Select style variants">
-            {
-              selectVariants.map((variant) => (
-                <Field>
-                  <FieldLabel for={`select-variant-${variant}`}>{variant}</FieldLabel>
-                  <Select id={`select-variant-${variant}`} variant={variant}>
-                    <option value="design">Design</option>
-                    <option value="engineering" selected>
-                      Engineering
-                    </option>
-                    <option value="operations">Operations</option>
-                  </Select>
-                </Field>
-              ))
-            }
-          </div>
-
-          <div
-            class="grid grid-cols-3 items-end gap-4 border-t border-border pt-8 max-[760px]:grid-cols-1"
-            aria-label="Select sizes"
-          >
-            {
-              selectSizes.map((size) => (
-                <Field>
-                  <FieldLabel for={`select-size-${size}`}>{size}</FieldLabel>
-                  <Select id={`select-size-${size}`} controlSize={size}>
-                    <option value="prague" selected>
-                      Prague
-                    </option>
-                    <option value="london">London</option>
-                    <option value="tokyo">Tokyo</option>
-                  </Select>
-                </Field>
-              ))
-            }
-          </div>
-
-          <div
-            class="grid grid-cols-2 gap-x-4 gap-y-6 border-t border-border pt-8 max-[760px]:grid-cols-1"
-            aria-label="Select states and native composition"
-          >
-            <Field>
-              <FieldLabel for="select-team">Team</FieldLabel>
-              <Select id="select-team">
-                <optgroup label="Product">
-                  <option>Design</option>
-                  <option selected>Engineering</option>
-                </optgroup>
-                <optgroup label="Business">
-                  <option>Operations</option>
-                  <option>Go to market</option>
-                </optgroup>
-              </Select>
-              <FieldDescription>Native option groups remain available.</FieldDescription>
-            </Field>
-
-            <Field>
-              <FieldLabel for="select-owner">Owner</FieldLabel>
-              <Select
-                id="select-owner"
-                required
-                aria-invalid="true"
-                aria-describedby="select-owner-error"
-              >
-                <option value="" selected disabled>Choose an owner</option>
-                <option value="alex">Alex Morgan</option>
-                <option value="mina">Mina Park</option>
-              </Select>
-              <FieldError id="select-owner-error">Select an owner to continue.</FieldError>
-            </Field>
-
-            <Field>
-              <FieldLabel for="select-plan">Plan</FieldLabel>
-              <Select id="select-plan" disabled aria-describedby="select-plan-description">
-                <option selected>Enterprise</option>
-              </Select>
-              <FieldDescription id="select-plan-description">
-                Managed by your organization.
-              </FieldDescription>
-            </Field>
-
-            <Field>
-              <FieldLabel for="select-regions">Regions</FieldLabel>
-              <Select
-                id="select-regions"
-                multiple
-                size={3}
-                aria-describedby="select-regions-description"
-              >
-                <option selected>Europe</option>
-                <option selected>North America</option>
-                <option>Asia Pacific</option>
-              </Select>
-              <FieldDescription id="select-regions-description">
-                Native multiple selection.
-              </FieldDescription>
-            </Field>
-          </div>
-        </div>
-
-        <div slot="props" class="prop-playground">
-          <div class="prop-controls prop-controls--select">
-            <label class="prop-control">
-              <span class="label">Variant</span>
-              <select aria-label="Select variant" data-select-prop-variant>
-                <option value="outline">Outline</option>
-                <option value="filled">Filled</option>
-                <option value="underline">Underline</option>
-              </select>
-            </label>
-
-            <label class="prop-control">
-              <span class="label">Size</span>
-              <select aria-label="Select size" data-select-prop-control-size>
-                <option value="sm">Small</option>
-                <option value="md" selected>Medium</option>
-                <option value="lg">Large</option>
-              </select>
-            </label>
-
-            <label class="prop-control">
-              <span class="label">State</span>
-              <select aria-label="Select state" data-select-prop-state>
-                <option value="default">Default</option>
-                <option value="invalid">Invalid</option>
-                <option value="disabled">Disabled</option>
-              </select>
-            </label>
-          </div>
-
-          <div class="playground-stage playground-stage--field">
-            <Field>
-              <FieldLabel for="select-playground-outline-md" data-select-playground-label>
-                Office
-              </FieldLabel>
-              {
-                selectVariants.map((variant) =>
-                  selectSizes.map((size) => {
-                    const selected = variant === "outline" && size === "md"
-                    return (
-                      <Select
-                        id={`select-playground-${variant}-${size}`}
-                        variant={variant}
-                        controlSize={size}
-                        aria-describedby={selected ? "select-prop-description" : undefined}
-                        data-playground-select
-                        data-variant={variant}
-                        data-size={size}
-                        disabled={!selected}
-                        hidden={!selected}
-                        tabindex={selected ? 0 : -1}
-                      >
-                        <option value="prague" selected>
-                          Prague · UTC+2
-                        </option>
-                        <option value="london">London · UTC+1</option>
-                        <option value="tokyo">Tokyo · UTC+9</option>
-                      </Select>
-                    )
-                  })
-                )
-              }
-              <FieldDescription id="select-prop-description" data-select-playground-description>
-                Used for dates, times, and regional defaults.
-              </FieldDescription>
-              <FieldError id="select-prop-error" data-select-playground-error hidden>
-                Choose an office to continue.
-              </FieldError>
-            </Field>
-          </div>
-
-          <code class="prop-readout" data-prop-readout aria-live="polite"
-            >&lt;Select variant="outline" controlSize="md" /&gt;</code
-          >
-        </div>
-
-        <dl slot="facts" class="facts">
-          <div class="fact">
-            <dt class="label">Available in</dt>
-            <dd>{select.frameworks.join(" · ")}</dd>
-          </div>
-          <div class="fact">
-            <dt class="label">Interaction</dt>
-            <dd>Native select</dd>
-          </div>
-          <div class="fact">
-            <dt class="label">Composition</dt>
-            <dd>Options + groups</dd>
-          </div>
-        </dl>
-      </ComponentPreview>
+      <SelectPreview />
 
       <ComponentSource
         component="Select"
-        generatedFamilies={["select", "field"]}
+        generatedFamilies={["select", "input", "field"]}
         previewSources={selectPreviewSources}
-        sources={selectSources}
         usageSources={selectUsageSources}
       />
     </div>
@@ -311,26 +125,33 @@ export function TeamSelect() {
       preview.querySelector<HTMLSelectElement>("[data-select-prop-variant]")?.value ?? "outline"
     const controlSize =
       preview.querySelector<HTMLSelectElement>("[data-select-prop-control-size]")?.value ?? "md"
+    const mode =
+      preview.querySelector<HTMLSelectElement>("[data-select-prop-mode]")?.value ?? "single"
     const state =
       preview.querySelector<HTMLSelectElement>("[data-select-prop-state]")?.value ?? "default"
 
-    preview.querySelectorAll<HTMLSelectElement>("[data-playground-select]").forEach((select) => {
-      const selected = select.dataset.variant === variant && select.dataset.size === controlSize
+    preview.querySelectorAll<HTMLElement>("[data-playground-select]").forEach((select) => {
+      const selected =
+        select.dataset.variant === variant &&
+        select.dataset.size === controlSize &&
+        select.dataset.mode === mode
       select.hidden = !selected
-      select.disabled = !selected || state === "disabled"
-      select.tabIndex = selected ? 0 : -1
+      select.dataset.disabled = !selected || state === "disabled" ? "true" : "false"
+
+      const trigger = select.querySelector<HTMLButtonElement>("[data-slot='select-trigger']")
+      if (!trigger) return
 
       if (selected && state === "invalid") {
-        select.setAttribute("aria-invalid", "true")
-        select.setAttribute("aria-describedby", "select-prop-error")
+        trigger.setAttribute("aria-invalid", "true")
+        trigger.setAttribute("aria-describedby", "select-prop-error")
       } else if (selected) {
-        select.removeAttribute("aria-invalid")
-        select.setAttribute("aria-describedby", "select-prop-description")
+        trigger.removeAttribute("aria-invalid")
+        trigger.setAttribute("aria-describedby", "select-prop-description")
       }
     })
 
     const label = preview.querySelector<HTMLLabelElement>("[data-select-playground-label]")
-    if (label) label.htmlFor = `select-playground-${variant}-${controlSize}`
+    if (label) label.htmlFor = `select-playground-${mode}-${variant}-${controlSize}-trigger`
 
     const description = preview.querySelector<HTMLElement>("[data-select-playground-description]")
     const error = preview.querySelector<HTMLElement>("[data-select-playground-error]")
@@ -339,9 +160,10 @@ export function TeamSelect() {
 
     const stateProp =
       state === "invalid" ? ' aria-invalid="true"' : state === "disabled" ? " disabled" : ""
+    const multipleProp = mode === "multiple" ? " multiple" : ""
     const readout = preview.querySelector<HTMLElement>("[data-prop-readout]")
     if (readout) {
-      readout.textContent = `<Select variant="${variant}" controlSize="${controlSize}"${stateProp} />`
+      readout.textContent = `<Select${multipleProp}><SelectTrigger variant="${variant}" controlSize="${controlSize}"${stateProp}>…</SelectTrigger></Select>`
     }
   }
 
@@ -359,6 +181,7 @@ export function TeamSelect() {
       [
         "[data-select-prop-variant]",
         "[data-select-prop-control-size]",
+        "[data-select-prop-mode]",
         "[data-select-prop-state]",
       ].join(",")
     )

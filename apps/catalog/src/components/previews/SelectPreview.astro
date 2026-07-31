@@ -1,0 +1,247 @@
+---
+import { Building2 } from "@lucide/astro"
+import FieldDescription from "@/ui/field/field-description.astro"
+import FieldError from "@/ui/field/field-error.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import InputAdornment from "@/ui/input/input-adornment.astro"
+import InputGroup from "@/ui/input/input-group.astro"
+import NativeSelect from "@/ui/select/native-select.astro"
+import SelectContent from "@/ui/select/select-content.astro"
+import SelectGroupLabel from "@/ui/select/select-group-label.astro"
+import SelectGroup from "@/ui/select/select-group.astro"
+import SelectOption from "@/ui/select/select-option.astro"
+import SelectTrigger from "@/ui/select/select-trigger.astro"
+import SelectValue from "@/ui/select/select-value.astro"
+import Select from "@/ui/select/select.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const select = manifest.library.components.select
+const selectSizes = ["sm", "md", "lg"] as const
+const selectVariants = ["outline", "filled", "underline"] as const
+const selectModes = ["single", "multiple"] as const
+---
+
+<ComponentPreview component="Select" hint="Arrows · Space · typeahead" requirePropsView={true}>
+  <div slot="variants" class="grid gap-8">
+    <div
+      class="grid grid-cols-2 items-start gap-6 max-[760px]:grid-cols-1"
+      aria-label="Custom select composition"
+    >
+      <Field>
+        <FieldLabel for="select-team-trigger">Team</FieldLabel>
+        <Select name="team" defaultValue="engineering">
+          <InputGroup>
+            <InputAdornment aria-hidden="true"><Building2 /></InputAdornment>
+            <SelectTrigger id="select-team-trigger" aria-describedby="select-team-description">
+              <SelectValue placeholder="Choose a team" />
+            </SelectTrigger>
+          </InputGroup>
+          <SelectContent>
+            <SelectGroup>
+              <SelectGroupLabel>Product</SelectGroupLabel>
+              <SelectOption value="design">Design</SelectOption>
+              <SelectOption value="engineering">Engineering</SelectOption>
+            </SelectGroup>
+            <SelectGroup>
+              <SelectGroupLabel>Business</SelectGroupLabel>
+              <SelectOption value="operations">Operations</SelectOption>
+              <SelectOption value="go-to-market">Go to market</SelectOption>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        <FieldDescription id="select-team-description">
+          A styled single-selection listbox.
+        </FieldDescription>
+      </Field>
+
+      <Field>
+        <FieldLabel for="select-members-trigger">Reviewers</FieldLabel>
+        <Select multiple name="reviewers" defaultValue={["alex", "mina"]}>
+          <SelectTrigger id="select-members-trigger" aria-describedby="select-members-description">
+            <SelectValue placeholder="Choose reviewers" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectGroupLabel>Available</SelectGroupLabel>
+              <SelectOption value="alex">Alex Morgan</SelectOption>
+              <SelectOption value="mina">Mina Park</SelectOption>
+              <SelectOption value="samuel">Samuel Hulla</SelectOption>
+              <SelectOption value="contractor" disabled>External contractor</SelectOption>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        <FieldDescription id="select-members-description">
+          Multiple selections stay open and submit under one name.
+        </FieldDescription>
+      </Field>
+    </div>
+
+    <div
+      class="grid grid-cols-3 items-end gap-4 border-t border-border pt-8 max-[760px]:grid-cols-1"
+      aria-label="Select trigger variants"
+    >
+      {
+        selectVariants.map((variant) => (
+          <Field>
+            <FieldLabel for={`select-variant-${variant}-trigger`}>{variant}</FieldLabel>
+            <Select defaultValue="prague">
+              <SelectTrigger id={`select-variant-${variant}-trigger`} variant={variant}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectOption value="prague">Prague · UTC+2</SelectOption>
+                <SelectOption value="london">London · UTC+1</SelectOption>
+                <SelectOption value="tokyo">Tokyo · UTC+9</SelectOption>
+              </SelectContent>
+            </Select>
+          </Field>
+        ))
+      }
+    </div>
+
+    <div
+      class="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-end gap-6 border-t border-border pt-8 max-[760px]:grid-cols-1"
+      aria-label="Native select alternative"
+    >
+      <Field>
+        <FieldLabel for="native-select-office">Native office selector</FieldLabel>
+        <NativeSelect id="native-select-office" name="office" defaultValue="prague">
+          <option value="prague">Prague · UTC+2</option>
+          <option value="london">London · UTC+1</option>
+          <option value="tokyo">Tokyo · UTC+9</option>
+        </NativeSelect>
+        <FieldDescription>Use NativeSelect when platform behavior is preferred.</FieldDescription>
+      </Field>
+
+      <Field>
+        <FieldLabel for="native-select-regions">Native regions</FieldLabel>
+        <NativeSelect id="native-select-regions" multiple size={3}>
+          <option value="europe" selected>Europe</option>
+          <option value="north-america" selected>North America</option>
+          <option value="asia-pacific">Asia Pacific</option>
+        </NativeSelect>
+        <FieldDescription>Native multiple selection remains available.</FieldDescription>
+      </Field>
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls prop-controls--select">
+      <label class="prop-control">
+        <span class="label">Variant</span>
+        <select aria-label="Select variant" data-select-prop-variant>
+          <option value="outline">Outline</option>
+          <option value="filled">Filled</option>
+          <option value="underline">Underline</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Size</span>
+        <select aria-label="Select size" data-select-prop-control-size>
+          <option value="sm">Small</option>
+          <option value="md" selected>Medium</option>
+          <option value="lg">Large</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Selection</span>
+        <select aria-label="Select selection mode" data-select-prop-mode>
+          <option value="single">Single</option>
+          <option value="multiple">Multiple</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">State</span>
+        <select aria-label="Select state" data-select-prop-state>
+          <option value="default">Default</option>
+          <option value="invalid">Invalid</option>
+          <option value="disabled">Disabled</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage playground-stage--field">
+      <Field>
+        <FieldLabel for="select-playground-single-outline-md-trigger" data-select-playground-label>
+          Office
+        </FieldLabel>
+        {
+          selectModes.map((mode) =>
+            selectVariants.map((variant) =>
+              selectSizes.map((size) => {
+                const selected = mode === "single" && variant === "outline" && size === "md"
+                const id = `select-playground-${mode}-${variant}-${size}`
+                return (
+                  <Select
+                    multiple={mode === "multiple"}
+                    defaultValue={mode === "multiple" ? ["prague", "london"] : "prague"}
+                    data-playground-select
+                    data-mode={mode}
+                    data-variant={variant}
+                    data-size={size}
+                    data-disabled={selected ? "false" : "true"}
+                    hidden={!selected}
+                  >
+                    <SelectTrigger
+                      id={`${id}-trigger`}
+                      variant={variant}
+                      controlSize={size}
+                      aria-describedby={selected ? "select-prop-description" : undefined}
+                    >
+                      <SelectValue placeholder="Choose an office" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectGroupLabel>Europe</SelectGroupLabel>
+                        <SelectOption value="prague">Prague · UTC+2</SelectOption>
+                        <SelectOption value="london">London · UTC+1</SelectOption>
+                      </SelectGroup>
+                      <SelectGroup>
+                        <SelectGroupLabel>Asia Pacific</SelectGroupLabel>
+                        <SelectOption value="tokyo">Tokyo · UTC+9</SelectOption>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                )
+              })
+            )
+          )
+        }
+        <FieldDescription id="select-prop-description" data-select-playground-description>
+          Used for dates, times, and regional defaults.
+        </FieldDescription>
+        <FieldError id="select-prop-error" data-select-playground-error hidden>
+          Choose an office to continue.
+        </FieldError>
+      </Field>
+    </div>
+
+    <code class="prop-readout" data-prop-readout aria-live="polite"
+      >&lt;Select&gt;…&lt;/Select&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{select.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Selection</dt>
+      <dd>Single + multiple</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Composition</dt>
+      <dd>Groups · labels · options</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Alternative</dt>
+      <dd>NativeSelect</dd>
+    </div>
+  </dl>
+</ComponentPreview>

@@ -1,0 +1,19 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"span"> & {
+  placeholder?: string
+}
+
+const { class: className, placeholder = "", ...props } = Astro.props as Props
+---
+
+<span
+  {...props}
+  data-placeholder={placeholder}
+  data-slot="select-value"
+  class={cn("min-w-0 flex-1 truncate data-[state=placeholder]:text-muted-foreground", className)}
+>
+  <slot>{placeholder}</slot>
+</span>
