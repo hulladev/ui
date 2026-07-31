@@ -1,0 +1,140 @@
+---
+import astroCalendarSource from "../../../../../generated/astro/calendar/calendar.astro?raw"
+import reactCalendarSource from "../../../../../generated/react/calendar/calendar.tsx?raw"
+import { calendarPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import CalendarPreview from "../previews/CalendarPreview.astro"
+
+const sources = [
+  {
+    code: astroCalendarSource,
+    filename: "generated/astro/calendar/calendar.astro",
+    framework: "Astro · Calendar",
+    language: "astro" as const,
+  },
+  {
+    code: reactCalendarSource,
+    filename: "generated/react/calendar/calendar.tsx",
+    framework: "React · Calendar",
+    language: "tsx" as const,
+  },
+]
+
+const usageSources = [
+  {
+    code: `---
+import Calendar from "@/ui/calendar/calendar.astro"
+---
+
+<Calendar
+  selectionMode="range"
+  defaultValue={{ start: "2026-07-30", end: "2026-08-04" }}
+/>`,
+    filename: "src/components/availability-calendar.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Calendar } from "@/ui/calendar"
+
+export function AvailabilityCalendar() {
+  return (
+    <Calendar
+      selectionMode="range"
+      defaultValue={{ start: "2026-07-30", end: "2026-08-04" }}
+    />
+  )
+}`,
+    filename: "src/components/availability-calendar.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="calendar" aria-labelledby="calendar-section-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Form / Date and time</p>
+      <h2 id="calendar-section-title">Calendar</h2>
+    </div>
+    <span class="status">ISO values · no date dependency</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Calendar component preview">
+    <div class="workbench workbench--calendar">
+      <CalendarPreview />
+
+      <ComponentSource
+        component="Calendar"
+        generatedFamilies={["calendar"]}
+        previewSources={calendarPreviewSources}
+        sources={sources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  type CalendarValue = string | { start: string; end?: string } | null
+  type CalendarElement = HTMLElement & {
+    refresh: () => void
+    value: CalendarValue
+  }
+
+  const unavailableDates = JSON.stringify([
+    { start: "2026-07-20", end: "2026-07-22" },
+    "2026-07-26",
+  ])
+
+  const syncCalendarPlayground = (preview: HTMLElement, resetSelection = false) => {
+    const calendar = preview.querySelector<CalendarElement>("[data-playground-calendar]")
+    const selection = preview.querySelector<HTMLSelectElement>("[data-calendar-selection-mode]")
+    const weekStart = preview.querySelector<HTMLSelectElement>("[data-calendar-week-start]")
+    const disabled = preview.querySelector<HTMLInputElement>("[data-calendar-disabled-dates]")
+    if (!calendar || !selection || !weekStart || !disabled) return
+
+    const previousMode = calendar.dataset.selectionMode
+    calendar.dataset.selectionMode = selection.value
+    calendar.dataset.weekStartsOn = weekStart.value
+    calendar.dataset.disabledDates = disabled.checked ? unavailableDates : "[]"
+    calendar.refresh()
+
+    if (resetSelection || previousMode !== selection.value) {
+      calendar.value =
+        selection.value === "range" ? { start: "2026-07-28", end: "2026-08-02" } : "2026-07-30"
+    }
+
+    const readout = preview.querySelector<HTMLElement>("[data-calendar-readout]")
+    if (readout) {
+      const value = JSON.stringify(calendar.value)
+      readout.textContent = `<Calendar selectionMode="${selection.value}" value={${value}} weekStartsOn={${weekStart.value}} />`
+    }
+  }
+
+  document.addEventListener("previewmodechange", (event) => {
+    const preview = (event.target as HTMLElement).closest<HTMLElement>(
+      '[data-preview-component="calendar-preview"]'
+    )
+    if (preview && (event as CustomEvent<{ mode?: string }>).detail.mode === "props") {
+      syncCalendarPlayground(preview)
+    }
+  })
+
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      "[data-calendar-selection-mode], [data-calendar-week-start], [data-calendar-disabled-dates]"
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="calendar-preview"]')
+    if (preview) syncCalendarPlayground(preview, control?.matches("[data-calendar-selection-mode]"))
+  })
+
+  document.addEventListener("hulla-calendar-value-change", (event) => {
+    const calendar = event.target as HTMLElement
+    const preview = calendar.closest<HTMLElement>('[data-preview-component="calendar-preview"]')
+    if (preview && calendar.matches("[data-playground-calendar]")) {
+      syncCalendarPlayground(preview)
+    }
+  })
+</script>

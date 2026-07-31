@@ -1,0 +1,110 @@
+---
+import Calendar from "@/ui/calendar/calendar.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const calendar = manifest.library.components.calendar
+const unavailableDates = [{ start: "2026-07-20", end: "2026-07-22" }, "2026-07-26"] as const
+---
+
+<ComponentPreview
+  component="Calendar"
+  hint="← ↑ → ↓ · PgUp · Shift PgUp"
+  requirePropsView={true}
+  variantsLabel="Selection modes"
+>
+  <div slot="variants" class="grid gap-6">
+    <div class="grid content-start gap-3">
+      <div class="flex items-baseline justify-between gap-3">
+        <span class="font-mono text-[0.6875rem] font-medium tracking-[0.1em] uppercase"
+          >Single date</span
+        >
+        <span class="text-xs text-muted-foreground">ISO value · localized display</span>
+      </div>
+      <Calendar
+        defaultValue="2026-07-30"
+        today="2026-07-30"
+        class="mx-auto border border-border bg-surface shadow-xs"
+      />
+    </div>
+
+    <div class="grid content-start gap-3">
+      <div class="flex items-baseline justify-between gap-3">
+        <span class="font-mono text-[0.6875rem] font-medium tracking-[0.1em] uppercase"
+          >Date range</span
+        >
+        <span class="text-xs text-muted-foreground">Unavailable dates included</span>
+      </div>
+      <Calendar
+        selectionMode="range"
+        defaultValue={{ start: "2026-07-28", end: "2026-08-02" }}
+        disabledDates={unavailableDates}
+        today="2026-07-30"
+        class="mx-auto border border-border bg-surface shadow-xs"
+      />
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Selection</span>
+        <select aria-label="Calendar selection mode" data-calendar-selection-mode>
+          <option value="single" selected>Single</option>
+          <option value="range">Range</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Week starts</span>
+        <select aria-label="First day of week" data-calendar-week-start>
+          <option value="1" selected>Monday</option>
+          <option value="0">Sunday</option>
+          <option value="6">Saturday</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="prop-controls prop-controls--toggles">
+      <label class="prop-disabled">
+        <input type="checkbox" checked data-calendar-disabled-dates />
+        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <span class="label">Unavailable dates</span>
+      </label>
+    </div>
+
+    <div class="playground-stage block">
+      <Calendar
+        defaultValue="2026-07-30"
+        today="2026-07-30"
+        weekStartsOn={1}
+        disabledDates={unavailableDates}
+        data-playground-calendar
+        class="mx-auto border border-border bg-surface shadow-sm"
+      />
+    </div>
+
+    <code class="prop-readout" data-calendar-readout aria-live="polite"
+      >&lt;Calendar defaultValue="2026-07-30" weekStartsOn={1} /&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{calendar.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Selection</dt>
+      <dd>single · range</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Value contract</dt>
+      <dd>ISO date · local date-time</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">State hooks</dt>
+      <dd>selected · range · today · unavailable</dd>
+    </div>
+  </dl>
+</ComponentPreview>

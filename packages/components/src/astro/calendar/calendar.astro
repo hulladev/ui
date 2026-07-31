@@ -1,0 +1,235 @@
+---
+import {
+  createCalendarView,
+  serializeCalendarValue,
+  type CalendarDateRange,
+  type CalendarDisabledDate,
+  type CalendarValue,
+} from "@/lib/calendar"
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type CalendarBaseProps = Omit<HTMLAttributes<"div">, "defaultValue"> & {
+  defaultMonth?: string
+  disabledDates?: readonly CalendarDisabledDate[]
+  locale?: string
+  max?: string
+  min?: string
+  month?: string
+  today?: string
+  weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6
+}
+
+type SingleCalendarProps = {
+  defaultValue?: string | null
+  selectionMode?: "single"
+  value?: string | null
+}
+
+type RangeCalendarProps = {
+  defaultValue?: CalendarDateRange | null
+  selectionMode: "range"
+  value?: CalendarDateRange | null
+}
+
+type Props = CalendarBaseProps & (SingleCalendarProps | RangeCalendarProps)
+
+const {
+  "aria-label": ariaLabel = "Calendar",
+  class: className,
+  defaultMonth,
+  defaultValue,
+  disabledDates,
+  locale,
+  max,
+  min,
+  month,
+  selectionMode = "single",
+  today,
+  value,
+  weekStartsOn,
+  ...props
+} = Astro.props as Props
+
+const initialValue = (value ?? defaultValue ?? null) as CalendarValue
+const view = createCalendarView({
+  disabledDates,
+  locale,
+  max,
+  min,
+  month: month ?? defaultMonth,
+  selectionMode,
+  today,
+  value: initialValue,
+  weekStartsOn,
+})
+const selectedDate =
+  typeof initialValue === "string" ? initialValue : (initialValue?.start ?? undefined)
+const initialFocus =
+  selectedDate ??
+  (today?.slice(0, 7) === view.month ? today : undefined) ??
+  view.days.find((day) => !day.disabled && !day.outside)?.date ??
+  view.days.find((day) => !day.disabled)?.date
+
+const dayClassName =
+  "relative isolate grid h-9 w-full place-items-center border-0 bg-transparent p-0 text-[0.8125rem] font-medium tabular-nums text-foreground transition-[background-color,color,box-shadow,transform] duration-100 ease-out after:pointer-events-none after:absolute after:bottom-1 after:left-1/2 after:size-1 after:-translate-x-1/2 after:rounded-full after:bg-transparent after:content-[''] hover:z-10 hover:bg-foreground/[0.065] active:scale-[0.94] focus-visible:z-20 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-focus-ring disabled:pointer-events-none disabled:text-muted-foreground/30 disabled:line-through disabled:decoration-current/45 motion-reduce:transition-none data-[outside=true]:text-muted-foreground/45 data-[today=true]:after:bg-primary group-data-[selection-mode=single]/calendar:data-[selected=true]:rounded-md group-data-[selection-mode=single]/calendar:data-[selected=true]:bg-primary group-data-[selection-mode=single]/calendar:data-[selected=true]:text-primary-foreground group-data-[selection-mode=single]/calendar:data-[selected=true]:shadow-sm group-data-[selection-mode=single]/calendar:data-[selected=true]:after:bg-primary-foreground data-[in-range=true]:rounded-none data-[in-range=true]:bg-primary/12 data-[range-preview=true]:rounded-none data-[range-preview=true]:bg-primary/[0.07] data-[range-start=true]:z-10 data-[range-start=true]:rounded-l-md data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-start=true]:shadow-sm data-[range-start=true]:after:bg-primary-foreground data-[range-end=true]:z-10 data-[range-end=true]:rounded-r-md data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-end=true]:shadow-sm data-[range-end=true]:after:bg-primary-foreground data-[range-start=true][data-range-end=true]:rounded-md dark:data-[in-range=true]:bg-primary/18 dark:data-[range-preview=true]:bg-primary/10"
+---
+
+<hulla-calendar
+  {...props}
+  aria-label={ariaLabel}
+  data-disabled-dates={disabledDates ? JSON.stringify(disabledDates) : undefined}
+  data-initial-value={serializeCalendarValue(initialValue)}
+  data-locale={locale}
+  data-max={max}
+  data-min={min}
+  data-month={view.month}
+  data-selection-mode={selectionMode}
+  data-slot="calendar"
+  data-today={today}
+  data-week-starts-on={weekStartsOn}
+  class={cn(
+    "group/calendar block w-[18.5rem] min-w-[18.5rem] select-none rounded-lg bg-surface-raised p-3 text-sm text-foreground antialiased",
+    className
+  )}
+>
+  <div data-slot="calendar-header" class="mb-2 flex h-9 items-center justify-between gap-2">
+    <button
+      type="button"
+      aria-label="Previous month"
+      data-slot="calendar-previous"
+      class="grid size-8 place-items-center rounded-md border border-transparent bg-transparent text-muted-foreground transition-[background-color,color,transform] duration-100 hover:bg-foreground/[0.06] hover:text-foreground active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus-ring disabled:pointer-events-none disabled:opacity-30 motion-reduce:transition-none"
+    >
+      <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" class="size-4">
+        <path
+          d="m10 3-5 5 5 5"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </button>
+
+    <div
+      data-slot="calendar-heading"
+      aria-live="polite"
+      class="min-w-0 flex-1 text-center text-[0.8125rem] font-semibold tracking-[-0.01em]"
+    >
+      {view.heading}
+    </div>
+
+    <button
+      type="button"
+      aria-label="Next month"
+      data-slot="calendar-next"
+      class="grid size-8 place-items-center rounded-md border border-transparent bg-transparent text-muted-foreground transition-[background-color,color,transform] duration-100 hover:bg-foreground/[0.06] hover:text-foreground active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus-ring disabled:pointer-events-none disabled:opacity-30 motion-reduce:transition-none"
+    >
+      <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" class="size-4">
+        <path
+          d="m6 3 5 5-5 5"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </button>
+  </div>
+
+  <table
+    role="grid"
+    data-slot="calendar-grid"
+    class="w-full table-fixed border-separate border-spacing-0"
+  >
+    <thead>
+      <tr>
+        {
+          view.weekdays.map((weekday) => (
+            <th
+              scope="col"
+              aria-label={weekday.longLabel}
+              title={weekday.longLabel}
+              data-slot="calendar-weekday"
+              class="h-7 p-0 text-center text-[0.625rem] font-semibold tracking-[0.08em] text-muted-foreground/75 uppercase"
+            >
+              {weekday.label}
+            </th>
+          ))
+        }
+      </tr>
+    </thead>
+    <tbody>
+      {
+        Array.from({ length: 6 }, (_, weekIndex) => (
+          <tr>
+            {view.days.slice(weekIndex * 7, weekIndex * 7 + 7).map((day) => (
+              <td role="gridcell" class="p-0 text-center">
+                <button
+                  type="button"
+                  aria-current={day.today ? "date" : undefined}
+                  aria-label={day.date}
+                  aria-selected={day.selected}
+                  disabled={day.disabled}
+                  tabindex={day.date === initialFocus && !day.disabled ? 0 : -1}
+                  data-date={day.date}
+                  data-in-range={day.inRange ? "true" : undefined}
+                  data-outside={day.outside ? "true" : undefined}
+                  data-range-end={day.rangeEnd ? "true" : undefined}
+                  data-range-start={day.rangeStart ? "true" : undefined}
+                  data-selected={day.selected ? "true" : undefined}
+                  data-slot="calendar-day"
+                  data-today={day.today ? "true" : undefined}
+                  class={dayClassName}
+                >
+                  {day.day}
+                </button>
+              </td>
+            ))}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</hulla-calendar>
+
+<script>
+  import { connectCalendar, type CalendarController, type CalendarValue } from "@/lib/calendar"
+
+  const elementName = "hulla-calendar"
+
+  if (!customElements.get(elementName)) {
+    class HullaCalendarElement extends HTMLElement {
+      controller: CalendarController | undefined
+
+      connectedCallback() {
+        this.controller ??= connectCalendar(this)
+      }
+
+      disconnectedCallback() {
+        this.controller?.destroy()
+        this.controller = undefined
+      }
+
+      get value(): CalendarValue {
+        return this.controller?.getValue() ?? null
+      }
+
+      set value(value: CalendarValue) {
+        this.controller?.setValue(value)
+      }
+
+      get month(): string {
+        return this.controller?.getMonth() ?? this.dataset.month ?? ""
+      }
+
+      set month(value: string) {
+        this.controller?.setMonth(value)
+      }
+
+      refresh() {
+        this.controller?.refresh()
+      }
+    }
+
+    customElements.define(elementName, HullaCalendarElement)
+  }
+</script>
