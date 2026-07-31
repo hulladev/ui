@@ -1,0 +1,113 @@
+---
+import { treeViewPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import TreeViewPreview from "../previews/TreeViewPreview.astro"
+
+const usageSources = [
+  {
+    code: `---
+import TreeGroup from "@/ui/tree-view/tree-group.astro"
+import TreeItemLabel from "@/ui/tree-view/tree-item-label.astro"
+import TreeItem from "@/ui/tree-view/tree-item.astro"
+import TreeView from "@/ui/tree-view/tree-view.astro"
+---
+
+<TreeView aria-label="Files" defaultValue="index">
+  <TreeItem value="src" defaultExpanded>
+    <TreeItemLabel>src</TreeItemLabel>
+    <TreeGroup>
+      <TreeItem value="index">
+        <TreeItemLabel>index.ts</TreeItemLabel>
+      </TreeItem>
+    </TreeGroup>
+  </TreeItem>
+</TreeView>`,
+    filename: "src/components/file-tree.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import {
+  TreeGroup,
+  TreeItem,
+  TreeItemLabel,
+  TreeView,
+} from "@/ui/tree-view"
+
+export function RepositoryTree() {
+  return (
+    <TreeView aria-label="Files" defaultValue="index">
+      <TreeItem value="src" defaultExpanded>
+        <TreeItemLabel>src</TreeItemLabel>
+        <TreeGroup>
+          <TreeItem value="index">
+            <TreeItemLabel>index.ts</TreeItemLabel>
+          </TreeItem>
+        </TreeGroup>
+      </TreeItem>
+    </TreeView>
+  )
+}`,
+    filename: "src/components/file-tree.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="tree-view" aria-labelledby="tree-view-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Navigation</p>
+      <h2 id="tree-view-title">Tree View</h2>
+    </div>
+    <span class="status">Hierarchical focus</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Tree View component preview">
+    <div class="workbench">
+      <TreeViewPreview />
+
+      <ComponentSource
+        component="TreeView"
+        generatedFamilies={["tree-view"]}
+        previewSources={treeViewPreviewSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncTreePlayground = (preview: HTMLElement) => {
+    const tree = preview.querySelector<HTMLElement>("[data-playground-tree]")
+    const selectionMode =
+      preview.querySelector<HTMLSelectElement>("[data-tree-selection-mode]")?.value ?? "single"
+    if (!tree) return
+
+    tree.dataset.selectionMode = selectionMode
+
+    const readout = preview.querySelector<HTMLElement>("[data-tree-readout]")
+    if (readout) {
+      readout.textContent = `<TreeView selectionMode="${selectionMode}" defaultValue="design">…</TreeView>`
+    }
+  }
+
+  document.addEventListener("change", (event) => {
+    const preview = (event.target as HTMLElement).closest<HTMLElement>(
+      '[data-preview-component="treeview-preview"]'
+    )
+    if (preview) syncTreePlayground(preview)
+  })
+
+  document.addEventListener("hulla-tree-view-value-change", (event) => {
+    const target = event.target as HTMLElement
+    const preview = target.closest<HTMLElement>('[data-preview-component="treeview-preview"]')
+    if (!preview || target.matches("[data-playground-tree]")) return
+
+    const selection = preview.querySelector<HTMLElement>("[data-tree-selection]")
+    if (selection) {
+      selection.textContent = (event as CustomEvent<{ value: string }>).detail.value
+    }
+  })
+</script>

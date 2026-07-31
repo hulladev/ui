@@ -1,0 +1,26 @@
+import { cn } from "@/lib/style"
+import type { ComponentPropsWithRef } from "react"
+
+export type TreeItemLabelProps = ComponentPropsWithRef<"span">
+
+export function TreeItemLabel({ children, className, ...props }: TreeItemLabelProps) {
+  return (
+    <span
+      {...props}
+      data-slot="tree-item-label"
+      className={cn(
+        "flex min-h-8 min-w-0 cursor-default select-none items-center gap-2 rounded-sm px-2 text-sm text-muted-foreground transition-[background-color,color] duration-100 hover:bg-foreground/[0.05] hover:text-foreground motion-reduce:transition-none [&_svg]:size-4 [&_svg]:shrink-0",
+        className
+      )}
+    >
+      <span
+        aria-hidden="true"
+        data-slot="tree-item-indicator"
+        className="inline-flex size-3.5 shrink-0 items-center justify-center text-muted-foreground opacity-0 transition-[transform,opacity] duration-150 motion-reduce:transition-none"
+      >
+        ›
+      </span>
+      {children}
+    </span>
+  )
+}

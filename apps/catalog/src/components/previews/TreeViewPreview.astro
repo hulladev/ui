@@ -1,0 +1,137 @@
+---
+import TreeGroup from "@/ui/tree-view/tree-group.astro"
+import TreeItemLabel from "@/ui/tree-view/tree-item-label.astro"
+import TreeItem from "@/ui/tree-view/tree-item.astro"
+import TreeView from "@/ui/tree-view/tree-view.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const treeView = manifest.library.components["tree-view"]
+---
+
+<ComponentPreview
+  component="TreeView"
+  hint="Arrow keys · selection · disclosure"
+  propsLabel="Selection model"
+  requirePropsView={true}
+>
+  <div slot="variants" class="grid gap-4">
+    <section
+      class="grid grid-cols-[minmax(0,1fr)_minmax(13rem,0.65fr)] overflow-hidden rounded-lg border border-border bg-surface-raised shadow-xs max-[700px]:grid-cols-1"
+    >
+      <div class="border-r border-border p-4 max-[700px]:border-r-0 max-[700px]:border-b">
+        <div class="mb-3 flex items-baseline justify-between gap-4 px-2">
+          <div>
+            <span class="font-mono text-[0.6875rem] tracking-wider text-primary uppercase"
+              >Repository</span
+            >
+            <h3 class="m-0 mt-1 text-sm font-semibold">hulla/ui</h3>
+          </div>
+          <span class="font-mono text-[0.6875rem] text-muted-foreground">main</span>
+        </div>
+
+        <TreeView aria-label="Repository files" defaultValue="button.tsx">
+          <TreeItem value="apps" defaultExpanded>
+            <TreeItemLabel><span aria-hidden="true">◇</span> apps</TreeItemLabel>
+            <TreeGroup>
+              <TreeItem value="catalog" defaultExpanded>
+                <TreeItemLabel><span aria-hidden="true">◇</span> catalog</TreeItemLabel>
+                <TreeGroup>
+                  <TreeItem value="index.astro">
+                    <TreeItemLabel><span aria-hidden="true">·</span> index.astro</TreeItemLabel>
+                  </TreeItem>
+                </TreeGroup>
+              </TreeItem>
+            </TreeGroup>
+          </TreeItem>
+          <TreeItem value="packages" defaultExpanded>
+            <TreeItemLabel><span aria-hidden="true">◇</span> packages</TreeItemLabel>
+            <TreeGroup>
+              <TreeItem value="components" defaultExpanded>
+                <TreeItemLabel><span aria-hidden="true">◇</span> components</TreeItemLabel>
+                <TreeGroup>
+                  <TreeItem value="button.tsx">
+                    <TreeItemLabel>
+                      <span class="text-primary" aria-hidden="true">◆</span> button.tsx
+                    </TreeItemLabel>
+                  </TreeItem>
+                  <TreeItem value="toggle.tsx">
+                    <TreeItemLabel><span aria-hidden="true">◆</span> toggle.tsx</TreeItemLabel>
+                  </TreeItem>
+                  <TreeItem value="tree-view.tsx" aria-disabled="true">
+                    <TreeItemLabel><span aria-hidden="true">◆</span> tree-view.tsx</TreeItemLabel>
+                  </TreeItem>
+                </TreeGroup>
+              </TreeItem>
+            </TreeGroup>
+          </TreeItem>
+          <TreeItem value="readme">
+            <TreeItemLabel><span aria-hidden="true">·</span> README.md</TreeItemLabel>
+          </TreeItem>
+        </TreeView>
+      </div>
+
+      <aside class="grid content-start gap-4 bg-foreground/[0.025] p-5" aria-label="Selected file">
+        <div class="grid gap-1">
+          <span class="font-mono text-[0.6875rem] tracking-wider text-muted-foreground uppercase"
+            >Selected</span
+          >
+          <strong class="text-sm" data-tree-selection>button.tsx</strong>
+        </div>
+        <div class="grid gap-2 font-mono text-[0.6875rem] text-muted-foreground">
+          <span>12.4 KB</span>
+          <span>TypeScript React</span>
+          <span>Modified 4m ago</span>
+        </div>
+      </aside>
+    </section>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Selection</span>
+        <select aria-label="Tree selection mode" data-tree-selection-mode>
+          <option value="single" selected>Single</option>
+          <option value="none">None</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage">
+      <TreeView
+        class="w-64 max-w-full rounded-md border border-border bg-surface p-2 shadow-xs [&_[data-slot=tree-item-label]]:min-h-7 [&_[data-slot=tree-item-label]]:font-mono [&_[data-slot=tree-item-label]]:text-xs"
+        aria-label="Workspace tree"
+        defaultValue="design"
+        data-playground-tree
+      >
+        <TreeItem value="workspace" defaultExpanded>
+          <TreeItemLabel>Workspace</TreeItemLabel>
+          <TreeGroup>
+            <TreeItem value="design"><TreeItemLabel>Design</TreeItemLabel></TreeItem>
+            <TreeItem value="engineering"><TreeItemLabel>Engineering</TreeItemLabel></TreeItem>
+          </TreeGroup>
+        </TreeItem>
+      </TreeView>
+    </div>
+
+    <code class="prop-readout" data-tree-readout aria-live="polite"
+      >&lt;TreeView selectionMode="single" defaultValue="design"&gt;…&lt;/TreeView&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{treeView.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Native structure</dt>
+      <dd>ul · li · nested lists</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Keyboard model</dt>
+      <dd>TreeView · APG tree keys</dd>
+    </div>
+  </dl>
+</ComponentPreview>
