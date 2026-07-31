@@ -1,6 +1,12 @@
 import { vn, cn } from "@/lib/style"
 import { connectDialog, onDialogDismiss, type DialogDismissReason } from "@/lib/dialog"
-import { useEffect, useRef, type ComponentPropsWithoutRef } from "react"
+import {
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  type ComponentPropsWithRef,
+  type CSSProperties,
+} from "react"
 
 const $overlayVariant = vn({
   compact: "p-4",
@@ -15,7 +21,9 @@ const $variant = vn({
   fullscreen: "flex h-dvh max-w-none flex-col rounded-none border-0 shadow-none",
 })
 
-export type DialogProps = Omit<ComponentPropsWithoutRef<"div">, "onDismiss"> & {
+export type DialogProps = Omit<ComponentPropsWithRef<"div">, "onDismiss"> & {
+  contentClassName?: string
+  contentStyle?: CSSProperties
   dismissible?: boolean
   onDismiss?: (reason: DialogDismissReason) => void
   variant?: typeof $variant.infer
@@ -25,6 +33,8 @@ export function Dialog({
   "aria-modal": ariaModal = true,
   children,
   className,
+  contentClassName,
+  contentStyle,
   dismissible = true,
   hidden = false,
   onDismiss,
@@ -35,6 +45,7 @@ export function Dialog({
   ...props
 }: DialogProps) {
   const elementRef = useRef<HTMLDivElement>(null)
+  useImperativeHandle(props.ref, () => elementRef.current as HTMLDivElement, [])
   const onDismissRef = useRef(onDismiss)
   onDismissRef.current = onDismiss
 
@@ -67,21 +78,23 @@ export function Dialog({
       tabIndex={tabIndex}
       style={{
         zIndex: "calc(var(--hulla-layer-base, 1000) + var(--hulla-layer-order, 0))",
+        ...style,
       }}
       className={cn(
         "fixed inset-0 grid max-h-dvh place-items-center overflow-y-auto overscroll-contain bg-foreground/40 backdrop-blur-[3px] focus:outline-none motion-reduce:backdrop-blur-none dark:bg-background/72 dark:backdrop-blur-[8px] [&[hidden]]:hidden",
-        $overlayVariant(variant)
+        $overlayVariant(variant),
+        className
       )}
     >
       <div
         data-slot="dialog"
         data-variant={variant}
         tabIndex={-1}
-        style={style}
+        style={contentStyle}
         className={cn(
           "group/dialog relative my-auto w-full overflow-hidden bg-surface-raised text-foreground focus:outline-none",
           $variant(variant),
-          className
+          contentClassName
         )}
       >
         {children}

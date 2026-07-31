@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type DialogFooterProps = ComponentPropsWithoutRef<"div">
+export type DialogFooterProps = ComponentPropsWithRef<"div">
 
 export function DialogFooter({ children, className, ...props }: DialogFooterProps) {
   return (

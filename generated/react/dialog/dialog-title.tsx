@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type DialogTitleProps = ComponentPropsWithoutRef<"h2">
+export type DialogTitleProps = ComponentPropsWithRef<"h2">
 
 export function DialogTitle({ children, className, ...props }: DialogTitleProps) {
   return (

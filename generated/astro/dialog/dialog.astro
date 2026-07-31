@@ -16,6 +16,8 @@ const $variant = vn({
 })
 
 type Props = HTMLAttributes<"div"> & {
+  contentClass?: string
+  contentStyle?: HTMLAttributes<"div">["style"]
   dismissible?: boolean
   variant?: typeof $variant.infer
 }
@@ -23,6 +25,8 @@ type Props = HTMLAttributes<"div"> & {
 const {
   "aria-modal": ariaModal = true,
   class: className,
+  contentClass,
+  contentStyle,
   dismissible = true,
   hidden = false,
   role = "dialog",
@@ -45,8 +49,10 @@ const {
   tabindex={tabindex}
   class={cn(
     "fixed inset-0 z-[calc(var(--hulla-layer-base,1000)+var(--hulla-layer-order,0))] grid max-h-dvh place-items-center overflow-y-auto overscroll-contain bg-foreground/40 backdrop-blur-[3px] focus:outline-none motion-reduce:backdrop-blur-none dark:bg-background/72 dark:backdrop-blur-[8px] [&[hidden]]:hidden",
-    $overlayVariant(variant)
+    $overlayVariant(variant),
+    className
   )}
+  style={style}
 >
   <div
     data-slot="dialog"
@@ -55,9 +61,9 @@ const {
     class={cn(
       "group/dialog relative my-auto w-full overflow-hidden bg-surface-raised text-foreground focus:outline-none",
       $variant(variant),
-      className
+      contentClass
     )}
-    style={style}
+    style={contentStyle}
   >
     <slot />
   </div>

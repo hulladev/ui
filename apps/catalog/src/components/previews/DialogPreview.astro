@@ -1,0 +1,204 @@
+---
+import Button from "@/ui/button/button.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const dialog = manifest.library.components.dialog
+---
+
+<ComponentPreview component="Dialog" hint="Escape closes the top layer" requirePropsView={true}>
+  <div slot="variants" class="grid gap-7">
+    <div class="grid grid-cols-3 gap-3 max-[760px]:grid-cols-1" aria-label="Dialog variants">
+      <div
+        class="grid min-w-0 grid-rows-[auto_1fr_auto] gap-4 rounded-lg border border-border bg-surface p-3.5 shadow-xs max-[760px]:grid-cols-[7.5rem_minmax(0,1fr)] max-[760px]:grid-rows-[auto_auto]"
+      >
+        <div
+          class="relative grid h-25 place-items-center overflow-hidden rounded-md border border-border bg-background"
+          aria-hidden="true"
+        >
+          <span
+            class="relative block h-[46%] w-[52%] rounded-[3px] border border-primary/35 bg-surface-raised shadow-lg"
+          ></span>
+        </div>
+        <div class="grid content-start gap-1">
+          <span class="font-mono text-xs font-medium tracking-wider uppercase"
+            >compact / default</span
+          >
+          <strong class="text-sm tracking-tight">Focused decisions</strong>
+          <p class="m-0 text-xs leading-5 text-muted-foreground">
+            Confirmations, forms, and short interactions.
+          </p>
+        </div>
+        <Button class="w-full max-[760px]:col-span-full" data-open-catalog-dialog>
+          Open compact
+        </Button>
+      </div>
+
+      <div
+        class="grid min-w-0 grid-rows-[auto_1fr_auto] gap-4 rounded-lg border border-border bg-surface p-3.5 shadow-xs max-[760px]:grid-cols-[7.5rem_minmax(0,1fr)] max-[760px]:grid-rows-[auto_auto]"
+      >
+        <div
+          class="grid h-25 grid-cols-[27%_1fr] place-items-stretch overflow-hidden rounded-md border border-border bg-background p-2.5"
+          aria-hidden="true"
+        >
+          <span class="block rounded-l-[3px] border border-primary/35 bg-surface"></span>
+          <span class="block rounded-r-[3px] border border-l-0 border-primary/35 bg-surface-raised"
+          ></span>
+        </div>
+        <div class="grid content-start gap-1">
+          <span class="font-mono text-xs font-medium tracking-wider uppercase">workspace</span>
+          <strong class="text-sm tracking-tight">Layered tools</strong>
+          <p class="m-0 text-xs leading-5 text-muted-foreground">
+            Dense, navigable workflows that preserve page context.
+          </p>
+        </div>
+        <Button
+          class="w-full max-[760px]:col-span-full"
+          variant="secondary"
+          data-open-workspace-dialog
+        >
+          Open workspace
+        </Button>
+      </div>
+
+      <div
+        class="grid min-w-0 grid-rows-[auto_1fr_auto] gap-4 rounded-lg border border-border bg-surface p-3.5 shadow-xs max-[760px]:grid-cols-[7.5rem_minmax(0,1fr)] max-[760px]:grid-rows-[auto_auto]"
+      >
+        <div
+          class="grid h-25 grid-rows-[0.45rem_1fr_0.45rem] place-items-stretch overflow-hidden rounded-md border border-border bg-background"
+          aria-hidden="true"
+        >
+          <span class="block border-y border-primary/35 bg-surface-raised"></span>
+          <span class="block bg-surface"></span>
+          <span class="block border-y border-primary/35 bg-surface-raised"></span>
+        </div>
+        <div class="grid content-start gap-1">
+          <span class="font-mono text-xs font-medium tracking-wider uppercase">fullscreen</span>
+          <strong class="text-sm tracking-tight">Immersive work</strong>
+          <p class="m-0 text-xs leading-5 text-muted-foreground">
+            Viewport-scale flows with page-like hierarchy.
+          </p>
+        </div>
+        <Button
+          class="w-full max-[760px]:col-span-full"
+          variant="outline"
+          data-open-fullscreen-dialog
+        >
+          Open fullscreen
+        </Button>
+      </div>
+    </div>
+
+    <div class="overflow-hidden rounded-lg border border-border bg-surface shadow-xs">
+      <div class="flex items-center justify-between gap-4 border-b border-border px-4 py-3">
+        <span class="font-mono text-xs font-medium tracking-wider uppercase"
+          >Deterministic layer ledger</span
+        >
+        <span class="font-mono text-xs text-primary" data-overlay-layer-count>
+          0 active layers
+        </span>
+      </div>
+
+      <div class="grid gap-2.5 p-4" aria-label="Layer ordering">
+        <div
+          class="ml-8 grid w-[calc(100%_-_2rem)] grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-3.5 rounded-md border border-primary/40 bg-surface-raised px-3.5 py-3 shadow-xs max-[760px]:ml-0 max-[760px]:w-auto"
+        >
+          <span class="font-mono text-xs tracking-wider text-primary uppercase">02</span>
+          <span class="grid min-w-0 gap-0.5">
+            <strong class="overflow-hidden text-sm font-semibold text-ellipsis whitespace-nowrap">
+              Nested dialog
+            </strong>
+            <small
+              class="overflow-hidden text-xs text-ellipsis whitespace-nowrap text-muted-foreground"
+            >
+              Registered last · dismisses first
+            </small>
+          </span>
+          <span class="font-mono text-xs tracking-wider text-primary uppercase">top</span>
+        </div>
+        <div
+          class="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-3.5 rounded-md border border-border bg-surface-raised px-3.5 py-3 shadow-xs"
+        >
+          <span class="font-mono text-xs tracking-wider text-primary uppercase">01</span>
+          <span class="grid min-w-0 gap-0.5">
+            <strong class="overflow-hidden text-sm font-semibold text-ellipsis whitespace-nowrap">
+              Dialog surface
+            </strong>
+            <small
+              class="overflow-hidden text-xs text-ellipsis whitespace-nowrap text-muted-foreground"
+            >
+              Focus trap + backdrop
+            </small>
+          </span>
+          <span class="font-mono text-xs tracking-wider text-muted-foreground uppercase">
+            queued
+          </span>
+        </div>
+        <div
+          class="ml-16 grid w-[calc(100%_-_4rem)] grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-3.5 rounded-md border border-border bg-surface-raised px-3.5 py-3 opacity-70 shadow-xs max-[760px]:ml-0 max-[760px]:w-auto"
+        >
+          <span class="font-mono text-xs tracking-wider text-primary uppercase">00</span>
+          <span class="grid min-w-0 gap-0.5">
+            <strong class="overflow-hidden text-sm font-semibold text-ellipsis whitespace-nowrap">
+              Application
+            </strong>
+            <small
+              class="overflow-hidden text-xs text-ellipsis whitespace-nowrap text-muted-foreground"
+            >
+              Uncontrolled by the stack
+            </small>
+          </span>
+          <span class="font-mono text-xs tracking-wider text-muted-foreground uppercase">
+            base
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Variant</span>
+        <select aria-label="Dialog variant" data-dialog-prop-variant>
+          <option value="compact">Compact</option>
+          <option value="workspace">Workspace</option>
+          <option value="fullscreen">Fullscreen</option>
+        </select>
+      </label>
+
+      <label class="prop-disabled">
+        <input type="checkbox" checked data-dialog-prop-dismissible />
+        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <span class="label">Dismissible</span>
+      </label>
+    </div>
+
+    <div class="playground-stage">
+      <div class="grid justify-items-center gap-2 text-center">
+        <span class="label">Live modal preview</span>
+        <strong data-dialog-prop-summary>Compact · dismissible</strong>
+        <Button data-open-props-dialog>Open dialog</Button>
+      </div>
+    </div>
+
+    <code class="prop-readout" data-dialog-prop-readout aria-live="polite"
+      >&lt;Dialog variant="compact" dismissible={true} /&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Dialog available in</dt>
+      <dd>{dialog.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Layout variants</dt>
+      <dd>Compact · Workspace · Fullscreen</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">State contract</dt>
+      <dd>Presence / hidden</dd>
+    </div>
+  </dl>
+</ComponentPreview>
