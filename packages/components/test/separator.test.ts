@@ -13,16 +13,18 @@ async function readGeneratedSeparator(framework: "astro" | "react"): Promise<str
 }
 
 describe("Separator generated contract", () => {
-  test("renders a native separator in every framework", async () => {
+  test("preserves a native separator when no content is passed", async () => {
     const sources = await Promise.all([
       readGeneratedSeparator("astro"),
       readGeneratedSeparator("react"),
     ])
 
     for (const source of sources) {
-      expect(source).toContain("<hr")
+      const nativeSeparator = source.match(/<hr[\s\S]*?\/>/)?.[0]
+
+      expect(nativeSeparator).toBeDefined()
       expect(source).toContain('data-slot="separator"')
-      expect(source).not.toContain('role="separator"')
+      expect(nativeSeparator).not.toContain('role="separator"')
     }
   })
 
@@ -42,6 +44,21 @@ describe("Separator generated contract", () => {
       expect(source).toContain("data-variant={variant}")
       expect(source).toContain('dashed: "border-dashed"')
       expect(source).toContain('dotted: "border-dotted"')
+    }
+  })
+
+  test("centers passed content between matching separator lines", async () => {
+    const sources = await Promise.all([
+      readGeneratedSeparator("astro"),
+      readGeneratedSeparator("react"),
+    ])
+
+    for (const source of sources) {
+      expect(source).toContain('role="separator"')
+      expect(source).toContain('data-slot="separator-content"')
+      expect(source).toContain('data-slot="separator-line"')
+      expect(source).toContain("$contentLineOrientation(orientation)")
+      expect(source).toContain("$variant(variant)")
     }
   })
 })
