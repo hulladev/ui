@@ -1,0 +1,244 @@
+---
+import FieldDescription from "@/ui/field/field-description.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import RangeSliderMax from "@/ui/slider/range-slider-max.astro"
+import RangeSliderMin from "@/ui/slider/range-slider-min.astro"
+import RangeSlider from "@/ui/slider/range-slider.astro"
+import Slider from "@/ui/slider/slider.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const sliderComponent = manifest.library.components.slider
+const mixControls = [
+  {
+    description: "Preserve transient detail without sharp peaks.",
+    id: "mix-dynamics",
+    label: "Dynamics",
+    value: 72,
+  },
+  {
+    description: "Keep the center image focused and stable.",
+    id: "mix-width",
+    label: "Stereo width",
+    value: 58,
+  },
+  {
+    description: "Lift quiet details above the room noise.",
+    id: "mix-presence",
+    label: "Presence",
+    value: 41,
+  },
+] as const
+---
+
+<ComponentPreview component="Slider" hint="← → · PgUp PgDn" requirePropsView={true}>
+  <div slot="variants" class="grid w-full max-w-xl gap-6">
+    <div
+      class="grid gap-5 rounded-xl border border-border bg-surface-raised p-5 shadow-xs max-[480px]:p-4"
+      aria-label="Mastering controls"
+    >
+      <div class="flex items-baseline justify-between gap-4">
+        <div>
+          <p class="text-sm font-semibold text-foreground">Mastering profile</p>
+          <p class="mt-0.5 text-xs text-muted-foreground">Quiet detail, controlled peaks</p>
+        </div>
+        <span class="font-mono text-[0.6875rem] tracking-[0.08em] text-muted-foreground uppercase">
+          Studio
+        </span>
+      </div>
+
+      {
+        mixControls.map(({ description, id, label, value }) => (
+          <Field class="grid gap-2">
+            <div class="flex items-baseline justify-between gap-3">
+              <FieldLabel for={id}>{label}</FieldLabel>
+              <output
+                for={id}
+                class="min-w-10 text-right font-mono text-xs tabular-nums text-muted-foreground"
+                data-slider-output={id}
+              >
+                {value}%
+              </output>
+            </div>
+            <Slider
+              id={id}
+              name={id}
+              min="0"
+              max="100"
+              value={value}
+              aria-describedby={`${id}-description`}
+              data-slider-live
+            />
+            <FieldDescription id={`${id}-description`}>{description}</FieldDescription>
+          </Field>
+        ))
+      }
+    </div>
+
+    <Field
+      class="grid gap-2 rounded-xl border border-border bg-surface-raised p-5 shadow-xs max-[480px]:p-4"
+    >
+      <div class="flex items-baseline justify-between gap-4">
+        <div>
+          <FieldLabel for="release-min">Release window</FieldLabel>
+          <p class="mt-0.5 text-xs text-muted-foreground">Select the minimum and maximum tail.</p>
+        </div>
+        <output
+          for="release-min release-max"
+          class="shrink-0 font-mono text-xs tabular-nums text-muted-foreground"
+          data-range-slider-output
+        >
+          28–74 ms
+        </output>
+      </div>
+      <RangeSlider
+        aria-label="Release window"
+        aria-describedby="release-description"
+        data-range-slider-live
+      >
+        <RangeSliderMin
+          id="release-min"
+          name="releaseMin"
+          min="0"
+          max="120"
+          value="28"
+          aria-label="Minimum release"
+        />
+        <RangeSliderMax
+          id="release-max"
+          name="releaseMax"
+          min="0"
+          max="120"
+          value="74"
+          aria-label="Maximum release"
+        />
+      </RangeSlider>
+      <div
+        aria-hidden="true"
+        class="flex justify-between font-mono text-[0.625rem] tabular-nums text-muted-foreground"
+      >
+        <span>0 ms</span>
+        <span>60</span>
+        <span>120 ms</span>
+      </div>
+      <FieldDescription id="release-description">
+        Each thumb remains an independent native range input.
+      </FieldDescription>
+    </Field>
+
+    <div
+      class="grid grid-cols-3 gap-3 border-t border-border pt-5 max-[560px]:grid-cols-1"
+      aria-label="Slider states"
+    >
+      <Field class="grid min-w-0 gap-2 rounded-md bg-foreground/[0.04] px-3.5 py-3">
+        <FieldLabel for="slider-default">Default</FieldLabel>
+        <Slider id="slider-default" value="36" aria-label="Default slider" />
+      </Field>
+      <Field class="grid min-w-0 gap-2 rounded-md bg-foreground/[0.04] px-3.5 py-3">
+        <FieldLabel for="slider-disabled">Disabled</FieldLabel>
+        <Slider id="slider-disabled" value="64" disabled aria-label="Disabled slider" />
+      </Field>
+      <Field class="grid min-w-0 gap-2 rounded-md bg-foreground/[0.04] px-3.5 py-3">
+        <FieldLabel for="slider-invalid">Invalid</FieldLabel>
+        <Slider id="slider-invalid" value="82" aria-invalid="true" aria-label="Invalid slider" />
+      </Field>
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Bounds</span>
+        <select aria-label="Slider bounds" data-slider-bounds>
+          <option value="0,100" selected>0–100</option>
+          <option value="0,10">0–10</option>
+          <option value="-50,50">−50–50</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Step</span>
+        <select aria-label="Slider step" data-slider-step>
+          <option value="1" selected>1</option>
+          <option value="5">5</option>
+          <option value="10">10</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Availability</span>
+        <select aria-label="Slider availability" data-slider-disabled>
+          <option value="false" selected>Enabled</option>
+          <option value="true">Disabled</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage">
+      <Field class="grid w-full max-w-md gap-2">
+        <div class="flex items-baseline justify-between gap-3">
+          <FieldLabel for="playground-slider">Output level</FieldLabel>
+          <output
+            for="playground-slider"
+            class="font-mono text-xs tabular-nums text-muted-foreground"
+            data-playground-slider-output
+          >
+            64
+          </output>
+        </div>
+        <Slider
+          id="playground-slider"
+          name="outputLevel"
+          min="0"
+          max="100"
+          step="1"
+          value="64"
+          data-playground-slider
+        />
+      </Field>
+    </div>
+
+    <code class="prop-readout" data-slider-readout aria-live="polite"
+      >&lt;Slider min="0" max="100" step="1" defaultValue="64" /&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{sliderComponent.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Native element</dt>
+      <dd>one or two input[type=range]</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Range API</dt>
+      <dd>RangeSlider · Min · Max</dd>
+    </div>
+  </dl>
+</ComponentPreview>
+
+<script>
+  document.addEventListener("input", (event) => {
+    const target = event.target as HTMLElement
+    const slider = target.closest<HTMLInputElement>("[data-slider-live]")
+    if (slider) {
+      const output = document.querySelector<HTMLOutputElement>(
+        `[data-slider-output="${slider.id}"]`
+      )
+      if (output) output.value = `${slider.value}%`
+    }
+
+    const rangeSlider = target.closest<HTMLElement>("[data-range-slider-live]")
+    if (!rangeSlider) return
+
+    const minimum = rangeSlider.querySelector<HTMLInputElement>("[data-slot='range-slider-min']")
+    const maximum = rangeSlider.querySelector<HTMLInputElement>("[data-slot='range-slider-max']")
+    const output = rangeSlider.parentElement?.querySelector<HTMLOutputElement>(
+      "[data-range-slider-output]"
+    )
+    if (minimum && maximum && output) output.value = `${minimum.value}–${maximum.value} ms`
+  })
+</script>

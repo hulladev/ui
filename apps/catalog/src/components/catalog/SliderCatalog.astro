@@ -1,0 +1,239 @@
+---
+import astroRangeSliderMaxSource from "../../../../../generated/astro/slider/range-slider-max.astro?raw"
+import astroRangeSliderMinSource from "../../../../../generated/astro/slider/range-slider-min.astro?raw"
+import astroRangeSliderSource from "../../../../../generated/astro/slider/range-slider.astro?raw"
+import astroSliderSource from "../../../../../generated/astro/slider/slider.astro?raw"
+import reactRangeSliderMaxSource from "../../../../../generated/react/slider/range-slider-max.tsx?raw"
+import reactRangeSliderMinSource from "../../../../../generated/react/slider/range-slider-min.tsx?raw"
+import reactRangeSliderSource from "../../../../../generated/react/slider/range-slider.tsx?raw"
+import reactSliderSource from "../../../../../generated/react/slider/slider.tsx?raw"
+import { sliderPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import SliderPreview from "../previews/SliderPreview.astro"
+
+const sliderSources = [
+  {
+    code: astroRangeSliderSource,
+    filename: "generated/astro/slider/range-slider.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: astroRangeSliderMinSource,
+    filename: "generated/astro/slider/range-slider-min.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: astroRangeSliderMaxSource,
+    filename: "generated/astro/slider/range-slider-max.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: astroSliderSource,
+    filename: "generated/astro/slider/slider.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactRangeSliderSource,
+    filename: "generated/react/slider/range-slider.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+  {
+    code: reactRangeSliderMinSource,
+    filename: "generated/react/slider/range-slider-min.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+  {
+    code: reactRangeSliderMaxSource,
+    filename: "generated/react/slider/range-slider-max.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+  {
+    code: reactSliderSource,
+    filename: "generated/react/slider/slider.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+
+const sliderUsageSources = [
+  {
+    code: `---
+import FieldDescription from "@/ui/field/field-description.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import RangeSliderMax from "@/ui/slider/range-slider-max.astro"
+import RangeSliderMin from "@/ui/slider/range-slider-min.astro"
+import RangeSlider from "@/ui/slider/range-slider.astro"
+import Slider from "@/ui/slider/slider.astro"
+---
+
+<div class="grid gap-6">
+  <Field class="grid gap-2">
+    <FieldLabel for="volume">Volume</FieldLabel>
+    <Slider id="volume" name="volume" min="0" max="100" step="5" value="60" />
+  </Field>
+
+  <Field class="grid gap-2">
+    <FieldLabel for="budget-min">Budget range</FieldLabel>
+    <RangeSlider aria-label="Budget range" aria-describedby="budget-help">
+      <RangeSliderMin
+        id="budget-min"
+        name="budgetMin"
+        min="0"
+        max="5000"
+        step="100"
+        value="1200"
+        aria-label="Minimum budget"
+      />
+      <RangeSliderMax
+        id="budget-max"
+        name="budgetMax"
+        min="0"
+        max="5000"
+        step="100"
+        value="3800"
+        aria-label="Maximum budget"
+      />
+    </RangeSlider>
+    <FieldDescription id="budget-help">
+      Each value is submitted as an independent native input.
+    </FieldDescription>
+  </Field>
+</div>`,
+    filename: "src/components/slider-controls.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Field, FieldDescription, FieldLabel } from "@/ui/field"
+import { RangeSlider, RangeSliderMax, RangeSliderMin, Slider } from "@/ui/slider"
+
+export function SliderControls() {
+  return (
+    <div className="grid gap-6">
+      <Field className="grid gap-2">
+        <FieldLabel htmlFor="volume">Volume</FieldLabel>
+        <Slider id="volume" name="volume" min={0} max={100} step={5} defaultValue={60} />
+      </Field>
+
+      <Field className="grid gap-2">
+        <FieldLabel htmlFor="budget-min">Budget range</FieldLabel>
+        <RangeSlider aria-label="Budget range" aria-describedby="budget-help">
+          <RangeSliderMin
+            id="budget-min"
+            name="budgetMin"
+            min={0}
+            max={5000}
+            step={100}
+            defaultValue={1200}
+            aria-label="Minimum budget"
+          />
+          <RangeSliderMax
+            id="budget-max"
+            name="budgetMax"
+            min={0}
+            max={5000}
+            step={100}
+            defaultValue={3800}
+            aria-label="Maximum budget"
+          />
+        </RangeSlider>
+        <FieldDescription id="budget-help">
+          Each value is submitted as an independent native input.
+        </FieldDescription>
+      </Field>
+    </div>
+  )
+}`,
+    filename: "src/components/slider-controls.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="slider" aria-labelledby="slider-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Form</p>
+      <h2 id="slider-title">Slider</h2>
+    </div>
+    <span class="status">Native control</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Slider component preview">
+    <div class="workbench workbench--slider">
+      <SliderPreview />
+
+      <ComponentSource
+        component="Slider"
+        generatedFamilies={["slider"]}
+        previewSources={sliderPreviewSources}
+        sources={sliderSources}
+        usageSources={sliderUsageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncSliderPlayground = (preview: HTMLElement) => {
+    const slider = preview.querySelector<HTMLInputElement>("[data-playground-slider]")
+    const boundsSelect = preview.querySelector<HTMLSelectElement>("[data-slider-bounds]")
+    const stepSelect = preview.querySelector<HTMLSelectElement>("[data-slider-step]")
+    const disabledSelect = preview.querySelector<HTMLSelectElement>("[data-slider-disabled]")
+    if (!slider || !boundsSelect || !stepSelect || !disabledSelect) return
+
+    const [min = "0", max = "100"] = boundsSelect.value.split(",")
+    slider.min = min
+    slider.max = max
+    slider.step = stepSelect.value
+    slider.disabled = disabledSelect.value === "true"
+
+    const numericMin = Number(min)
+    const numericMax = Number(max)
+    if (slider.valueAsNumber < numericMin || slider.valueAsNumber > numericMax) {
+      slider.valueAsNumber = numericMin + (numericMax - numericMin) / 2
+    }
+    slider.value = String(slider.valueAsNumber)
+
+    const output = preview.querySelector<HTMLOutputElement>("[data-playground-slider-output]")
+    if (output) output.value = slider.value
+
+    const readout = preview.querySelector<HTMLElement>("[data-slider-readout]")
+    if (readout) {
+      const props = [
+        `min="${min}"`,
+        `max="${max}"`,
+        `step="${slider.step}"`,
+        `defaultValue="${slider.value}"`,
+        slider.disabled ? "disabled" : "",
+      ].filter(Boolean)
+      readout.textContent = `<Slider ${props.join(" ")} />`
+    }
+  }
+
+  document.addEventListener("change", (event) => {
+    const target = event.target as HTMLElement
+    const preview = target.closest<HTMLElement>('[data-preview-component="slider-preview"]')
+    if (!preview) return
+
+    if (target.matches("[data-slider-bounds], [data-slider-step], [data-slider-disabled]")) {
+      syncSliderPlayground(preview)
+    }
+  })
+
+  document.addEventListener("input", (event) => {
+    const target = event.target as HTMLElement
+    const preview = target.closest<HTMLElement>('[data-preview-component="slider-preview"]')
+    if (!preview || !target.matches("[data-playground-slider]")) return
+    syncSliderPlayground(preview)
+  })
+</script>
