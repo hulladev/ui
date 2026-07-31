@@ -1,0 +1,140 @@
+---
+import astroCodeSource from "../../../../../generated/astro/code/code.astro?raw"
+import astroCodeBlockSource from "../../../../../generated/astro/code/code-block.astro?raw"
+import astroCodeContentSource from "../../../../../generated/astro/code/code-block-content.astro?raw"
+import reactCodeSource from "../../../../../generated/react/code/code.tsx?raw"
+import reactCodeBlockSource from "../../../../../generated/react/code/code-block.tsx?raw"
+import reactCodeContentSource from "../../../../../generated/react/code/code-block-content.tsx?raw"
+import ComponentSource from "../ComponentSource.astro"
+import CodePreview from "../previews/CodePreview.astro"
+import { codePreviewSources } from "../../data/catalogPreviewSources"
+
+const codeSources = [
+  {
+    code: astroCodeSource,
+    filename: "generated/astro/code/code.astro",
+    framework: "Astro · Inline",
+    language: "astro" as const,
+  },
+  {
+    code: astroCodeBlockSource,
+    filename: "generated/astro/code/code-block.astro",
+    framework: "Astro · Block",
+    language: "astro" as const,
+  },
+  {
+    code: astroCodeContentSource,
+    filename: "generated/astro/code/code-block-content.astro",
+    framework: "Astro · Content",
+    language: "astro" as const,
+  },
+  {
+    code: reactCodeSource,
+    filename: "generated/react/code/code.tsx",
+    framework: "React · Inline",
+    language: "tsx" as const,
+  },
+  {
+    code: reactCodeBlockSource,
+    filename: "generated/react/code/code-block.tsx",
+    framework: "React · Block",
+    language: "tsx" as const,
+  },
+  {
+    code: reactCodeContentSource,
+    filename: "generated/react/code/code-block-content.tsx",
+    framework: "React · Content",
+    language: "tsx" as const,
+  },
+]
+
+const codeUsageSources = [
+  {
+    code: `---
+import Button from "@/ui/button/button.astro"
+import CodeBlock from "@/ui/code/code-block.astro"
+import CodeBlockActions from "@/ui/code/code-block-actions.astro"
+import CodeBlockBody from "@/ui/code/code-block-body.astro"
+import CodeBlockContent from "@/ui/code/code-block-content.astro"
+import CodeBlockHeader from "@/ui/code/code-block-header.astro"
+import CodeBlockPath from "@/ui/code/code-block-path.astro"
+import CodeBlockTitle from "@/ui/code/code-block-title.astro"
+import { createShikiCodeHighlighter } from "@/ui/code-highlighter-shiki/code-highlighter-shiki"
+
+const highlighter = await createShikiCodeHighlighter({ languages: ["ts"] })
+const highlighted = highlighter.highlight("const ready = true", { language: "ts" })
+---
+
+<CodeBlock>
+  <CodeBlockHeader>
+    <CodeBlockTitle>status.ts</CodeBlockTitle>
+  </CodeBlockHeader>
+  <CodeBlockPath>src/lib/status.ts</CodeBlockPath>
+  <CodeBlockBody>
+    <CodeBlockContent {highlighted} lineNumbers highlightedLines={[1]} />
+    <CodeBlockActions><Button variant="outline" size="sm">Copy</Button></CodeBlockActions>
+  </CodeBlockBody>
+</CodeBlock>`,
+    filename: "src/components/status-code.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Button } from "@/ui/button"
+import {
+  CodeBlock,
+  CodeBlockActions,
+  CodeBlockBody,
+  CodeBlockContent,
+  CodeBlockHeader,
+  CodeBlockPath,
+  CodeBlockTitle,
+} from "@/ui/code"
+import { createTanStackCodeHighlighter } from "@/ui/code-highlighter-tanstack"
+import { ts } from "@tanstack/highlight/languages/ts"
+
+const highlighter = createTanStackCodeHighlighter({ languages: [ts] })
+const highlighted = highlighter.highlight("const ready = true", { language: "ts" })
+
+export function StatusCode() {
+  return (
+    <CodeBlock>
+      <CodeBlockHeader><CodeBlockTitle>status.ts</CodeBlockTitle></CodeBlockHeader>
+      <CodeBlockPath>src/lib/status.ts</CodeBlockPath>
+      <CodeBlockBody>
+        <CodeBlockContent highlighted={highlighted} lineNumbers highlightedLines={[1]} />
+        <CodeBlockActions><Button variant="outline" size="sm">Copy</Button></CodeBlockActions>
+      </CodeBlockBody>
+    </CodeBlock>
+  )
+}`,
+    filename: "src/components/status-code.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="code" aria-labelledby="code-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Developer content</p>
+      <h2 id="code-title">Code</h2>
+    </div>
+    <span class="status">Adapter-ready</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Code component preview">
+    <div class="workbench workbench--code">
+      <CodePreview />
+
+      <ComponentSource
+        component="Code"
+        generatedFamilies={["code", "code-highlighter-shiki", "code-highlighter-tanstack"]}
+        previewSources={codePreviewSources}
+        sources={codeSources}
+        usageSources={codeUsageSources}
+      />
+    </div>
+  </article>
+</section>

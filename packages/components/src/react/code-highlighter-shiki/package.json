@@ -1,0 +1,7 @@
+{
+  "name": "@hulla/code-highlighter-shiki",
+  "private": true,
+  "dependencies": {
+    "shiki": "^4.3.1"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "@hulla/code-highlighter-tanstack",
+  "private": true,
+  "dependencies": {
+    "@tanstack/highlight": "^0.0.9"
+  }
+}
