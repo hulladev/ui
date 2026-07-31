@@ -1,7 +1,15 @@
 ---
-import { Code } from "astro:components"
 import { ChevronDown } from "@lucide/astro"
+import { css } from "@tanstack/highlight/languages/css"
+import { html } from "@tanstack/highlight/languages/html"
+import { ts } from "@tanstack/highlight/languages/ts"
+import { tsx } from "@tanstack/highlight/languages/tsx"
+import CodeBlock from "@/ui/code/code-block.astro"
+import CodeBlockContent from "@/ui/code/code-block-content.astro"
+import CodeBlockPath from "@/ui/code/code-block-path.astro"
+import { createTanStackCodeHighlighter } from "@/ui/code-highlighter-tanstack/code-highlighter-tanstack"
 import { generatedSourcesFor, type CatalogSourceLanguage } from "../data/generatedCatalogSources"
+import { astro } from "../lib/tanstack-astro"
 
 type SourceFile = {
   code: string
@@ -20,7 +28,7 @@ type Props = {
 }
 
 type SourceMode = "visible" | "minimal" | "generated"
-type Framework = "Astro" | "React"
+type Framework = "Astro" | "React" | "Solid"
 type SourceRecord = Omit<SourceFile, "framework"> & {
   framework: Framework
   mode: SourceMode
@@ -37,14 +45,14 @@ const inspectorId = `${component.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}-s
 const hasUsage = usageSources.length > 0
 const hasPreview = previewSources.length > 0
 const initialMode: SourceMode = hasPreview ? "visible" : hasUsage ? "minimal" : "generated"
-const frameworkOf = (source: SourceFile): Framework =>
-  source.framework.toLowerCase().includes("react") ? "React" : "Astro"
+const frameworkOf = (source: SourceFile): Framework => {
+  const framework = source.framework.toLowerCase()
+  if (framework.includes("react")) return "React"
+  if (framework.includes("solid")) return "Solid"
+  return "Astro"
+}
 const normalizeSources = (groupSources: SourceFile[], mode: SourceMode): SourceRecord[] =>
-  groupSources.map((source) => ({
-    ...source,
-    framework: frameworkOf(source),
-    mode,
-  }))
+  groupSources.map((source) => ({ ...source, framework: frameworkOf(source), mode }))
 const generatedSources =
   generatedFamilies.length > 0 ? generatedSourcesFor(...generatedFamilies) : sources
 const sourceGroups: {
@@ -83,7 +91,7 @@ const sourceGroups: {
 const records = sourceGroups.flatMap(({ mode, sources: groupSources }) =>
   normalizeSources(groupSources, mode)
 )
-const frameworks = (["React", "Astro"] as const).filter((framework) =>
+const frameworks = (["React", "Solid", "Astro"] as const).filter((framework) =>
   records.some((record) => record.framework === framework)
 )
 const initialModeFrameworks = frameworks.filter((framework) =>
@@ -95,7 +103,14 @@ const firstSource =
   records[0]
 const fileName = (source: SourceRecord) => source.filename.split("/").at(-1) ?? source.filename
 const fileIconTone = (source: SourceRecord) =>
-  source.language === "tsx" ? "react" : source.language
+  source.framework === "Solid" ? "solid" : source.language === "tsx" ? "react" : source.language
+const highlighter = createTanStackCodeHighlighter({
+  fallbackLanguage: "ts",
+  languages: [astro, css, html, ts, tsx],
+})
+const firstHighlighted = firstSource
+  ? highlighter.highlight(firstSource.code, { language: firstSource.language })
+  : undefined
 ---
 
 <section class="source-inspector" data-source-inspector aria-labelledby={`${inspectorId}-title`}>
@@ -109,15 +124,7 @@ const fileIconTone = (source: SourceRecord) =>
           <select data-source-framework-select aria-label={`${component} framework`}>
             {
               frameworks.map((framework) => (
-                <option
-                  value={framework}
-                  selected={framework === initialFramework}
-                  disabled={
-                    !records.some(
-                      (record) => record.mode === initialMode && record.framework === framework
-                    )
-                  }
-                >
+                <option value={framework} selected={framework === initialFramework}>
                   {framework}
                 </option>
               ))
@@ -205,77 +212,13 @@ const fileIconTone = (source: SourceRecord) =>
                         ]}
                         aria-hidden="true"
                       >
-                        {source.language === "css" ? (
-                          <svg viewBox="0 0 24 24">
-                            <path
-                              d="M4.4 2.5h15.2l-1.4 16L12 21.5l-6.2-3-1.4-16Z"
-                              fill="currentColor"
-                            />
-                            <path
-                              d="M8 7.2h8.3l-.2 2.1-5.8 2.5 5.4-.1-.5 4.1-3.2 1.5-3.1-1.5-.2-2.2h2.1l.1.9 1.1.5 1.2-.6.1-.9-6.6.1-.2-2 5.9-2.4H7.8L8 7.2Z"
-                              fill="var(--source-icon-ink)"
-                            />
-                          </svg>
-                        ) : source.language === "astro" ? (
-                          <svg viewBox="0 0 24 24">
-                            <path
-                              d="M8.1 15.8 12 3l3.9 12.8-3.7-2.2a.4.4 0 0 0-.4 0l-3.7 2.2Z"
-                              fill="currentColor"
-                            />
-                            <path
-                              d="M8.6 17.1c.8 1.8 1.9 2.8 3.4 3.1 1.5-.3 2.6-1.3 3.4-3.1-1 .5-2.1.8-3.4.8s-2.4-.3-3.4-.8Z"
-                              fill="var(--source-icon-accent)"
-                            />
-                          </svg>
-                        ) : source.language === "ts" ? (
-                          <svg viewBox="0 0 24 24">
-                            <rect
-                              width="19"
-                              height="19"
-                              x="2.5"
-                              y="2.5"
-                              rx="2.5"
-                              fill="currentColor"
-                            />
-                            <path
-                              d="M6.4 9.2h6v2h-1.9v6.1H8.3v-6.1H6.4v-2Zm6.3 7.1 1.1-1.5c.7.6 1.5.9 2.2.9.6 0 1-.2 1-.6 0-.4-.3-.6-1.4-1-1.5-.5-2.5-1.2-2.5-2.6 0-1.6 1.2-2.6 3.1-2.6 1.2 0 2.2.4 3 1.1L18 11.4c-.6-.5-1.2-.7-1.8-.7-.5 0-.8.2-.8.6 0 .4.4.6 1.5 1 1.6.5 2.4 1.2 2.4 2.6 0 1.6-1.2 2.7-3.3 2.7-1.3 0-2.5-.5-3.3-1.3Z"
-                              fill="var(--source-icon-ink)"
-                            />
-                          </svg>
-                        ) : (
-                          <svg viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="1.75" fill="currentColor" />
-                            <ellipse
-                              cx="12"
-                              cy="12"
-                              rx="9.1"
-                              ry="3.65"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="1.35"
-                            />
-                            <ellipse
-                              cx="12"
-                              cy="12"
-                              rx="9.1"
-                              ry="3.65"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="1.35"
-                              transform="rotate(60 12 12)"
-                            />
-                            <ellipse
-                              cx="12"
-                              cy="12"
-                              rx="9.1"
-                              ry="3.65"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="1.35"
-                              transform="rotate(120 12 12)"
-                            />
-                          </svg>
-                        )}
+                        {source.language === "css"
+                          ? "CSS"
+                          : source.language === "astro"
+                            ? "A"
+                            : source.language === "ts"
+                              ? "TS"
+                              : "R"}
                       </span>
                       <span class="source-tab-label">{fileName(source)}</span>
                     </button>
@@ -288,961 +231,97 @@ const fileIconTone = (source: SourceRecord) =>
       )
     }
 
-    <div class="source-meta">
+    <CodeBlockPath class="source-meta">
       <p class="source-path" data-source-path>{firstSource?.filename}</p>
-      <span class="source-diagnostics" data-diagnostics>
-        {
-          firstSource?.language === "tsx" || firstSource?.language === "ts"
-            ? "Types ready"
-            : firstSource?.language === "css"
-              ? "Demo styles"
-              : firstSource?.mode === "minimal"
-                ? "Minimal example"
-                : firstSource?.mode === "generated"
-                  ? "Generated source"
-                  : "Exact render"
-        }
-      </span>
-    </div>
+      <span class="source-diagnostics" data-diagnostics data-state="ready" aria-live="polite"
+        >Server highlighted</span
+      >
+    </CodeBlockPath>
   </div>
 
   <div class="source-records" hidden>
     {
-      records.map((source) => (
-        <input
-          type="hidden"
-          value={source.code}
-          data-filename={source.filename}
-          data-framework={source.framework}
-          data-language={source.language}
-          data-mode={source.mode}
-          data-source-record
-        />
-      ))
+      records.map((source) =>
+        // prettier-ignore
+        <template data-filename={source.filename} data-framework={source.framework} data-language={source.language} data-mode={source.mode} data-source-record>{source.code}</template>
+      )
     }
   </div>
 
-  <div class="editor-stage">
-    <div class="monaco-mount" data-monaco-mount></div>
+  <div class="editor-stage" data-source-output>
     {
       firstSource && (
-        <div class="editor-fallback" data-editor-fallback>
-          <Code code={firstSource.code} lang={firstSource.language} theme="vesper" wrap={false} />
-        </div>
+        <CodeBlock>
+          <CodeBlockContent highlighted={firstHighlighted} lineNumbers />
+        </CodeBlock>
       )
     }
   </div>
 </section>
 
 <script>
-  import * as monaco from "monaco-editor/editor/editor.api"
-  import EditorWorker from "monaco-editor/editor/editor.worker?worker"
-  import "monaco-editor/editor/contrib/bracketMatching/browser/bracketMatching"
-  import "monaco-editor/editor/contrib/find/browser/findController"
-  import "monaco-editor/editor/contrib/gotoError/browser/gotoError"
-  import "monaco-editor/editor/contrib/hover/browser/hoverContribution"
-  import "monaco-editor/editor/contrib/suggest/browser/suggestController"
-  import "monaco-editor/editor/contrib/wordHighlighter/browser/wordHighlighter"
-  import "monaco-editor/languages/definitions/css/register"
-  import "monaco-editor/languages/definitions/typescript/register"
-  import CssWorker from "monaco-editor/languages/features/css/css.worker?worker"
-  import * as tsLanguage from "monaco-editor/languages/features/typescript/register"
-  import TypeScriptWorker from "monaco-editor/languages/features/typescript/ts.worker?worker"
+  import { css } from "@tanstack/highlight/languages/css"
+  import { html } from "@tanstack/highlight/languages/html"
+  import { ts } from "@tanstack/highlight/languages/ts"
+  import { tsx } from "@tanstack/highlight/languages/tsx"
+  import { createTanStackCodeHighlighter } from "@/ui/code-highlighter-tanstack/code-highlighter-tanstack"
+  import { astro } from "../lib/tanstack-astro"
 
-  type MonacoEnvironment = {
-    getWorker: (workerId: string, label: string) => Worker
-  }
-  ;(self as typeof self & { MonacoEnvironment: MonacoEnvironment }).MonacoEnvironment = {
-    getWorker(workerId, label) {
-      void workerId
-      if (label === "css" || label === "less" || label === "scss") return new CssWorker()
-      if (label === "typescript" || label === "javascript") return new TypeScriptWorker()
-      return new EditorWorker()
-    },
-  }
-
-  if (!monaco.languages.getLanguages().some(({ id }) => id === "astro")) {
-    monaco.languages.register({
-      id: "astro",
-      extensions: [".astro"],
-      aliases: ["Astro"],
-    })
-    monaco.languages.setLanguageConfiguration("astro", {
-      autoClosingPairs: [
-        { open: "{", close: "}" },
-        { open: "[", close: "]" },
-        { open: "(", close: ")" },
-        { open: '"', close: '"' },
-        { open: "'", close: "'" },
-        { open: "`", close: "`" },
-      ],
-      brackets: [
-        ["{", "}"],
-        ["[", "]"],
-        ["(", ")"],
-        ["<", ">"],
-      ],
-      comments: {
-        blockComment: ["<!--", "-->"],
-        lineComment: "//",
-      },
-    })
-    monaco.languages.setMonarchTokensProvider("astro", {
-      defaultToken: "",
-      tokenPostfix: ".astro",
-      tokenizer: {
-        root: [
-          [/^---\s*$/, { token: "delimiter.astro", next: "@frontmatter" }],
-          [/<!--/, "comment", "@comment"],
-          [/(<!DOCTYPE)(\s+)([^>]+)(>)/, ["metatag", "", "metatag.content", "metatag"]],
-          [/(<\/?)([\w:-]+)/, ["delimiter", "tag"], "@tag"],
-          [/{/, { token: "delimiter.bracket", next: "@expression" }],
-        ],
-        frontmatter: [
-          [/^---\s*$/, { token: "delimiter.astro", next: "@root" }],
-          [/\/\/.*$/, "comment"],
-          [/\/\*/, "comment", "@jsComment"],
-          [
-            /\b(?:as|const|export|extends|from|import|interface|let|return|satisfies|type)\b/,
-            "keyword",
-          ],
-          [/\b(?:Astro|false|null|true|undefined)\b/, "constant"],
-          [/[A-Z][\w$]*/, "type.identifier"],
-          [/[a-zA-Z_$][\w$]*(?=\s*\()/, "function"],
-          [/"([^"\\]|\\.)*$/, "string.invalid"],
-          [/'([^'\\]|\\.)*$/, "string.invalid"],
-          [/"/, "string", "@doubleString"],
-          [/'/, "string", "@singleString"],
-          [/`/, "string", "@templateString"],
-          [/\d+(?:\.\d+)?/, "number"],
-        ],
-        tag: [
-          [/\s+/, ""],
-          [/[\w:-]+/, "attribute.name"],
-          [/=/, "delimiter"],
-          [/"[^"]*"/, "attribute.value"],
-          [/'[^']*'/, "attribute.value"],
-          [/{/, { token: "delimiter.bracket", next: "@expression" }],
-          [/\/?>/, { token: "delimiter", next: "@pop" }],
-        ],
-        expression: [
-          [/}/, { token: "delimiter.bracket", next: "@pop" }],
-          [/\b(?:as|await|const|else|false|if|let|null|return|true|typeof|undefined)\b/, "keyword"],
-          [/[A-Z][\w$]*/, "type.identifier"],
-          [/[a-zA-Z_$][\w$]*(?=\s*\()/, "function"],
-          [/"/, "string", "@doubleString"],
-          [/'/, "string", "@singleString"],
-          [/`/, "string", "@templateString"],
-          [/\d+(?:\.\d+)?/, "number"],
-        ],
-        comment: [
-          [/-->/, "comment", "@pop"],
-          [/./, "comment"],
-        ],
-        jsComment: [
-          [/\*\//, "comment", "@pop"],
-          [/./, "comment"],
-        ],
-        doubleString: [
-          [/[^\\"]+/, "string"],
-          [/\\./, "string.escape"],
-          [/"/, "string", "@pop"],
-        ],
-        singleString: [
-          [/[^\\']+/, "string"],
-          [/\\./, "string.escape"],
-          [/'/, "string", "@pop"],
-        ],
-        templateString: [
-          [/[^\\`$]+/, "string"],
-          [/\\./, "string.escape"],
-          [/`/, "string", "@pop"],
-        ],
-      },
-    })
-  }
-
-  const reactTypeStubs = `
-declare module "react" {
-  export type ReactNode =
-    | JSX.Element
-    | string
-    | number
-    | boolean
-    | null
-    | undefined
-    | readonly ReactNode[]
-  export type PropsWithChildren<P = unknown> = P & { children?: ReactNode }
-  export type HTMLAttributes<T = HTMLElement> = {
-    "aria-describedby"?: string
-    "aria-haspopup"?: boolean | "dialog" | "grid" | "listbox" | "menu" | "tree"
-    "aria-invalid"?: boolean | "false" | "true"
-    "aria-label"?: string
-    "aria-labelledby"?: string
-    "aria-modal"?: boolean | "false" | "true"
-    accept?: string
-    alt?: string
-    children?: ReactNode
-    className?: string
-    defaultValue?: string | number | readonly string[]
-    disabled?: boolean
-    focusable?: boolean | "false" | "true"
-    hidden?: boolean
-    htmlFor?: string
-    href?: string
-    id?: string
-    key?: string | number
-    max?: number | string
-    min?: number | string
-    multiple?: boolean
-    name?: string
-    onClick?: (...args: unknown[]) => void
-    onError?: (...args: unknown[]) => void
-    onLoad?: (...args: unknown[]) => void
-    placeholder?: string
-    popover?: "auto" | "hint" | "manual"
-    popoverTarget?: string
-    popoverTargetAction?: "hide" | "show" | "toggle"
-    readOnly?: boolean
-    required?: boolean
-    role?: string
-    size?: number | string
-    src?: string
-    strokeWidth?: number
-    style?: Record<string, string | number>
-    tabIndex?: number
-    type?: string
-    value?: string | number | readonly string[]
-    [attribute: \`data-\${string}\`]: string | number | boolean | undefined
-  }
-  export type ComponentPropsWithoutRef<T extends string> = HTMLAttributes
-  export type ButtonHTMLAttributes<T> = HTMLAttributes<T>
-  export type DetailedHTMLProps<E, T> = E
-  export type MutableRefObject<T> = { current: T }
-
-  export function useEffect(
-    effect: () => void | (() => void),
-    dependencies: readonly unknown[]
-  ): void
-  export function useId(): string
-  export function useRef<T>(value: T): MutableRefObject<T>
-  export function useRef<T>(value: T | null): MutableRefObject<T | null>
-  export function useState<T>(
-    initialValue: T
-  ): [T, (value: T | ((previous: T) => T)) => void]
-}
-
-declare module "react/jsx-runtime" {
-  export const Fragment: unique symbol
-  export function jsx(type: unknown, props: unknown, key?: unknown): JSX.Element
-  export function jsxs(type: unknown, props: unknown, key?: unknown): JSX.Element
-}
-
-declare namespace JSX {
-  interface Element {}
-  interface ElementChildrenAttribute {
-    children: {}
-  }
-  interface IntrinsicAttributes {
-    key?: string | number
-  }
-  interface IntrinsicElements {
-    [elementName: string]: import("react").HTMLAttributes
-  }
-}
-`
-
-  const styleTypeStubs = `
-declare module "@/lib/style" {
-  type Variant<V extends Record<string, unknown>> = ((value: keyof V) => string) & {
-    infer: keyof V
-  }
-
-  export const cn: (...classes: unknown[]) => string
-  export const vn: <const V extends Record<string, unknown>>(variants: V) => Variant<V>
-}
-
-declare module "@/lib/dialog" {
-  export type DialogDismissReason = "backdrop" | "escape"
-  export function connectDialog(element: HTMLElement): { destroy(): void }
-  export function onDialogDismiss(
-    element: HTMLElement,
-    callback: (event: CustomEvent<{ reason: DialogDismissReason }>) => void
-  ): () => void
-}
-
-declare module "@/lib/dropdown-menu" {
-  export function connectDropdownMenu(element: HTMLElement): { destroy(): void }
-}
-
-declare module "@/lib/floating-layer" {
-  export function connectFloatingLayer(
-    element: HTMLElement,
-    options: {
-      closeDelay: number
-      offset: number
-      openDelay: number
-      placement: import("@floating-ui/dom").Placement
-      triggerId: string
-    }
-  ): { destroy(): void }
-}
-
-declare module "@floating-ui/dom" {
-  export type Placement =
-    | "top" | "top-start" | "top-end"
-    | "right" | "right-start" | "right-end"
-    | "bottom" | "bottom-start" | "bottom-end"
-    | "left" | "left-start" | "left-end"
-}
-
-declare module "lucide-react" {
-  export type LucideProps = import("react").SVGAttributes<SVGSVGElement> & {
-    size?: number | string
-    strokeWidth?: number | string
-  }
-
-  export function TriangleAlert(props: LucideProps): JSX.Element
-}
-`
-
-  const componentTypeStubs = `
-declare module "@/ui/button" {
-  type NativeButtonProps = import("react").ComponentPropsWithoutRef<"button">
-  export type ButtonProps = NativeButtonProps & {
-    /** Controls the button height, text size, and horizontal padding. @default "md" */
-    size?: "sm" | "md" | "lg"
-    /** Selects the visual emphasis of the action. @default "primary" */
-    variant?: "primary" | "secondary" | "outline"
-  }
-  /** A native button with Hulla variants, focus treatment, and disabled states. */
-  export function Button(props: ButtonProps): JSX.Element
-}
-
-declare module "@/ui/avatar" {
-  type NativeAvatarProps = import("react").ComponentPropsWithoutRef<"span">
-  type NativeImageProps = import("react").ComponentPropsWithoutRef<"img">
-  export type AvatarProps = NativeAvatarProps & {
-    /** Controls the avatar diameter and fallback text scale. @default "md" */
-    size?: "sm" | "md" | "lg"
-  }
-  export type AvatarFallbackProps = NativeAvatarProps
-  export type AvatarImageProps = NativeImageProps & {
-    /** Describes the person when the image carries the avatar's accessible name. */
-    alt: string
-  }
-  /** A composable identity image with a load-safe fallback. */
-  export function Avatar(props: AvatarProps): JSX.Element
-  /** Initials or a compact mark displayed beneath the avatar image. */
-  export function AvatarFallback(props: AvatarFallbackProps): JSX.Element
-  /** A native image that yields to the fallback when loading fails. */
-  export function AvatarImage(props: AvatarImageProps): JSX.Element
-}
-
-declare module "@/ui/badge" {
-  type NativeBadgeProps = import("react").ComponentPropsWithoutRef<"span">
-  export type BadgeProps = NativeBadgeProps & {
-    /** Controls the badge height and icon scale. @default "md" */
-    size?: "sm" | "md" | "lg"
-    /** Communicates the semantic status through color. @default "neutral" */
-    variant?: "neutral" | "primary" | "success" | "warning" | "danger"
-  }
-  /** Compact, non-interactive metadata built on a native span. */
-  export function Badge(props: BadgeProps): JSX.Element
-}
-
-declare module "@/ui/breadcrumbs" {
-  export type BreadcrumbsProps = import("react").ComponentPropsWithoutRef<"nav">
-  export type BreadcrumbItemProps = import("react").ComponentPropsWithoutRef<"li">
-  /** A named navigation landmark containing an ordered page hierarchy. */
-  export function Breadcrumbs(props: BreadcrumbsProps): JSX.Element
-  /** A native list item containing a link, omitted levels, or the current page. */
-  export function BreadcrumbItem(props: BreadcrumbItemProps): JSX.Element
-}
-
-declare module "@/ui/kbd" {
-  export type KbdProps = import("react").ComponentPropsWithoutRef<"kbd">
-  /** Displays a keyboard input using the semantic kbd element. */
-  export function Kbd(props: KbdProps): JSX.Element
-}
-
-declare module "@/ui/input" {
-  type NativeInputProps = import("react").ComponentPropsWithoutRef<"input">
-  type NativeInputGroupProps = import("react").ComponentPropsWithoutRef<"div">
-  type NativeInputAdornmentProps = import("react").ComponentPropsWithoutRef<"span">
-  export type InputProps = NativeInputProps & {
-    /** Controls the input height and text size. @default "md" */
-    controlSize?: "sm" | "md" | "lg"
-    /** Selects the border and surface treatment. @default "outline" */
-    variant?: "outline" | "filled" | "underline"
-  }
-  export type InputGroupProps = NativeInputGroupProps & {
-    /** Controls the group height and text size. @default "md" */
-    controlSize?: "sm" | "md" | "lg"
-    /** Selects the unified border and surface treatment. @default "outline" */
-    variant?: "outline" | "filled" | "underline"
-  }
-  export type InputAdornmentProps = NativeInputAdornmentProps
-  /** A styled native input that preserves native input types and attributes. */
-  export function Input(props: InputProps): JSX.Element
-  /** Presents an input and its adjacent content as one composed control. */
-  export function InputGroup(props: InputGroupProps): JSX.Element
-  /** Non-interactive text or icon content adjacent to a grouped input. */
-  export function InputAdornment(props: InputAdornmentProps): JSX.Element
-}
-
-declare module "@/ui/switch" {
-  type NativeSwitchProps = import("react").ComponentPropsWithoutRef<"input">
-  export type SwitchProps = NativeSwitchProps
-  /** A native checkbox with switch semantics and platform form behavior. */
-  export function Switch(props: SwitchProps): JSX.Element
-}
-
-declare module "@/ui/field" {
-  type NativeDivProps = import("react").ComponentPropsWithoutRef<"div">
-  type NativeLabelProps = import("react").ComponentPropsWithoutRef<"label">
-  type NativeParagraphProps = import("react").ComponentPropsWithoutRef<"p">
-  export type FieldProps = NativeDivProps
-  export type FieldLabelProps = NativeLabelProps
-  export type FieldDescriptionProps = NativeParagraphProps
-  export type FieldErrorProps = NativeParagraphProps
-  /** Groups a label, control, description, and validation message. */
-  export function Field(props: FieldProps): JSX.Element
-  /** A native label styled for a Hulla field. */
-  export function FieldLabel(props: FieldLabelProps): JSX.Element
-  /** Supporting text associated with a field through aria-describedby. */
-  export function FieldDescription(props: FieldDescriptionProps): JSX.Element
-  /** A validation message associated with an invalid field. */
-  export function FieldError(props: FieldErrorProps): JSX.Element
-}
-
-declare module "@/ui/select" {
-  type NativeSelectProps = import("react").ComponentPropsWithoutRef<"select">
-  export type SelectProps = NativeSelectProps & {
-    /** Controls the select height and text size. @default "md" */
-    controlSize?: "sm" | "md" | "lg"
-    /** Selects the border and surface treatment. @default "outline" */
-    variant?: "outline" | "filled" | "underline"
-  }
-  /** A styled native select that preserves options, groups, and multiple selection. */
-  export function Select(props: SelectProps): JSX.Element
-}
-
-declare module "@/ui/popover" {
-  type NativePopoverProps = import("react").ComponentPropsWithoutRef<"div">
-  export type PopoverPlacement =
-    | "top-start" | "top" | "top-end"
-    | "right-start" | "right" | "right-end"
-    | "bottom-start" | "bottom" | "bottom-end"
-    | "left-start" | "left" | "left-end"
-  export type PopoverProps = NativePopoverProps & {
-    /** Logical anchor placement with automatic collision fallbacks. @default "bottom" */
-    placement?: PopoverPlacement
-  }
-  /** A native top-layer popover positioned with CSS anchors. */
-  export function Popover(props: PopoverProps): JSX.Element
-}
-
-declare module "@/ui/tooltip" {
-  type NativeDivProps = Omit<import("react").ComponentPropsWithoutRef<"div">, "popover">
-  export type TooltipProps = NativeDivProps & {
-    /** Delay before the tooltip closes after hover or focus leaves. @default 100 */
-    closeDelay?: number
-    /** Delay before pointer hover opens the tooltip. Keyboard focus opens immediately. @default 180 */
-    openDelay?: number
-    /** Preferred placement before collision handling. @default "top" */
-    placement?: import("@floating-ui/dom").Placement
-    popover?: "" | "auto" | "hint" | "manual"
-    /** The id of the element that triggers and anchors the tooltip. */
-    triggerId: string
-  }
-  /** Descriptive, non-interactive content shown on pointer hover or keyboard focus. */
-  export function Tooltip(props: TooltipProps): JSX.Element
-}
-
-declare module "@/ui/hover-card" {
-  type NativeDivProps = Omit<import("react").ComponentPropsWithoutRef<"div">, "popover">
-  export type HoverCardProps = NativeDivProps & {
-    /** Delay before the card closes after pointer and focus leave both elements. @default 300 */
-    closeDelay?: number
-    /** Delay before pointer hover opens the card. Keyboard focus opens immediately. @default 200 */
-    openDelay?: number
-    /** Preferred placement before collision handling. @default "bottom-start" */
-    placement?: import("@floating-ui/dom").Placement
-    popover?: "" | "auto" | "hint" | "manual"
-    /** The id of the element that triggers and anchors the hover card. */
-    triggerId: string
-  }
-  /** Rich supplementary content shown on pointer hover or keyboard focus. */
-  export function HoverCard(props: HoverCardProps): JSX.Element
-}
-
-declare module "@/ui/dropdown-menu" {
-  type NativeDivProps = import("react").ComponentPropsWithoutRef<"div">
-  type NativeButtonProps = import("react").ComponentPropsWithoutRef<"button">
-  type NativeRuleProps = import("react").ComponentPropsWithoutRef<"hr">
-  export type DropdownMenuGroupProps = NativeDivProps
-  export type DropdownMenuLabelProps = NativeDivProps
-  export type DropdownMenuProps = NativeDivProps & {
-    /** Logical anchor placement with automatic collision fallbacks. @default "bottom-start" */
-    placement?:
-      | "top-start" | "top" | "top-end"
-      | "right-start" | "right" | "right-end"
-      | "bottom-start" | "bottom" | "bottom-end"
-      | "left-start" | "left" | "left-end"
-  }
-  export type DropdownMenuItemProps = NativeButtonProps & {
-    /** Uses destructive styling for dangerous actions. @default "default" */
-    variant?: "default" | "danger"
-  }
-  export type DropdownMenuSeparatorProps = NativeRuleProps
-  /** Keyboard-navigable menu built on the native popover top layer. */
-  export function DropdownMenu(props: DropdownMenuProps): JSX.Element
-  /** A semantic group of related menu actions. */
-  export function DropdownMenuGroup(props: DropdownMenuGroupProps): JSX.Element
-  /** A roving-focus menu action. */
-  export function DropdownMenuItem(props: DropdownMenuItemProps): JSX.Element
-  /** A visible label that can name a menu group through aria-labelledby. */
-  export function DropdownMenuLabel(props: DropdownMenuLabelProps): JSX.Element
-  /** A semantic separator between related menu actions. */
-  export function DropdownMenuSeparator(props: DropdownMenuSeparatorProps): JSX.Element
-}
-
-declare module "@/ui/dialog" {
-  type NativeDialogProps = import("react").ComponentPropsWithoutRef<"div">
-  export type DialogDismissReason = "backdrop" | "escape"
-  export type DialogProps = NativeDialogProps & {
-    /** Allows Escape and backdrop dismissal. @default true */
-    dismissible?: boolean
-    /** Called when the user dismisses the dialog. */
-    onDismiss?: (reason: DialogDismissReason) => void
-    /** Controls the dialog's layout scale and surface treatment. @default "compact" */
-    variant?: "compact" | "workspace" | "fullscreen"
-  }
-  /** A focus-managed modal surface registered with Hulla's deterministic layer stack. */
-  export function Dialog(props: DialogProps): JSX.Element
-  export function DialogHeader(props: NativeDialogProps): JSX.Element
-  export function DialogTitle(props: import("react").ComponentPropsWithoutRef<"h2">): JSX.Element
-  export function DialogDescription(
-    props: import("react").ComponentPropsWithoutRef<"p">
-  ): JSX.Element
-  export function DialogFooter(props: NativeDialogProps): JSX.Element
-}
-
-declare module "@/ui/card" {
-  type NativeArticleProps = import("react").ComponentPropsWithoutRef<"article">
-  type NativeDivProps = import("react").ComponentPropsWithoutRef<"div">
-  export type CardProps = NativeArticleProps & {
-    /** Selects the surface depth and chrome. @default "outline" */
-    variant?: "outline" | "elevated" | "ghost"
-  }
-  /** A composable article surface with native attribute forwarding. */
-  export function Card(props: CardProps): JSX.Element
-  export function CardHeader(props: import("react").ComponentPropsWithoutRef<"header">): JSX.Element
-  export function CardTitle(props: import("react").ComponentPropsWithoutRef<"h3">): JSX.Element
-  export function CardDescription(props: import("react").ComponentPropsWithoutRef<"p">): JSX.Element
-  export function CardContent(props: NativeDivProps): JSX.Element
-  export function CardFooter(props: import("react").ComponentPropsWithoutRef<"footer">): JSX.Element
-}
-
-declare module "@/ui/accordion" {
-  type NativeDivProps = import("react").ComponentPropsWithoutRef<"div">
-  type NativeDetailsProps = import("react").ComponentPropsWithoutRef<"details">
-  type NativeSummaryProps = import("react").ComponentPropsWithoutRef<"summary">
-  export type AccordionProps = NativeDivProps
-  export type AccordionItemProps = NativeDetailsProps
-  export type AccordionTriggerProps = NativeSummaryProps
-  export type AccordionContentProps = NativeDivProps
-  /** Groups related native disclosure items without owning their state. */
-  export function Accordion(props: AccordionProps): JSX.Element
-  /** A native details element whose open and name attributes control disclosure state. */
-  export function AccordionItem(props: AccordionItemProps): JSX.Element
-  /** A native summary element that toggles its containing item. */
-  export function AccordionTrigger(props: AccordionTriggerProps): JSX.Element
-  /** Composable content revealed by the containing item. */
-  export function AccordionContent(props: AccordionContentProps): JSX.Element
-}
-
-declare module "@/ui/alert" {
-  type NativeAlertProps = import("react").ComponentPropsWithoutRef<"div">
-  export type AlertProps = NativeAlertProps & {
-    /** Selects the semantic accent and icon. @default "note" */
-    variant?: "note" | "success" | "important" | "warning" | "danger"
-  }
-  /** A semantic status message with a default note role. */
-  export function Alert(props: AlertProps): JSX.Element
-}
-`
-
-  tsLanguage.typescriptDefaults.setCompilerOptions({
-    allowNonTsExtensions: true,
-    esModuleInterop: true,
-    jsx: tsLanguage.JsxEmit.ReactJSX,
-    module: tsLanguage.ModuleKind.ESNext,
-    moduleResolution: tsLanguage.ModuleResolutionKind.NodeJs,
-    noEmit: true,
-    skipLibCheck: true,
-    strict: true,
-    target: tsLanguage.ScriptTarget.ESNext,
-  })
-  tsLanguage.typescriptDefaults.setDiagnosticsOptions({
-    noSemanticValidation: false,
-    noSyntaxValidation: false,
-  })
-  tsLanguage.typescriptDefaults.setEagerModelSync(true)
-  tsLanguage.typescriptDefaults.addExtraLib(
-    reactTypeStubs,
-    "file:///node_modules/@types/react/index.d.ts"
-  )
-  tsLanguage.typescriptDefaults.addExtraLib(
-    styleTypeStubs,
-    "file:///generated/react/lib/style.d.ts"
-  )
-  tsLanguage.typescriptDefaults.addExtraLib(
-    componentTypeStubs,
-    "file:///generated/react/hulla-components.d.ts"
-  )
-
-  monaco.editor.defineTheme("hulla-foundry", {
-    base: "vs-dark",
-    inherit: true,
-    colors: {
-      "editor.background": "#0b0e18",
-      "editor.foreground": "#edf2ff",
-      "editor.lineHighlightBackground": "#ffffff06",
-      "editorLineNumber.foreground": "#4d566c",
-      "editorLineNumber.activeForeground": "#a8b3cf",
-      "editorCursor.foreground": "#718bff",
-      "editor.selectionBackground": "#5478ff33",
-      "editor.inactiveSelectionBackground": "#ffffff12",
-      "editorIndentGuide.background1": "#ffffff0d",
-      "editorIndentGuide.activeBackground1": "#ffffff24",
-      "editorError.foreground": "#ff7c8f",
-      "editorWarning.foreground": "#f1cb72",
-      "editorHoverWidget.background": "#171c2a",
-      "editorHoverWidget.border": "#ffffff24",
-      "editorSuggestWidget.background": "#171c2a",
-      "editorSuggestWidget.border": "#ffffff24",
-      "editorWidget.border": "#ffffff24",
-      "scrollbarSlider.background": "#ffffff1f",
-      "scrollbarSlider.hoverBackground": "#ffffff33",
-      "scrollbarSlider.activeBackground": "#ffffff45",
-    },
-    rules: [
-      { token: "delimiter.astro", foreground: "718BFF", fontStyle: "bold" },
-      { token: "tag", foreground: "9EB3FF" },
-      { token: "attribute.name", foreground: "B8C8FF" },
-      { token: "attribute.value", foreground: "B7E875" },
-      { token: "keyword", foreground: "90A7FF" },
-      { token: "type.identifier", foreground: "C4D0FF" },
-      { token: "function", foreground: "7BD9EF" },
-      { token: "string", foreground: "A9DB87" },
-      { token: "number", foreground: "E2B1FF" },
-      { token: "comment", foreground: "6F7890", fontStyle: "italic" },
-    ],
-  })
-
+  type SourceMode = "visible" | "minimal" | "generated"
   type SourceRecord = {
     code: string
     filename: string
     framework: string
     language: "astro" | "css" | "ts" | "tsx"
-    mode: "visible" | "minimal" | "generated"
+    mode: SourceMode
   }
 
-  type TailwindSuggestion = {
-    description: string
-    detail: string
-    label: string
+  const highlighter = createTanStackCodeHighlighter({
+    fallbackLanguage: "ts",
+    languages: [astro, css, html, ts, tsx],
+  })
+
+  const statusFor = (record: SourceRecord) => {
+    if (record.mode === "visible") return "Exact render"
+    if (record.mode === "minimal") return "Copy-ready"
+    return "Generated source"
   }
 
-  const commonTailwindSuggestions: TailwindSuggestion[] = [
-    { label: "relative", detail: "position: relative", description: "Position relative" },
-    { label: "absolute", detail: "position: absolute", description: "Position absolute" },
-    { label: "fixed", detail: "position: fixed", description: "Position fixed" },
-    { label: "sticky", detail: "position: sticky", description: "Position sticky" },
-    { label: "block", detail: "display: block", description: "Block layout" },
-    { label: "inline-block", detail: "display: inline-block", description: "Inline-block layout" },
-    { label: "inline", detail: "display: inline", description: "Inline layout" },
-    { label: "flex", detail: "display: flex", description: "Flex layout" },
-    { label: "inline-flex", detail: "display: inline-flex", description: "Inline flex layout" },
-    { label: "grid", detail: "display: grid", description: "Grid layout" },
-    { label: "hidden", detail: "display: none", description: "Hide the element" },
-    { label: "border", detail: "border-width: 1px", description: "Use the default border width" },
-    { label: "shrink-0", detail: "flex-shrink: 0", description: "Prevent flex shrinking" },
-    { label: "grow", detail: "flex-grow: 1", description: "Allow flex growth" },
-    {
-      label: "items-start",
-      detail: "align-items: flex-start",
-      description: "Align items at start",
-    },
-    { label: "items-center", detail: "align-items: center", description: "Center items" },
-    { label: "items-end", detail: "align-items: flex-end", description: "Align items at end" },
-    {
-      label: "items-stretch",
-      detail: "align-items: stretch",
-      description: "Stretch items across the cross axis",
-    },
-    {
-      label: "justify-start",
-      detail: "justify-content: flex-start",
-      description: "Pack items at start",
-    },
-    {
-      label: "justify-center",
-      detail: "justify-content: center",
-      description: "Center items",
-    },
-    {
-      label: "justify-between",
-      detail: "justify-content: space-between",
-      description: "Distribute space between items",
-    },
-    { label: "overflow-hidden", detail: "overflow: hidden", description: "Clip overflow" },
-    { label: "overflow-auto", detail: "overflow: auto", description: "Scroll overflow as needed" },
-    {
-      label: "whitespace-nowrap",
-      detail: "white-space: nowrap",
-      description: "Prevent text wrapping",
-    },
-    { label: "select-none", detail: "user-select: none", description: "Disable text selection" },
-    { label: "font-medium", detail: "font-weight: 500", description: "Medium font weight" },
-    { label: "font-semibold", detail: "font-weight: 600", description: "Semibold font weight" },
-    { label: "leading-none", detail: "line-height: 1", description: "Tight line height" },
-    {
-      label: "antialiased",
-      detail: "font smoothing",
-      description: "Use antialiased text rendering",
-    },
-    {
-      label: "transition",
-      detail: "transition-property: common properties",
-      description: "Apply the default transition",
-    },
-    {
-      label: "transition-colors",
-      detail: "transition-property: color, background, border",
-      description: "Transition color properties",
-    },
-    { label: "cursor-pointer", detail: "cursor: pointer", description: "Pointer cursor" },
-    {
-      label: "disabled:cursor-not-allowed",
-      detail: "cursor: not-allowed",
-      description: "Use a disabled cursor when the element is disabled",
-    },
-  ]
+  const renderHighlightedSource = (output: HTMLElement, record: SourceRecord) => {
+    const highlighted = highlighter.highlight(record.code, { language: record.language })
+    const pre = document.createElement("pre")
+    pre.tabIndex = 0
+    pre.dataset.language = highlighted.language
+    pre.dataset.lineNumbers = "true"
+    pre.dataset.slot = "code-block-content"
+    pre.className =
+      "group/code-content m-0 min-w-0 overflow-auto bg-[var(--hulla-code-background)] py-4 font-mono text-[0.8125rem] leading-6 text-[var(--hulla-code-foreground)] [tab-size:2] whitespace-pre focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-focus-ring"
 
-  const spacingSteps = [
-    "0",
-    "0.5",
-    "1",
-    "1.5",
-    "2",
-    "2.5",
-    "3",
-    "3.5",
-    "4",
-    "5",
-    "6",
-    "8",
-    "10",
-    "12",
-    "16",
-    "20",
-    "24",
-    "32",
-  ]
-  const spacingPrefixes = [
-    "gap",
-    "gap-x",
-    "gap-y",
-    "h",
-    "m",
-    "mb",
-    "ml",
-    "mr",
-    "mt",
-    "mx",
-    "my",
-    "p",
-    "pb",
-    "pl",
-    "pr",
-    "pt",
-    "px",
-    "py",
-    "w",
-  ]
-  for (const prefix of spacingPrefixes) {
-    for (const step of spacingSteps) {
-      commonTailwindSuggestions.push({
-        label: `${prefix}-${step}`,
-        detail: `Tailwind spacing · ${Number(step) * 0.25}rem`,
-        description: `Project spacing utility using the ${step} spacing step`,
+    const code = document.createElement("code")
+    code.dataset.slot = "code-block-code"
+    highlighted.lines.forEach((line, index) => {
+      const lineElement = document.createElement("span")
+      lineElement.dataset.codeLine = ""
+      lineElement.dataset.line = String(index + 1)
+      lineElement.className =
+        "relative inline-block min-h-6 min-w-full border-l-2 border-transparent px-4"
+      line.tokens.forEach((token) => {
+        const tokenElement = document.createElement("span")
+        if (token.className) tokenElement.className = token.className
+        tokenElement.textContent = token.content
+        lineElement.append(tokenElement)
       })
-    }
-  }
-
-  const projectColors = [
-    "background",
-    "border",
-    "focus-ring",
-    "foreground",
-    "muted-foreground",
-    "primary",
-    "primary-foreground",
-    "surface",
-    "surface-raised",
-  ]
-  const colorPrefixes = ["bg", "border", "caret", "fill", "outline", "ring", "stroke", "text"]
-  for (const prefix of colorPrefixes) {
-    for (const color of projectColors) {
-      commonTailwindSuggestions.push({
-        label: `${prefix}-${color}`,
-        detail: `Hulla theme · --color-${color}`,
-        description: `Uses the ${color} color from the active Hulla theme`,
-      })
-    }
-  }
-
-  for (const radius of ["sm", "md", "lg"]) {
-    commonTailwindSuggestions.push({
-      label: `rounded-${radius}`,
-      detail: `Hulla theme · --radius-${radius}`,
-      description: `Uses the ${radius} radius from the Hulla theme`,
+      code.append(lineElement)
+      if (index < highlighted.lines.length - 1) code.append("\n")
     })
-  }
+    pre.append(code)
 
-  const getTailwindToken = (
-    model: monaco.editor.ITextModel,
-    position: monaco.Position
-  ): { range: monaco.Range; token: string } | undefined => {
-    const line = model.getLineContent(position.lineNumber)
-    const cursor = position.column - 1
-    let start = cursor
-    let end = cursor
-
-    while (start > 0 && !/[\s"'`]/.test(line[start - 1] ?? "")) start -= 1
-    while (end < line.length && !/[\s"'`,)]/.test(line[end] ?? "")) end += 1
-
-    const token = line.slice(start, end)
-    if (!token) return
-    return {
-      token,
-      range: new monaco.Range(position.lineNumber, start + 1, position.lineNumber, end + 1),
-    }
-  }
-
-  const getTailwindCompletionRange = (
-    model: monaco.editor.ITextModel,
-    position: monaco.Position,
-    knownClasses: Set<string>
-  ): monaco.Range | undefined => {
-    const line = model.getLineContent(position.lineNumber)
-    const cursor = position.column - 1
-    const beforeCursor = line.slice(0, cursor)
-    const openingQuote = Math.max(
-      beforeCursor.lastIndexOf('"'),
-      beforeCursor.lastIndexOf("'"),
-      beforeCursor.lastIndexOf("`")
-    )
-    if (openingQuote < 0) return
-
-    const quote = line[openingQuote]
-    const closingQuote = line.indexOf(quote ?? "", cursor)
-    if (closingQuote < 0) return
-
-    const value = line.slice(openingQuote + 1, closingQuote)
-    const nearbySource = model.getValueInRange(
-      new monaco.Range(
-        Math.max(1, position.lineNumber - 10),
-        1,
-        position.lineNumber,
-        openingQuote + 1
-      )
-    )
-    const isKnownClassList = value.split(/\s+/).some((className) => knownClasses.has(className))
-    const isClassContext =
-      isKnownClassList || /(?:class|className)\s*=|(?:cn|vn)\s*\([\s\S]*$/.test(nearbySource)
-    if (!isClassContext) return
-
-    const fragment = beforeCursor.slice(openingQuote + 1).match(/[^\s]*$/)?.[0] ?? ""
-    return new monaco.Range(
-      position.lineNumber,
-      position.column - fragment.length,
-      position.lineNumber,
-      position.column
-    )
-  }
-
-  const registerTailwindIntelliSense = (records: SourceRecord[]) => {
-    const suggestions = new Map(
-      commonTailwindSuggestions.map((suggestion) => [suggestion.label, suggestion])
-    )
-    const classPattern = /["'`]([^"'`\n]+)["'`]/g
-
-    for (const record of records) {
-      for (const match of record.code.matchAll(classPattern)) {
-        const classList = match[1] ?? ""
-        if (!/\s/.test(classList)) continue
-
-        for (const className of classList.split(/\s+/)) {
-          if (!/[-:[\]/]/.test(className)) continue
-          if (!suggestions.has(className)) {
-            suggestions.set(className, {
-              label: className,
-              detail: "Tailwind class · used by this component",
-              description: "A Tailwind utility found in this generated component",
-            })
-          }
-        }
-      }
-    }
-
-    const knownClasses = new Set(suggestions.keys())
-    const completionProvider: monaco.languages.CompletionItemProvider = {
-      triggerCharacters: [":", "-", "[", "/"],
-      provideCompletionItems(model, position) {
-        const range = getTailwindCompletionRange(model, position, knownClasses)
-        if (!range) return { suggestions: [] }
-
-        return {
-          suggestions: Array.from(suggestions.values()).map((suggestion) => ({
-            label: suggestion.label,
-            kind: monaco.languages.CompletionItemKind.Value,
-            detail: suggestion.detail,
-            documentation: suggestion.description,
-            insertText: suggestion.label,
-            range,
-            sortText: suggestion.detail.startsWith("Hulla")
-              ? `0-${suggestion.label}`
-              : `1-${suggestion.label}`,
-          })),
-        }
-      },
-    }
-    const hoverProvider: monaco.languages.HoverProvider = {
-      provideHover(model, position) {
-        const result = getTailwindToken(model, position)
-        const suggestion = result ? suggestions.get(result.token) : undefined
-        if (!result || !suggestion) return
-
-        return {
-          range: result.range,
-          contents: [
-            { value: `**${suggestion.label}**` },
-            { value: suggestion.detail },
-            { value: suggestion.description },
-          ],
-        }
-      },
-    }
-
-    const disposables = ["astro", "typescript"].flatMap((language) => [
-      monaco.languages.registerCompletionItemProvider(language, completionProvider),
-      monaco.languages.registerHoverProvider(language, hoverProvider),
-    ])
-    return () => disposables.forEach((disposable) => disposable.dispose())
+    const block = document.createElement("div")
+    block.dataset.slot = "code-block"
+    block.className =
+      "group/code-block min-w-0 overflow-hidden rounded-md border border-border bg-surface-raised text-foreground shadow-sm"
+    block.append(pre)
+    output.replaceChildren(block)
   }
 
   const initializeSourceInspector = (inspector: HTMLElement) => {
@@ -1255,136 +334,45 @@ declare module "@/ui/alert" {
     const modeTabs = Array.from(inspector.querySelectorAll<HTMLButtonElement>("[data-source-mode]"))
     const tabGroups = Array.from(inspector.querySelectorAll<HTMLElement>("[data-source-files]"))
     const records = Array.from(
-      inspector.querySelectorAll<HTMLInputElement>("[data-source-record]")
+      inspector.querySelectorAll<HTMLTemplateElement>("[data-source-record]")
     ).map(
-      (input): SourceRecord => ({
-        code: input.value,
-        filename: input.dataset.filename ?? "generated/source.ts",
-        framework: input.dataset.framework ?? "Source",
+      (template): SourceRecord => ({
+        code: template.content.textContent ?? "",
+        filename: template.dataset.filename ?? "generated/source.ts",
+        framework: template.dataset.framework ?? "Source",
         language:
-          input.dataset.language === "tsx"
+          template.dataset.language === "tsx"
             ? "tsx"
-            : input.dataset.language === "ts"
+            : template.dataset.language === "ts"
               ? "ts"
-              : input.dataset.language === "css"
+              : template.dataset.language === "css"
                 ? "css"
                 : "astro",
         mode:
-          input.dataset.mode === "visible" || input.dataset.mode === "minimal"
-            ? input.dataset.mode
+          template.dataset.mode === "visible" || template.dataset.mode === "minimal"
+            ? template.dataset.mode
             : "generated",
       })
     )
-    const mount = inspector.querySelector<HTMLElement>("[data-monaco-mount]")
-    const fallback = inspector.querySelector<HTMLElement>("[data-editor-fallback]")
+    const output = inspector.querySelector<HTMLElement>("[data-source-output]")
     const path = inspector.querySelector<HTMLElement>("[data-source-path]")
     const diagnostics = inspector.querySelector<HTMLElement>("[data-diagnostics]")
     const copyButton = inspector.querySelector<HTMLButtonElement>("[data-copy-source]")
     const copyLabel = inspector.querySelector<HTMLElement>("[data-copy-label]")
-    if (!mount || records.length === 0) return
-    inspector.dataset.sourceInspectorReady = "true"
+    if (!output || records.length === 0) return
 
-    const inspectorKey = inspector.getAttribute("aria-labelledby") ?? "component-source"
-    const models = records.map((record, index) =>
-      monaco.editor.createModel(
-        record.code,
-        record.language === "tsx" || record.language === "ts" ? "typescript" : record.language,
-        monaco.Uri.parse(`file:///${inspectorKey}/${index}/${record.filename}`)
-      )
-    )
-    const disposeTailwindIntelliSense = registerTailwindIntelliSense(records)
+    inspector.dataset.sourceInspectorReady = "true"
+    const lifecycle = new AbortController()
     let activeIndex = Number(
       inspector.querySelector<HTMLButtonElement>('[data-source-tab][aria-selected="true"]')?.dataset
         .sourceIndex ?? 0
     )
-    const getEditorLabel = (record: SourceRecord) => `${record.framework} ${record.mode} code`
-
-    const editor = monaco.editor.create(mount, {
-      model: models[activeIndex],
-      ariaLabel: records[activeIndex] ? getEditorLabel(records[activeIndex]) : "Component code",
-      automaticLayout: true,
-      bracketPairColorization: { enabled: true },
-      cursorBlinking: "smooth",
-      cursorSmoothCaretAnimation: "on",
-      fontFamily: '"IBM Plex Mono", "SFMono-Regular", "Cascadia Mono", monospace',
-      fontLigatures: true,
-      fontSize: 13,
-      glyphMargin: false,
-      hover: { enabled: "on", delay: 180, sticky: true },
-      lineHeight: 22,
-      minimap: { enabled: false },
-      padding: { top: 14, bottom: 18 },
-      readOnly: true,
-      readOnlyMessage: { value: "This code sample is read only." },
-      renderLineHighlight: "gutter",
-      renderValidationDecorations: "on",
-      roundedSelection: false,
-      scrollBeyondLastLine: false,
-      scrollbar: {
-        alwaysConsumeMouseWheel: false,
-        horizontalScrollbarSize: 9,
-        verticalScrollbarSize: 9,
-      },
-      smoothScrolling: true,
-      tabSize: 2,
-      theme: "hulla-foundry",
-      wordWrap: "off",
-    })
-    fallback?.setAttribute("hidden", "")
-
-    const updateDiagnostics = () => {
-      if (!diagnostics) return
-      const record = records[activeIndex]
-      if (record?.language !== "tsx" && record?.language !== "ts") {
-        diagnostics.textContent =
-          record?.language === "css"
-            ? "Demo styles"
-            : record?.mode === "minimal"
-              ? "Minimal example"
-              : record?.mode === "generated"
-                ? "Generated source"
-                : "Exact render"
-        diagnostics.dataset.state = "idle"
-        diagnostics.title =
-          record?.language === "css"
-            ? "All catalog CSS is exposed so demo-only styles are never hidden."
-            : record?.mode === "minimal"
-              ? "This is a deliberately small, copy-ready composition rather than the rendered catalog source."
-              : record?.mode === "generated"
-                ? "This is the generated component file shipped to consumers."
-                : "This is the exact Astro file used to render the catalog example."
-        return
-      }
-
-      const markers = monaco.editor.getModelMarkers({ resource: models[activeIndex]?.uri })
-      const errors = markers.filter(({ severity }) => severity === monaco.MarkerSeverity.Error)
-      const warnings = markers.filter(({ severity }) => severity === monaco.MarkerSeverity.Warning)
-      const errorCount = errors.length
-      const warningCount = warnings.length
-      diagnostics.title = [...errors, ...warnings].map(({ message }) => message).join("\n")
-      if (errorCount > 0) {
-        diagnostics.textContent = `${errorCount} TypeScript error${errorCount === 1 ? "" : "s"}`
-        diagnostics.dataset.state = "error"
-      } else if (warningCount > 0) {
-        diagnostics.textContent = `${warningCount} TypeScript warning${warningCount === 1 ? "" : "s"}`
-        diagnostics.dataset.state = "warning"
-      } else {
-        diagnostics.textContent = "Types ready"
-        diagnostics.dataset.state = "ready"
-        diagnostics.title =
-          records[activeIndex]?.mode === "minimal"
-            ? "This is a deliberately small, copy-ready composition rather than the rendered catalog source."
-            : records[activeIndex]?.mode === "generated"
-              ? "This is the generated component file shipped to consumers."
-              : "This is the exact source used to render the catalog example."
-      }
-    }
 
     const selectSource = (index: number, moveFocus = false) => {
-      if (!records[index] || !models[index]) return
+      const record = records[index]
+      if (!record) return
       activeIndex = index
-      const activeMode = records[index].mode
-      const activeFramework = records[index].framework
+
       tabs.forEach((tab) => {
         const selected = Number(tab.dataset.sourceIndex) === index
         tab.setAttribute("aria-selected", String(selected))
@@ -1392,151 +380,126 @@ declare module "@/ui/alert" {
         if (selected && moveFocus) tab.focus()
       })
       modeTabs.forEach((tab) => {
-        const selected = tab.dataset.sourceMode === activeMode
+        const selected = tab.dataset.sourceMode === record.mode
         tab.setAttribute("aria-selected", String(selected))
         tab.tabIndex = selected ? 0 : -1
       })
-      if (frameworkSelect) {
-        frameworkSelect.value = activeFramework
-        Array.from(frameworkSelect.options).forEach((option) => {
-          option.disabled = !records.some(
-            (record) => record.mode === activeMode && record.framework === option.value
-          )
-        })
-      }
+      if (frameworkSelect) frameworkSelect.value = record.framework
       tabGroups.forEach((group) => {
-        group.hidden = group.dataset.sourceFiles !== `${activeFramework}:${activeMode}`
+        group.hidden = group.dataset.sourceFiles !== `${record.framework}:${record.mode}`
       })
 
-      editor.setModel(models[index])
-      editor.updateOptions({ ariaLabel: getEditorLabel(records[index]) })
-      editor.setScrollPosition({ scrollLeft: 0, scrollTop: 0 })
-      editor.layout()
-      if (path) path.textContent = records[index].filename
-      if (diagnostics && (records[index].language === "tsx" || records[index].language === "ts")) {
-        diagnostics.textContent = "Checking types…"
-        diagnostics.dataset.state = "checking"
+      renderHighlightedSource(output, record)
+      if (path) path.textContent = record.filename
+      if (diagnostics) {
+        diagnostics.textContent = statusFor(record)
+        diagnostics.dataset.state = "ready"
       }
-      updateDiagnostics()
     }
 
     tabs.forEach((tab) => {
       const index = Number(tab.dataset.sourceIndex)
-      tab.addEventListener("click", () => selectSource(index))
-      tab.addEventListener("keydown", (event) => {
-        const groupTabs = Array.from(
-          tab
-            .closest("[data-source-files]")
-            ?.querySelectorAll<HTMLButtonElement>("[data-source-tab]") ?? []
-        )
-        const currentPosition = groupTabs.indexOf(tab)
-        let nextPosition = currentPosition
-
-        if (event.key === "ArrowRight") nextPosition = (currentPosition + 1) % groupTabs.length
-        if (event.key === "ArrowLeft") {
-          nextPosition = (currentPosition - 1 + groupTabs.length) % groupTabs.length
-        }
-        if (event.key === "Home") nextPosition = 0
-        if (event.key === "End") nextPosition = groupTabs.length - 1
-        if (nextPosition === currentPosition) return
-
-        event.preventDefault()
-        selectSource(Number(groupTabs[nextPosition]?.dataset.sourceIndex), true)
-      })
+      tab.addEventListener("click", () => selectSource(index), { signal: lifecycle.signal })
+      tab.addEventListener(
+        "keydown",
+        (event) => {
+          const groupTabs = Array.from(
+            tab
+              .closest("[data-source-files]")
+              ?.querySelectorAll<HTMLButtonElement>("[data-source-tab]") ?? []
+          )
+          const currentPosition = groupTabs.indexOf(tab)
+          let nextPosition = currentPosition
+          if (event.key === "ArrowRight") nextPosition = (currentPosition + 1) % groupTabs.length
+          if (event.key === "ArrowLeft") {
+            nextPosition = (currentPosition - 1 + groupTabs.length) % groupTabs.length
+          }
+          if (event.key === "Home") nextPosition = 0
+          if (event.key === "End") nextPosition = groupTabs.length - 1
+          if (nextPosition === currentPosition) return
+          event.preventDefault()
+          selectSource(Number(groupTabs[nextPosition]?.dataset.sourceIndex), true)
+        },
+        { signal: lifecycle.signal }
+      )
     })
 
     modeTabs.forEach((tab, index) => {
-      tab.addEventListener("click", () => {
-        const activeFramework = records[activeIndex]?.framework
+      tab.addEventListener(
+        "click",
+        () => {
+          const activeFramework = records[activeIndex]?.framework
+          let recordIndex = records.findIndex(
+            ({ framework, mode }) =>
+              framework === activeFramework && mode === tab.dataset.sourceMode
+          )
+          if (recordIndex < 0) {
+            recordIndex = records.findIndex(({ mode }) => mode === tab.dataset.sourceMode)
+          }
+          selectSource(recordIndex)
+        },
+        { signal: lifecycle.signal }
+      )
+      tab.addEventListener(
+        "keydown",
+        (event) => {
+          let nextIndex = index
+          if (event.key === "ArrowRight") nextIndex = (index + 1) % modeTabs.length
+          if (event.key === "ArrowLeft") {
+            nextIndex = (index - 1 + modeTabs.length) % modeTabs.length
+          }
+          if (event.key === "Home") nextIndex = 0
+          if (event.key === "End") nextIndex = modeTabs.length - 1
+          if (nextIndex === index) return
+          event.preventDefault()
+          modeTabs[nextIndex]?.click()
+          modeTabs[nextIndex]?.focus()
+        },
+        { signal: lifecycle.signal }
+      )
+    })
+
+    frameworkSelect?.addEventListener(
+      "change",
+      () => {
+        const activeMode = records[activeIndex]?.mode
         let recordIndex = records.findIndex(
-          ({ framework, mode }) => framework === activeFramework && mode === tab.dataset.sourceMode
+          ({ framework, mode }) => framework === frameworkSelect.value && mode === activeMode
         )
         if (recordIndex < 0) {
-          recordIndex = records.findIndex(({ mode }) => mode === tab.dataset.sourceMode)
+          recordIndex = records.findIndex(({ framework }) => framework === frameworkSelect.value)
         }
         selectSource(recordIndex)
-      })
-      tab.addEventListener("keydown", (event) => {
-        let nextIndex = index
-
-        if (event.key === "ArrowRight") nextIndex = (index + 1) % modeTabs.length
-        if (event.key === "ArrowLeft") {
-          nextIndex = (index - 1 + modeTabs.length) % modeTabs.length
-        }
-        if (event.key === "Home") nextIndex = 0
-        if (event.key === "End") nextIndex = modeTabs.length - 1
-        if (nextIndex === index) return
-
-        event.preventDefault()
-        modeTabs[nextIndex]?.click()
-        modeTabs[nextIndex]?.focus()
-      })
-    })
-
-    frameworkSelect?.addEventListener("change", () => {
-      const activeMode = records[activeIndex]?.mode
-      let recordIndex = records.findIndex(
-        ({ framework, mode }) => framework === frameworkSelect.value && mode === activeMode
-      )
-      if (recordIndex < 0) {
-        recordIndex = records.findIndex(({ framework }) => framework === frameworkSelect.value)
-      }
-      selectSource(recordIndex)
-    })
-
-    monaco.editor.onDidChangeMarkers((uris) => {
-      if (uris.some((uri) => uri.toString() === models[activeIndex]?.uri.toString())) {
-        updateDiagnostics()
-      }
-    })
-
-    copyButton?.addEventListener("click", async () => {
-      const source = editor.getModel()?.getValue()
-      if (!source || !copyLabel) return
-
-      try {
-        await navigator.clipboard.writeText(source)
-        copyLabel.textContent = "Copied"
-        window.setTimeout(() => {
-          copyLabel.textContent = "Copy"
-        }, 1600)
-      } catch {
-        copyLabel.textContent = "Copy failed"
-      }
-    })
-
-    window.addEventListener(
-      "pagehide",
-      () => {
-        disposeTailwindIntelliSense()
       },
-      { once: true }
+      { signal: lifecycle.signal }
+    )
+
+    copyButton?.addEventListener(
+      "click",
+      async () => {
+        const source = records[activeIndex]?.code
+        if (!source || !copyLabel) return
+        try {
+          await navigator.clipboard.writeText(source)
+          copyLabel.textContent = "Copied"
+          window.setTimeout(() => {
+            copyLabel.textContent = "Copy"
+          }, 1600)
+        } catch {
+          copyLabel.textContent = "Copy failed"
+        }
+      },
+      { signal: lifecycle.signal }
     )
   }
 
   const initializeSourceInspectors = (root: ParentNode = document) => {
+    if (root instanceof HTMLElement && root.matches("[data-source-inspector]")) {
+      initializeSourceInspector(root)
+    }
     root.querySelectorAll<HTMLElement>("[data-source-inspector]").forEach(initializeSourceInspector)
   }
 
-  type SourceInspectorWindow = Window & {
-    hullaSourceInspectorObserver?: MutationObserver
-  }
-
   initializeSourceInspectors()
-
-  const sourceInspectorWindow = window as SourceInspectorWindow
-  sourceInspectorWindow.hullaSourceInspectorObserver?.disconnect()
-  sourceInspectorWindow.hullaSourceInspectorObserver = new MutationObserver((mutations) => {
-    for (const mutation of mutations) {
-      for (const node of mutation.addedNodes) {
-        if (!(node instanceof HTMLElement)) continue
-        if (node.matches("[data-source-inspector]")) initializeSourceInspector(node)
-        initializeSourceInspectors(node)
-      }
-    }
-  })
-  sourceInspectorWindow.hullaSourceInspectorObserver.observe(document.body, {
-    childList: true,
-    subtree: true,
-  })
+  document.addEventListener("astro:page-load", () => initializeSourceInspectors())
 </script>

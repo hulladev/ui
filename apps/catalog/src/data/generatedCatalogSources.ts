@@ -3,25 +3,31 @@ export type CatalogSourceLanguage = "astro" | "css" | "ts" | "tsx"
 export type CatalogSourceFile = {
   code: string
   filename: string
-  framework: "Astro" | "React"
+  framework: "Astro" | "React" | "Solid"
   label?: string
   language: CatalogSourceLanguage
 }
 
-const astroModules = import.meta.glob("../../../../generated/astro/**/*.astro", {
+const astroModules = import.meta.glob("../../../../generated/astro/**/*.{astro,ts}", {
   eager: true,
   import: "default",
   query: "?raw",
 }) as Record<string, string>
 
-const reactModules = import.meta.glob("../../../../generated/react/**/*.tsx", {
+const reactModules = import.meta.glob("../../../../generated/react/**/*.{tsx,ts}", {
+  eager: true,
+  import: "default",
+  query: "?raw",
+}) as Record<string, string>
+
+const solidModules = import.meta.glob("../../../../generated/solid/**/*.{tsx,ts}", {
   eager: true,
   import: "default",
   query: "?raw",
 }) as Record<string, string>
 
 const basename = (filename: string) => filename.split("/").at(-1) ?? filename
-const withoutExtension = (filename: string) => filename.replace(/\.(?:astro|tsx)$/, "")
+const withoutExtension = (filename: string) => filename.replace(/\.(?:astro|ts|tsx)$/, "")
 
 const fileLabel = (filename: string) =>
   withoutExtension(basename(filename))
@@ -33,7 +39,7 @@ const normalizedFilename = (path: string) => path.replace(/^.*\/generated\//, "g
 
 const familySources = (
   modules: Record<string, string>,
-  framework: "Astro" | "React",
+  framework: "Astro" | "React" | "Solid",
   language: "astro" | "tsx",
   family: string
 ): CatalogSourceFile[] => {
@@ -48,7 +54,7 @@ const familySources = (
         filename,
         framework,
         label: fileLabel(filename),
-        language,
+        language: filename.endsWith(".ts") ? ("ts" as const) : language,
       }
     })
     .sort((left, right) => {
@@ -61,12 +67,12 @@ const familySources = (
 }
 
 export const generatedSourcesFor = (...families: string[]): CatalogSourceFile[] =>
-  (["React", "Astro"] as const).flatMap((framework) =>
+  (["React", "Solid", "Astro"] as const).flatMap((framework) =>
     families.flatMap((family) =>
       familySources(
-        framework === "React" ? reactModules : astroModules,
+        framework === "React" ? reactModules : framework === "Solid" ? solidModules : astroModules,
         framework,
-        framework === "React" ? "tsx" : "astro",
+        framework === "Astro" ? "astro" : "tsx",
         family
       )
     )
