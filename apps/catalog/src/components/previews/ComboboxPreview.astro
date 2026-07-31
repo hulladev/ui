@@ -1,0 +1,227 @@
+---
+import { Search } from "@lucide/astro"
+import ComboboxContent from "@/ui/combobox/combobox-content.astro"
+import ComboboxEmpty from "@/ui/combobox/combobox-empty.astro"
+import ComboboxGroupLabel from "@/ui/combobox/combobox-group-label.astro"
+import ComboboxGroup from "@/ui/combobox/combobox-group.astro"
+import ComboboxInput from "@/ui/combobox/combobox-input.astro"
+import ComboboxOption from "@/ui/combobox/combobox-option.astro"
+import Combobox from "@/ui/combobox/combobox.astro"
+import FieldDescription from "@/ui/field/field-description.astro"
+import FieldError from "@/ui/field/field-error.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import InputAdornment from "@/ui/input/input-adornment.astro"
+import InputGroup from "@/ui/input/input-group.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const combobox = manifest.library.components.combobox
+const comboboxSizes = ["sm", "md", "lg"] as const
+const comboboxVariants = ["outline", "filled", "underline"] as const
+const comboboxModes = ["single", "multiple"] as const
+---
+
+<ComponentPreview component="Combobox" hint="Filter · Enter" requirePropsView={true}>
+  <div slot="variants" class="grid gap-8">
+    <div
+      class="grid grid-cols-2 items-start gap-6 max-[760px]:grid-cols-1"
+      aria-label="Combobox selection modes"
+    >
+      <Field>
+        <FieldLabel for="combobox-team-input">Team</FieldLabel>
+        <Combobox name="team-search" defaultValue="engineering">
+          <InputGroup>
+            <InputAdornment aria-hidden="true"><Search /></InputAdornment>
+            <ComboboxInput
+              id="combobox-team-input"
+              placeholder="Search teams"
+              aria-describedby="combobox-team-description"
+            />
+          </InputGroup>
+          <ComboboxContent>
+            <ComboboxGroup>
+              <ComboboxGroupLabel>Product</ComboboxGroupLabel>
+              <ComboboxOption value="design">Design</ComboboxOption>
+              <ComboboxOption value="engineering">Engineering</ComboboxOption>
+              <ComboboxOption value="research">Research</ComboboxOption>
+            </ComboboxGroup>
+            <ComboboxGroup>
+              <ComboboxGroupLabel>Business</ComboboxGroupLabel>
+              <ComboboxOption value="operations">Operations</ComboboxOption>
+              <ComboboxOption value="go-to-market">Go to market</ComboboxOption>
+            </ComboboxGroup>
+            <ComboboxEmpty>No teams match that search.</ComboboxEmpty>
+          </ComboboxContent>
+        </Combobox>
+        <FieldDescription id="combobox-team-description">
+          Search a closed set of available teams.
+        </FieldDescription>
+      </Field>
+
+      <Field>
+        <FieldLabel for="combobox-reviewers-input">Reviewers</FieldLabel>
+        <Combobox multiple name="reviewer-search" defaultValue={["alex", "mina"]}>
+          <ComboboxInput
+            id="combobox-reviewers-input"
+            placeholder="Add reviewers"
+            aria-describedby="combobox-reviewers-description"
+          />
+          <ComboboxContent>
+            <ComboboxGroup>
+              <ComboboxGroupLabel>Available</ComboboxGroupLabel>
+              <ComboboxOption value="alex">Alex Morgan</ComboboxOption>
+              <ComboboxOption value="mina">Mina Park</ComboboxOption>
+              <ComboboxOption value="samuel">Samuel Hulla</ComboboxOption>
+              <ComboboxOption value="contractor" disabled>External contractor</ComboboxOption>
+            </ComboboxGroup>
+            <ComboboxEmpty>No reviewers match that search.</ComboboxEmpty>
+          </ComboboxContent>
+        </Combobox>
+        <FieldDescription id="combobox-reviewers-description">
+          Each choice clears the query and leaves the result list open.
+        </FieldDescription>
+      </Field>
+    </div>
+
+    <div
+      class="grid grid-cols-3 items-end gap-4 border-t border-border pt-8 max-[760px]:grid-cols-1"
+      aria-label="Combobox input variants"
+    >
+      {
+        comboboxVariants.map((variant) => (
+          <Field>
+            <FieldLabel for={`combobox-variant-${variant}`}>{variant}</FieldLabel>
+            <Combobox defaultValue="prague">
+              <ComboboxInput id={`combobox-variant-${variant}`} variant={variant} />
+              <ComboboxContent>
+                <ComboboxOption value="prague">Prague · UTC+2</ComboboxOption>
+                <ComboboxOption value="london">London · UTC+1</ComboboxOption>
+                <ComboboxOption value="tokyo">Tokyo · UTC+9</ComboboxOption>
+                <ComboboxEmpty>No offices found.</ComboboxEmpty>
+              </ComboboxContent>
+            </Combobox>
+          </Field>
+        ))
+      }
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls prop-controls--combobox">
+      <label class="prop-control">
+        <span class="label">Variant</span>
+        <select aria-label="Combobox variant" data-combobox-prop-variant>
+          <option value="outline">Outline</option>
+          <option value="filled">Filled</option>
+          <option value="underline">Underline</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Size</span>
+        <select aria-label="Combobox size" data-combobox-prop-control-size>
+          <option value="sm">Small</option>
+          <option value="md" selected>Medium</option>
+          <option value="lg">Large</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Selection</span>
+        <select aria-label="Combobox selection mode" data-combobox-prop-mode>
+          <option value="single">Single</option>
+          <option value="multiple">Multiple</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">State</span>
+        <select aria-label="Combobox state" data-combobox-prop-state>
+          <option value="default">Default</option>
+          <option value="invalid">Invalid</option>
+          <option value="disabled">Disabled</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage playground-stage--field">
+      <Field>
+        <FieldLabel for="combobox-playground-single-outline-md" data-combobox-playground-label>
+          Office
+        </FieldLabel>
+        {
+          comboboxModes.map((mode) =>
+            comboboxVariants.map((variant) =>
+              comboboxSizes.map((size) => {
+                const selected = mode === "single" && variant === "outline" && size === "md"
+                const id = `combobox-playground-${mode}-${variant}-${size}`
+                return (
+                  <Combobox
+                    multiple={mode === "multiple"}
+                    defaultValue={mode === "multiple" ? ["prague", "london"] : "prague"}
+                    data-playground-combobox
+                    data-mode={mode}
+                    data-variant={variant}
+                    data-size={size}
+                    data-disabled={selected ? "false" : "true"}
+                    hidden={!selected}
+                  >
+                    <ComboboxInput
+                      id={id}
+                      variant={variant}
+                      controlSize={size}
+                      placeholder="Search offices"
+                      aria-describedby={selected ? "combobox-prop-description" : undefined}
+                    />
+                    <ComboboxContent>
+                      <ComboboxGroup>
+                        <ComboboxGroupLabel>Europe</ComboboxGroupLabel>
+                        <ComboboxOption value="prague">Prague · UTC+2</ComboboxOption>
+                        <ComboboxOption value="london">London · UTC+1</ComboboxOption>
+                      </ComboboxGroup>
+                      <ComboboxGroup>
+                        <ComboboxGroupLabel>Asia Pacific</ComboboxGroupLabel>
+                        <ComboboxOption value="tokyo">Tokyo · UTC+9</ComboboxOption>
+                      </ComboboxGroup>
+                      <ComboboxEmpty>No offices found.</ComboboxEmpty>
+                    </ComboboxContent>
+                  </Combobox>
+                )
+              })
+            )
+          )
+        }
+        <FieldDescription id="combobox-prop-description" data-combobox-playground-description>
+          Filters offices while preserving a native form value.
+        </FieldDescription>
+        <FieldError id="combobox-prop-error" data-combobox-playground-error hidden>
+          Choose an office to continue.
+        </FieldError>
+      </Field>
+    </div>
+
+    <code class="prop-readout" data-prop-readout aria-live="polite"
+      >&lt;Combobox&gt;…&lt;/Combobox&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{combobox.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Selection</dt>
+      <dd>Single + multiple</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Filtering</dt>
+      <dd>Option text · textValue</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Focus model</dt>
+      <dd>Input · active descendant</dd>
+    </div>
+  </dl>
+</ComponentPreview>

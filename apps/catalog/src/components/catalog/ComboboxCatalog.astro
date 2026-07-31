@@ -1,0 +1,168 @@
+---
+import ComponentSource from "../ComponentSource.astro"
+import ComboboxPreview from "../previews/ComboboxPreview.astro"
+import { comboboxPreviewSources } from "../../data/catalogPreviewSources"
+
+const comboboxUsageSources = [
+  {
+    code: `---
+import ComboboxContent from "@/ui/combobox/combobox-content.astro"
+import ComboboxEmpty from "@/ui/combobox/combobox-empty.astro"
+import ComboboxInput from "@/ui/combobox/combobox-input.astro"
+import ComboboxOption from "@/ui/combobox/combobox-option.astro"
+import Combobox from "@/ui/combobox/combobox.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import InputAdornment from "@/ui/input/input-adornment.astro"
+import InputGroup from "@/ui/input/input-group.astro"
+---
+
+<Field>
+  <FieldLabel for="team-search">Team</FieldLabel>
+  <Combobox name="team">
+    <InputGroup>
+      <InputAdornment aria-hidden="true">Search</InputAdornment>
+      <ComboboxInput id="team-search" placeholder="Search teams" />
+    </InputGroup>
+    <ComboboxContent>
+      <ComboboxOption value="design">Design</ComboboxOption>
+      <ComboboxOption value="engineering">Engineering</ComboboxOption>
+      <ComboboxOption value="operations">Operations</ComboboxOption>
+      <ComboboxEmpty>No teams found.</ComboboxEmpty>
+    </ComboboxContent>
+  </Combobox>
+</Field>`,
+    filename: "src/components/team-combobox.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxOption,
+} from "@/ui/combobox"
+import { Field, FieldLabel } from "@/ui/field"
+import { InputAdornment, InputGroup } from "@/ui/input"
+
+export function TeamCombobox() {
+  return (
+    <Field>
+      <FieldLabel htmlFor="team-search">Team</FieldLabel>
+      <Combobox name="team">
+        <InputGroup>
+          <InputAdornment aria-hidden="true">Search</InputAdornment>
+          <ComboboxInput id="team-search" placeholder="Search teams" />
+        </InputGroup>
+        <ComboboxContent>
+          <ComboboxOption value="design">Design</ComboboxOption>
+          <ComboboxOption value="engineering">Engineering</ComboboxOption>
+          <ComboboxOption value="operations">Operations</ComboboxOption>
+          <ComboboxEmpty>No teams found.</ComboboxEmpty>
+        </ComboboxContent>
+      </Combobox>
+    </Field>
+  )
+}`,
+    filename: "src/components/team-combobox.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="combobox" aria-labelledby="combobox-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Choice</p>
+      <h2 id="combobox-title">Combobox</h2>
+    </div>
+    <span class="status">Editable listbox</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Combobox component preview">
+    <div class="workbench workbench--combobox">
+      <ComboboxPreview />
+
+      <ComponentSource
+        component="Combobox"
+        generatedFamilies={["combobox", "input", "field"]}
+        previewSources={comboboxPreviewSources}
+        usageSources={comboboxUsageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncComboboxPlayground = (preview: HTMLElement) => {
+    const variant =
+      preview.querySelector<HTMLSelectElement>("[data-combobox-prop-variant]")?.value ?? "outline"
+    const controlSize =
+      preview.querySelector<HTMLSelectElement>("[data-combobox-prop-control-size]")?.value ?? "md"
+    const mode =
+      preview.querySelector<HTMLSelectElement>("[data-combobox-prop-mode]")?.value ?? "single"
+    const state =
+      preview.querySelector<HTMLSelectElement>("[data-combobox-prop-state]")?.value ?? "default"
+
+    preview.querySelectorAll<HTMLElement>("[data-playground-combobox]").forEach((combobox) => {
+      const selected =
+        combobox.dataset.variant === variant &&
+        combobox.dataset.size === controlSize &&
+        combobox.dataset.mode === mode
+      combobox.hidden = !selected
+      combobox.dataset.disabled = !selected || state === "disabled" ? "true" : "false"
+
+      const input = combobox.querySelector<HTMLInputElement>("[data-slot='combobox-input']")
+      if (!input) return
+
+      if (selected && state === "invalid") {
+        input.setAttribute("aria-invalid", "true")
+        input.setAttribute("aria-describedby", "combobox-prop-error")
+      } else if (selected) {
+        input.removeAttribute("aria-invalid")
+        input.setAttribute("aria-describedby", "combobox-prop-description")
+      }
+    })
+
+    const label = preview.querySelector<HTMLLabelElement>("[data-combobox-playground-label]")
+    if (label) label.htmlFor = `combobox-playground-${mode}-${variant}-${controlSize}`
+
+    const description = preview.querySelector<HTMLElement>("[data-combobox-playground-description]")
+    const error = preview.querySelector<HTMLElement>("[data-combobox-playground-error]")
+    if (description) description.hidden = state === "invalid"
+    if (error) error.hidden = state !== "invalid"
+
+    const stateProp =
+      state === "invalid" ? ' aria-invalid="true"' : state === "disabled" ? " disabled" : ""
+    const multipleProp = mode === "multiple" ? " multiple" : ""
+    const readout = preview.querySelector<HTMLElement>("[data-prop-readout]")
+    if (readout) {
+      readout.textContent = `<Combobox${multipleProp}><ComboboxInput variant="${variant}" controlSize="${controlSize}"${stateProp} />…</Combobox>`
+    }
+  }
+
+  document.addEventListener("previewmodechange", (event) => {
+    const preview = (event.target as HTMLElement).closest<HTMLElement>(
+      '[data-preview-component="combobox-preview"]'
+    )
+    if (preview && (event as CustomEvent<{ mode?: string }>).detail.mode === "props") {
+      syncComboboxPlayground(preview)
+    }
+  })
+
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      [
+        "[data-combobox-prop-variant]",
+        "[data-combobox-prop-control-size]",
+        "[data-combobox-prop-mode]",
+        "[data-combobox-prop-state]",
+      ].join(",")
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="combobox-preview"]')
+    if (preview) syncComboboxPlayground(preview)
+  })
+</script>

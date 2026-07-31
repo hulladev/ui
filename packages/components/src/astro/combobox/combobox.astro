@@ -1,0 +1,82 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type ComboboxValue = string | string[]
+
+type Props = Omit<HTMLAttributes<"div">, "defaultValue"> & {
+  defaultValue?: ComboboxValue
+  disabled?: boolean
+  form?: string
+  multiple?: boolean
+  name?: string
+  required?: boolean
+  value?: ComboboxValue
+}
+
+const {
+  class: className,
+  defaultValue,
+  disabled = false,
+  form,
+  multiple = false,
+  name,
+  required = false,
+  value,
+  ...props
+} = Astro.props as Props
+const initialValue = value ?? defaultValue ?? (multiple ? [] : "")
+---
+
+<hulla-combobox
+  {...props}
+  data-disabled={disabled ? "true" : "false"}
+  data-initial-value={JSON.stringify(initialValue)}
+  data-multiple={multiple ? "true" : "false"}
+  data-slot="combobox"
+  class={cn("relative grid w-full min-w-0", className)}
+>
+  <slot />
+  <select
+    aria-hidden="true"
+    data-slot="combobox-native-control"
+    disabled={disabled}
+    form={form}
+    inert
+    multiple={multiple}
+    name={name}
+    required={required}
+    tabindex="-1"
+    class="pointer-events-none absolute bottom-0 left-0 size-px opacity-0"></select>
+</hulla-combobox>
+
+<script>
+  import { connectCombobox, type ComboboxController, type ComboboxValue } from "@/lib/combobox"
+
+  const elementName = "hulla-combobox"
+
+  if (!customElements.get(elementName)) {
+    class HullaComboboxElement extends HTMLElement {
+      controller: ComboboxController | undefined
+
+      connectedCallback() {
+        this.controller ??= connectCombobox(this)
+      }
+
+      disconnectedCallback() {
+        this.controller?.destroy()
+        this.controller = undefined
+      }
+
+      get value(): ComboboxValue {
+        return this.controller?.getValue() ?? (this.dataset.multiple === "true" ? [] : "")
+      }
+
+      set value(value: ComboboxValue) {
+        this.controller?.setValue(value)
+      }
+    }
+
+    customElements.define(elementName, HullaComboboxElement)
+  }
+</script>

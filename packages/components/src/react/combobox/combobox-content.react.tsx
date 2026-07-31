@@ -1,0 +1,38 @@
+import { popoverPlacements, popoverSurface } from "@/+css/popover.css"
+import { cn } from "@/lib/style"
+import { resolve } from "@hulla/ui"
+import type { ComponentPropsWithRef } from "react"
+
+const $placement = resolve(popoverPlacements)
+const $surface = resolve(popoverSurface)
+
+export type ComboboxContentProps = ComponentPropsWithRef<"div"> & {
+  placement?: typeof $placement.infer
+}
+
+export function ComboboxContent({
+  children,
+  className,
+  placement = "bottom-start",
+  popover = "auto",
+  role = "listbox",
+  ...props
+}: ComboboxContentProps) {
+  return (
+    <div
+      {...props}
+      popover={popover}
+      role={role}
+      data-placement={placement}
+      data-slot="combobox-content"
+      className={cn(
+        $surface,
+        $placement(placement),
+        "min-w-[anchor-size(width)] max-w-[min(28rem,calc(100vw-1rem))] overscroll-contain p-1",
+        className
+      )}
+    >
+      {children}
+    </div>
+  )
+}

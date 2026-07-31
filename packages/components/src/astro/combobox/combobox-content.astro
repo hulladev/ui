@@ -1,0 +1,37 @@
+---
+import { popoverPlacements, popoverSurface } from "@/+css/popover.css"
+import { cn } from "@/lib/style"
+import { resolve } from "@hulla/ui"
+import type { HTMLAttributes } from "astro/types"
+
+const $placement = resolve(popoverPlacements)
+const $surface = resolve(popoverSurface)
+
+type Props = HTMLAttributes<"div"> & {
+  placement?: typeof $placement.infer
+}
+
+const {
+  class: className,
+  placement = "bottom-start",
+  popover = "auto",
+  role = "listbox",
+  ...props
+} = Astro.props as Props
+---
+
+<div
+  {...props}
+  popover={popover}
+  role={role}
+  data-placement={placement}
+  data-slot="combobox-content"
+  class={cn(
+    $surface,
+    $placement(placement),
+    "min-w-[anchor-size(width)] max-w-[min(28rem,calc(100vw-1rem))] overscroll-contain p-1",
+    className
+  )}
+>
+  <slot />
+</div>
