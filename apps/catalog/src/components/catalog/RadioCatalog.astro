@@ -1,0 +1,151 @@
+---
+import astroRadioSource from "../../../../../generated/astro/radio/radio.astro?raw"
+import reactRadioSource from "../../../../../generated/react/radio/radio.tsx?raw"
+import { radioPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import RadioPreview from "../previews/RadioPreview.astro"
+
+const radioSources = [
+  {
+    code: astroRadioSource,
+    filename: "generated/astro/radio/radio.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactRadioSource,
+    filename: "generated/react/radio/radio.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+
+const radioUsageSources = [
+  {
+    code: `---
+import FieldDescription from "@/ui/field/field-description.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import RadioGroup from "@/ui/radio/radio-group.astro"
+import Radio from "@/ui/radio/radio.astro"
+---
+
+<RadioGroup>
+  <legend class="text-sm font-medium">Choose a workspace plan</legend>
+  <Field class="grid-cols-[auto_1fr] items-start gap-x-3">
+    <Radio
+      id="plan-studio"
+      name="plan"
+      value="studio"
+      aria-describedby="plan-studio-help"
+      checked
+    />
+    <div>
+      <FieldLabel for="plan-studio">Studio</FieldLabel>
+      <FieldDescription id="plan-studio-help">
+        Shared tools for a growing product team.
+      </FieldDescription>
+    </div>
+  </Field>
+</RadioGroup>`,
+    filename: "src/components/plan-picker.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Field, FieldDescription, FieldLabel } from "@/ui/field"
+import { Radio, RadioGroup } from "@/ui/radio"
+
+export function PlanPicker() {
+  return (
+    <RadioGroup>
+      <legend className="text-sm font-medium">Choose a workspace plan</legend>
+      <Field className="grid-cols-[auto_1fr] items-start gap-x-3">
+        <Radio
+          id="plan-studio"
+          name="plan"
+          value="studio"
+          aria-describedby="plan-studio-help"
+          defaultChecked
+        />
+        <div>
+          <FieldLabel htmlFor="plan-studio">Studio</FieldLabel>
+          <FieldDescription id="plan-studio-help">
+            Shared tools for a growing product team.
+          </FieldDescription>
+        </div>
+      </Field>
+    </RadioGroup>
+  )
+}`,
+    filename: "src/components/plan-picker.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="radio" aria-labelledby="radio-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Form</p>
+      <h2 id="radio-title">Radio + RadioGroup</h2>
+    </div>
+    <span class="status">Native control</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Radio component preview">
+    <div class="workbench workbench--radio">
+      <RadioPreview />
+
+      <ComponentSource
+        component="Radio + RadioGroup"
+        generatedFamilies={["radio"]}
+        previewSources={radioPreviewSources}
+        sources={radioSources}
+        usageSources={radioUsageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncRadioPlayground = (preview: HTMLElement) => {
+    const radio = preview.querySelector<HTMLInputElement>("[data-playground-radio]")
+    const checkedSelect = preview.querySelector<HTMLSelectElement>("[data-radio-checked]")
+    const disabledSelect = preview.querySelector<HTMLSelectElement>("[data-radio-disabled]")
+    if (!radio || !checkedSelect || !disabledSelect) return
+
+    radio.checked = checkedSelect.value === "true"
+    radio.disabled = disabledSelect.value === "true"
+
+    const readout = preview.querySelector<HTMLElement>("[data-radio-readout]")
+    if (readout) {
+      const props = [
+        'name="plan"',
+        'value="studio"',
+        radio.checked ? "defaultChecked" : "",
+        radio.disabled ? "disabled" : "",
+        'aria-label="Studio plan"',
+      ].filter(Boolean)
+      readout.textContent = `<Radio ${props.join(" ")} />`
+    }
+  }
+
+  document.addEventListener("change", (event) => {
+    const target = event.target as HTMLElement
+    const preview = target.closest<HTMLElement>(
+      '[data-preview-component="radio-radiogroup-preview"]'
+    )
+    if (!preview) return
+
+    if (target.matches("[data-playground-radio]")) {
+      const checkedSelect = preview.querySelector<HTMLSelectElement>("[data-radio-checked]")
+      if (checkedSelect && target instanceof HTMLInputElement) {
+        checkedSelect.value = String(target.checked)
+      }
+    }
+
+    syncRadioPlayground(preview)
+  })
+</script>

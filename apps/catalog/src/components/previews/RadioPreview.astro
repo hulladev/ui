@@ -1,0 +1,146 @@
+---
+import FieldDescription from "@/ui/field/field-description.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import RadioGroup from "@/ui/radio/radio-group.astro"
+import Radio from "@/ui/radio/radio.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const radioComponent = manifest.library.components.radio
+const plans = [
+  {
+    checked: false,
+    description: "For personal projects and early prototypes.",
+    id: "plan-starter",
+    label: "Starter",
+    value: "starter",
+  },
+  {
+    checked: true,
+    description: "Shared tools for a growing product team.",
+    id: "plan-studio",
+    label: "Studio",
+    value: "studio",
+  },
+  {
+    checked: false,
+    description: "Advanced controls for larger organizations.",
+    id: "plan-company",
+    label: "Company",
+    value: "company",
+  },
+] as const
+---
+
+<ComponentPreview component="Radio + RadioGroup" hint="← →" requirePropsView={true}>
+  <div slot="variants" class="grid gap-3">
+    <RadioGroup>
+      <legend class="mb-1 text-sm font-medium text-foreground">Choose a workspace plan</legend>
+      {
+        plans.map(({ checked, description, id, label, value }) => (
+          <Field class="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 rounded-lg border border-border bg-surface-raised px-4 py-3.5 shadow-xs transition-[border-color,background-color] has-[:checked]:border-primary/55 has-[:checked]:bg-primary/[0.035]">
+            <Radio
+              id={id}
+              name="workspace-plan"
+              value={value}
+              aria-describedby={`${id}-description`}
+              checked={checked}
+            />
+            <div class="grid gap-0.5">
+              <FieldLabel for={id}>{label}</FieldLabel>
+              <FieldDescription id={`${id}-description`}>{description}</FieldDescription>
+            </div>
+          </Field>
+        ))
+      }
+    </RadioGroup>
+    <div
+      class="mt-2 grid grid-cols-2 gap-3 border-t border-border pt-5 max-[480px]:grid-cols-1"
+      aria-label="Radio states"
+    >
+      <Field
+        class="grid grid-cols-[auto_1fr] items-center gap-x-3 rounded-md bg-foreground/[0.04] px-3.5 py-3"
+      >
+        <Radio id="radio-unchecked" name="radio-state-unchecked" />
+        <FieldLabel for="radio-unchecked">Unchecked</FieldLabel>
+      </Field>
+      <Field
+        class="grid grid-cols-[auto_1fr] items-center gap-x-3 rounded-md bg-foreground/[0.04] px-3.5 py-3"
+      >
+        <Radio id="radio-checked" name="radio-state-checked" checked />
+        <FieldLabel for="radio-checked">Checked</FieldLabel>
+      </Field>
+      <Field
+        class="grid grid-cols-[auto_1fr] items-center gap-x-3 rounded-md bg-foreground/[0.04] px-3.5 py-3"
+      >
+        <Radio id="radio-disabled" name="radio-state-disabled" disabled />
+        <FieldLabel for="radio-disabled">Disabled</FieldLabel>
+      </Field>
+      <Field
+        class="grid grid-cols-[auto_1fr] items-center gap-x-3 rounded-md bg-foreground/[0.04] px-3.5 py-3"
+      >
+        <Radio id="radio-invalid" name="radio-state-invalid" aria-invalid="true" />
+        <FieldLabel for="radio-invalid">Invalid</FieldLabel>
+      </Field>
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Selection</span>
+        <select aria-label="Radio selection state" data-radio-checked>
+          <option value="true" selected>Checked</option>
+          <option value="false">Unchecked</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Availability</span>
+        <select aria-label="Radio availability" data-radio-disabled>
+          <option value="false" selected>Enabled</option>
+          <option value="true">Disabled</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage">
+      <Field class="grid w-full max-w-sm grid-cols-[auto_1fr] items-start gap-x-3">
+        <Radio
+          id="playground-radio"
+          name="playground-plan"
+          value="studio"
+          aria-describedby="playground-radio-help"
+          checked
+          data-playground-radio
+        />
+        <div>
+          <FieldLabel for="playground-radio">Studio plan</FieldLabel>
+          <FieldDescription id="playground-radio-help">
+            Shared tools for a growing product team.
+          </FieldDescription>
+        </div>
+      </Field>
+    </div>
+
+    <code class="prop-readout" data-radio-readout aria-live="polite"
+      >&lt;Radio name="plan" value="studio" defaultChecked aria-label="Studio plan" /&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{radioComponent.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Native element</dt>
+      <dd>input[type=radio] · fieldset</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Custom props</dt>
+      <dd>none · native attributes</dd>
+    </div>
+  </dl>
+</ComponentPreview>
