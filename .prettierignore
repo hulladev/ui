@@ -1,3 +1,4 @@
 .claude/
+.playwright-cli/
 .vscode/
 packages/components/src/astro/.astro/

@@ -3,9 +3,10 @@
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
     "paths": {
+      "@/ui/*": ["../../generated/astro/*"],
       "@/*": ["../../generated/astro/*"]
     },
-    "types": ["astro/client", "node"]
+    "types": ["astro/client", "bun", "node"]
   },
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist", "eslint.config.mjs"]
