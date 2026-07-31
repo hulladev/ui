@@ -1,0 +1,126 @@
+---
+import Badge from "@/ui/badge/badge.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const badge = manifest.library.components.badge
+const badgeSizes = ["sm", "md", "lg"] as const
+const badgeVariants = [
+  { label: "Neutral", sample: "Draft", variant: "neutral" },
+  { label: "Primary", sample: "Pro", variant: "primary" },
+  { label: "Success", sample: "Operational", variant: "success" },
+  { label: "Warning", sample: "Needs review", variant: "warning" },
+  { label: "Danger", sample: "Failed", variant: "danger" },
+] as const
+---
+
+<ComponentPreview component="Badge" hint="Non-interactive" requirePropsView={true}>
+  <div
+    slot="variants"
+    class="grid overflow-hidden rounded-md border border-border bg-surface-raised shadow-xs"
+  >
+    <div
+      class="grid grid-cols-[minmax(5rem,0.8fr)_repeat(3,minmax(6rem,1fr))] items-center gap-2 border-b border-border bg-foreground p-3 font-mono text-xs font-medium tracking-wider text-background uppercase max-[760px]:grid-cols-3 max-[760px]:[&>:first-child]:hidden"
+      aria-hidden="true"
+    >
+      <span>Variant</span>
+      <span>Small</span>
+      <span>Medium</span>
+      <span>Large</span>
+    </div>
+    {
+      badgeVariants.map(({ label, sample, variant }) => (
+        <div class="grid grid-cols-[minmax(5rem,0.8fr)_repeat(3,minmax(6rem,1fr))] items-center gap-2 border-t border-border p-3 first:border-t-0 max-[760px]:grid-cols-3">
+          <span class="font-mono text-xs font-medium tracking-wider text-muted-foreground uppercase max-[760px]:col-span-full">
+            {label}
+          </span>
+          {badgeSizes.map((size) => (
+            <span class="justify-self-start">
+              <Badge size={size} variant={variant}>
+                {variant === "success" && (
+                  <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path
+                      d="m4 8.25 2.4 2.4L12 5.5"
+                      stroke="currentColor"
+                      stroke-width="1.75"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                )}
+                {sample}
+              </Badge>
+            </span>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Variant</span>
+        <select aria-label="Badge variant" data-badge-prop-variant>
+          {badgeVariants.map(({ label, variant }) => <option value={variant}>{label}</option>)}
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Size</span>
+        <select aria-label="Badge size" data-badge-prop-size>
+          {
+            badgeSizes.map((size) => (
+              <option value={size} selected={size === "md"}>
+                {size}
+              </option>
+            ))
+          }
+        </select>
+      </label>
+
+      <label class="prop-control prop-control--wide">
+        <span class="label">Content</span>
+        <input type="text" value="Draft" maxlength="28" data-badge-prop-content />
+      </label>
+    </div>
+
+    <div class="playground-stage">
+      {
+        badgeVariants.map(({ variant }) =>
+          badgeSizes.map((size) => (
+            <Badge
+              variant={variant}
+              size={size}
+              data-playground-badge
+              data-variant={variant}
+              data-size={size}
+              hidden={variant !== "neutral" || size !== "md"}
+            >
+              Draft
+            </Badge>
+          ))
+        )
+      }
+    </div>
+
+    <code class="prop-readout" data-badge-prop-readout aria-live="polite"
+      >&lt;Badge variant="neutral" size="md"&gt;Draft&lt;/Badge&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{badge.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Native element</dt>
+      <dd>span · no implicit role</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Custom props</dt>
+      <dd>variant · size</dd>
+    </div>
+  </dl>
+</ComponentPreview>

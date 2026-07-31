@@ -1,0 +1,153 @@
+---
+import AvatarFallback from "@/ui/avatar/avatar-fallback.astro"
+import Avatar from "@/ui/avatar/avatar.astro"
+import Badge from "@/ui/badge/badge.astro"
+import Button from "@/ui/button/button.astro"
+import HoverCard from "@/ui/hover-card/hover-card.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const hoverCard = manifest.library.components["hover-card"]
+const placements = ["bottom-start", "right", "top-start", "left"] as const
+---
+
+<ComponentPreview
+  component="HoverCard"
+  hint="Hover, focus, or press Escape"
+  requirePropsView={true}
+  propsLabel="Placement"
+>
+  <div
+    slot="variants"
+    class="grid min-h-80 place-items-center overflow-hidden rounded-lg bg-surface/65 p-8"
+  >
+    <div class="grid w-full max-w-md gap-5">
+      <div class="grid gap-5 rounded-lg border border-border bg-surface-raised/75 p-5 text-center">
+        <div class="grid gap-2">
+          <span class="font-mono text-xs tracking-wider text-primary uppercase">Rich preview</span>
+          <strong class="text-lg tracking-tight">Move into the card</strong>
+          <p class="m-0 text-xs leading-6 text-muted-foreground">
+            Supplementary content remains open while the pointer or focus is inside it.
+          </p>
+        </div>
+
+        <div class="flex items-center justify-center gap-3">
+          <Avatar aria-hidden="true">
+            <AvatarFallback class="bg-primary/15 text-primary">SK</AvatarFallback>
+          </Avatar>
+          <a
+            id="catalog-hover-card-trigger"
+            class="font-medium text-foreground underline decoration-primary/45 underline-offset-4"
+            href="#hover-card"
+            aria-details="catalog-hover-card"
+          >
+            Sora Kim
+          </a>
+          <HoverCard
+            id="catalog-hover-card"
+            triggerId="catalog-hover-card-trigger"
+            aria-label="About Sora Kim"
+          >
+            <div class="grid gap-4">
+              <div class="flex items-start gap-3">
+                <Avatar size="lg" aria-hidden="true">
+                  <AvatarFallback class="bg-primary/15 text-primary">SK</AvatarFallback>
+                </Avatar>
+                <div class="grid gap-1">
+                  <strong class="text-base">Sora Kim</strong>
+                  <span class="text-xs text-muted-foreground">@sora · Prague</span>
+                </div>
+              </div>
+              <p class="m-0 text-xs leading-6 text-muted-foreground">
+                Design systems engineer making complex product surfaces feel inevitable.
+              </p>
+              <div class="flex items-center gap-2 border-t border-border pt-3">
+                <Badge variant="outline">Design systems</Badge>
+                <span class="ml-auto text-xs text-muted-foreground">42 components</span>
+              </div>
+              <Button size="sm" variant="outline">View profile</Button>
+            </div>
+          </HoverCard>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control prop-control--wide">
+        <span class="label">Placement</span>
+        <select aria-label="HoverCard placement" data-hover-card-placement>
+          {
+            placements.map((placement) => (
+              <option value={placement} selected={placement === "bottom-start"}>
+                {placement}
+              </option>
+            ))
+          }
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage playground-stage--overlay">
+      {
+        placements.map((placement) => {
+          const triggerId = `catalog-hover-card-${placement}-trigger`
+          const hoverCardId = `catalog-hover-card-${placement}`
+          return (
+            <div
+              data-hover-card-case
+              data-placement={placement}
+              hidden={placement !== "bottom-start"}
+            >
+              <a
+                id={triggerId}
+                class="font-medium text-foreground underline decoration-primary/45 underline-offset-4"
+                href="#hover-card"
+                aria-details={hoverCardId}
+              >
+                Preview contributor
+              </a>
+              <HoverCard
+                id={hoverCardId}
+                triggerId={triggerId}
+                placement={placement}
+                openDelay={150}
+              >
+                <div class="grid gap-2">
+                  <strong>Sora Kim</strong>
+                  <span class="text-xs text-muted-foreground">
+                    Design systems engineer · Prague
+                  </span>
+                </div>
+              </HoverCard>
+            </div>
+          )
+        })
+      }
+    </div>
+
+    <code class="prop-readout" data-hover-card-readout aria-live="polite"
+      >&lt;HoverCard placement="bottom-start" /&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{hoverCard.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Layering</dt>
+      <dd>Native Popover top layer</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Content</dt>
+      <dd>Rich · focusable · scrollable</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Input</dt>
+      <dd>Pointer hover · keyboard focus · Escape</dd>
+    </div>
+  </dl>
+</ComponentPreview>

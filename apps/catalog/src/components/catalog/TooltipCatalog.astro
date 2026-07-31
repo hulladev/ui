@@ -1,0 +1,106 @@
+---
+import astroTooltipSource from "../../../../../generated/astro/tooltip/tooltip.astro?raw"
+import reactTooltipSource from "../../../../../generated/react/tooltip/tooltip.tsx?raw"
+import { tooltipPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import TooltipPreview from "../previews/TooltipPreview.astro"
+
+const tooltipSources = [
+  {
+    code: astroTooltipSource,
+    filename: "generated/astro/tooltip/tooltip.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactTooltipSource,
+    filename: "generated/react/tooltip/tooltip.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+
+const usageSources = [
+  {
+    code: `---
+import Button from "@/ui/button/button.astro"
+import Tooltip from "@/ui/tooltip/tooltip.astro"
+---
+
+<Button id="archive-trigger" aria-describedby="archive-tooltip">
+  Archive
+</Button>
+<Tooltip id="archive-tooltip" triggerId="archive-trigger">
+  Move this release to the archive
+</Tooltip>`,
+    filename: "src/components/archive-action.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Button } from "@/ui/button"
+import { Tooltip } from "@/ui/tooltip"
+
+export function ArchiveAction() {
+  return (
+    <>
+      <Button id="archive-trigger" aria-describedby="archive-tooltip">
+        Archive
+      </Button>
+      <Tooltip id="archive-tooltip" triggerId="archive-trigger">
+        Move this release to the archive
+      </Tooltip>
+    </>
+  )
+}`,
+    filename: "src/components/archive-action.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="tooltip" aria-labelledby="tooltip-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Transient overlay</p>
+      <h2 id="tooltip-title">Tooltip</h2>
+    </div>
+    <span class="status">Native layer · JS position</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Tooltip component preview">
+    <div class="workbench workbench--tooltip">
+      <TooltipPreview />
+
+      <ComponentSource
+        component="Tooltip"
+        generatedFamilies={["tooltip"]}
+        previewSources={tooltipPreviewSources}
+        sources={tooltipSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  document.addEventListener("input", (event) => {
+    const control = (event.target as HTMLElement).closest<HTMLSelectElement>(
+      "[data-tooltip-placement]"
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="tooltip-preview"]')
+    if (!control || !preview) return
+
+    preview.querySelectorAll<HTMLElement>("[data-tooltip-case]").forEach((item) => {
+      const surface = item.querySelector<HTMLElement>("[popover]")
+      if (item.dataset.placement !== control.value && surface?.matches(":popover-open")) {
+        surface.hidePopover()
+      }
+      item.hidden = item.dataset.placement !== control.value
+    })
+
+    const readout = preview.querySelector<HTMLElement>("[data-tooltip-readout]")
+    if (readout) readout.textContent = `<Tooltip placement="${control.value}" />`
+  })
+</script>

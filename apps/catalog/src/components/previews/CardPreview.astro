@@ -1,0 +1,206 @@
+---
+import Button from "@/ui/button/button.astro"
+import CardContent from "@/ui/card/card-content.astro"
+import CardDescription from "@/ui/card/card-description.astro"
+import CardFooter from "@/ui/card/card-footer.astro"
+import CardHeader from "@/ui/card/card-header.astro"
+import CardTitle from "@/ui/card/card-title.astro"
+import Card from "@/ui/card/card.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const card = manifest.library.components.card
+const cardVariants = ["outline", "elevated", "ghost"] as const
+---
+
+<ComponentPreview
+  component="Card"
+  hint="Semantic article"
+  requirePropsView={true}
+  variantsLabel="Styles"
+>
+  <div slot="variants" class="grid gap-4">
+    <Card variant="elevated" aria-labelledby="catalog-release-title">
+      <CardHeader>
+        <div
+          class="mb-1 flex items-center justify-between gap-4 font-mono text-xs tracking-wider text-muted-foreground uppercase"
+        >
+          <span>Elevated / Release 024</span>
+          <span class="flex items-center gap-1.5 text-foreground">
+            <i
+              class="size-2 rounded-full bg-success shadow-[0_0_0_4px_color-mix(in_oklab,var(--color-success)_16%,transparent)]"
+            ></i>
+            Ready
+          </span>
+        </div>
+        <CardTitle id="catalog-release-title">Candidate approved for production.</CardTitle>
+        <CardDescription>
+          The release train is clear. All required checks completed seven minutes ago.
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent>
+        <div class="grid gap-5">
+          <div
+            class="grid grid-cols-3 overflow-hidden rounded-md border border-border bg-surface-raised/70 max-[760px]:grid-cols-1"
+          >
+            <span
+              class="grid gap-0.5 border-l border-border px-4 py-3 first:border-l-0 max-[760px]:border-t max-[760px]:border-l-0 max-[760px]:first:border-t-0"
+            >
+              <strong class="text-lg tracking-tight">18</strong>
+              <small class="text-xs text-muted-foreground">checks passed</small>
+            </span>
+            <span
+              class="grid gap-0.5 border-l border-border px-4 py-3 first:border-l-0 max-[760px]:border-t max-[760px]:border-l-0"
+            >
+              <strong class="text-lg tracking-tight">0</strong>
+              <small class="text-xs text-muted-foreground">open blockers</small>
+            </span>
+            <span
+              class="grid gap-0.5 border-l border-border px-4 py-3 first:border-l-0 max-[760px]:border-t max-[760px]:border-l-0"
+            >
+              <strong class="text-lg tracking-tight">4m</strong>
+              <small class="text-xs text-muted-foreground">build time</small>
+            </span>
+          </div>
+          <div
+            class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3"
+            aria-label="Release readiness: 100%"
+          >
+            <span class="font-mono text-xs font-medium tracking-wider uppercase">Readiness</span>
+            <span class="h-1 overflow-hidden rounded-full bg-foreground/10" aria-hidden="true">
+              <i class="block h-full w-full rounded-[inherit] bg-primary"></i>
+            </span>
+            <strong class="font-mono text-xs font-medium">100%</strong>
+          </div>
+        </div>
+      </CardContent>
+
+      <CardFooter>
+        <Button size="sm">Review release</Button>
+        <Button size="sm" variant="outline">View checks</Button>
+        <span
+          class="ml-auto font-mono text-xs text-muted-foreground max-[760px]:ml-0 max-[760px]:w-full"
+        >
+          Updated 7m ago
+        </span>
+      </CardFooter>
+    </Card>
+
+    <div class="grid grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] gap-4 max-[760px]:grid-cols-1">
+      <Card variant="outline" aria-labelledby="catalog-velocity-title">
+        <CardHeader>
+          <span class="font-mono text-xs font-medium tracking-wider uppercase"
+            >Outline / Cycle velocity</span
+          >
+          <CardTitle id="catalog-velocity-title">4.2 days</CardTitle>
+          <CardDescription>Median time to production</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div class="flex h-14 items-end gap-1" aria-label="Velocity improved 16 percent">
+            <span class="h-[46%] w-1.5 rounded-t-full bg-primary"></span>
+            <span class="h-[58%] w-1.5 rounded-t-full bg-primary"></span>
+            <span class="h-[52%] w-1.5 rounded-t-full bg-primary"></span>
+            <span class="h-[68%] w-1.5 rounded-t-full bg-primary"></span>
+            <span class="h-[63%] w-1.5 rounded-t-full bg-primary"></span>
+            <span class="h-[82%] w-1.5 rounded-t-full bg-primary"></span>
+            <strong class="ml-auto self-end font-mono text-xs font-medium text-success">
+              −16%
+            </strong>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card variant="ghost" aria-labelledby="catalog-note-title">
+        <CardHeader>
+          <span class="font-mono text-xs text-primary">Ghost / 01</span>
+          <CardTitle id="catalog-note-title">Native by default.</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>
+            Every part accepts native attributes. Classes merge last, so a card can become a metric,
+            notice, or full workflow surface without another prop.
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls prop-controls--toggles">
+      <label class="prop-control prop-control--wide">
+        <span class="label">Variant</span>
+        <select aria-label="Card variant" data-card-prop-variant>
+          <option value="outline">Outline</option>
+          <option value="elevated">Elevated</option>
+          <option value="ghost">Ghost</option>
+        </select>
+      </label>
+
+      <label class="prop-disabled">
+        <input type="checkbox" checked data-card-prop-description />
+        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <span class="label">Description</span>
+      </label>
+      <label class="prop-disabled">
+        <input type="checkbox" checked data-card-prop-content />
+        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <span class="label">Content</span>
+      </label>
+      <label class="prop-disabled">
+        <input type="checkbox" checked data-card-prop-footer />
+        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <span class="label">Footer</span>
+      </label>
+    </div>
+
+    <div class="playground-stage playground-stage--card">
+      {
+        cardVariants.map((variant) => (
+          <Card
+            variant={variant}
+            aria-labelledby={`card-prop-title-${variant}`}
+            class="w-full max-w-[27rem]"
+            data-playground-card
+            hidden={variant !== "outline"}
+          >
+            <CardHeader>
+              <span class="font-mono text-xs font-medium tracking-wider uppercase">
+                Release / 024
+              </span>
+              <CardTitle id={`card-prop-title-${variant}`}>Candidate ready.</CardTitle>
+              <CardDescription data-card-prop-part="description">
+                All required checks passed seven minutes ago.
+              </CardDescription>
+            </CardHeader>
+            <CardContent data-card-prop-part="content">
+              <strong>18 checks passed</strong>
+            </CardContent>
+            <CardFooter data-card-prop-part="footer">
+              <Button size="sm">Review release</Button>
+            </CardFooter>
+          </Card>
+        ))
+      }
+    </div>
+
+    <code class="prop-readout" data-card-prop-readout aria-live="polite"
+      >&lt;Card&gt;Header + Content + Footer&lt;/Card&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{card.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Compound parts</dt>
+      <dd>6 semantic exports</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Custom props</dt>
+      <dd>variant · native HTML</dd>
+    </div>
+  </dl>
+</ComponentPreview>

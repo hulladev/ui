@@ -1,0 +1,106 @@
+---
+import astroHoverCardSource from "../../../../../generated/astro/hover-card/hover-card.astro?raw"
+import reactHoverCardSource from "../../../../../generated/react/hover-card/hover-card.tsx?raw"
+import { hoverCardPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import HoverCardPreview from "../previews/HoverCardPreview.astro"
+
+const hoverCardSources = [
+  {
+    code: astroHoverCardSource,
+    filename: "generated/astro/hover-card/hover-card.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactHoverCardSource,
+    filename: "generated/react/hover-card/hover-card.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+
+const usageSources = [
+  {
+    code: `---
+import HoverCard from "@/ui/hover-card/hover-card.astro"
+---
+
+<a id="author-trigger" href="/people/sora" aria-details="author-card">
+  Sora Kim
+</a>
+<HoverCard id="author-card" triggerId="author-trigger">
+  <strong>Sora Kim</strong>
+  <p>Design systems engineer · Prague</p>
+</HoverCard>`,
+    filename: "src/components/author-preview.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { HoverCard } from "@/ui/hover-card"
+
+export function AuthorPreview() {
+  return (
+    <>
+      <a id="author-trigger" href="/people/sora" aria-details="author-card">
+        Sora Kim
+      </a>
+      <HoverCard id="author-card" triggerId="author-trigger">
+        <strong>Sora Kim</strong>
+        <p>Design systems engineer · Prague</p>
+      </HoverCard>
+    </>
+  )
+}`,
+    filename: "src/components/author-preview.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="hover-card" aria-labelledby="hover-card-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Rich preview</p>
+      <h2 id="hover-card-title">HoverCard</h2>
+    </div>
+    <span class="status">Interactive hover layer</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="HoverCard component preview">
+    <div class="workbench workbench--hover-card">
+      <HoverCardPreview />
+
+      <ComponentSource
+        component="HoverCard"
+        generatedFamilies={["hover-card"]}
+        previewSources={hoverCardPreviewSources}
+        sources={hoverCardSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  document.addEventListener("input", (event) => {
+    const control = (event.target as HTMLElement).closest<HTMLSelectElement>(
+      "[data-hover-card-placement]"
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="hovercard-preview"]')
+    if (!control || !preview) return
+
+    preview.querySelectorAll<HTMLElement>("[data-hover-card-case]").forEach((item) => {
+      const surface = item.querySelector<HTMLElement>("[popover]")
+      if (item.dataset.placement !== control.value && surface?.matches(":popover-open")) {
+        surface.hidePopover()
+      }
+      item.hidden = item.dataset.placement !== control.value
+    })
+
+    const readout = preview.querySelector<HTMLElement>("[data-hover-card-readout]")
+    if (readout) readout.textContent = `<HoverCard placement="${control.value}" />`
+  })
+</script>

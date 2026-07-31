@@ -1,30 +1,9 @@
 ---
-import FieldDescription from "../../../../../generated/astro/field/field-description.astro"
-import FieldLabel from "../../../../../generated/astro/field/field-label.astro"
-import Field from "../../../../../generated/astro/field/field.astro"
-import Switch from "../../../../../generated/astro/switch/switch.astro"
 import astroSwitchSource from "../../../../../generated/astro/switch/switch.astro?raw"
 import reactSwitchSource from "../../../../../generated/react/switch/switch.tsx?raw"
-import manifest from "../../../../../generated/ui.manifest.json"
 import { switchPreviewSources } from "../../data/catalogPreviewSources"
-import ComponentPreview from "../ComponentPreview.astro"
 import ComponentSource from "../ComponentSource.astro"
-
-const switchComponent = manifest.library.components.switch
-const preferences = [
-  {
-    checked: true,
-    description: "Receive a compact summary every Monday morning.",
-    id: "weekly-digest",
-    label: "Weekly digest",
-  },
-  {
-    checked: false,
-    description: "Surface desktop alerts when a teammate mentions you.",
-    id: "desktop-alerts",
-    label: "Desktop alerts",
-  },
-] as const
+import SwitchPreview from "../previews/SwitchPreview.astro"
 
 const switchSources = [
   {
@@ -108,117 +87,7 @@ export function DigestPreference() {
 
   <article class="bench glass-panel" aria-label="Switch component preview">
     <div class="workbench workbench--switch">
-      <ComponentPreview component="Switch" hint="Click or press Space" requirePropsView={true}>
-        <div slot="variants" class="grid gap-4">
-          <div
-            class="overflow-hidden rounded-lg border border-border bg-surface-raised shadow-xs"
-            aria-label="Notification preferences"
-          >
-            {
-              preferences.map(({ checked, description, id, label }) => (
-                <Field class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-5 border-t border-border px-4 py-4 first:border-t-0">
-                  <div class="grid gap-0.5">
-                    <FieldLabel for={id}>{label}</FieldLabel>
-                    <FieldDescription id={`${id}-description`}>{description}</FieldDescription>
-                  </div>
-                  <Switch
-                    id={id}
-                    name={id}
-                    aria-describedby={`${id}-description`}
-                    checked={checked}
-                  />
-                </Field>
-              ))
-            }
-          </div>
-
-          <div
-            class="grid grid-cols-2 gap-3 border-t border-border pt-5 max-[480px]:grid-cols-1"
-            aria-label="Switch states"
-          >
-            <Field
-              class="grid grid-cols-[1fr_auto] items-center rounded-md bg-foreground/[0.04] px-3.5 py-3"
-            >
-              <FieldLabel for="switch-unchecked">Unchecked</FieldLabel>
-              <Switch id="switch-unchecked" />
-            </Field>
-            <Field
-              class="grid grid-cols-[1fr_auto] items-center rounded-md bg-foreground/[0.04] px-3.5 py-3"
-            >
-              <FieldLabel for="switch-checked">Checked</FieldLabel>
-              <Switch id="switch-checked" checked />
-            </Field>
-            <Field
-              class="grid grid-cols-[1fr_auto] items-center rounded-md bg-foreground/[0.04] px-3.5 py-3"
-            >
-              <FieldLabel for="switch-disabled">Disabled</FieldLabel>
-              <Switch id="switch-disabled" disabled />
-            </Field>
-            <Field
-              class="grid grid-cols-[1fr_auto] items-center rounded-md bg-foreground/[0.04] px-3.5 py-3"
-            >
-              <FieldLabel for="switch-invalid">Invalid</FieldLabel>
-              <Switch id="switch-invalid" aria-invalid="true" />
-            </Field>
-          </div>
-        </div>
-
-        <div slot="props" class="prop-playground">
-          <div class="prop-controls">
-            <label class="prop-control">
-              <span class="label">Checked</span>
-              <select aria-label="Switch checked state" data-switch-checked>
-                <option value="true" selected>On</option>
-                <option value="false">Off</option>
-              </select>
-            </label>
-
-            <label class="prop-control">
-              <span class="label">Availability</span>
-              <select aria-label="Switch availability" data-switch-disabled>
-                <option value="false" selected>Enabled</option>
-                <option value="true">Disabled</option>
-              </select>
-            </label>
-          </div>
-
-          <div class="playground-stage">
-            <Field class="grid w-full max-w-sm grid-cols-[1fr_auto] items-center gap-x-5">
-              <div>
-                <FieldLabel for="playground-switch">Sync activity</FieldLabel>
-                <FieldDescription id="playground-switch-help">
-                  Keep this workspace current across devices.
-                </FieldDescription>
-              </div>
-              <Switch
-                id="playground-switch"
-                aria-describedby="playground-switch-help"
-                checked
-                data-playground-switch
-              />
-            </Field>
-          </div>
-
-          <code class="prop-readout" data-switch-readout aria-live="polite"
-            >&lt;Switch defaultChecked aria-label="Sync activity" /&gt;</code
-          >
-        </div>
-
-        <dl slot="facts" class="facts">
-          <div class="fact">
-            <dt class="label">Available in</dt>
-            <dd>{switchComponent.frameworks.join(" · ")}</dd>
-          </div>
-          <div class="fact">
-            <dt class="label">Native element</dt>
-            <dd>input[type=checkbox] · role=switch</dd>
-          </div>
-          <div class="fact">
-            <dt class="label">Custom props</dt>
-            <dd>none · native attributes</dd>
-          </div>
-        </dl>
-      </ComponentPreview>
+      <SwitchPreview />
 
       <ComponentSource
         component="Switch"

@@ -1,0 +1,137 @@
+---
+import Checkbox from "@/ui/checkbox/checkbox.astro"
+import FieldDescription from "@/ui/field/field-description.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const checkboxComponent = manifest.library.components.checkbox
+const checklist = [
+  {
+    checked: true,
+    description: "Confirm the copy, destination, and audience.",
+    id: "review-release",
+    label: "Review release notes",
+  },
+  {
+    checked: false,
+    description: "Notify owners before the production rollout.",
+    id: "notify-owners",
+    label: "Notify workspace owners",
+  },
+] as const
+---
+
+<ComponentPreview component="Checkbox" hint="Click or press Space" requirePropsView={true}>
+  <div slot="variants" class="grid gap-5">
+    <div
+      class="overflow-hidden rounded-lg border border-border bg-surface-raised shadow-xs"
+      aria-label="Release checklist"
+    >
+      {
+        checklist.map(({ checked, description, id, label }) => (
+          <Field class="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 border-t border-border px-4 py-4 first:border-t-0">
+            <Checkbox id={id} name={id} aria-describedby={`${id}-description`} checked={checked} />
+            <div class="grid gap-0.5">
+              <FieldLabel for={id}>{label}</FieldLabel>
+              <FieldDescription id={`${id}-description`}>{description}</FieldDescription>
+            </div>
+          </Field>
+        ))
+      }
+    </div>
+
+    <div
+      class="grid grid-cols-2 gap-3 border-t border-border pt-5 max-[480px]:grid-cols-1"
+      aria-label="Checkbox states"
+    >
+      <Field
+        class="grid grid-cols-[auto_1fr] items-center gap-x-3 rounded-md bg-foreground/[0.04] px-3.5 py-3"
+      >
+        <Checkbox id="checkbox-unchecked" />
+        <FieldLabel for="checkbox-unchecked">Unchecked</FieldLabel>
+      </Field>
+      <Field
+        class="grid grid-cols-[auto_1fr] items-center gap-x-3 rounded-md bg-foreground/[0.04] px-3.5 py-3"
+      >
+        <Checkbox id="checkbox-checked" checked />
+        <FieldLabel for="checkbox-checked">Checked</FieldLabel>
+      </Field>
+      <Field
+        class="grid grid-cols-[auto_1fr] items-center gap-x-3 rounded-md bg-foreground/[0.04] px-3.5 py-3"
+      >
+        <Checkbox id="checkbox-indeterminate" data-checkbox-indeterminate />
+        <FieldLabel for="checkbox-indeterminate">Indeterminate</FieldLabel>
+      </Field>
+      <Field
+        class="grid grid-cols-[auto_1fr] items-center gap-x-3 rounded-md bg-foreground/[0.04] px-3.5 py-3"
+      >
+        <Checkbox id="checkbox-disabled" disabled />
+        <FieldLabel for="checkbox-disabled">Disabled</FieldLabel>
+      </Field>
+      <Field
+        class="grid grid-cols-[auto_1fr] items-center gap-x-3 rounded-md bg-foreground/[0.04] px-3.5 py-3"
+      >
+        <Checkbox id="checkbox-invalid" aria-invalid="true" />
+        <FieldLabel for="checkbox-invalid">Invalid</FieldLabel>
+      </Field>
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Selection</span>
+        <select aria-label="Checkbox selection state" data-checkbox-checked>
+          <option value="true" selected>Checked</option>
+          <option value="false">Unchecked</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Availability</span>
+        <select aria-label="Checkbox availability" data-checkbox-disabled>
+          <option value="false" selected>Enabled</option>
+          <option value="true">Disabled</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage">
+      <Field class="grid w-full max-w-sm grid-cols-[auto_1fr] items-start gap-x-3">
+        <Checkbox
+          id="playground-checkbox"
+          aria-describedby="playground-checkbox-help"
+          checked
+          data-playground-checkbox
+        />
+        <div>
+          <FieldLabel for="playground-checkbox">Include archived projects</FieldLabel>
+          <FieldDescription id="playground-checkbox-help">
+            Search results will include inactive work.
+          </FieldDescription>
+        </div>
+      </Field>
+    </div>
+
+    <code class="prop-readout" data-checkbox-readout aria-live="polite"
+      >&lt;Checkbox defaultChecked aria-label="Include archived projects" /&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{checkboxComponent.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Native element</dt>
+      <dd>input[type=checkbox]</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Custom props</dt>
+      <dd>none · native attributes</dd>
+    </div>
+  </dl>
+</ComponentPreview>

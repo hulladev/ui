@@ -1,49 +1,9 @@
 ---
-import { CircleAlert, CircleCheck, CircleX, TriangleAlert } from "@lucide/astro"
-import Alert from "../../../../../generated/astro/alert/alert.astro"
-import AlertDescription from "../../../../../generated/astro/alert/alert-description.astro"
-import AlertIcon from "../../../../../generated/astro/alert/alert-icon.astro"
-import AlertTitle from "../../../../../generated/astro/alert/alert-title.astro"
 import astroAlertSource from "../../../../../generated/astro/alert/alert.astro?raw"
 import reactAlertSource from "../../../../../generated/react/alert/alert.tsx?raw"
-import manifest from "../../../../../generated/ui.manifest.json"
-import ComponentPreview from "../ComponentPreview.astro"
 import ComponentSource from "../ComponentSource.astro"
+import AlertPreview from "../previews/AlertPreview.astro"
 import { alertPreviewSources } from "../../data/catalogPreviewSources"
-
-const alert = manifest.library.components.alert
-const alertVariants = [
-  {
-    body: "Additional context that helps the reader understand the surrounding content.",
-    icon: null,
-    label: "Note",
-    variant: "note",
-  },
-  {
-    body: "Release checks passed. This version is ready to move to production.",
-    icon: CircleCheck,
-    label: "Success",
-    variant: "success",
-  },
-  {
-    body: "This migration changes the public import path. Update consumers before publishing.",
-    icon: CircleAlert,
-    label: "Important",
-    variant: "important",
-  },
-  {
-    body: "The current token will expire in 24 hours. Rotate it to avoid interrupted builds.",
-    icon: TriangleAlert,
-    label: "Warning",
-    variant: "warning",
-  },
-  {
-    body: "This action removes production data and cannot be undone.",
-    icon: CircleX,
-    label: "Danger",
-    variant: "danger",
-  },
-] as const
 
 const alertSources = [
   {
@@ -114,92 +74,7 @@ export function DeploymentWarning() {
 
   <article class="bench glass-panel" aria-label="Alert component preview">
     <div class="workbench workbench--alert">
-      <ComponentPreview component="Alert" hint="Static note role" requirePropsView={true}>
-        <div slot="variants" class="grid gap-3.5">
-          {
-            alertVariants.map(({ body, icon: Icon, label, variant }) => (
-              <Alert variant={variant}>
-                {Icon && (
-                  <AlertIcon>
-                    <Icon />
-                  </AlertIcon>
-                )}
-                <AlertTitle>{label}</AlertTitle>
-                <AlertDescription>{body}</AlertDescription>
-              </Alert>
-            ))
-          }
-        </div>
-
-        <div slot="props" class="prop-playground">
-          <div class="prop-controls">
-            <label class="prop-control">
-              <span class="label">Variant</span>
-              <select aria-label="Alert variant" data-alert-prop-variant>
-                {
-                  alertVariants.map(({ label, variant }) => (
-                    <option value={variant}>{label}</option>
-                  ))
-                }
-              </select>
-            </label>
-
-            <label class="prop-control">
-              <span class="label">Role</span>
-              <select aria-label="Alert role" data-alert-prop-role>
-                <option value="note">note</option>
-                <option value="status">status</option>
-                <option value="alert">alert</option>
-              </select>
-            </label>
-
-            <label class="prop-control prop-control--wide">
-              <span class="label">Message</span>
-              <input
-                type="text"
-                value="Additional context for the reader."
-                maxlength="80"
-                data-alert-prop-content
-              />
-            </label>
-          </div>
-
-          <div class="playground-stage playground-stage--alert">
-            {
-              alertVariants.map(({ label, variant }) => (
-                <Alert
-                  variant={variant}
-                  data-playground-alert
-                  data-variant={variant}
-                  hidden={variant !== "note"}
-                >
-                  <strong>{label}</strong>
-                  <p data-alert-prop-message>Additional context for the reader.</p>
-                </Alert>
-              ))
-            }
-          </div>
-
-          <code class="prop-readout" data-alert-prop-readout aria-live="polite"
-            >&lt;Alert variant="note" role="note"&gt;…&lt;/Alert&gt;</code
-          >
-        </div>
-
-        <dl slot="facts" class="facts">
-          <div class="fact">
-            <dt class="label">Available in</dt>
-            <dd>{alert.frameworks.join(" · ")}</dd>
-          </div>
-          <div class="fact">
-            <dt class="label">Default role</dt>
-            <dd>note · overridable</dd>
-          </div>
-          <div class="fact">
-            <dt class="label">Compound parts</dt>
-            <dd>icon · title · description</dd>
-          </div>
-        </dl>
-      </ComponentPreview>
+      <AlertPreview />
 
       <ComponentSource
         component="Alert"

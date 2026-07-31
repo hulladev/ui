@@ -1,0 +1,106 @@
+---
+import Button from "@/ui/button/button.astro"
+import Tooltip from "@/ui/tooltip/tooltip.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const tooltip = manifest.library.components.tooltip
+const placements = ["top", "right", "bottom", "left"] as const
+---
+
+<ComponentPreview
+  component="Tooltip"
+  hint="Hover, focus, or press Escape"
+  requirePropsView={true}
+  propsLabel="Placement"
+>
+  <div
+    slot="variants"
+    class="grid min-h-80 place-items-center overflow-hidden rounded-lg bg-surface/65 p-8"
+  >
+    <div class="grid w-full max-w-md gap-8">
+      <section
+        class="grid content-between gap-8 rounded-lg border border-border bg-surface-raised/75 p-5"
+      >
+        <div class="grid gap-2">
+          <span class="font-mono text-xs tracking-wider text-primary uppercase"
+            >Fast annotation</span
+          >
+          <strong class="text-lg tracking-tight">Tooltip</strong>
+          <p class="m-0 text-xs leading-6 text-muted-foreground">
+            Descriptive text linked explicitly with <code>aria-describedby</code>.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <Button id="catalog-tooltip-trigger" variant="outline" aria-describedby="catalog-tooltip">
+            Queue release
+          </Button>
+          <Tooltip id="catalog-tooltip" triggerId="catalog-tooltip-trigger" placement="top">
+            Adds this build to the next release train
+          </Tooltip>
+          <span class="font-mono text-[0.65rem] text-muted-foreground">180 ms</span>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control prop-control--wide">
+        <span class="label">Tooltip placement</span>
+        <select aria-label="Tooltip placement" data-tooltip-placement>
+          {
+            placements.map((placement) => (
+              <option value={placement} selected={placement === "top"}>
+                {placement}
+              </option>
+            ))
+          }
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage playground-stage--overlay">
+      {
+        placements.map((placement) => {
+          const triggerId = `catalog-tooltip-${placement}-trigger`
+          const tooltipId = `catalog-tooltip-${placement}`
+          return (
+            <div data-tooltip-case data-placement={placement} hidden={placement !== "top"}>
+              <Button id={triggerId} variant="outline" aria-describedby={tooltipId}>
+                Hover or focus
+              </Button>
+              <Tooltip id={tooltipId} triggerId={triggerId} placement={placement} openDelay={150}>
+                Floating UI resolved: {placement}
+              </Tooltip>
+            </div>
+          )
+        })
+      }
+    </div>
+
+    <code class="prop-readout" data-tooltip-readout aria-live="polite"
+      >&lt;Tooltip placement="top" /&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{tooltip.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Layering</dt>
+      <dd>Native Popover top layer</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Positioning</dt>
+      <dd>Floating UI flip · shift · auto-update</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Input</dt>
+      <dd>Pointer hover · keyboard focus · Escape</dd>
+    </div>
+  </dl>
+</ComponentPreview>

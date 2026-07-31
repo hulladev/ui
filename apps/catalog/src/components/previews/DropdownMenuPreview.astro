@@ -1,0 +1,181 @@
+---
+import { Archive, Copy, Ellipsis, FolderSymlink, Pencil, Trash2 } from "@lucide/astro"
+import Button from "@/ui/button/button.astro"
+import DropdownMenuGroup from "@/ui/dropdown-menu/dropdown-menu-group.astro"
+import DropdownMenuItem from "@/ui/dropdown-menu/dropdown-menu-item.astro"
+import DropdownMenuLabel from "@/ui/dropdown-menu/dropdown-menu-label.astro"
+import DropdownMenuSeparator from "@/ui/dropdown-menu/dropdown-menu-separator.astro"
+import DropdownMenu from "@/ui/dropdown-menu/dropdown-menu.astro"
+import Kbd from "@/ui/kbd/kbd.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const dropdownMenu = manifest.library.components["dropdown-menu"]
+const catalogMenuId = "catalog-project-actions"
+const dropdownMenuPlacements = [
+  "top-start",
+  "top",
+  "top-end",
+  "right-start",
+  "right",
+  "right-end",
+  "bottom-start",
+  "bottom",
+  "bottom-end",
+  "left-start",
+  "left",
+  "left-end",
+] as const
+---
+
+<ComponentPreview
+  component="Dropdown Menu"
+  hint="Arrow keys · typeahead · Home / End"
+  requirePropsView={true}
+>
+  <div
+    slot="variants"
+    class="relative grid min-h-80 place-items-center overflow-hidden rounded-lg bg-surface/75 before:pointer-events-none before:absolute before:size-72 before:rounded-full before:border before:border-primary/15 before:content-['']"
+  >
+    <div class="absolute top-6 left-6 grid gap-1">
+      <span class="font-mono text-xs font-medium tracking-wider uppercase">Current project</span>
+      <strong class="tracking-tight">Orbital release</strong>
+      <p class="m-0 text-xs text-muted-foreground">Updated 12 minutes ago · 8 collaborators</p>
+    </div>
+
+    <div
+      class="relative z-1 grid w-[min(23rem,calc(100%_-_2rem))] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-md border border-border bg-surface-raised/90 p-3 shadow-lg backdrop-blur"
+    >
+      <span
+        class="grid size-8 place-items-center rounded-sm border border-primary/20 bg-primary/10 font-mono text-[0.625rem] font-medium text-primary"
+        aria-hidden="true">OR</span
+      >
+      <span class="grid min-w-0">
+        <strong class="overflow-hidden text-sm tracking-tight text-ellipsis whitespace-nowrap">
+          Orbital release
+        </strong>
+        <small class="text-xs text-muted-foreground">Engineering / Active</small>
+      </span>
+      <Button
+        size="sm"
+        variant="outline"
+        popovertarget={catalogMenuId}
+        aria-haspopup="menu"
+        aria-label="Open project actions"
+      >
+        <Ellipsis aria-hidden="true" size={16} />
+      </Button>
+    </div>
+
+    <DropdownMenu id={catalogMenuId} placement="bottom-end" aria-label="Project actions">
+      <DropdownMenuGroup aria-labelledby="catalog-project-actions-label">
+        <DropdownMenuLabel id="catalog-project-actions-label">Project</DropdownMenuLabel>
+        <DropdownMenuItem>
+          <Pencil aria-hidden="true" />
+          Rename project
+          <Kbd>↵</Kbd>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Copy aria-hidden="true" />
+          Duplicate
+          <Kbd>⌘D</Kbd>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <FolderSymlink aria-hidden="true" />
+          Move to workspace
+        </DropdownMenuItem>
+        <DropdownMenuItem disabled>
+          <Archive aria-hidden="true" />
+          Archive current release
+        </DropdownMenuItem>
+      </DropdownMenuGroup>
+      <DropdownMenuSeparator />
+      <DropdownMenuGroup aria-labelledby="catalog-danger-actions-label">
+        <DropdownMenuLabel id="catalog-danger-actions-label">Danger zone</DropdownMenuLabel>
+        <DropdownMenuItem variant="danger">
+          <Trash2 aria-hidden="true" />
+          Delete project
+          <Kbd>⌘⌫</Kbd>
+        </DropdownMenuItem>
+      </DropdownMenuGroup>
+    </DropdownMenu>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Placement</span>
+        <select aria-label="Dropdown Menu placement" data-menu-prop-placement>
+          {
+            dropdownMenuPlacements.map((placement) => (
+              <option value={placement} selected={placement === "bottom-start"}>
+                {placement}
+              </option>
+            ))
+          }
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Item variant</span>
+        <select aria-label="Dropdown Menu item variant" data-menu-prop-variant>
+          <option value="default">Default</option>
+          <option value="danger">Danger</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage playground-stage--overlay">
+      {
+        dropdownMenuPlacements.map((placement) => {
+          const id = `catalog-props-menu-${placement}`
+          return (
+            <div
+              class="overlay-prop-case"
+              data-menu-prop-case
+              data-placement={placement}
+              hidden={placement !== "bottom-start"}
+            >
+              <Button variant="outline" popovertarget={id} aria-haspopup="menu">
+                Open {placement}
+              </Button>
+              <DropdownMenu id={id} placement={placement} aria-label="Props menu">
+                <DropdownMenuItem data-menu-prop-item data-variant="default">
+                  Rename project
+                </DropdownMenuItem>
+                <DropdownMenuItem variant="danger" data-menu-prop-item data-variant="danger" hidden>
+                  Delete project
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>View activity</DropdownMenuItem>
+              </DropdownMenu>
+            </div>
+          )
+        })
+      }
+    </div>
+
+    <code class="prop-readout" data-menu-prop-readout aria-live="polite"
+      >&lt;DropdownMenu placement="bottom-start"&gt;…&lt;/DropdownMenu&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{dropdownMenu.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Foundation</dt>
+      <dd>Native popover + CSS anchors</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Keyboard</dt>
+      <dd>Arrows · Home / End · typeahead</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Composition</dt>
+      <dd>Groups · labels · items · separators</dd>
+    </div>
+  </dl>
+</ComponentPreview>
