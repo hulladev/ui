@@ -1,0 +1,14 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"hr">
+
+const { class: className, ...props } = Astro.props as Props
+---
+
+<hr
+  {...props}
+  data-slot="command-separator"
+  class={cn("-mx-1 my-1 h-px border-0 bg-border", className)}
+/>

@@ -1,0 +1,47 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"div"> & {
+  filter?: boolean
+  loop?: boolean
+}
+
+const { class: className, filter = true, loop = true, ...props } = Astro.props as Props
+---
+
+<hulla-command
+  {...props}
+  data-filter={filter ? "true" : "false"}
+  data-loop={loop ? "true" : "false"}
+  data-slot="command"
+  class={cn(
+    "flex w-full min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-surface-raised text-foreground shadow-lg",
+    className
+  )}
+>
+  <slot />
+</hulla-command>
+
+<script>
+  import { connectCommand, type CommandController } from "@/lib/command"
+
+  const elementName = "hulla-command"
+
+  if (!customElements.get(elementName)) {
+    class HullaCommandElement extends HTMLElement {
+      controller: CommandController | undefined
+
+      connectedCallback() {
+        this.controller ??= connectCommand(this)
+      }
+
+      disconnectedCallback() {
+        this.controller?.destroy()
+        this.controller = undefined
+      }
+    }
+
+    customElements.define(elementName, HullaCommandElement)
+  }
+</script>

@@ -1,0 +1,17 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"div">
+
+const { class: className, role = "listbox", ...props } = Astro.props as Props
+---
+
+<div
+  {...props}
+  role={role}
+  data-slot="command-list"
+  class={cn("max-h-72 overflow-x-hidden overflow-y-auto overscroll-contain p-1.5", className)}
+>
+  <slot />
+</div>

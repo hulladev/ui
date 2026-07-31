@@ -1,0 +1,280 @@
+---
+import { Clipboard, CodeXml, FileText, GitBranch, Moon, Settings2, UserPlus } from "@lucide/astro"
+import Button from "@/ui/button/button.astro"
+import CommandEmpty from "@/ui/command/command-empty.astro"
+import CommandGroupLabel from "@/ui/command/command-group-label.astro"
+import CommandGroup from "@/ui/command/command-group.astro"
+import CommandInput from "@/ui/command/command-input.astro"
+import CommandItem from "@/ui/command/command-item.astro"
+import CommandList from "@/ui/command/command-list.astro"
+import CommandShortcut from "@/ui/command/command-shortcut.astro"
+import Command from "@/ui/command/command.astro"
+import Dialog from "@/ui/dialog/dialog.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const command = manifest.library.components.command
+---
+
+<ComponentPreview
+  component="Command"
+  hint="Type · ↑↓ · Enter"
+  propsLabel="Behavior"
+  requirePropsView={true}
+>
+  <div slot="variants" class="grid gap-6">
+    <div
+      class="grid gap-4 rounded-lg border border-border bg-surface/85 p-4 shadow-xs"
+      aria-label="Command dialog example"
+    >
+      <div class="flex items-start justify-between gap-5">
+        <div class="grid gap-1">
+          <span class="font-mono text-[0.625rem] tracking-[0.08em] text-primary uppercase">
+            Layered composition
+          </span>
+          <strong class="text-sm tracking-tight">Put the command menu above the page</strong>
+          <p class="m-0 max-w-[30rem] text-xs leading-5 text-muted-foreground">
+            Dialog owns the backdrop, focus trap, Escape handling, and focus restoration.
+          </p>
+        </div>
+        <output
+          class="hidden font-mono text-[0.625rem] tracking-[0.06em] text-muted-foreground uppercase sm:block"
+          data-command-overlay-selection
+          aria-live="polite">No action yet</output
+        >
+      </div>
+
+      <Button class="w-full justify-between" variant="secondary" data-open-command-dialog>
+        <span>Open command menu</span>
+        <span
+          class="font-mono text-[0.625rem] tracking-[0.06em] text-muted-foreground uppercase"
+          aria-hidden="true"
+        >
+          Backdrop preview
+        </span>
+      </Button>
+    </div>
+
+    <div class="flex items-center justify-between gap-4 px-1">
+      <div class="grid gap-0.5">
+        <span class="font-mono text-[0.625rem] tracking-[0.08em] text-primary uppercase">
+          Inline composition
+        </span>
+        <strong class="text-sm tracking-tight">Move without leaving the keyboard</strong>
+      </div>
+      <span
+        class="hidden items-center gap-1.5 font-mono text-[0.625rem] tracking-[0.06em] text-muted-foreground sm:flex"
+      >
+        Always visible
+      </span>
+    </div>
+
+    <Command id="catalog-command" aria-label="Workspace actions">
+      <CommandInput id="catalog-command-input" placeholder="Search actions and files…" autofocus />
+      <CommandList>
+        <CommandEmpty>No matching action. Try “branch” or “theme”.</CommandEmpty>
+
+        <CommandGroup>
+          <CommandGroupLabel>Create</CommandGroupLabel>
+          <CommandItem value="new-file" keywords={["document", "page"]}>
+            <FileText aria-hidden="true" />
+            <span>New file</span>
+            <CommandShortcut>⌘ N</CommandShortcut>
+          </CommandItem>
+          <CommandItem value="invite-person" keywords={["member", "collaborator"]}>
+            <UserPlus aria-hidden="true" />
+            <span>Invite person</span>
+            <CommandShortcut>⌘ I</CommandShortcut>
+          </CommandItem>
+          <CommandItem value="create-branch" keywords={["git", "fork"]}>
+            <GitBranch aria-hidden="true" />
+            <span>Create branch</span>
+            <CommandShortcut>⌘ B</CommandShortcut>
+          </CommandItem>
+        </CommandGroup>
+
+        <CommandGroup>
+          <CommandGroupLabel>Workspace</CommandGroupLabel>
+          <CommandItem value="copy-link" keywords={["url", "share"]}>
+            <Clipboard aria-hidden="true" />
+            <span>Copy workspace link</span>
+            <CommandShortcut>⌘ ⇧ C</CommandShortcut>
+          </CommandItem>
+          <CommandItem value="open-code" keywords={["source", "editor"]}>
+            <CodeXml aria-hidden="true" />
+            <span>Open source</span>
+            <CommandShortcut>⌘ E</CommandShortcut>
+          </CommandItem>
+          <CommandItem value="toggle-theme" keywords={["dark", "light", "appearance"]}>
+            <Moon aria-hidden="true" />
+            <span>Toggle theme</span>
+            <CommandShortcut>⌘ ⇧ L</CommandShortcut>
+          </CommandItem>
+          <CommandItem value="workspace-settings" keywords={["preferences"]} disabled>
+            <Settings2 aria-hidden="true" />
+            <span>Workspace settings</span>
+            <CommandShortcut>Unavailable</CommandShortcut>
+          </CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </Command>
+
+    <div
+      class="flex min-h-7 items-center justify-between gap-4 px-1 font-mono text-[0.625rem] tracking-[0.06em] text-muted-foreground uppercase"
+    >
+      <span>Selection event</span>
+      <output data-command-selection aria-live="polite">Waiting for action</output>
+    </div>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Filtering</span>
+        <select aria-label="Command filtering" data-command-prop-filter>
+          <option value="true">Built in</option>
+          <option value="false">External</option>
+        </select>
+      </label>
+
+      <label class="prop-control">
+        <span class="label">Navigation</span>
+        <select aria-label="Command navigation" data-command-prop-loop>
+          <option value="true">Loop</option>
+          <option value="false">Stop at edges</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="playground-stage">
+      <Command
+        class="w-full max-w-[23rem]"
+        aria-label="Command behavior playground"
+        data-playground-command
+      >
+        <CommandInput placeholder="Try searching “review”…" />
+        <CommandList class="max-h-52">
+          <CommandEmpty>No result in this local list.</CommandEmpty>
+          <CommandGroup>
+            <CommandGroupLabel>Actions</CommandGroupLabel>
+            <CommandItem value="open-review">Open review queue</CommandItem>
+            <CommandItem value="request-review">Request a review</CommandItem>
+            <CommandItem value="publish-release">Publish release</CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </Command>
+    </div>
+
+    <code class="prop-readout" data-command-prop-readout aria-live="polite"
+      >&lt;Command filter loop&gt;…&lt;/Command&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{command.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Added dependencies</dt>
+      <dd>None</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Filtering</dt>
+      <dd>Text · value · keywords</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Focus model</dt>
+      <dd>Input · active descendant</dd>
+    </div>
+  </dl>
+</ComponentPreview>
+
+<Dialog
+  id="catalog-command-dialog"
+  contentClass="max-w-xl p-0"
+  hidden
+  aria-label="Global command menu"
+  data-command-dialog
+>
+  <Command class="rounded-[inherit] border-0 shadow-none" aria-label="Global actions">
+    <CommandInput
+      id="catalog-command-dialog-input"
+      placeholder="Where do you want to go?"
+      autofocus
+    />
+    <CommandList>
+      <CommandEmpty>No destination found.</CommandEmpty>
+      <CommandGroup>
+        <CommandGroupLabel>Jump to</CommandGroupLabel>
+        <CommandItem value="overview" keywords={["home", "dashboard"]}>
+          <FileText aria-hidden="true" />
+          <span>Project overview</span>
+          <CommandShortcut>G O</CommandShortcut>
+        </CommandItem>
+        <CommandItem value="source" keywords={["code", "repository"]}>
+          <CodeXml aria-hidden="true" />
+          <span>Source files</span>
+          <CommandShortcut>G S</CommandShortcut>
+        </CommandItem>
+        <CommandItem value="branches" keywords={["git"]}>
+          <GitBranch aria-hidden="true" />
+          <span>Branches</span>
+          <CommandShortcut>G B</CommandShortcut>
+        </CommandItem>
+      </CommandGroup>
+      <CommandGroup>
+        <CommandGroupLabel>Actions</CommandGroupLabel>
+        <CommandItem value="invite">
+          <UserPlus aria-hidden="true" />
+          <span>Invite collaborator</span>
+          <CommandShortcut>⌘ I</CommandShortcut>
+        </CommandItem>
+        <CommandItem value="preferences" keywords={["settings"]}>
+          <Settings2 aria-hidden="true" />
+          <span>Preferences</span>
+          <CommandShortcut>⌘ ,</CommandShortcut>
+        </CommandItem>
+      </CommandGroup>
+    </CommandList>
+  </Command>
+</Dialog>
+
+<script>
+  import { COMMAND_SELECT_EVENT, type CommandSelectDetail } from "@/ui/lib/command"
+  import { onDialogDismiss } from "@/ui/lib/dialog"
+
+  const dialog = document.querySelector<HTMLElement>("[data-command-dialog]")
+  const trigger = document.querySelector<HTMLButtonElement>("[data-open-command-dialog]")
+  const selection = document.querySelector<HTMLOutputElement>("[data-command-overlay-selection]")
+
+  if (dialog && dialog.parentElement !== document.body) {
+    document.body.append(dialog)
+  }
+
+  const closeDialog = () => {
+    if (dialog) dialog.hidden = true
+  }
+
+  const openDialog = () => {
+    if (!dialog) return
+
+    if (document.activeElement === document.body) {
+      trigger?.focus({ preventScroll: true })
+    }
+
+    const input = dialog.querySelector<HTMLInputElement>("[data-slot='command-input']")
+    if (input) {
+      input.value = ""
+      input.dispatchEvent(new Event("input", { bubbles: true }))
+    }
+    dialog.hidden = false
+  }
+
+  trigger?.addEventListener("click", openDialog)
+  dialog?.addEventListener(COMMAND_SELECT_EVENT, (event) => {
+    if (selection) selection.value = (event as CustomEvent<CommandSelectDetail>).detail.value
+    closeDialog()
+  })
+  if (dialog) onDialogDismiss(dialog, closeDialog)
+</script>

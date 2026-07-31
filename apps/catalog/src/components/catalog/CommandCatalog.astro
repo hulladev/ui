@@ -1,0 +1,147 @@
+---
+import ComponentSource from "../ComponentSource.astro"
+import CommandPreview from "../previews/CommandPreview.astro"
+import { commandPreviewSources } from "../../data/catalogPreviewSources"
+
+const commandUsageSources = [
+  {
+    code: `---
+import CommandEmpty from "@/ui/command/command-empty.astro"
+import CommandGroupLabel from "@/ui/command/command-group-label.astro"
+import CommandGroup from "@/ui/command/command-group.astro"
+import CommandInput from "@/ui/command/command-input.astro"
+import CommandItem from "@/ui/command/command-item.astro"
+import CommandList from "@/ui/command/command-list.astro"
+import CommandShortcut from "@/ui/command/command-shortcut.astro"
+import Command from "@/ui/command/command.astro"
+---
+
+<Command aria-label="Project actions">
+  <CommandInput placeholder="Search actions…" />
+  <CommandList>
+    <CommandEmpty>No actions found.</CommandEmpty>
+    <CommandGroup>
+      <CommandGroupLabel>Project</CommandGroupLabel>
+      <CommandItem value="new-file" keywords={["document"]}>
+        New file
+        <CommandShortcut>⌘ N</CommandShortcut>
+      </CommandItem>
+      <CommandItem value="create-branch">Create branch</CommandItem>
+    </CommandGroup>
+  </CommandList>
+</Command>
+
+<script>
+  import { COMMAND_SELECT_EVENT, type CommandSelectDetail } from "@/ui/lib/command"
+
+  document.querySelector("[data-slot='command']")?.addEventListener(
+    COMMAND_SELECT_EVENT,
+    (event) => {
+      const value = (event as CustomEvent<CommandSelectDetail>).detail.value
+      console.log("Selected", value)
+    }
+  )
+</script>`,
+    filename: "src/components/project-command.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandGroupLabel,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandShortcut,
+} from "@/ui/command"
+
+export function ProjectCommand() {
+  return (
+    <Command aria-label="Project actions" onSelect={(value) => console.log(value)}>
+      <CommandInput placeholder="Search actions…" />
+      <CommandList>
+        <CommandEmpty>No actions found.</CommandEmpty>
+        <CommandGroup>
+          <CommandGroupLabel>Project</CommandGroupLabel>
+          <CommandItem value="new-file" keywords={["document"]}>
+            New file
+            <CommandShortcut>⌘ N</CommandShortcut>
+          </CommandItem>
+          <CommandItem value="create-branch">Create branch</CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </Command>
+  )
+}`,
+    filename: "src/components/project-command.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="command" aria-labelledby="command-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Navigation</p>
+      <h2 id="command-title">Command</h2>
+    </div>
+    <span class="status">Owned behavior</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Command component preview">
+    <div class="workbench workbench--command">
+      <CommandPreview />
+
+      <ComponentSource
+        component="Command"
+        generatedFamilies={["command"]}
+        previewSources={commandPreviewSources}
+        usageSources={commandUsageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  import { COMMAND_SELECT_EVENT, type CommandSelectDetail } from "@/ui/lib/command"
+
+  document.addEventListener(COMMAND_SELECT_EVENT, (event) => {
+    const command = (event.target as HTMLElement).closest<HTMLElement>("#catalog-command")
+    if (!command) return
+
+    const output = command.parentElement?.querySelector<HTMLOutputElement>(
+      "[data-command-selection]"
+    )
+    if (output) output.value = (event as CustomEvent<CommandSelectDetail>).detail.value
+  })
+
+  const syncCommandPlayground = (preview: HTMLElement) => {
+    const filter =
+      preview.querySelector<HTMLSelectElement>("[data-command-prop-filter]")?.value ?? "true"
+    const loop =
+      preview.querySelector<HTMLSelectElement>("[data-command-prop-loop]")?.value ?? "true"
+    const command = preview.querySelector<HTMLElement>("[data-playground-command]")
+
+    if (command) {
+      command.dataset.filter = filter
+      command.dataset.loop = loop
+    }
+
+    const readout = preview.querySelector<HTMLElement>("[data-command-prop-readout]")
+    if (readout) {
+      readout.textContent = `<Command filter={${filter}} loop={${loop}}>…</Command>`
+    }
+  }
+
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      "[data-command-prop-filter], [data-command-prop-loop]"
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="command-preview"]')
+    if (preview) syncCommandPlayground(preview)
+  })
+</script>

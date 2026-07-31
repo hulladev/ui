@@ -1,0 +1,20 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"span">
+
+const { class: className, ...props } = Astro.props as Props
+---
+
+<span
+  {...props}
+  aria-hidden="true"
+  data-slot="command-shortcut"
+  class={cn(
+    "ml-auto whitespace-nowrap pl-3 font-mono text-[0.625rem] tracking-[0.06em] text-muted-foreground group-data-[selected]/command-item:text-foreground/70",
+    className
+  )}
+>
+  <slot />
+</span>
