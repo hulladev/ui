@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type TableCaptionProps = ComponentPropsWithoutRef<"caption">
+export type TableCaptionProps = ComponentPropsWithRef<"caption">
 
 export function TableCaption({ children, className, ...props }: TableCaptionProps) {
   return (
@@ -9,7 +9,7 @@ export function TableCaption({ children, className, ...props }: TableCaptionProp
       {...props}
       data-slot="table-caption"
       className={cn(
-        "caption-bottom px-4 pt-3 text-left text-xs leading-5 text-muted-foreground",
+        "caption-bottom px-4 py-3 text-left text-xs leading-5 text-muted-foreground",
         className
       )}
     >
