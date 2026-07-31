@@ -1,0 +1,215 @@
+---
+import {
+  formatCalendarValue,
+  serializeCalendarValue,
+  type CalendarDateRange,
+  type CalendarDisabledDate,
+  type CalendarValue,
+} from "@/lib/calendar"
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+import Button from "../button/button.astro"
+import Calendar from "../calendar/calendar.astro"
+import Popover from "../popover/popover.astro"
+
+type DatePickerBaseProps = Omit<HTMLAttributes<"div">, "defaultValue"> & {
+  defaultMonth?: string
+  disabled?: boolean
+  disabledDates?: readonly CalendarDisabledDate[]
+  form?: string
+  locale?: string
+  max?: string
+  min?: string
+  month?: string
+  placeholder?: string
+  today?: string
+  weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6
+}
+
+type SingleDatePickerProps = {
+  defaultValue?: string | null
+  name?: string
+  selectionMode?: "single"
+  value?: string | null
+}
+
+type RangeDatePickerProps = {
+  defaultValue?: CalendarDateRange | null
+  endName?: string
+  selectionMode: "range"
+  startName?: string
+  value?: CalendarDateRange | null
+}
+
+type Props = DatePickerBaseProps & (SingleDatePickerProps | RangeDatePickerProps)
+
+const {
+  class: className,
+  defaultMonth,
+  defaultValue,
+  disabled = false,
+  disabledDates,
+  form,
+  locale,
+  max,
+  min,
+  month,
+  placeholder,
+  selectionMode = "single",
+  today,
+  value,
+  weekStartsOn,
+  ...props
+} = Astro.props as Props
+
+const initialValue = (value ?? defaultValue ?? null) as CalendarValue
+const fallback =
+  placeholder ?? (selectionMode === "range" ? "Choose a date range" : "Choose a date")
+const formattedValue = formatCalendarValue(initialValue, selectionMode, locale)
+const singleName =
+  selectionMode === "single" ? (Astro.props as SingleDatePickerProps).name : undefined
+const startName =
+  selectionMode === "range" ? (Astro.props as RangeDatePickerProps).startName : undefined
+const endName =
+  selectionMode === "range" ? (Astro.props as RangeDatePickerProps).endName : undefined
+---
+
+<hulla-date-picker
+  {...props}
+  data-initial-value={serializeCalendarValue(initialValue)}
+  data-locale={locale}
+  data-placeholder={placeholder}
+  data-selection-mode={selectionMode}
+  data-slot="date-picker"
+  class={cn("relative inline-grid min-w-0", className)}
+>
+  <Button
+    variant="outline"
+    disabled={disabled}
+    aria-expanded="false"
+    aria-haspopup="dialog"
+    data-slot="date-picker-trigger"
+    class="min-w-52 justify-between gap-3 bg-surface px-3 text-left font-normal shadow-xs"
+  >
+    <span
+      data-slot="date-picker-value"
+      data-state={formattedValue ? "value" : "placeholder"}
+      class="min-w-0 flex-1 overflow-hidden text-ellipsis data-[state=placeholder]:text-muted-foreground"
+    >
+      {formattedValue || fallback}
+    </span>
+    <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" class="size-4 text-muted-foreground">
+      <path
+        d="M3.25 4.75h9.5M5 2.5v3M11 2.5v3M3 7.25h10v5.25H3z"
+        stroke="currentColor"
+        stroke-width="1.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
+  </Button>
+
+  {
+    selectionMode === "range" ? (
+      <>
+        <input
+          type="hidden"
+          disabled={disabled}
+          form={form}
+          name={startName}
+          data-slot="date-picker-start-input"
+          value={initialValue && typeof initialValue !== "string" ? initialValue.start : ""}
+        />
+        <input
+          type="hidden"
+          disabled={disabled}
+          form={form}
+          name={endName}
+          data-slot="date-picker-end-input"
+          value={initialValue && typeof initialValue !== "string" ? (initialValue.end ?? "") : ""}
+        />
+      </>
+    ) : (
+      <input
+        type="hidden"
+        disabled={disabled}
+        form={form}
+        name={singleName}
+        data-slot="date-picker-input"
+        value={typeof initialValue === "string" ? initialValue : ""}
+      />
+    )
+  }
+
+  <Popover
+    role="dialog"
+    placement="bottom-start"
+    data-date-picker-popover
+    data-slot="date-picker-popover"
+    class="max-h-[calc(100dvh-1rem)] max-w-[calc(100vw-1rem)] overflow-visible p-0"
+  >
+    {
+      selectionMode === "range" ? (
+        <Calendar
+          defaultMonth={defaultMonth}
+          defaultValue={initialValue && typeof initialValue !== "string" ? initialValue : null}
+          disabledDates={disabledDates}
+          locale={locale}
+          max={max}
+          min={min}
+          month={month}
+          selectionMode="range"
+          today={today}
+          weekStartsOn={weekStartsOn}
+        />
+      ) : (
+        <Calendar
+          defaultMonth={defaultMonth}
+          defaultValue={typeof initialValue === "string" ? initialValue : null}
+          disabledDates={disabledDates}
+          locale={locale}
+          max={max}
+          min={min}
+          month={month}
+          today={today}
+          weekStartsOn={weekStartsOn}
+        />
+      )
+    }
+  </Popover>
+</hulla-date-picker>
+
+<script>
+  import { connectDatePicker, type DatePickerController } from "@/lib/date-picker"
+  import type { CalendarValue } from "@/lib/calendar"
+
+  const elementName = "hulla-date-picker"
+
+  if (!customElements.get(elementName)) {
+    class HullaDatePickerElement extends HTMLElement {
+      controller: DatePickerController | undefined
+
+      connectedCallback() {
+        this.controller ??= connectDatePicker(this)
+      }
+
+      disconnectedCallback() {
+        this.controller?.destroy()
+        this.controller = undefined
+      }
+
+      get value(): CalendarValue {
+        return this.controller?.getValue() ?? null
+      }
+
+      set value(value: CalendarValue) {
+        this.controller?.setValue(value)
+      }
+
+      refresh() {
+        this.controller?.refresh()
+      }
+    }
+
+    customElements.define(elementName, HullaDatePickerElement)
+  }
+</script>

@@ -1,0 +1,155 @@
+---
+import astroDatePickerSource from "../../../../../generated/astro/date-picker/date-picker.astro?raw"
+import astroDateTimePickerSource from "../../../../../generated/astro/date-picker/date-time-picker.astro?raw"
+import reactDatePickerSource from "../../../../../generated/react/date-picker/date-picker.tsx?raw"
+import reactDateTimePickerSource from "../../../../../generated/react/date-picker/date-time-picker.tsx?raw"
+import { datePickerPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import DatePickerPreview from "../previews/DatePickerPreview.astro"
+
+const sources = [
+  {
+    code: astroDatePickerSource,
+    filename: "generated/astro/date-picker/date-picker.astro",
+    framework: "Astro · DatePicker",
+    language: "astro" as const,
+  },
+  {
+    code: astroDateTimePickerSource,
+    filename: "generated/astro/date-picker/date-time-picker.astro",
+    framework: "Astro · DateTimePicker",
+    language: "astro" as const,
+  },
+  {
+    code: reactDatePickerSource,
+    filename: "generated/react/date-picker/date-picker.tsx",
+    framework: "React · DatePicker",
+    language: "tsx" as const,
+  },
+  {
+    code: reactDateTimePickerSource,
+    filename: "generated/react/date-picker/date-time-picker.tsx",
+    framework: "React · DateTimePicker",
+    language: "tsx" as const,
+  },
+]
+
+const usageSources = [
+  {
+    code: `---
+import DatePicker from "@/ui/date-picker/date-picker.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+---
+
+<Field>
+  <FieldLabel for="travel-dates-trigger">Travel dates</FieldLabel>
+  <DatePicker
+    id="travel-dates"
+    selectionMode="range"
+    defaultValue={{ start: "2026-07-30", end: "2026-08-04" }}
+    startName="travelStart"
+    endName="travelEnd"
+  />
+</Field>`,
+    filename: "src/components/travel-dates.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { DatePicker } from "@/ui/date-picker"
+import { Field, FieldLabel } from "@/ui/field"
+
+export function TravelDates() {
+  return (
+    <Field>
+      <FieldLabel htmlFor="travel-dates-trigger">Travel dates</FieldLabel>
+      <DatePicker
+        id="travel-dates"
+        selectionMode="range"
+        defaultValue={{ start: "2026-07-30", end: "2026-08-04" }}
+        startName="travelStart"
+        endName="travelEnd"
+      />
+    </Field>
+  )
+}`,
+    filename: "src/components/travel-dates.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="date-picker" aria-labelledby="date-picker-section-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Form / Date and time</p>
+      <h2 id="date-picker-section-title">Date Picker</h2>
+    </div>
+    <span class="status">ISO values · native form bridge</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Date picker component preview">
+    <div class="workbench workbench--date-picker">
+      <DatePickerPreview />
+
+      <ComponentSource
+        component="Date Picker"
+        generatedFamilies={["date-picker"]}
+        previewSources={datePickerPreviewSources}
+        sources={sources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  type DatePickerElement = HTMLElement & {
+    value: string | null
+  }
+
+  const syncDatePickerPlayground = (preview: HTMLElement, updateValue = false) => {
+    const picker = preview.querySelector<DatePickerElement>("[data-playground-date-picker]")
+    const value = preview.querySelector<HTMLSelectElement>("[data-date-picker-value]")
+    const disabled = preview.querySelector<HTMLInputElement>("[data-date-picker-disabled]")
+    const trigger = picker?.querySelector<HTMLButtonElement>("[data-slot='date-picker-trigger']")
+    if (!picker || !value || !disabled || !trigger) return
+
+    if (updateValue) picker.value = value.value || null
+    trigger.disabled = disabled.checked
+
+    const readout = preview.querySelector<HTMLElement>("[data-date-picker-readout]")
+    if (readout) {
+      readout.textContent = `<DatePicker value=${picker.value ? `"${picker.value}"` : "{null}"}${disabled.checked ? " disabled" : ""} />`
+    }
+  }
+
+  document.addEventListener("previewmodechange", (event) => {
+    const preview = (event.target as HTMLElement).closest<HTMLElement>(
+      '[data-preview-component="date-picker-preview"]'
+    )
+    if (preview && (event as CustomEvent<{ mode?: string }>).detail.mode === "props") {
+      syncDatePickerPlayground(preview)
+    }
+  })
+
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      "[data-date-picker-value], [data-date-picker-disabled]"
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="date-picker-preview"]')
+    if (preview) syncDatePickerPlayground(preview, control?.matches("[data-date-picker-value]"))
+  })
+
+  document.addEventListener("hulla-date-picker-value-change", (event) => {
+    const picker = event.target as DatePickerElement
+    const preview = picker.closest<HTMLElement>('[data-preview-component="date-picker-preview"]')
+    if (preview && picker.matches("[data-playground-date-picker]")) {
+      const select = preview.querySelector<HTMLSelectElement>("[data-date-picker-value]")
+      if (select) select.value = typeof picker.value === "string" ? picker.value : ""
+      syncDatePickerPlayground(preview)
+    }
+  })
+</script>

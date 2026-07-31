@@ -1,0 +1,143 @@
+---
+import astroTimePickerSource from "../../../../../generated/astro/time-picker/time-picker.astro?raw"
+import reactTimePickerSource from "../../../../../generated/react/time-picker/time-picker.tsx?raw"
+import { timePickerPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import TimePickerPreview from "../previews/TimePickerPreview.astro"
+
+const sources = [
+  {
+    code: astroTimePickerSource,
+    filename: "generated/astro/time-picker/time-picker.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: reactTimePickerSource,
+    filename: "generated/react/time-picker/time-picker.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+
+const usageSources = [
+  {
+    code: `---
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import TimePicker from "@/ui/time-picker/time-picker.astro"
+---
+
+<Field>
+  <FieldLabel for="handoff-time-trigger">Handoff time</FieldLabel>
+  <TimePicker
+    id="handoff-time"
+    defaultValue="17:30"
+    name="handoffTime"
+    min="09:00"
+    max="20:00"
+    step={30}
+  />
+</Field>`,
+    filename: "src/components/handoff-time.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Field, FieldLabel } from "@/ui/field"
+import { TimePicker } from "@/ui/time-picker"
+
+export function HandoffTime() {
+  return (
+    <Field>
+      <FieldLabel htmlFor="handoff-time-trigger">Handoff time</FieldLabel>
+      <TimePicker
+        id="handoff-time"
+        defaultValue="17:30"
+        name="handoffTime"
+        min="09:00"
+        max="20:00"
+        step={30}
+      />
+    </Field>
+  )
+}`,
+    filename: "src/components/handoff-time.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="time-picker" aria-labelledby="time-picker-section-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Form / Date and time</p>
+      <h2 id="time-picker-section-title">Time Picker</h2>
+    </div>
+    <span class="status">Local HH:mm · no time zone</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Time picker component preview">
+    <div class="workbench workbench--time-picker">
+      <TimePickerPreview />
+
+      <ComponentSource
+        component="Time Picker"
+        generatedFamilies={["time-picker"]}
+        previewSources={timePickerPreviewSources}
+        sources={sources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  type TimePickerElement = HTMLElement & {
+    value: string | null
+  }
+
+  const syncTimePickerPlayground = (preview: HTMLElement, updateValue = false) => {
+    const picker = preview.querySelector<TimePickerElement>("[data-playground-time-picker]")
+    const value = preview.querySelector<HTMLSelectElement>("[data-time-picker-value]")
+    const disabled = preview.querySelector<HTMLInputElement>("[data-time-picker-disabled]")
+    const trigger = picker?.querySelector<HTMLButtonElement>("[data-slot='time-picker-trigger']")
+    if (!picker || !value || !disabled || !trigger) return
+
+    if (updateValue) picker.value = value.value || null
+    trigger.disabled = disabled.checked
+
+    const readout = preview.querySelector<HTMLElement>("[data-time-picker-readout]")
+    if (readout) {
+      readout.textContent = `<TimePicker value=${picker.value ? `"${picker.value}"` : "{null}"} step={30}${disabled.checked ? " disabled" : ""} />`
+    }
+  }
+
+  document.addEventListener("previewmodechange", (event) => {
+    const preview = (event.target as HTMLElement).closest<HTMLElement>(
+      '[data-preview-component="time-picker-preview"]'
+    )
+    if (preview && (event as CustomEvent<{ mode?: string }>).detail.mode === "props") {
+      syncTimePickerPlayground(preview)
+    }
+  })
+
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      "[data-time-picker-value], [data-time-picker-disabled]"
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="time-picker-preview"]')
+    if (preview) syncTimePickerPlayground(preview, control?.matches("[data-time-picker-value]"))
+  })
+
+  document.addEventListener("hulla-time-picker-value-change", (event) => {
+    const picker = event.target as TimePickerElement
+    const preview = picker.closest<HTMLElement>('[data-preview-component="time-picker-preview"]')
+    if (preview && picker.matches("[data-playground-time-picker]")) {
+      const select = preview.querySelector<HTMLSelectElement>("[data-time-picker-value]")
+      if (select) select.value = picker.value ?? ""
+      syncTimePickerPlayground(preview)
+    }
+  })
+</script>

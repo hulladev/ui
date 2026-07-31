@@ -1,0 +1,123 @@
+---
+import FieldDescription from "@/ui/field/field-description.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import Field from "@/ui/field/field.astro"
+import TimePicker from "@/ui/time-picker/time-picker.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const timePicker = manifest.library.components["time-picker"]
+---
+
+<ComponentPreview
+  component="Time Picker"
+  hint="← ↑ → ↓ · Enter · Escape"
+  requirePropsView={true}
+  variantsLabel="24-hour default + optional 12-hour"
+>
+  <div slot="variants" class="grid gap-6">
+    <Field>
+      <FieldLabel for="catalog-workday-start-trigger">Workday starts</FieldLabel>
+      <TimePicker
+        id="catalog-workday-start"
+        defaultValue="09:00"
+        form="catalog-time-form"
+        name="workdayStart"
+        min="07:00"
+        max="18:00"
+        step={30}
+        class="w-full [&_[data-slot=time-picker-trigger]]:w-full"
+      />
+      <FieldDescription
+        >24-hour display by default, with a stable HH:mm form value.</FieldDescription
+      >
+    </Field>
+
+    <Field>
+      <FieldLabel for="catalog-handoff-time-trigger">Handoff time</FieldLabel>
+      <TimePicker
+        id="catalog-handoff-time"
+        defaultValue="17:45"
+        form="catalog-time-form"
+        name="handoffTime"
+        min="12:00"
+        max="22:00"
+        step={15}
+        hourCycle="h23"
+        class="w-full [&_[data-slot=time-picker-trigger]]:w-full"
+      />
+      <FieldDescription>15-minute precision with an explicit 24-hour clock.</FieldDescription>
+    </Field>
+
+    <Field>
+      <FieldLabel for="catalog-appointment-time-trigger">Appointment</FieldLabel>
+      <TimePicker
+        id="catalog-appointment-time"
+        defaultValue="13:30"
+        form="catalog-time-form"
+        hourCycle="h12"
+        class="w-full [&_[data-slot=time-picker-trigger]]:w-full"
+      />
+      <FieldDescription>AM/PM remains available when a 12-hour cycle is requested.</FieldDescription
+      >
+    </Field>
+
+    <form id="catalog-time-form" data-time-picker-contract-form></form>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control">
+        <span class="label">Value</span>
+        <select aria-label="Time picker value" data-time-picker-value>
+          <option value="09:30" selected>09:30</option>
+          <option value="13:00">13:00</option>
+          <option value="17:30">17:30</option>
+          <option value="">Empty</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="prop-controls prop-controls--toggles">
+      <label class="prop-disabled">
+        <input type="checkbox" data-time-picker-disabled />
+        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <span class="label">Disabled</span>
+      </label>
+    </div>
+
+    <div class="playground-stage block">
+      <TimePicker
+        defaultValue="09:30"
+        min="08:00"
+        max="18:00"
+        step={30}
+        data-playground-time-picker
+        class="mx-auto [&_[data-slot=time-picker-trigger]]:w-56"
+      />
+    </div>
+
+    <code class="prop-readout" data-time-picker-readout aria-live="polite"
+      >&lt;TimePicker value="09:30" step={30} /&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{timePicker.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Machine value</dt>
+      <dd>HH:mm · no time zone</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Display</dt>
+      <dd>24-hour default · optional AM/PM</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Semantics</dt>
+      <dd>group · buttons · hidden input</dd>
+    </div>
+  </dl>
+</ComponentPreview>

@@ -1,0 +1,189 @@
+---
+import { type CalendarDisabledDate } from "@/lib/calendar"
+import { formatLocalDateTime, isLocalDateTime } from "@/lib/date-picker"
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+import Button from "../button/button.astro"
+import Calendar from "../calendar/calendar.astro"
+import Popover from "../popover/popover.astro"
+import TimePicker from "../time-picker/time-picker.astro"
+
+type Props = Omit<HTMLAttributes<"div">, "defaultValue"> & {
+  defaultMonth?: string
+  defaultTime?: string
+  defaultValue?: string | null
+  disabled?: boolean
+  disabledDates?: readonly CalendarDisabledDate[]
+  form?: string
+  hourCycle?: "h11" | "h12" | "h23" | "h24"
+  locale?: string
+  max?: string
+  min?: string
+  month?: string
+  name?: string
+  placeholder?: string
+  timeStep?: number
+  today?: string
+  value?: string | null
+  weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6
+}
+
+const {
+  class: className,
+  defaultMonth,
+  defaultTime = "09:00",
+  defaultValue,
+  disabled = false,
+  disabledDates,
+  form,
+  hourCycle = "h23",
+  locale,
+  max,
+  min,
+  month,
+  name,
+  placeholder = "Choose a date and time",
+  timeStep = 30,
+  today,
+  value,
+  weekStartsOn,
+  ...props
+} = Astro.props as Props
+
+const initialValue = isLocalDateTime(value)
+  ? value
+  : isLocalDateTime(defaultValue)
+    ? defaultValue
+    : null
+const initialDate = initialValue?.slice(0, 10)
+const initialTime = initialValue?.slice(11, 16) ?? defaultTime
+const minDate = isLocalDateTime(min) ? min.slice(0, 10) : undefined
+const maxDate = isLocalDateTime(max) ? max.slice(0, 10) : undefined
+---
+
+<hulla-date-time-picker
+  {...props}
+  data-default-time={defaultTime}
+  data-hour-cycle={hourCycle}
+  data-initial-value={JSON.stringify(initialValue)}
+  data-locale={locale}
+  data-max={max}
+  data-min={min}
+  data-placeholder={placeholder}
+  data-slot="date-time-picker"
+  class={cn("relative inline-grid min-w-0", className)}
+>
+  <Button
+    variant="outline"
+    disabled={disabled}
+    aria-expanded="false"
+    aria-haspopup="dialog"
+    data-slot="date-time-picker-trigger"
+    class="min-w-60 justify-between gap-3 bg-surface px-3 text-left font-normal shadow-xs"
+  >
+    <span
+      data-slot="date-time-picker-value"
+      data-state={initialValue ? "value" : "placeholder"}
+      class="min-w-0 flex-1 overflow-hidden text-ellipsis data-[state=placeholder]:text-muted-foreground"
+    >
+      {initialValue ? formatLocalDateTime(initialValue, locale, hourCycle) : placeholder}
+    </span>
+    <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" class="size-4 text-muted-foreground">
+      <path
+        d="M3.25 4.75h9.5M5 2.5v3M11 2.5v3M3 7.25h10v5.25H3z"
+        stroke="currentColor"
+        stroke-width="1.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+      <path
+        d="M10.75 9v1.75l1 1"
+        stroke="currentColor"
+        stroke-width="1.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
+  </Button>
+
+  <input
+    type="hidden"
+    disabled={disabled}
+    form={form}
+    name={name}
+    data-slot="date-time-picker-input"
+    value={initialValue ?? ""}
+  />
+
+  <Popover
+    role="dialog"
+    placement="bottom-start"
+    data-date-time-picker-popover
+    data-slot="date-time-picker-popover"
+    class="max-h-[calc(100dvh-1rem)] max-w-[calc(100vw-1rem)] overflow-visible p-0"
+  >
+    <Calendar
+      defaultMonth={defaultMonth}
+      defaultValue={initialDate}
+      disabledDates={disabledDates}
+      locale={locale}
+      max={maxDate}
+      min={minDate}
+      month={month}
+      today={today}
+      weekStartsOn={weekStartsOn}
+      class="rounded-b-none"
+    />
+
+    <div class="flex items-end gap-2 border-t border-border/80 bg-foreground/[0.025] p-3">
+      <div class="grid min-w-0 flex-1 gap-1.5">
+        <span
+          class="text-[0.6875rem] font-semibold tracking-[0.06em] text-muted-foreground uppercase"
+        >
+          Time
+        </span>
+        <TimePicker
+          value={initialTime}
+          hourCycle={hourCycle}
+          locale={locale}
+          step={timeStep}
+          class="[&_[data-slot=time-picker-trigger]]:w-full"
+        />
+      </div>
+      <Button type="button" data-slot="date-time-picker-apply">Apply</Button>
+    </div>
+  </Popover>
+</hulla-date-time-picker>
+
+<script>
+  import { connectDateTimePicker, type DateTimePickerController } from "@/lib/date-picker"
+
+  const elementName = "hulla-date-time-picker"
+
+  if (!customElements.get(elementName)) {
+    class HullaDateTimePickerElement extends HTMLElement {
+      controller: DateTimePickerController | undefined
+
+      connectedCallback() {
+        this.controller ??= connectDateTimePicker(this)
+      }
+
+      disconnectedCallback() {
+        this.controller?.destroy()
+        this.controller = undefined
+      }
+
+      get value(): string | null {
+        return this.controller?.getValue() ?? null
+      }
+
+      set value(value: string | null) {
+        this.controller?.setValue(value)
+      }
+
+      refresh() {
+        this.controller?.refresh()
+      }
+    }
+
+    customElements.define(elementName, HullaDateTimePickerElement)
+  }
+</script>
