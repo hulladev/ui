@@ -1,0 +1,16 @@
+---
+import { sidebarMenuControls } from "@/+css/sidebar.css"
+import { cn } from "@/lib/style"
+import { resolve } from "@hulla/ui"
+import type { HTMLAttributes } from "astro/types"
+
+const $control = resolve(sidebarMenuControls)
+
+type Props = HTMLAttributes<"a">
+
+const { class: className, ...props } = Astro.props as Props
+---
+
+<a {...props} data-slot="sidebar-menu-link" class={cn($control("default"), className)}>
+  <slot />
+</a>

@@ -1,0 +1,138 @@
+---
+import { sidebarPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import SidebarPreview from "../previews/SidebarPreview.astro"
+
+const usageSources = [
+  {
+    code: `---
+import Collapsible from "@/ui/collapsible/collapsible.astro"
+import CollapsibleContent from "@/ui/collapsible/collapsible-content.astro"
+import Sidebar from "@/ui/sidebar/sidebar.astro"
+import SidebarContent from "@/ui/sidebar/sidebar-content.astro"
+import SidebarGroup from "@/ui/sidebar/sidebar-group.astro"
+import SidebarGroupTrigger from "@/ui/sidebar/sidebar-group-trigger.astro"
+import SidebarMenu from "@/ui/sidebar/sidebar-menu.astro"
+import SidebarMenuItem from "@/ui/sidebar/sidebar-menu-item.astro"
+import SidebarMenuLink from "@/ui/sidebar/sidebar-menu-link.astro"
+---
+
+<Sidebar>
+  <SidebarContent aria-label="Workspace">
+    <SidebarGroup>
+      <Collapsible open>
+        <SidebarGroupTrigger>Projects</SidebarGroupTrigger>
+        <CollapsibleContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuLink href="/launchpad" aria-current="page">
+                Launchpad
+              </SidebarMenuLink>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </CollapsibleContent>
+      </Collapsible>
+    </SidebarGroup>
+  </SidebarContent>
+</Sidebar>`,
+    filename: "src/components/app-sidebar.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import {
+  Collapsible,
+  CollapsibleContent,
+} from "@/ui/collapsible"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupTrigger,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuLink,
+} from "@/ui/sidebar"
+
+export function AppSidebar() {
+  return (
+    <Sidebar>
+      <SidebarContent aria-label="Workspace">
+        <SidebarGroup>
+          <Collapsible open>
+            <SidebarGroupTrigger>Projects</SidebarGroupTrigger>
+            <CollapsibleContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuLink href="/launchpad" aria-current="page">
+                    Launchpad
+                  </SidebarMenuLink>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </CollapsibleContent>
+          </Collapsible>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
+  )
+}`,
+    filename: "src/components/app-sidebar.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="sidebar" aria-labelledby="sidebar-section-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Pattern / Navigation</p>
+      <h2 id="sidebar-section-title">Sidebar</h2>
+    </div>
+    <span class="status">Recursive composition</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Sidebar component preview">
+    <div class="workbench workbench--sidebar">
+      <SidebarPreview />
+
+      <ComponentSource
+        component="Sidebar"
+        generatedFamilies={["sidebar", "collapsible"]}
+        previewSources={sidebarPreviewSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  const syncSidebarPlayground = (preview: HTMLElement) => {
+    const workspaceOpen =
+      preview.querySelector<HTMLInputElement>("[data-sidebar-prop-workspace]")?.checked ?? true
+    const projectsOpen =
+      preview.querySelector<HTMLInputElement>("[data-sidebar-prop-projects]")?.checked ?? true
+    const workspace = preview.querySelector<HTMLDetailsElement>(
+      "[data-playground-sidebar-workspace]"
+    )
+    const projects = preview.querySelector<HTMLDetailsElement>("[data-playground-sidebar-projects]")
+
+    if (workspace) workspace.open = workspaceOpen
+    if (projects) projects.open = projectsOpen
+
+    const readout = preview.querySelector<HTMLElement>("[data-sidebar-prop-readout]")
+    if (readout) {
+      readout.textContent = `Workspace: ${workspaceOpen ? "open" : "closed"} · Projects: ${
+        projectsOpen ? "open" : "closed"
+      }`
+    }
+  }
+
+  document.addEventListener("input", (event) => {
+    const control = (event.target as HTMLElement).closest(
+      "[data-sidebar-prop-workspace], [data-sidebar-prop-projects]"
+    )
+    const preview = control?.closest<HTMLElement>('[data-preview-component="sidebar-preview"]')
+    if (preview) syncSidebarPlayground(preview)
+  })
+</script>

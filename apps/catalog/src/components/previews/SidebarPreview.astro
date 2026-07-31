@@ -1,0 +1,247 @@
+---
+import Collapsible from "@/ui/collapsible/collapsible.astro"
+import CollapsibleContent from "@/ui/collapsible/collapsible-content.astro"
+import Sidebar from "@/ui/sidebar/sidebar.astro"
+import SidebarContent from "@/ui/sidebar/sidebar-content.astro"
+import SidebarFooter from "@/ui/sidebar/sidebar-footer.astro"
+import SidebarGroup from "@/ui/sidebar/sidebar-group.astro"
+import SidebarGroupLabel from "@/ui/sidebar/sidebar-group-label.astro"
+import SidebarGroupTrigger from "@/ui/sidebar/sidebar-group-trigger.astro"
+import SidebarHeader from "@/ui/sidebar/sidebar-header.astro"
+import SidebarMenu from "@/ui/sidebar/sidebar-menu.astro"
+import SidebarMenuBadge from "@/ui/sidebar/sidebar-menu-badge.astro"
+import SidebarMenuButton from "@/ui/sidebar/sidebar-menu-button.astro"
+import SidebarMenuItem from "@/ui/sidebar/sidebar-menu-item.astro"
+import SidebarMenuLink from "@/ui/sidebar/sidebar-menu-link.astro"
+import SidebarMenuTrigger from "@/ui/sidebar/sidebar-menu-trigger.astro"
+import {
+  Bell,
+  Blocks,
+  Boxes,
+  CircleDot,
+  Command,
+  FileText,
+  Gauge,
+  Inbox,
+  LogOut,
+  Settings2,
+  UserRound,
+} from "@lucide/astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const sidebar = manifest.library.components.sidebar
+---
+
+<ComponentPreview
+  component="Sidebar"
+  hint="Tab · Enter or Space"
+  requirePropsView={true}
+  variantsLabel="Composition"
+>
+  <div slot="variants" class="sidebar-stage">
+    <Sidebar class="h-[38rem] w-[17rem] rounded-xl border border-border shadow-lg">
+      <SidebarHeader class="flex items-center gap-3">
+        <span
+          class="grid size-9 shrink-0 place-items-center rounded-md bg-foreground text-primary-foreground shadow-sm"
+        >
+          <Command size={17} aria-hidden="true" />
+        </span>
+        <span class="grid min-w-0">
+          <strong class="truncate text-sm leading-5">Northstar</strong>
+          <span class="truncate font-mono text-[0.625rem] text-muted-foreground">
+            PRODUCT STUDIO
+          </span>
+        </span>
+      </SidebarHeader>
+
+      <SidebarContent aria-label="Northstar workspace">
+        <SidebarGroup>
+          <SidebarGroupLabel>Overview</SidebarGroupLabel>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuLink href="#sidebar" aria-current="page">
+                <Gauge aria-hidden="true" />
+                Dashboard
+              </SidebarMenuLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuLink href="#sidebar">
+                <Inbox aria-hidden="true" />
+                Inbox
+              </SidebarMenuLink>
+              <SidebarMenuBadge>8</SidebarMenuBadge>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuLink href="#sidebar">
+                <Bell aria-hidden="true" />
+                Activity
+              </SidebarMenuLink>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <Collapsible open>
+            <SidebarGroupTrigger>
+              <Boxes size={13} aria-hidden="true" />
+              Workspace
+            </SidebarGroupTrigger>
+            <CollapsibleContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <Collapsible open>
+                    <SidebarMenuTrigger>
+                      <Blocks aria-hidden="true" />
+                      Projects
+                    </SidebarMenuTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenu>
+                        <SidebarMenuItem>
+                          <SidebarMenuLink href="#sidebar">Launchpad</SidebarMenuLink>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem>
+                          <Collapsible open>
+                            <SidebarMenuTrigger>
+                              <CircleDot aria-hidden="true" />
+                              Platform
+                            </SidebarMenuTrigger>
+                            <CollapsibleContent>
+                              <SidebarMenu>
+                                <SidebarMenuItem>
+                                  <SidebarMenuLink href="#sidebar">API gateway</SidebarMenuLink>
+                                </SidebarMenuItem>
+                                <SidebarMenuItem>
+                                  <SidebarMenuLink href="#sidebar">Observability</SidebarMenuLink>
+                                </SidebarMenuItem>
+                              </SidebarMenu>
+                            </CollapsibleContent>
+                          </Collapsible>
+                        </SidebarMenuItem>
+                      </SidebarMenu>
+                    </CollapsibleContent>
+                  </Collapsible>
+                </SidebarMenuItem>
+              </SidebarMenu>
+
+              <SidebarGroup class="pt-2">
+                <Collapsible open>
+                  <SidebarGroupTrigger>
+                    <FileText size={13} aria-hidden="true" />
+                    Notes
+                  </SidebarGroupTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenu>
+                      <SidebarMenuItem>
+                        <SidebarMenuLink href="#sidebar">Release brief</SidebarMenuLink>
+                      </SidebarMenuItem>
+                    </SidebarMenu>
+                  </CollapsibleContent>
+                </Collapsible>
+              </SidebarGroup>
+            </CollapsibleContent>
+          </Collapsible>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>System</SidebarGroupLabel>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuLink href="#sidebar">
+                <Settings2 aria-hidden="true" />
+                Settings
+              </SidebarMenuLink>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <span
+                class="grid size-6 place-items-center rounded-sm bg-foreground/[0.08]"
+                aria-hidden="true"
+              >
+                <UserRound size={13} />
+              </span>
+              <span class="grid min-w-0 flex-1">
+                <strong class="truncate text-xs leading-4 text-foreground">Sam H.</strong>
+                <span class="truncate text-[0.6875rem]">sam@northstar.dev</span>
+              </span>
+              <LogOut aria-hidden="true" />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+    </Sidebar>
+  </div>
+
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls prop-controls--toggles">
+      <label class="prop-disabled">
+        <input type="checkbox" checked data-sidebar-prop-workspace />
+        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <span class="label">Workspace open</span>
+      </label>
+      <label class="prop-disabled">
+        <input type="checkbox" checked data-sidebar-prop-projects />
+        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <span class="label">Projects open</span>
+      </label>
+    </div>
+
+    <div class="playground-stage sidebar-playground-stage">
+      <Sidebar class="h-80 w-60 rounded-lg border border-border shadow-md">
+        <SidebarContent aria-label="Example sidebar">
+          <SidebarGroup>
+            <Collapsible open data-playground-sidebar-workspace>
+              <SidebarGroupTrigger>Workspace</SidebarGroupTrigger>
+              <CollapsibleContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuLink href="#sidebar" aria-current="page">
+                      Dashboard
+                    </SidebarMenuLink>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <Collapsible open data-playground-sidebar-projects>
+                      <SidebarMenuTrigger>Projects</SidebarMenuTrigger>
+                      <CollapsibleContent>
+                        <SidebarMenu>
+                          <SidebarMenuItem>
+                            <SidebarMenuLink href="#sidebar">Launchpad</SidebarMenuLink>
+                          </SidebarMenuItem>
+                        </SidebarMenu>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </CollapsibleContent>
+            </Collapsible>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
+    </div>
+
+    <code class="prop-readout" data-sidebar-prop-readout aria-live="polite"
+      >&lt;Collapsible open&gt;…&lt;/Collapsible&gt;</code
+    >
+  </div>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{sidebar.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Structure</dt>
+      <dd>aside · nav · lists</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Nesting</dt>
+      <dd>recursive · no depth limit</dd>
+    </div>
+  </dl>
+</ComponentPreview>
