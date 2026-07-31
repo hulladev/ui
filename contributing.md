@@ -26,11 +26,18 @@ The generator watches `packages/components/src` and serializes rebuilds so a bur
 cannot create overlapping writes. The catalog compiles components from `generated/astro`, which
 means it exercises the same transformed files consumers receive.
 
-Use the narrower commands when needed:
+The catalog task is linked to the generator watcher, so this equivalent command also keeps
+generated output current:
+
+```bash
+bun run dev:catalog
+```
+
+Use the narrower commands only when you deliberately need one side of the loop:
 
 ```bash
 bun run dev:generator
-bun run dev:catalog
+bun run dev:catalog-only
 ```
 
 Author only in `packages/components/src`. A successful generator run replaces `generated` as a

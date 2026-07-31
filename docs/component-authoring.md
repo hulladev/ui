@@ -13,10 +13,14 @@ packages/components/src/
 ├── astro/button/
 │   ├── package.json
 │   └── button.astro
-└── react/button/
+├── react/button/
     ├── package.json
     ├── button.react.tsx
     └── index.button.react.tsx
+└── solid/button/
+    ├── package.json
+    ├── button.solid.tsx
+    └── index.button.solid.tsx
 ```
 
 The local `package.json` is a discovery marker and is copied with the component. A directory without
@@ -27,8 +31,11 @@ Use a framework segment immediately before the extension when a source filename 
 specifier is framework-specific:
 
 - `button.react.tsx` becomes `button.tsx`.
+- `button.solid.tsx` becomes `button.tsx`.
 - `index.button.react.tsx` becomes `index.tsx`.
+- `index.button.solid.tsx` becomes `index.tsx`.
 - `export * from "./button.react"` becomes `export * from "./button"`.
+- `export * from "./button.solid"` becomes `export * from "./button"`.
 
 Run `bun run generate` after creating or deleting component files. The full-tree build handles
 pruning; no cache cleanup is required.
@@ -76,6 +83,22 @@ The contract is intentionally strict:
 
 The generator rejects unsupported cases with the source path and corrective action instead of
 emitting code that fails later in a consumer.
+
+## Solid component conventions
+
+Solid templates are first-class sources under `src/solid`; they are not wrappers around React
+output. Keep prop reads reactive with `splitProps` and `mergeProps`, use Solid's native `class` and
+lowercase DOM attribute names, and use `<For>` for keyed collections. Do not carry React hooks,
+synthetic event types, `key` props, or `react-dom` portals into Solid output.
+
+Interactive components should reuse the same framework-neutral DOM controller as Astro and React.
+The Solid-only `lib/solid.ts` copy file provides ref exposure, mount cleanup, and dependency-aware
+controller effects. Event callbacks and controlled values should read from the live Solid prop
+proxy inside controller listeners rather than snapshotting a prop during component setup.
+
+Solid support is complete only when the authored tree and `generated/solid` both type-check, every
+component family lists `solid` in `ui.manifest.json`, and the catalog's generated-source inspector
+shows the emitted Solid files.
 
 ## Shared files
 

@@ -30,20 +30,22 @@ bun run verify
 
 ## Common commands
 
-| Command                   | Purpose                                                            |
-| ------------------------- | ------------------------------------------------------------------ |
-| `bun run dev`             | Watch component sources and run the catalog                        |
-| `bun run dev:generator`   | Watch and regenerate without the catalog                           |
-| `bun run dev:catalog`     | Run only the catalog                                               |
-| `bun run generate`        | Rebuild the committed registry atomically                          |
-| `bun run generate:check`  | Report generated drift without writing files                       |
-| `bun run check-generated` | Type-check generated output in isolated framework projects         |
-| `bun run verify`          | Format, lint, type-check, test, build, and verify generated output |
+| Command                    | Purpose                                                            |
+| -------------------------- | ------------------------------------------------------------------ |
+| `bun run dev`              | Watch, regenerate, and hot-reload the linked catalog               |
+| `bun run dev:generator`    | Watch and regenerate without the catalog                           |
+| `bun run dev:catalog`      | Run the catalog together with its generator watcher                |
+| `bun run dev:catalog-only` | Run only Astro against the current generated output                |
+| `bun run generate`         | Rebuild the committed registry atomically                          |
+| `bun run generate:check`   | Report generated drift without writing files                       |
+| `bun run check-generated`  | Type-check generated output in isolated framework projects         |
+| `bun run verify`           | Format, lint, type-check, test, build, and verify generated output |
 
 ## Repository map
 
 - `packages/ui` — published `@hulla/ui` generator API and `uigen` CLI.
-- `packages/components/src` — canonical component templates and shared source files.
+- `packages/components/src` — canonical Astro, React, and Solid component templates plus shared
+  source files.
 - `generated` — committed registry consumed by the `hulla` CLI.
 - `apps/catalog` — real Astro compilation and visual inspection environment.
 - `docs` — generator API, architecture, and component-authoring contracts.
