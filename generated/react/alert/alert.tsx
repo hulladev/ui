@@ -1,5 +1,5 @@
 import { vn, cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $variant = vn({
   note: "[--alert-accent:var(--color-muted-foreground)]",
@@ -9,7 +9,7 @@ const $variant = vn({
   danger: "[--alert-accent:var(--color-danger)]",
 })
 
-export type AlertProps = ComponentPropsWithoutRef<"div"> & {
+export type AlertProps = ComponentPropsWithRef<"div"> & {
   variant?: typeof $variant.infer
 }
 

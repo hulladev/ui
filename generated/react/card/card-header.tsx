@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type CardHeaderProps = ComponentPropsWithoutRef<"header">
+export type CardHeaderProps = ComponentPropsWithRef<"header">
 
 export function CardHeader({ children, className, ...props }: CardHeaderProps) {
   return (

@@ -1,9 +1,9 @@
 import { cn } from "@/lib/style"
-import { useState, type ComponentPropsWithoutRef } from "react"
+import { useState, type ComponentPropsWithRef } from "react"
 
 type ImageStatus = "error" | "loaded" | "loading"
 
-export type AvatarImageProps = ComponentPropsWithoutRef<"img"> & {
+export type AvatarImageProps = ComponentPropsWithRef<"img"> & {
   alt: string
 }
 

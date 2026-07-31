@@ -1,11 +1,11 @@
 import { cardVariants } from "@/+css/card.css"
 import { cn } from "@/lib/style"
 import { resolve } from "@hulla/ui"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $variant = resolve(cardVariants)
 
-export type CardProps = ComponentPropsWithoutRef<"article"> & {
+export type CardProps = ComponentPropsWithRef<"article"> & {
   variant?: typeof $variant.infer
 }
 

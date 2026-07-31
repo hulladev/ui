@@ -47,6 +47,6 @@ describe("Checkbox generated contract", () => {
   test("keeps its fixed type out of the React prop surface", async () => {
     const source = await readGeneratedCheckbox("react")
 
-    expect(source).toContain('Omit<ComponentPropsWithoutRef<"input">, "type">')
+    expect(source).toContain('Omit<ComponentPropsWithRef<"input">, "type">')
   })
 })

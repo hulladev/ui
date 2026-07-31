@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type AlertDescriptionProps = ComponentPropsWithoutRef<"p">
+export type AlertDescriptionProps = ComponentPropsWithRef<"p">
 
 export function AlertDescription({ children, className, ...props }: AlertDescriptionProps) {
   return (

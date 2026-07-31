@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type SwitchProps = Omit<ComponentPropsWithoutRef<"input">, "role" | "type">
+export type SwitchProps = Omit<ComponentPropsWithRef<"input">, "role" | "type">
 
 export function Switch({ className, ...props }: SwitchProps) {
   return (

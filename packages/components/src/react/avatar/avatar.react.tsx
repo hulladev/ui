@@ -1,11 +1,11 @@
 import { avatarSizes } from "@/+css/avatar.css"
 import { cn } from "@/lib/style"
 import { resolve } from "@hulla/ui"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $size = resolve(avatarSizes)
 
-export type AvatarProps = ComponentPropsWithoutRef<"span"> & {
+export type AvatarProps = ComponentPropsWithRef<"span"> & {
   size?: typeof $size.infer
 }
 

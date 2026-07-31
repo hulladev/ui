@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef, ReactNode } from "react"
+import type { ComponentPropsWithRef, ReactNode } from "react"
 
-export type FieldProps = Omit<ComponentPropsWithoutRef<"div">, "children"> & {
+export type FieldProps = Omit<ComponentPropsWithRef<"div">, "children"> & {
   children: ReactNode
 }
 

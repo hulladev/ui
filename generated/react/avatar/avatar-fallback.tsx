@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type AvatarFallbackProps = ComponentPropsWithoutRef<"span">
+export type AvatarFallbackProps = ComponentPropsWithRef<"span">
 
 export function AvatarFallback({ children, className, ...props }: AvatarFallbackProps) {
   return (

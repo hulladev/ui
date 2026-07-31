@@ -1,5 +1,5 @@
 import { vn, cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $variant = vn({
   pulse: "animate-skeleton-pulse",
@@ -7,7 +7,7 @@ const $variant = vn({
     "before:absolute before:inset-0 before:animate-skeleton-shimmer before:bg-[linear-gradient(105deg,transparent_20%,color-mix(in_oklab,var(--color-surface-raised)_82%,transparent)_50%,transparent_80%)] before:content-['']",
 })
 
-export type SkeletonProps = ComponentPropsWithoutRef<"div"> & {
+export type SkeletonProps = ComponentPropsWithRef<"div"> & {
   variant?: typeof $variant.infer
 }
 

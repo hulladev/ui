@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type CardDescriptionProps = ComponentPropsWithoutRef<"p">
+export type CardDescriptionProps = ComponentPropsWithRef<"p">
 
 export function CardDescription({ children, className, ...props }: CardDescriptionProps) {
   return (

@@ -43,7 +43,7 @@ describe("Breadcrumbs generated contract", () => {
       expect(source).toContain("[&>a]")
       expect(source).toContain("[&:not(:first-child)]:before")
     }
-    expect(react).toContain('ComponentPropsWithoutRef<"li">')
+    expect(react).toContain('ComponentPropsWithRef<"li">')
   })
 
   test("exports only the landmark and item components", async () => {

@@ -1,11 +1,11 @@
 import { tableVariants } from "@/+css/table.css"
 import { cn } from "@/lib/style"
 import { resolve } from "@hulla/ui"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $variant = resolve(tableVariants)
 
-export type TableProps = ComponentPropsWithoutRef<"table"> & {
+export type TableProps = ComponentPropsWithRef<"table"> & {
   variant?: typeof $variant.infer
 }
 

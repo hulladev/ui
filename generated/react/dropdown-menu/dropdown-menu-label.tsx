@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type DropdownMenuLabelProps = ComponentPropsWithoutRef<"div">
+export type DropdownMenuLabelProps = ComponentPropsWithRef<"div">
 
 export function DropdownMenuLabel({
   children,

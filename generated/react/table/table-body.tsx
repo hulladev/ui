@@ -1,6 +1,6 @@
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type TableBodyProps = ComponentPropsWithoutRef<"tbody">
+export type TableBodyProps = ComponentPropsWithRef<"tbody">
 
 export function TableBody({ children, className, ...props }: TableBodyProps) {
   return (

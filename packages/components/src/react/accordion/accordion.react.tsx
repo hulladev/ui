@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type AccordionProps = ComponentPropsWithoutRef<"div">
+export type AccordionProps = ComponentPropsWithRef<"div">
 
 export function Accordion({ children, className, ...props }: AccordionProps) {
   return (

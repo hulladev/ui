@@ -1,12 +1,12 @@
 import { badgeSizes, badgeVariants } from "@/+css/badge.css"
 import { cn } from "@/lib/style"
 import { resolve } from "@hulla/ui"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $size = resolve(badgeSizes)
 const $variant = resolve(badgeVariants)
 
-export type BadgeProps = ComponentPropsWithoutRef<"span"> & {
+export type BadgeProps = ComponentPropsWithRef<"span"> & {
   size?: typeof $size.infer
   variant?: typeof $variant.infer
 }

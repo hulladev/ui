@@ -1,11 +1,11 @@
 import { alertVariants } from "@/+css/alert.css"
 import { cn } from "@/lib/style"
 import { resolve } from "@hulla/ui"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $variant = resolve(alertVariants)
 
-export type AlertProps = ComponentPropsWithoutRef<"div"> & {
+export type AlertProps = ComponentPropsWithRef<"div"> & {
   variant?: typeof $variant.infer
 }
 

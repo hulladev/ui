@@ -2,12 +2,12 @@ import { popoverPlacements, popoverSurface } from "@/+css/popover.css"
 import { connectDropdownMenu } from "@/lib/dropdown-menu"
 import { cn } from "@/lib/style"
 import { resolve } from "@hulla/ui"
-import { useEffect, useRef, type ComponentPropsWithoutRef } from "react"
+import { useEffect, useImperativeHandle, useRef, type ComponentPropsWithRef } from "react"
 
 const $placement = resolve(popoverPlacements)
 const $surface = resolve(popoverSurface)
 
-export type DropdownMenuProps = ComponentPropsWithoutRef<"div"> & {
+export type DropdownMenuProps = ComponentPropsWithRef<"div"> & {
   placement?: typeof $placement.infer
 }
 
@@ -21,6 +21,7 @@ export function DropdownMenu({
   ...props
 }: DropdownMenuProps) {
   const elementRef = useRef<HTMLDivElement>(null)
+  useImperativeHandle(props.ref, () => elementRef.current as HTMLDivElement, [])
 
   useEffect(() => {
     const element = elementRef.current

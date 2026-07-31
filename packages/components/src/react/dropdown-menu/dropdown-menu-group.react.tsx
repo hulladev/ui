@@ -1,6 +1,6 @@
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type DropdownMenuGroupProps = ComponentPropsWithoutRef<"div">
+export type DropdownMenuGroupProps = ComponentPropsWithRef<"div">
 
 export function DropdownMenuGroup({
   children,

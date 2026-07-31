@@ -1,5 +1,5 @@
 import { vn, cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $variant = vn({
   default:
@@ -8,7 +8,7 @@ const $variant = vn({
     "text-danger hover:bg-danger/10 data-[highlighted=true]:bg-danger/10 dark:hover:bg-danger/14 dark:data-[highlighted=true]:bg-danger/14",
 })
 
-export type DropdownMenuItemProps = ComponentPropsWithoutRef<"button"> & {
+export type DropdownMenuItemProps = ComponentPropsWithRef<"button"> & {
   variant?: typeof $variant.infer
 }
 

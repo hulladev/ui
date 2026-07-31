@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type FieldErrorProps = ComponentPropsWithoutRef<"p">
+export type FieldErrorProps = ComponentPropsWithRef<"p">
 
 export function FieldError({ children, className, ...props }: FieldErrorProps) {
   return (

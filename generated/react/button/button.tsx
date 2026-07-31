@@ -1,5 +1,5 @@
 import { vn, cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $size = vn({
   sm: "gap-1.5 rounded-sm px-2 py-1.5 text-[0.8125rem]",
@@ -15,7 +15,7 @@ const $variant = vn({
     "border-border bg-transparent text-foreground hover:border-foreground/25 hover:bg-foreground/5 active:bg-foreground/10",
 })
 
-export type ButtonProps = ComponentPropsWithoutRef<"button"> & {
+export type ButtonProps = ComponentPropsWithRef<"button"> & {
   size?: typeof $size.infer
   variant?: typeof $variant.infer
 }

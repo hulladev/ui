@@ -1,12 +1,12 @@
 import { buttonSizes, buttonVariants } from "@/+css/button.css"
 import { cn } from "@/lib/style"
 import { resolve } from "@hulla/ui"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $size = resolve(buttonSizes)
 const $variant = resolve(buttonVariants)
 
-export type ButtonProps = ComponentPropsWithoutRef<"button"> & {
+export type ButtonProps = ComponentPropsWithRef<"button"> & {
   size?: typeof $size.infer
   variant?: typeof $variant.infer
 }

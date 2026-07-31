@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type AlertTitleProps = ComponentPropsWithoutRef<"strong">
+export type AlertTitleProps = ComponentPropsWithRef<"strong">
 
 export function AlertTitle({ children, className, ...props }: AlertTitleProps) {
   return (

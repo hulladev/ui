@@ -26,6 +26,6 @@ describe("Switch generated contract", () => {
   test("keeps its fixed semantic attributes out of the React prop surface", async () => {
     const source = await readGeneratedSwitch("react")
 
-    expect(source).toContain('Omit<ComponentPropsWithoutRef<"input">, "role" | "type">')
+    expect(source).toContain('Omit<ComponentPropsWithRef<"input">, "role" | "type">')
   })
 })

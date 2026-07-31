@@ -1,11 +1,11 @@
 import { skeletonVariants } from "@/+css/skeleton.css"
 import { cn } from "@/lib/style"
 import { resolve } from "@hulla/ui"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $variant = resolve(skeletonVariants)
 
-export type SkeletonProps = ComponentPropsWithoutRef<"div"> & {
+export type SkeletonProps = ComponentPropsWithRef<"div"> & {
   variant?: typeof $variant.infer
 }
 

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type CheckboxProps = Omit<ComponentPropsWithoutRef<"input">, "type">
+export type CheckboxProps = Omit<ComponentPropsWithRef<"input">, "type">
 
 export function Checkbox({ className, ...props }: CheckboxProps) {
   return (

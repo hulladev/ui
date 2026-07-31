@@ -1,5 +1,5 @@
 import { vn, cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $variant = vn({
   outline: "border-border bg-surface shadow-xs",
@@ -8,7 +8,7 @@ const $variant = vn({
   ghost: "border-transparent bg-transparent shadow-none",
 })
 
-export type CardProps = ComponentPropsWithoutRef<"article"> & {
+export type CardProps = ComponentPropsWithRef<"article"> & {
   variant?: typeof $variant.infer
 }
 

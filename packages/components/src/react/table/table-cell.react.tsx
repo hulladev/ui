@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type TableCellProps = ComponentPropsWithoutRef<"td">
+export type TableCellProps = ComponentPropsWithRef<"td">
 
 export function TableCell({ children, className, ...props }: TableCellProps) {
   return (

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type FieldDescriptionProps = ComponentPropsWithoutRef<"p">
+export type FieldDescriptionProps = ComponentPropsWithRef<"p">
 
 export function FieldDescription({ children, className, ...props }: FieldDescriptionProps) {
   return (

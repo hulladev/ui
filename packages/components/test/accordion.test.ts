@@ -37,7 +37,7 @@ describe("Accordion generated contract", () => {
   test("keeps open and name available as native details attributes", async () => {
     const reactItem = await readGeneratedAccordionPart("react", "accordion-item")
 
-    expect(reactItem).toContain('ComponentPropsWithoutRef<"details">')
+    expect(reactItem).toContain('ComponentPropsWithRef<"details">')
     expect(reactItem).not.toContain("type AccordionItemProps = {")
   })
 

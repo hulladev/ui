@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type TableRowProps = ComponentPropsWithoutRef<"tr">
+export type TableRowProps = ComponentPropsWithRef<"tr">
 
 export function TableRow({ children, className, ...props }: TableRowProps) {
   return (

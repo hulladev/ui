@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type KbdProps = ComponentPropsWithoutRef<"kbd">
+export type KbdProps = ComponentPropsWithRef<"kbd">
 
 export function Kbd({ children, className, ...props }: KbdProps) {
   return (

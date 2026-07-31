@@ -1,5 +1,5 @@
 import { vn, cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $variant = vn({
   plain: "",
@@ -9,7 +9,7 @@ const $variant = vn({
     "overflow-hidden rounded-md border border-border bg-surface shadow-xs [&_thead]:bg-foreground/[0.065] [&_tbody_tr:nth-child(odd)]:bg-foreground/[0.035] dark:[&_thead]:bg-foreground/[0.085] dark:[&_tbody_tr:nth-child(odd)]:bg-foreground/[0.055]",
 })
 
-export type TableProps = ComponentPropsWithoutRef<"table"> & {
+export type TableProps = ComponentPropsWithRef<"table"> & {
   variant?: typeof $variant.infer
 }
 

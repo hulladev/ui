@@ -1,5 +1,5 @@
 import { vn, cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $size = vn({
   sm: "size-8 text-xs",
@@ -7,7 +7,7 @@ const $size = vn({
   lg: "size-12 text-base",
 })
 
-export type AvatarProps = ComponentPropsWithoutRef<"span"> & {
+export type AvatarProps = ComponentPropsWithRef<"span"> & {
   size?: typeof $size.infer
 }
 

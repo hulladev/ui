@@ -1,5 +1,5 @@
 import { vn, cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $size = vn({
   sm: "h-5 gap-1 rounded-sm px-1.5 text-[0.6875rem] [&>svg]:size-3",
@@ -15,7 +15,7 @@ const $variant = vn({
   danger: "border-danger/25 bg-danger/10 text-danger",
 })
 
-export type BadgeProps = ComponentPropsWithoutRef<"span"> & {
+export type BadgeProps = ComponentPropsWithRef<"span"> & {
   size?: typeof $size.infer
   variant?: typeof $variant.infer
 }

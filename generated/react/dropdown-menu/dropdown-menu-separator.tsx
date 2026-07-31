@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type DropdownMenuSeparatorProps = ComponentPropsWithoutRef<"hr">
+export type DropdownMenuSeparatorProps = ComponentPropsWithRef<"hr">
 
 export function DropdownMenuSeparator({
   className,

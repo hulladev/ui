@@ -1,6 +1,6 @@
 import { vn, cn } from "@/lib/style"
 import { connectDropdownMenu } from "@/lib/dropdown-menu"
-import { useEffect, useRef, type ComponentPropsWithoutRef } from "react"
+import { useEffect, useImperativeHandle, useRef, type ComponentPropsWithRef } from "react"
 
 const $placement = vn({
   "top-start": "[position-area:block-start_span-inline-end]",
@@ -19,7 +19,7 @@ const $placement = vn({
 const $surface =
   "fixed inset-auto m-2 max-h-[min(24rem,calc(100dvh-1rem))] w-max max-w-[min(22rem,calc(100vw-1rem))] overflow-auto rounded-md border border-border bg-surface-raised/96 p-1.5 text-sm text-foreground opacity-0 shadow-[0_1rem_3rem_-1rem_oklch(0_0_0/0.26)] backdrop-blur-xl transition-[display,opacity,overlay,transform] duration-150 ease-out [position-try-fallbacks:flip-block,flip-inline,flip-block_flip-inline] [transform:translateY(-0.25rem)_scale(0.98)] [transition-behavior:allow-discrete] motion-reduce:transition-none motion-reduce:[transform:none] dark:border-foreground/15 dark:bg-surface-raised/92 dark:shadow-[0_1.25rem_4rem_-1rem_oklch(0_0_0/0.75),inset_0_1px_0_oklch(1_0_0/0.08)] [&:popover-open]:opacity-100 [&:popover-open]:[transform:none] starting:[&:popover-open]:opacity-0 starting:[&:popover-open]:[transform:translateY(-0.25rem)_scale(0.98)]"
 
-export type DropdownMenuProps = ComponentPropsWithoutRef<"div"> & {
+export type DropdownMenuProps = ComponentPropsWithRef<"div"> & {
   placement?: typeof $placement.infer
 }
 
@@ -33,6 +33,7 @@ export function DropdownMenu({
   ...props
 }: DropdownMenuProps) {
   const elementRef = useRef<HTMLDivElement>(null)
+  useImperativeHandle(props.ref, () => elementRef.current as HTMLDivElement, [])
 
   useEffect(() => {
     const element = elementRef.current

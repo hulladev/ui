@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type TableHeaderProps = ComponentPropsWithoutRef<"thead">
+export type TableHeaderProps = ComponentPropsWithRef<"thead">
 
 export function TableHeader({ children, className, ...props }: TableHeaderProps) {
   return (

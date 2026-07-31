@@ -3,11 +3,11 @@ import { connectFloatingLayer } from "@/lib/floating-layer"
 import { cn } from "@/lib/style"
 import type { Placement } from "@floating-ui/dom"
 import { resolve } from "@hulla/ui"
-import { useEffect, useRef, type ComponentPropsWithoutRef } from "react"
+import { useEffect, useImperativeHandle, useRef, type ComponentPropsWithRef } from "react"
 
 const $layer = resolve(floatingLayer)
 
-export type TooltipProps = Omit<ComponentPropsWithoutRef<"div">, "popover"> & {
+export type TooltipProps = Omit<ComponentPropsWithRef<"div">, "popover"> & {
   closeDelay?: number
   openDelay?: number
   placement?: Placement
@@ -27,6 +27,7 @@ export function Tooltip({
   ...props
 }: TooltipProps) {
   const elementRef = useRef<HTMLDivElement>(null)
+  useImperativeHandle(props.ref, () => elementRef.current as HTMLDivElement, [])
 
   useEffect(() => {
     const element = elementRef.current
@@ -46,7 +47,7 @@ export function Tooltip({
     <div
       {...props}
       ref={elementRef}
-      popover={popover as ComponentPropsWithoutRef<"div">["popover"]}
+      popover={popover as ComponentPropsWithRef<"div">["popover"]}
       role={role}
       data-placement={placement}
       data-slot="tooltip"

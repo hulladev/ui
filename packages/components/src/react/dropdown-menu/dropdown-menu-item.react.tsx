@@ -1,11 +1,11 @@
 import { dropdownMenuItemVariants } from "@/+css/dropdown-menu.css"
 import { cn } from "@/lib/style"
 import { resolve } from "@hulla/ui"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $variant = resolve(dropdownMenuItemVariants)
 
-export type DropdownMenuItemProps = ComponentPropsWithoutRef<"button"> & {
+export type DropdownMenuItemProps = ComponentPropsWithRef<"button"> & {
   variant?: typeof $variant.infer
 }
 

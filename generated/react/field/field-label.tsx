@@ -1,7 +1,7 @@
 import { cn } from "@/lib/style"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
-export type FieldLabelProps = ComponentPropsWithoutRef<"label">
+export type FieldLabelProps = ComponentPropsWithRef<"label">
 
 export function FieldLabel({ children, className, ...props }: FieldLabelProps) {
   return (

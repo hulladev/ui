@@ -1,12 +1,12 @@
 import { popoverPlacements, popoverSurface } from "@/+css/popover.css"
 import { cn } from "@/lib/style"
 import { resolve } from "@hulla/ui"
-import type { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithRef } from "react"
 
 const $placement = resolve(popoverPlacements)
 const $surface = resolve(popoverSurface)
 
-export type PopoverProps = ComponentPropsWithoutRef<"div"> & {
+export type PopoverProps = ComponentPropsWithRef<"div"> & {
   placement?: typeof $placement.infer
 }
 

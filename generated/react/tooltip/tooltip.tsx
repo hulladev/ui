@@ -1,12 +1,12 @@
 import { connectFloatingLayer } from "@/lib/floating-layer"
 import { cn } from "@/lib/style"
 import type { Placement } from "@floating-ui/dom"
-import { useEffect, useRef, type ComponentPropsWithoutRef } from "react"
+import { useEffect, useImperativeHandle, useRef, type ComponentPropsWithRef } from "react"
 
 const $layer =
   "fixed top-0 left-0 m-0 invisible pointer-events-none scale-[0.98] opacity-0 transition-[display,opacity,overlay,transform,visibility] duration-150 ease-out [transition-behavior:allow-discrete] [&[data-positioned=true]:popover-open]:visible [&[data-positioned=true]:popover-open]:pointer-events-auto [&[data-positioned=true]:popover-open]:scale-100 [&[data-positioned=true]:popover-open]:opacity-100 motion-reduce:transition-none"
 
-export type TooltipProps = Omit<ComponentPropsWithoutRef<"div">, "popover"> & {
+export type TooltipProps = Omit<ComponentPropsWithRef<"div">, "popover"> & {
   closeDelay?: number
   openDelay?: number
   placement?: Placement
@@ -26,6 +26,7 @@ export function Tooltip({
   ...props
 }: TooltipProps) {
   const elementRef = useRef<HTMLDivElement>(null)
+  useImperativeHandle(props.ref, () => elementRef.current as HTMLDivElement, [])
 
   useEffect(() => {
     const element = elementRef.current
@@ -45,7 +46,7 @@ export function Tooltip({
     <div
       {...props}
       ref={elementRef}
-      popover={popover as ComponentPropsWithoutRef<"div">["popover"]}
+      popover={popover as ComponentPropsWithRef<"div">["popover"]}
       role={role}
       data-placement={placement}
       data-slot="tooltip"
