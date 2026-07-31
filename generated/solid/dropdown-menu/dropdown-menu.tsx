@@ -1,0 +1,66 @@
+import { vn, cn } from "@/lib/style"
+import { createMutableRef, exposeRef, onMountEffect } from "@/lib/solid"
+import { mergeProps, splitProps, type JSX } from "solid-js"
+import { connectDropdownMenu } from "@/lib/dropdown-menu"
+
+const $placement = vn({
+  "top-start": "[position-area:block-start_span-inline-end]",
+  top: "[position-area:block-start]",
+  "top-end": "[position-area:block-start_span-inline-start]",
+  "right-start": "[position-area:inline-end_span-block-end]",
+  right: "[position-area:inline-end]",
+  "right-end": "[position-area:inline-end_span-block-start]",
+  "bottom-start": "[position-area:block-end_span-inline-end]",
+  bottom: "[position-area:block-end]",
+  "bottom-end": "[position-area:block-end_span-inline-start]",
+  "left-start": "[position-area:inline-start_span-block-end]",
+  left: "[position-area:inline-start]",
+  "left-end": "[position-area:inline-start_span-block-start]",
+})
+const $surface =
+  "fixed inset-auto m-2 max-h-[min(24rem,calc(100dvh-1rem))] w-max max-w-[min(22rem,calc(100vw-1rem))] overflow-auto rounded-md border border-border bg-surface-raised/96 p-1.5 text-sm text-foreground opacity-0 shadow-[0_1rem_3rem_-1rem_oklch(0_0_0/0.26)] backdrop-blur-xl transition-[display,opacity,overlay,transform] duration-150 ease-out [position-try-fallbacks:flip-block,flip-inline,flip-block_flip-inline] [transform:translateY(-0.25rem)_scale(0.98)] [transition-behavior:allow-discrete] motion-reduce:transition-none motion-reduce:[transform:none] dark:border-foreground/15 dark:bg-surface-raised/92 dark:shadow-[0_1.25rem_4rem_-1rem_oklch(0_0_0/0.75),inset_0_1px_0_oklch(1_0_0/0.08)] [&:popover-open]:opacity-100 [&:popover-open]:[transform:none] starting:[&:popover-open]:opacity-0 starting:[&:popover-open]:[transform:translateY(-0.25rem)_scale(0.98)]"
+
+export type DropdownMenuProps = JSX.IntrinsicElements["div"] & {
+  placement?: typeof $placement.infer
+}
+
+export function DropdownMenu(props: DropdownMenuProps) {
+  const [local, rest] = splitProps(
+    mergeProps(
+      { placement: "bottom-start", popover: "auto", role: "menu", tabIndex: -1 } as const,
+      props
+    ),
+    ["children", "class", "placement", "popover", "role", "tabIndex"]
+  )
+
+  const elementRef = createMutableRef<HTMLDivElement>(null)
+  exposeRef(rest.ref, () => elementRef.current as HTMLDivElement, [])
+
+  onMountEffect(() => {
+    const element = elementRef.current
+    if (!element) return
+
+    const controller = connectDropdownMenu(element)
+    return () => controller.destroy()
+  })
+
+  return (
+    <div
+      {...rest}
+      ref={elementRef}
+      popover={local.popover}
+      role={local.role}
+      tabindex={local.tabIndex}
+      data-placement={local.placement}
+      data-slot="dropdown-menu"
+      class={cn(
+        $surface,
+        $placement(local.placement),
+        "min-w-48 max-w-72 overscroll-contain p-0",
+        local.class
+      )}
+    >
+      {local.children}
+    </div>
+  )
+}
