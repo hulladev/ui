@@ -1,0 +1,93 @@
+---
+import { paginationPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import PaginationPreview from "../previews/PaginationPreview.astro"
+
+const usageSources = [
+  {
+    code: `---
+import PaginationItem from "@/ui/pagination/pagination-item.astro"
+import Pagination from "@/ui/pagination/pagination.astro"
+---
+
+<Pagination aria-label="Search result pages">
+  <PaginationItem><a href="?page=1">Previous</a></PaginationItem>
+  <PaginationItem><a href="?page=1" aria-label="Page 1">1</a></PaginationItem>
+  <PaginationItem>
+    <a href="?page=2" aria-label="Page 2" aria-current="page">2</a>
+  </PaginationItem>
+  <PaginationItem><a href="?page=3" aria-label="Page 3">3</a></PaginationItem>
+  <PaginationItem><a href="?page=3">Next</a></PaginationItem>
+</Pagination>`,
+    filename: "src/components/search-pagination.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { Pagination, PaginationItem } from "@/ui/pagination"
+
+export function SearchPagination() {
+  return (
+    <Pagination aria-label="Search result pages">
+      <PaginationItem><a href="?page=1">Previous</a></PaginationItem>
+      <PaginationItem><a href="?page=1" aria-label="Page 1">1</a></PaginationItem>
+      <PaginationItem>
+        <a href="?page=2" aria-label="Page 2" aria-current="page">2</a>
+      </PaginationItem>
+      <PaginationItem><a href="?page=3" aria-label="Page 3">3</a></PaginationItem>
+      <PaginationItem><a href="?page=3">Next</a></PaginationItem>
+    </Pagination>
+  )
+}`,
+    filename: "src/components/search-pagination.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="pagination" aria-labelledby="pagination-section-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Navigation</p>
+      <h2 id="pagination-section-title">Pagination</h2>
+    </div>
+    <span class="status">Native page state</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="Pagination component preview">
+    <div class="workbench">
+      <PaginationPreview />
+
+      <ComponentSource
+        component="Pagination"
+        generatedFamilies={["pagination"]}
+        previewSources={paginationPreviewSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>
+
+<script>
+  document.addEventListener("change", (event) => {
+    const control = (event.target as HTMLElement).closest<HTMLSelectElement>(
+      "[data-pagination-current]"
+    )
+    if (!control) return
+
+    const preview = control.closest<HTMLElement>('[data-preview-component="pagination-preview"]')
+    preview?.querySelectorAll<HTMLElement>("[data-playground-page]").forEach((page) => {
+      if (page.dataset.playgroundPage === control.value) {
+        page.setAttribute("aria-current", "page")
+      } else {
+        page.removeAttribute("aria-current")
+      }
+    })
+
+    const readout = preview?.querySelector<HTMLElement>("[data-pagination-readout]")
+    if (readout) {
+      readout.textContent = `<a aria-current="page">${control.value}</a>`
+    }
+  })
+</script>

@@ -1,0 +1,14 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"nav">
+
+const { "aria-label": ariaLabel = "Pagination", class: className, ...props } = Astro.props as Props
+---
+
+<nav {...props} aria-label={ariaLabel} data-slot="pagination" class={cn("min-w-0", className)}>
+  <ul data-slot="pagination-list" class="flex max-w-full items-center justify-center gap-1">
+    <slot />
+  </ul>
+</nav>
