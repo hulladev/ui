@@ -33,6 +33,10 @@ export const ui = createLibrary({
   copyFiles: {
     shared: [
       {
+        src: "lib/table-of-contents.ts",
+        description: "Framework-neutral section discovery and scroll tracking",
+      },
+      {
         src: "lib/tag-input.ts",
         description: "Framework-neutral tag entry keyboard and commit behavior",
       },

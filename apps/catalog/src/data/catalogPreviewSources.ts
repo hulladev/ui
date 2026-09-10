@@ -1,3 +1,4 @@
+import tableOfContentsCatalogSource from "../components/previews/TableOfContentsPreview.astro?raw"
 import dialogOverlaysSource from "../components/previews/DialogOverlays.astro?raw"
 import backdropCatalogSource from "../components/previews/BackdropPreview.astro?raw"
 import drawerCatalogSource from "../components/previews/DrawerPreview.astro?raw"
@@ -245,4 +246,9 @@ export const tagInputPreviewSources = exactCatalogPreview(
 export const stepperPreviewSources = exactCatalogPreview(
   "StepperPreview.astro",
   stepperCatalogSource
+)
+
+export const tableOfContentsPreviewSources = exactCatalogPreview(
+  "TableOfContentsPreview.astro",
+  tableOfContentsCatalogSource
 )

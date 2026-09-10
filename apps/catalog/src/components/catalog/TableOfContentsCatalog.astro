@@ -1,0 +1,54 @@
+---
+import { tableOfContentsPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import TableOfContentsPreview from "../previews/TableOfContentsPreview.astro"
+const usageSources = [
+  {
+    code: '---\nimport TableOfContents from "@/ui/table-of-contents/table-of-contents.astro"\nimport TableOfContentsSection from "@/ui/table-of-contents/table-of-contents-section.astro"\n---\n\n<TableOfContents for="article"><span>On this page</span></TableOfContents>\n<main id="article">\n  <TableOfContentsSection id="overview" label="Overview">\n    <h2>Overview</h2>\n    <p>Your content goes here.</p>\n  </TableOfContentsSection>\n  <TableOfContentsSection id="details" label="Details">\n    <h2>Details</h2>\n  </TableOfContentsSection>\n</main>',
+    filename: "src/components/article.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: 'import { TableOfContents, TableOfContentsSection } from "@/ui/table-of-contents"\n\nexport function Article() {\n  return (\n    <>\n      <TableOfContents for="article">\n        <span>On this page</span>\n      </TableOfContents>\n      <main id="article">\n        <TableOfContentsSection id="overview" label="Overview">\n          <h2>Overview</h2>\n          <p>Your content goes here.</p>\n        </TableOfContentsSection>\n        <TableOfContentsSection id="details" label="Details">\n          <h2>Details</h2>\n        </TableOfContentsSection>\n      </main>\n    </>\n  )\n}',
+    filename: "src/components/article.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+  {
+    code: 'import { TableOfContents, TableOfContentsSection } from "@/ui/table-of-contents"\n\nexport function Article() {\n  return (\n    <>\n      <TableOfContents for="article">\n        <span>On this page</span>\n      </TableOfContents>\n      <main id="article">\n        <TableOfContentsSection id="overview" label="Overview">\n          <h2>Overview</h2>\n          <p>Your content goes here.</p>\n        </TableOfContentsSection>\n        <TableOfContentsSection id="details" label="Details">\n          <h2>Details</h2>\n        </TableOfContentsSection>\n      </main>\n    </>\n  )\n}',
+    filename: "src/components/article.tsx",
+    framework: "Solid",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="table-of-contents" aria-labelledby="table-of-contents-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Navigation</p><h2 id="table-of-contents-title">
+        Table of contents
+      </h2>
+    </div>
+    <span class="status">On this page</span>
+  </div>
+  <p>
+    Wrap content with a unique, stable id and label. The for prop selects its container. Links
+    appear after JavaScript initializes; section anchors are native HTML. The offset sets the
+    active-section threshold (96px by default); match it with the sections’ scroll-margin-top when
+    customizing for a sticky header. Scrolling updates the active link without changing browser
+    history.
+  </p>
+  <article class="bench glass-panel" aria-label="Table of contents component preview">
+    <div class="workbench">
+      <TableOfContentsPreview />
+      <ComponentSource
+        component="Table of contents"
+        generatedFamilies={["table-of-contents"]}
+        previewSources={tableOfContentsPreviewSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>

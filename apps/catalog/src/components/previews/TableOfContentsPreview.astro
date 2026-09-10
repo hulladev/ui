@@ -1,0 +1,90 @@
+---
+import TableOfContents from "@/ui/table-of-contents/table-of-contents.astro"
+import TableOfContentsSection from "@/ui/table-of-contents/table-of-contents-section.astro"
+import ComponentPreview from "../ComponentPreview.astro"
+---
+
+<ComponentPreview
+  requirePropsView={true}
+  component="Table of contents"
+  hint="Scroll · follow · share"
+>
+  <div slot="variants" class="grid gap-6 md:grid-cols-[10rem_minmax(0,1fr)]" data-toc-demo>
+    <div>
+      <TableOfContents for="toc-guide"><span>On this page</span></TableOfContents>
+    </div>
+    <div id="toc-guide" class="h-80 overflow-y-auto" tabindex="0" aria-label="Example article">
+      <TableOfContentsSection id="toc-overview" label="Overview">
+        <div class="min-h-64 space-y-4">
+          <h3>Give every section an address</h3><p>
+            Wrap any content with a stable ID and a readable label. The navigation collects your
+            sections in page order.
+          </p>
+        </div>
+      </TableOfContentsSection>
+      <TableOfContentsSection id="toc-composition" label="Composition">
+        <div class="min-h-64 space-y-4">
+          <h3>Keep your content yours</h3><p>
+            Wrap a heading, a group of paragraphs, or an entire component. No special page structure
+            or provider is required.
+          </p>
+        </div>
+      </TableOfContentsSection>
+      <TableOfContentsSection id="toc-sharing" label="Sharing links">
+        <div class="min-h-64 space-y-4">
+          <h3>A link worth keeping</h3><p>
+            Click a section to update the URL. Copy its link to share it, or use your browser’s Back
+            and Forward controls to retrace your steps.
+          </p>
+        </div>
+      </TableOfContentsSection>
+    </div>
+  </div>
+  <div slot="props" class="prop-playground" data-toc-playground>
+    <div class="prop-controls">
+      <label
+        ><span class="label">First section label</span><input
+          data-toc-label-control
+          value="Getting started"
+        /></label
+      >
+      <label><input data-toc-visible-control type="checkbox" checked /> Show second section</label>
+    </div>
+    <div class="grid gap-6 md:grid-cols-[10rem_minmax(0,1fr)]">
+      <div>
+        <TableOfContents for="toc-playground-content"><span>On this page</span></TableOfContents>
+      </div>
+      <div
+        id="toc-playground-content"
+        class="h-64 overflow-y-auto"
+        tabindex="0"
+        aria-label="Playground article"
+      >
+        <TableOfContentsSection id="toc-start" label="Getting started">
+          <div class="min-h-64">
+            <h3>Getting started</h3><p>Edit the label to update its link.</p>
+          </div>
+        </TableOfContentsSection>
+        <TableOfContentsSection id="toc-next" label="Next steps">
+          <div class="min-h-64">
+            <h3>Next steps</h3><p>Toggle this section to try dynamic visibility.</p>
+          </div>
+        </TableOfContentsSection>
+      </div>
+    </div>
+  </div>
+</ComponentPreview>
+<script>
+  document
+    .querySelector<HTMLInputElement>("[data-toc-label-control]")
+    ?.addEventListener("input", (event) => {
+      document.getElementById("toc-start")!.dataset.tocLabel = (
+        event.target as HTMLInputElement
+      ).value
+    })
+  document
+    .querySelector<HTMLInputElement>("[data-toc-visible-control]")
+    ?.addEventListener("change", (event) => {
+      document.getElementById("toc-next")!.hidden = !(event.target as HTMLInputElement).checked
+    })
+</script>

@@ -136,6 +136,9 @@ export const config = {
     table: {
       frameworks: ["astro", "react", "solid"],
     },
+    "table-of-contents": {
+      frameworks: ["astro", "react", "solid"],
+    },
     tabs: {
       frameworks: ["astro", "react", "solid"],
     },
@@ -164,6 +167,12 @@ export const config = {
   author: "Samuel Hulla",
   copyFiles: {
     shared: [
+      {
+        src: "lib/table-of-contents.ts",
+        dest: "lib/table-of-contents.ts",
+        required: true,
+        description: "Framework-neutral section discovery and scroll tracking",
+      },
       {
         src: "lib/tag-input.ts",
         dest: "lib/tag-input.ts",

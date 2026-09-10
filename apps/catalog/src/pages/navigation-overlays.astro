@@ -1,5 +1,6 @@
 ---
 import CatalogLayout from "../layouts/CatalogLayout.astro"
+import TableOfContentsCatalog from "../components/catalog/TableOfContentsCatalog.astro"
 import StepperCatalog from "../components/catalog/StepperCatalog.astro"
 import CommandCatalog from "../components/catalog/CommandCatalog.astro"
 import PopoverCatalog from "../components/catalog/PopoverCatalog.astro"
@@ -18,6 +19,7 @@ import TreeViewCatalog from "../components/catalog/TreeViewCatalog.astro"
 ---
 
 <CatalogLayout group="Navigation & overlays">
+  <TableOfContentsCatalog />
   <StepperCatalog />
   <CommandCatalog />
   <PopoverCatalog />

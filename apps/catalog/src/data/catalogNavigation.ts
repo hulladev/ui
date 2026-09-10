@@ -179,6 +179,12 @@ export const catalogSections = [
   },
   {
     group: "Navigation & overlays",
+    href: "#table-of-contents",
+    keywords: ["toc", "on this page", "anchors", "scroll", "sections"],
+    label: "Table of contents",
+  },
+  {
+    group: "Navigation & overlays",
     href: "#stepper",
     keywords: ["step", "wizard", "progress", "checkout"],
     label: "Stepper",

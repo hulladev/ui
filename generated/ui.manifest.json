@@ -136,6 +136,9 @@
       "table": {
         "frameworks": ["astro", "react", "solid"]
       },
+      "table-of-contents": {
+        "frameworks": ["astro", "react", "solid"]
+      },
       "tabs": {
         "frameworks": ["astro", "react", "solid"]
       },
@@ -164,6 +167,12 @@
     "author": "Samuel Hulla",
     "copyFiles": {
       "shared": [
+        {
+          "src": "lib/table-of-contents.ts",
+          "dest": "lib/table-of-contents.ts",
+          "required": true,
+          "description": "Framework-neutral section discovery and scroll tracking"
+        },
         {
           "src": "lib/tag-input.ts",
           "dest": "lib/tag-input.ts",
@@ -420,6 +429,7 @@
     "astro/lib/select.ts": "e66ef5ae44e0a618a1602104bad3bee3b5a4bd2602d8bf8cfc8e359d0235f927",
     "astro/lib/spatial-interaction.ts": "bbba4c9958b8adfe4818f9301a2e3bf8b2e5c75c50b831628b3ce5a205741e62",
     "astro/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
+    "astro/lib/table-of-contents.ts": "892eb2e9d5751db96869f44975856fd250a69a181c6aa1c4f55c3a61f9a5fc89",
     "astro/lib/tabs.ts": "add63a26ee402d8bcc0cfec5e5fc7625d5338e9891e0a37274d7cc745bccfdb4",
     "astro/lib/tag-input.ts": "bc4b12a4796acabe7def089cbff78eef48b25b510f3bcd9595d1468f158f53a5",
     "astro/lib/time-picker.ts": "84925050f5f641f8db836fed0c5699c83d6b22397819853bcc41fda941684539",
@@ -501,6 +511,9 @@
     "astro/table/table-header.astro": "52d7388f03508aef526d4d69754857bfe3d3a57c5f271129d111c1c1c6573804",
     "astro/table/table-row.astro": "8758f93adb8569fa1bbadc0256fcb5ddd2bb84930318349a0b85a8b2f03714f7",
     "astro/table/table.astro": "4443028c80652a09613fdf88c65c0b425c095fb2b7e740ae9b15d2dfece0548d",
+    "astro/table-of-contents/package.json": "5dee2fc7e74da9924958107333b961a741c2da956b82759beaf58d15fa5c7f22",
+    "astro/table-of-contents/table-of-contents-section.astro": "878da88c91591d7940147ea33f4cccc725c43b19b12aa12a6f204ced2b21e8c5",
+    "astro/table-of-contents/table-of-contents.astro": "1771740a9e2dda9293b912870c1454585f835d797bbdcde65b6b6c182f1fcafd",
     "astro/tabs/package.json": "b988ebfa75c78170618e874ef5f0c6f188aaa3f8a2b18fafb5a13bb92438372a",
     "astro/tabs/tabs-content.astro": "049e0012110ef083907ad7a8ba45057d522dab0b9b22a1141ee0bc3411dcdadd",
     "astro/tabs/tabs-list.astro": "b14e8af983f3fa88791e28e58d040129f049c75eb16c761bd0b3d76919608c22",
@@ -682,6 +695,7 @@
     "react/lib/select.ts": "e66ef5ae44e0a618a1602104bad3bee3b5a4bd2602d8bf8cfc8e359d0235f927",
     "react/lib/spatial-interaction.ts": "bbba4c9958b8adfe4818f9301a2e3bf8b2e5c75c50b831628b3ce5a205741e62",
     "react/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
+    "react/lib/table-of-contents.ts": "892eb2e9d5751db96869f44975856fd250a69a181c6aa1c4f55c3a61f9a5fc89",
     "react/lib/tabs.ts": "add63a26ee402d8bcc0cfec5e5fc7625d5338e9891e0a37274d7cc745bccfdb4",
     "react/lib/tag-input.ts": "bc4b12a4796acabe7def089cbff78eef48b25b510f3bcd9595d1468f158f53a5",
     "react/lib/time-picker.ts": "84925050f5f641f8db836fed0c5699c83d6b22397819853bcc41fda941684539",
@@ -779,6 +793,10 @@
     "react/table/table-header.tsx": "f3da227133d76939fde9cb69882fe81ca15a299a5e3ed8a130630462107106b1",
     "react/table/table-row.tsx": "ebc26bb153a162727a636313bf13037c3713940afeca7158eb752c53d558ce70",
     "react/table/table.tsx": "4cb513ddc9f21edd60ce86dca478b8b07128a7fc5e494666a107d5122fb9a5c6",
+    "react/table-of-contents/index.tsx": "a2aee470051129604498963a4e95717a346ae700c8e846ec4662c413fe77538f",
+    "react/table-of-contents/package.json": "5dee2fc7e74da9924958107333b961a741c2da956b82759beaf58d15fa5c7f22",
+    "react/table-of-contents/table-of-contents-section.tsx": "862d31fef6e87cc32cf95827cfdee55e9b988771d353085e1121e81c9c2a555e",
+    "react/table-of-contents/table-of-contents.tsx": "a83455f17ebb7ae0ccd34bc32644cf0619b6cdf2179dd1f4ea5540cd3c28db89",
     "react/tabs/index.tsx": "e21562a8b8c3ccfa925d6ce7c437148302f29053a3b1179f0441b9a6b899fa5e",
     "react/tabs/package.json": "b988ebfa75c78170618e874ef5f0c6f188aaa3f8a2b18fafb5a13bb92438372a",
     "react/tabs/tabs-content.tsx": "01acac0579e0e07f838012984c56648962ce1d15571f55cfa9cd214c35b4778f",
@@ -964,6 +982,7 @@
     "solid/lib/solid.ts": "027f8d1e3c478175d84c7173530164bb0c21c7f7226e55d13e3cbbe804709c7c",
     "solid/lib/spatial-interaction.ts": "bbba4c9958b8adfe4818f9301a2e3bf8b2e5c75c50b831628b3ce5a205741e62",
     "solid/lib/style.ts": "27088c4e4033e7f6e9ba95a9899355fa68a168b38addc94131f2843ae6e6751a",
+    "solid/lib/table-of-contents.ts": "892eb2e9d5751db96869f44975856fd250a69a181c6aa1c4f55c3a61f9a5fc89",
     "solid/lib/tabs.ts": "add63a26ee402d8bcc0cfec5e5fc7625d5338e9891e0a37274d7cc745bccfdb4",
     "solid/lib/tag-input.ts": "bc4b12a4796acabe7def089cbff78eef48b25b510f3bcd9595d1468f158f53a5",
     "solid/lib/time-picker.ts": "84925050f5f641f8db836fed0c5699c83d6b22397819853bcc41fda941684539",
@@ -1061,6 +1080,10 @@
     "solid/table/table-header.tsx": "7f7c6be11fb1fa711d781544a356217078e195f5bbe65e19685d0a19d10216eb",
     "solid/table/table-row.tsx": "7ea812679d59d83a826cc15a892265bc1284a85faf0a9cc143b3e4c8618524c0",
     "solid/table/table.tsx": "f9eb846de3cb2d2bc859c2759e97123567caafa487423e0443b6a414b1391859",
+    "solid/table-of-contents/index.tsx": "a2aee470051129604498963a4e95717a346ae700c8e846ec4662c413fe77538f",
+    "solid/table-of-contents/package.json": "5dee2fc7e74da9924958107333b961a741c2da956b82759beaf58d15fa5c7f22",
+    "solid/table-of-contents/table-of-contents-section.tsx": "6fd75d9b671cccc0db3b8aaf83b6d2e420a764d48fd91fb3594efdd750f18e05",
+    "solid/table-of-contents/table-of-contents.tsx": "6a4481b49f5b44944f34151dc26748983943aed5bf9d25a2d0f7c4e6f5d86260",
     "solid/tabs/index.tsx": "e21562a8b8c3ccfa925d6ce7c437148302f29053a3b1179f0441b9a6b899fa5e",
     "solid/tabs/package.json": "b988ebfa75c78170618e874ef5f0c6f188aaa3f8a2b18fafb5a13bb92438372a",
     "solid/tabs/tabs-content.tsx": "29da0df7c7a237904c791c4a564b2a2eccd7639bb92ae1845f6ea6304792189a",
@@ -1097,6 +1120,6 @@
     "solid/tree-view/tree-item.tsx": "1f851578880ec06f3ffa62df66e697f4f4e2529fbc0aa86c8b52428873bbc55f",
     "solid/tree-view/tree-view.tsx": "13257fbe7a8bd0a19462f229940f7fe0e787b507b739a2275ccdd364f3e1a632",
     "solid/tsconfig.json": "37e941a49cbc375f8dfc37529cbc03fbba8f5c9497683e0654099144e6f4a15d",
-    "ui.config.ts": "422da489696b7d3490d24289ca7ddde67a70706ca467c8344b805ce5abd39397"
+    "ui.config.ts": "1c07cb6794627e17358776aa03188e454da3392888dfe38db64518834c924a9a"
   }
 }
