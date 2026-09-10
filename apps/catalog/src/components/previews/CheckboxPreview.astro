@@ -23,19 +23,27 @@ const checklist = [
 ] as const
 ---
 
-<ComponentPreview component="Checkbox" hint="Click or press Space" requirePropsView={true}>
+<ComponentPreview
+  component="Checkbox"
+  hint="Check and uncheck · quick indicator reveal"
+  requirePropsView={true}
+>
   <div slot="variants" class="grid gap-5">
-    <div
-      class="overflow-hidden rounded-lg border border-border bg-surface-raised shadow-xs"
-      aria-label="Release checklist"
-    >
+    <div class="grid gap-4" aria-label="Release checklist">
       {
         checklist.map(({ checked, description, id, label }) => (
-          <Field class="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 border-t border-border px-4 py-4 first:border-t-0">
-            <Checkbox id={id} name={id} aria-describedby={`${id}-description`} checked={checked} />
-            <div class="grid gap-0.5">
-              <FieldLabel for={id}>{label}</FieldLabel>
-              <FieldDescription id={`${id}-description`}>{description}</FieldDescription>
+          <Field>
+            <div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
+              <Checkbox
+                id={id}
+                name={id}
+                aria-describedby={`${id}-description`}
+                checked={checked}
+              />
+              <div class="grid gap-0.5">
+                <FieldLabel for={id}>{label}</FieldLabel>
+                <FieldDescription id={`${id}-description`}>{description}</FieldDescription>
+              </div>
             </div>
           </Field>
         ))
@@ -47,35 +55,41 @@ const checklist = [
       aria-label="Checkbox states"
     >
       <Field
-        class="grid grid-cols-[auto_1fr] items-center gap-x-3 rounded-md bg-foreground/[0.04] px-3.5 py-3"
+        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
+          <Checkbox id="checkbox-unchecked" />
+          <FieldLabel for="checkbox-unchecked">Unchecked</FieldLabel>
+        </div></Field
       >
-        <Checkbox id="checkbox-unchecked" />
-        <FieldLabel for="checkbox-unchecked">Unchecked</FieldLabel>
+      <Field
+        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
+          <Checkbox id="checkbox-checked" checked />
+          <FieldLabel for="checkbox-checked">Checked</FieldLabel>
+        </div></Field
+      >
+      <Field
+        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
+          <Checkbox id="checkbox-indeterminate" data-checkbox-indeterminate />
+          <FieldLabel for="checkbox-indeterminate">Indeterminate</FieldLabel>
+        </div></Field
+      >
+      <Field
+        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
+          <Checkbox id="checkbox-disabled" disabled />
+          <FieldLabel for="checkbox-disabled">Disabled</FieldLabel>
+        </div></Field
+      >
+      <Field>
+        <div class="flex items-center gap-4">
+          <Checkbox id="checkbox-disabled-checked" checked disabled />
+          <FieldLabel for="checkbox-disabled-checked">Checked · disabled</FieldLabel>
+        </div>
       </Field>
       <Field
-        class="grid grid-cols-[auto_1fr] items-center gap-x-3 rounded-md bg-foreground/[0.04] px-3.5 py-3"
+        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
+          <Checkbox id="checkbox-invalid" aria-invalid="true" />
+          <FieldLabel for="checkbox-invalid">Invalid</FieldLabel>
+        </div></Field
       >
-        <Checkbox id="checkbox-checked" checked />
-        <FieldLabel for="checkbox-checked">Checked</FieldLabel>
-      </Field>
-      <Field
-        class="grid grid-cols-[auto_1fr] items-center gap-x-3 rounded-md bg-foreground/[0.04] px-3.5 py-3"
-      >
-        <Checkbox id="checkbox-indeterminate" data-checkbox-indeterminate />
-        <FieldLabel for="checkbox-indeterminate">Indeterminate</FieldLabel>
-      </Field>
-      <Field
-        class="grid grid-cols-[auto_1fr] items-center gap-x-3 rounded-md bg-foreground/[0.04] px-3.5 py-3"
-      >
-        <Checkbox id="checkbox-disabled" disabled />
-        <FieldLabel for="checkbox-disabled">Disabled</FieldLabel>
-      </Field>
-      <Field
-        class="grid grid-cols-[auto_1fr] items-center gap-x-3 rounded-md bg-foreground/[0.04] px-3.5 py-3"
-      >
-        <Checkbox id="checkbox-invalid" aria-invalid="true" />
-        <FieldLabel for="checkbox-invalid">Invalid</FieldLabel>
-      </Field>
     </div>
   </div>
 
@@ -99,20 +113,22 @@ const checklist = [
     </div>
 
     <div class="playground-stage">
-      <Field class="grid w-full max-w-sm grid-cols-[auto_1fr] items-start gap-x-3">
-        <Checkbox
-          id="playground-checkbox"
-          aria-describedby="playground-checkbox-help"
-          checked
-          data-playground-checkbox
-        />
-        <div>
-          <FieldLabel for="playground-checkbox">Include archived projects</FieldLabel>
-          <FieldDescription id="playground-checkbox-help">
-            Search results will include inactive work.
-          </FieldDescription>
-        </div>
-      </Field>
+      <Field class="w-full max-w-sm"
+        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
+          <Checkbox
+            id="playground-checkbox"
+            aria-describedby="playground-checkbox-help"
+            checked
+            data-playground-checkbox
+          />
+          <div>
+            <FieldLabel for="playground-checkbox">Include archived projects</FieldLabel>
+            <FieldDescription id="playground-checkbox-help">
+              Search results will include inactive work.
+            </FieldDescription>
+          </div>
+        </div></Field
+      >
     </div>
 
     <code class="prop-readout" data-checkbox-readout aria-live="polite"

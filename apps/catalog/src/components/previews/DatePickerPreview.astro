@@ -1,4 +1,6 @@
 ---
+import Switch from "@/ui/switch/switch.astro"
+import Input from "@/ui/input/input.astro"
 import DatePicker from "@/ui/date-picker/date-picker.astro"
 import DateTimePicker from "@/ui/date-picker/date-time-picker.astro"
 import FieldDescription from "@/ui/field/field-description.astro"
@@ -19,6 +21,12 @@ const unavailableDates = [{ start: "2026-07-20", end: "2026-07-22" }, "2026-07-2
 >
   <div slot="variants" class="grid gap-6">
     <Field>
+      <FieldLabel for="picker-input-reference">Text input</FieldLabel>
+      <Input id="picker-input-reference" value="Project kickoff" />
+      <FieldDescription>Shared input styling, shown alongside the picker controls.</FieldDescription
+      >
+    </Field>
+    <Field>
       <FieldLabel for="catalog-departure-date-trigger">Departure date</FieldLabel>
       <DatePicker
         id="catalog-departure-date"
@@ -27,7 +35,7 @@ const unavailableDates = [{ start: "2026-07-20", end: "2026-07-22" }, "2026-07-2
         name="departureDate"
         disabledDates={unavailableDates}
         today="2026-07-30"
-        class="w-full [&_[data-slot=date-picker-trigger]]:w-full"
+        class="w-full"
       />
       <FieldDescription>A localized label backed by an ISO date value.</FieldDescription>
     </Field>
@@ -43,7 +51,7 @@ const unavailableDates = [{ start: "2026-07-20", end: "2026-07-22" }, "2026-07-2
         endName="travelEnd"
         disabledDates={unavailableDates}
         today="2026-07-30"
-        class="w-full [&_[data-slot=date-picker-trigger]]:w-full"
+        class="w-full"
       />
       <FieldDescription
         >Separate start and end inputs preserve native form submission.</FieldDescription
@@ -60,7 +68,7 @@ const unavailableDates = [{ start: "2026-07-20", end: "2026-07-22" }, "2026-07-2
         min="2026-07-20T08:00"
         max="2026-08-12T18:00"
         today="2026-07-30"
-        class="w-full [&_[data-slot=date-time-picker-trigger]]:w-full"
+        class="w-full"
       />
       <FieldDescription>Calendar and TimePicker composed around one local value.</FieldDescription>
     </Field>
@@ -73,7 +81,7 @@ const unavailableDates = [{ start: "2026-07-20", end: "2026-07-22" }, "2026-07-2
         form="catalog-trip-form"
         name="unavailableDate"
         disabled
-        class="w-full [&_[data-slot=date-picker-trigger]]:w-full"
+        class="w-full"
       />
       <FieldDescription>Disabled custom fields are omitted from native submission.</FieldDescription
       >
@@ -96,8 +104,7 @@ const unavailableDates = [{ start: "2026-07-20", end: "2026-07-22" }, "2026-07-2
 
     <div class="prop-controls prop-controls--toggles">
       <label class="prop-disabled">
-        <input type="checkbox" data-date-picker-disabled />
-        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <Switch variant="subtle" data-date-picker-disabled />
         <span class="label">Disabled</span>
       </label>
     </div>
@@ -107,7 +114,7 @@ const unavailableDates = [{ start: "2026-07-20", end: "2026-07-22" }, "2026-07-2
         defaultValue="2026-07-30"
         today="2026-07-30"
         data-playground-date-picker
-        class="mx-auto [&_[data-slot=date-picker-trigger]]:w-64"
+        class="mx-auto"
       />
     </div>
 

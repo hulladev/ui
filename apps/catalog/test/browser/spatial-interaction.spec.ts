@@ -40,7 +40,7 @@ const dragToStageEdge = async (
 }
 
 test("draggable defaults to parent bounds and supports the keyboard", async ({ page }) => {
-  await page.goto("/#draggable", { waitUntil: "domcontentloaded" })
+  await page.goto("/layout-feedback#draggable", { waitUntil: "domcontentloaded" })
 
   const stage = page.locator("[data-draggable-stage]")
   const draggable = stage.locator('[data-slot="draggable"]')
@@ -56,7 +56,7 @@ test("draggable defaults to parent bounds and supports the keyboard", async ({ p
 })
 
 test("draggable remains reachable at every parent edge", async ({ page }) => {
-  await page.goto("/#draggable", { waitUntil: "domcontentloaded" })
+  await page.goto("/layout-feedback#draggable", { waitUntil: "domcontentloaded" })
 
   const stage = page.locator("[data-draggable-stage]")
   const draggable = stage.locator('[data-slot="draggable"]')
@@ -73,7 +73,7 @@ test("draggable remains reachable at every parent edge", async ({ page }) => {
 })
 
 test("resizable respects parent bounds and CSS size limits", async ({ page }) => {
-  await page.goto("/#resizable", { waitUntil: "domcontentloaded" })
+  await page.goto("/layout-feedback#resizable", { waitUntil: "domcontentloaded" })
 
   const stage = page.locator("[data-resizable-stage]")
   const resizable = stage.locator('[data-slot="resizable"]')
@@ -107,7 +107,7 @@ test("resizable respects parent bounds and CSS size limits", async ({ page }) =>
 
 test("both components fit at a narrow viewport", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto("/#draggable", { waitUntil: "domcontentloaded" })
+  await page.goto("/layout-feedback#draggable", { waitUntil: "domcontentloaded" })
 
   const draggableStage = page.locator("[data-draggable-stage]")
   await expectContained(
@@ -116,7 +116,7 @@ test("both components fit at a narrow viewport", async ({ page }) => {
     12
   )
 
-  await page.goto("/#resizable", { waitUntil: "domcontentloaded" })
+  await page.goto("/layout-feedback#resizable", { waitUntil: "domcontentloaded" })
   const resizableStage = page.locator("[data-resizable-stage]")
   await expectContained(
     resizableStage.locator('[data-slot="resizable"] [data-slot="card"]'),

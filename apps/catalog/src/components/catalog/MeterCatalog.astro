@@ -6,30 +6,33 @@ import MeterPreview from "../previews/MeterPreview.astro"
 const usageSources = [
   {
     code: `---
+import Field from "@/ui/field/field.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
 import Meter from "@/ui/meter/meter.astro"
 ---
 
-<label>
-  Storage used
-  <Meter value={18.4} min={0} max={24} low={12} high={21} optimum={8}>
+<Field>
+  <FieldLabel for="storage-meter">Storage used</FieldLabel>
+  <Meter id="storage-meter" value={18.4} min={0} max={24} low={12} high={21} optimum={8}>
     18.4 GB of 24 GB
   </Meter>
-</label>`,
+</Field>`,
     filename: "src/components/storage-meter.astro",
     framework: "Astro",
     language: "astro" as const,
   },
   {
-    code: `import { Meter } from "@/ui/meter"
+    code: `import { Field, FieldLabel } from "@/ui/field"
+import { Meter } from "@/ui/meter"
 
 export function StorageMeter() {
   return (
-    <label>
-      Storage used
-      <Meter value={18.4} min={0} max={24} low={12} high={21} optimum={8}>
+    <Field>
+      <FieldLabel htmlFor="storage-meter">Storage used</FieldLabel>
+      <Meter id="storage-meter" value={18.4} min={0} max={24} low={12} high={21} optimum={8}>
         18.4 GB of 24 GB
       </Meter>
-    </label>
+    </Field>
   )
 }`,
     filename: "src/components/storage-meter.tsx",
@@ -78,7 +81,7 @@ export function StorageMeter() {
 
     const readout = preview.querySelector<HTMLElement>("[data-meter-readout]")
     if (readout) {
-      readout.textContent = `<Meter value={${valueControl.value}} min={0} max={100} optimum={${optimumControl.value}} />`
+      readout.textContent = `<Meter id="storage-meter" value={${valueControl.value}} min={0} max={100} optimum={${optimumControl.value}} />`
     }
   }
 

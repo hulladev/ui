@@ -1,4 +1,5 @@
 ---
+import Switch from "@/ui/switch/switch.astro"
 import FieldDescription from "@/ui/field/field-description.astro"
 import FieldLabel from "@/ui/field/field-label.astro"
 import Field from "@/ui/field/field.astro"
@@ -26,7 +27,7 @@ const timePicker = manifest.library.components["time-picker"]
         min="07:00"
         max="18:00"
         step={30}
-        class="w-full [&_[data-slot=time-picker-trigger]]:w-full"
+        class="w-full"
       />
       <FieldDescription
         >24-hour display by default, with a stable HH:mm form value.</FieldDescription
@@ -44,7 +45,7 @@ const timePicker = manifest.library.components["time-picker"]
         max="22:00"
         step={15}
         hourCycle="h23"
-        class="w-full [&_[data-slot=time-picker-trigger]]:w-full"
+        class="w-full"
       />
       <FieldDescription>15-minute precision with an explicit 24-hour clock.</FieldDescription>
     </Field>
@@ -56,7 +57,7 @@ const timePicker = manifest.library.components["time-picker"]
         defaultValue="13:30"
         form="catalog-time-form"
         hourCycle="h12"
-        class="w-full [&_[data-slot=time-picker-trigger]]:w-full"
+        class="w-full"
       />
       <FieldDescription>AM/PM remains available when a 12-hour cycle is requested.</FieldDescription
       >
@@ -80,8 +81,7 @@ const timePicker = manifest.library.components["time-picker"]
 
     <div class="prop-controls prop-controls--toggles">
       <label class="prop-disabled">
-        <input type="checkbox" data-time-picker-disabled />
-        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <Switch variant="subtle" data-time-picker-disabled />
         <span class="label">Disabled</span>
       </label>
     </div>
@@ -93,7 +93,7 @@ const timePicker = manifest.library.components["time-picker"]
         max="18:00"
         step={30}
         data-playground-time-picker
-        class="mx-auto [&_[data-slot=time-picker-trigger]]:w-56"
+        class="mx-auto"
       />
     </div>
 

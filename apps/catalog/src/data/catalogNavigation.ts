@@ -89,6 +89,18 @@ export const catalogSections = [
   },
   {
     group: "Forms",
+    href: "#file-upload",
+    keywords: ["file", "upload", "attachment", "dropzone"],
+    label: "File Upload",
+  },
+  {
+    group: "Forms",
+    href: "#tag-input",
+    keywords: ["tag", "label", "chip", "recipient"],
+    label: "Tag Input",
+  },
+  {
+    group: "Forms",
     href: "#input",
     keywords: ["text", "form", "adornment", "control"],
     label: "Input",
@@ -167,6 +179,12 @@ export const catalogSections = [
   },
   {
     group: "Navigation & overlays",
+    href: "#stepper",
+    keywords: ["step", "wizard", "progress", "checkout"],
+    label: "Stepper",
+  },
+  {
+    group: "Navigation & overlays",
     href: "#command",
     keywords: ["palette", "search", "menu", "shortcut", "cmdk"],
     label: "Command",
@@ -200,6 +218,18 @@ export const catalogSections = [
     href: "#navigation-menu",
     keywords: ["navigation", "mega menu", "hover", "site", "header"],
     label: "Navigation Menu",
+  },
+  {
+    group: "Navigation & overlays",
+    href: "#backdrop",
+    keywords: ["dimming", "blur", "overlay"],
+    label: "Backdrop",
+  },
+  {
+    group: "Navigation & overlays",
+    href: "#drawer",
+    keywords: ["sheet", "panel", "modal", "edge"],
+    label: "Drawer",
   },
   {
     group: "Navigation & overlays",
@@ -293,3 +323,34 @@ export const catalogResources = [
     label: "Documentation",
   },
 ] as const
+
+export const catalogPages = [
+  {
+    group: "Foundations",
+    href: "/",
+    description: "Core building blocks, identity, and loading states.",
+  },
+  {
+    group: "Forms",
+    href: "/forms",
+    description: "Inputs, selection, and validation for everyday forms.",
+  },
+  {
+    group: "Navigation & overlays",
+    href: "/navigation-overlays",
+    description: "Move between views and reveal contextual content.",
+  },
+  {
+    group: "Layout & feedback",
+    href: "/layout-feedback",
+    description: "Structure content and keep people informed.",
+  },
+] as const satisfies readonly { group: CatalogSectionGroup; href: string; description: string }[]
+
+export const getCatalogSectionHref = (
+  section: Pick<CatalogNavigationItem, "group" | "href">,
+  currentGroup?: CatalogSectionGroup
+) =>
+  section.group === currentGroup
+    ? section.href
+    : `${catalogPages.find((page) => page.group === section.group)!.href}${section.href}`

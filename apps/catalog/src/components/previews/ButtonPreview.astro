@@ -1,4 +1,5 @@
 ---
+import Switch from "@/ui/switch/switch.astro"
 import Button from "@/ui/button/button.astro"
 import ButtonGroup from "@/ui/button/button-group.astro"
 import manifest from "../../../../../generated/ui.manifest.json"
@@ -6,10 +7,10 @@ import ComponentPreview from "../ComponentPreview.astro"
 
 const button = manifest.library.components.button
 const buttonSizes = ["sm", "md", "lg"] as const
-const buttonVariants = ["primary", "secondary", "outline"] as const
+const buttonVariants = ["primary", "secondary", "outline", "ghost", "inverted", "danger"] as const
 ---
 
-<ComponentPreview component="Button" requirePropsView={true}>
+<ComponentPreview component="Button" hint="Depth · focus · press" requirePropsView={true}>
   <div slot="variants" class="grid gap-5">
     {
       buttonVariants.map((variant) => (
@@ -18,9 +19,14 @@ const buttonVariants = ["primary", "secondary", "outline"] as const
             {variant}
           </span>
           {buttonSizes.map((size) => (
-            <Button size={size} variant={variant}>
-              {size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
-            </Button>
+            <span class="inline-flex flex-col items-start gap-2">
+              <Button size={size} variant={variant}>
+                {size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
+              </Button>
+              <span class="font-mono text-[0.625rem] text-muted-foreground">
+                {size === "sm" ? 28 : size === "md" ? 32 : 36}px
+              </span>
+            </span>
           ))}
         </div>
       ))
@@ -31,7 +37,15 @@ const buttonVariants = ["primary", "secondary", "outline"] as const
       <span class="font-mono text-xs font-medium tracking-wider text-muted-foreground uppercase"
         >Disabled</span
       >
-      <Button disabled>Unavailable</Button>
+      <div class="flex flex-wrap gap-3">
+        {
+          buttonVariants.map((variant) => (
+            <Button variant={variant} disabled>
+              {variant.charAt(0).toUpperCase() + variant.slice(1)}
+            </Button>
+          ))
+        }
+      </div>
     </div>
     <div
       class="grid grid-cols-[4.25rem_minmax(0,auto)] items-center justify-center gap-3 border-t border-border pt-5 max-[760px]:grid-cols-1 max-[760px]:gap-2"
@@ -40,9 +54,9 @@ const buttonVariants = ["primary", "secondary", "outline"] as const
         >Group</span
       >
       <ButtonGroup aria-label="Document actions">
-        <Button variant="outline">Preview</Button>
-        <Button variant="outline">Duplicate</Button>
-        <Button>Publish</Button>
+        <Button variant="outline">Cancel</Button>
+        <Button variant="inverted">Preview</Button>
+        <Button variant="danger">Delete</Button>
       </ButtonGroup>
     </div>
   </div>
@@ -52,9 +66,11 @@ const buttonVariants = ["primary", "secondary", "outline"] as const
       <label class="prop-control">
         <span class="label">Variant</span>
         <select aria-label="Button variant" data-button-prop-variant>
-          <option value="primary">Primary</option>
-          <option value="secondary">Secondary</option>
-          <option value="outline">Outline</option>
+          {
+            buttonVariants.map((variant) => (
+              <option value={variant}>{variant.charAt(0).toUpperCase() + variant.slice(1)}</option>
+            ))
+          }
         </select>
       </label>
 
@@ -68,8 +84,7 @@ const buttonVariants = ["primary", "secondary", "outline"] as const
       </label>
 
       <label class="prop-disabled">
-        <input type="checkbox" data-button-prop-disabled />
-        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <Switch variant="subtle" data-button-prop-disabled />
         <span class="label">Disabled</span>
       </label>
     </div>

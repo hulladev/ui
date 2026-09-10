@@ -23,9 +23,9 @@ const axes = ["both", "x", "y"] as const
     <span class="spatial-origin" aria-hidden="true"></span>
 
     <Draggable boundaryPadding={12} class="draggable-panel">
-      <Card variant="elevated" class="w-72 gap-3 p-4">
-        <CardHeader class="gap-2">
-          <DragHandle class="spatial-handle" aria-label="Move signal inspector">
+      <Card variant="elevated" class="w-72 max-w-full">
+        <CardHeader>
+          <DragHandle aria-label="Move signal inspector">
             <span class="flex items-center gap-2">
               <span class="spatial-grip" aria-hidden="true">
                 <i></i><i></i><i></i><i></i><i></i><i></i>
@@ -36,7 +36,7 @@ const axes = ["both", "x", "y"] as const
             </span>
             <span class="spatial-coordinate" data-drag-position>x 0 · y 0</span>
           </DragHandle>
-          <CardTitle class="text-lg">Move the inspector</CardTitle>
+          <CardTitle>Move the inspector</CardTitle>
           <CardDescription>
             Parent bounds are the default. This card keeps a 12 px inset from every edge.
           </CardDescription>
@@ -69,12 +69,10 @@ const axes = ["both", "x", "y"] as const
             data-playground-axis={axis}
             hidden={axis !== "both"}
           >
-            <div class="spatial-playground-card">
-              <DragHandle aria-label={`Move card on ${axis} axis`} class="px-3">
-                Move me
-              </DragHandle>
-              <small>{axis} axis</small>
-            </div>
+            <Card variant="elevated" class="w-40">
+              <DragHandle aria-label={`Move card on ${axis} axis`}>Move me</DragHandle>
+              <CardDescription>{axis} axis</CardDescription>
+            </Card>
           </Draggable>
         ))
       }

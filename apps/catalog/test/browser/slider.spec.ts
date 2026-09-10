@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test"
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/#slider", { waitUntil: "domcontentloaded" })
+  await page.goto("/forms#slider", { waitUntil: "domcontentloaded" })
 })
 
 test("exposes a native minimum and maximum with a selected interval", async ({ page }) => {
@@ -45,7 +45,7 @@ test("updates both output and constraints with native input events", async ({ pa
 
 test("fits the two-point slider at a narrow viewport", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto("/#slider", { waitUntil: "domcontentloaded" })
+  await page.goto("/forms#slider", { waitUntil: "domcontentloaded" })
 
   const preview = page.locator('[data-preview-component="slider-preview"]')
   const box = await preview.boundingBox()

@@ -51,9 +51,11 @@ const toastSources = [
 const usageSources = [
   {
     code: `---
+import Button from "@/ui/button/button.astro"
 import Toaster from "@/ui/toast/toaster.astro"
 ---
 
+<Button id="save">Save</Button>
 <Toaster position="top-right" duration={5000} />
 
 <script>
@@ -73,12 +75,13 @@ import Toaster from "@/ui/toast/toaster.astro"
     language: "astro" as const,
   },
   {
-    code: `import { Toaster, toast } from "@/ui/toast"
+    code: `import { Button } from "@/ui/button"
+import { Toaster, toast } from "@/ui/toast"
 
 export function App() {
   return (
     <>
-      <button
+      <Button
         onClick={() =>
           toast.push({
             description: "Your latest settings are now active.",
@@ -89,7 +92,7 @@ export function App() {
         }
       >
         Save
-      </button>
+      </Button>
       <Toaster position="top-right" duration={5000} />
     </>
   )

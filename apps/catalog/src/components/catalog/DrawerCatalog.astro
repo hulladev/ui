@@ -1,0 +1,41 @@
+---
+import ComponentSource from "../ComponentSource.astro"
+import DrawerPreview from "../previews/DrawerPreview.astro"
+import { drawerPreviewSources } from "../../data/catalogPreviewSources"
+const usageSources = [
+  {
+    code: `---
+import Drawer from "@/ui/drawer/drawer.astro"
+import DialogTitle from "@/ui/dialog/dialog-title.astro"
+---
+
+<Drawer hidden={false} side="right" aria-labelledby="drawer-title">
+  <DialogTitle id="drawer-title">Release details</DialogTitle>
+</Drawer>`,
+    filename: "src/components/drawer-example.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+]
+---
+
+<section class="component-section" id="drawer" aria-labelledby="drawer-section-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Overlay</p><h2 id="drawer-section-title">Drawer</h2><p>
+        An edge-aligned modal with shared focus management and layer ordering.
+      </p>
+    </div>
+  </div>
+  <article class="bench glass-panel" aria-label="Drawer component preview">
+    <div class="workbench">
+      <DrawerPreview />
+      <ComponentSource
+        component="Drawer"
+        generatedFamilies={["drawer", "backdrop"]}
+        previewSources={drawerPreviewSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>

@@ -1,4 +1,7 @@
 ---
+import Progress from "@/ui/progress/progress.astro"
+import Switch from "@/ui/switch/switch.astro"
+import Badge from "@/ui/badge/badge.astro"
 import Button from "@/ui/button/button.astro"
 import CardContent from "@/ui/card/card-content.astro"
 import CardDescription from "@/ui/card/card-description.astro"
@@ -15,7 +18,7 @@ const cardVariants = ["outline", "elevated", "ghost"] as const
 
 <ComponentPreview
   component="Card"
-  hint="Semantic article"
+  hint="Title · content · actions"
   requirePropsView={true}
   variantsLabel="Styles"
 >
@@ -26,12 +29,7 @@ const cardVariants = ["outline", "elevated", "ghost"] as const
           class="mb-1 flex items-center justify-between gap-4 font-mono text-xs tracking-wider text-muted-foreground uppercase"
         >
           <span>Elevated / Release 024</span>
-          <span class="flex items-center gap-1.5 text-foreground">
-            <i
-              class="size-2 rounded-full bg-success shadow-[0_0_0_4px_color-mix(in_oklab,var(--color-success)_16%,transparent)]"
-            ></i>
-            Ready
-          </span>
+          <Badge variant="success">Ready</Badge>
         </div>
         <CardTitle id="catalog-release-title">Candidate approved for production.</CardTitle>
         <CardDescription>
@@ -68,9 +66,7 @@ const cardVariants = ["outline", "elevated", "ghost"] as const
             aria-label="Release readiness: 100%"
           >
             <span class="font-mono text-xs font-medium tracking-wider uppercase">Readiness</span>
-            <span class="h-1 overflow-hidden rounded-full bg-foreground/10" aria-hidden="true">
-              <i class="block h-full w-full rounded-[inherit] bg-primary"></i>
-            </span>
+            <Progress value={100} max={100} aria-label="Release readiness">100%</Progress>
             <strong class="font-mono text-xs font-medium">100%</strong>
           </div>
         </div>
@@ -138,18 +134,15 @@ const cardVariants = ["outline", "elevated", "ghost"] as const
       </label>
 
       <label class="prop-disabled">
-        <input type="checkbox" checked data-card-prop-description />
-        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <Switch variant="subtle" checked data-card-prop-description />
         <span class="label">Description</span>
       </label>
       <label class="prop-disabled">
-        <input type="checkbox" checked data-card-prop-content />
-        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <Switch variant="subtle" checked data-card-prop-content />
         <span class="label">Content</span>
       </label>
       <label class="prop-disabled">
-        <input type="checkbox" checked data-card-prop-footer />
-        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <Switch variant="subtle" checked data-card-prop-footer />
         <span class="label">Footer</span>
       </label>
     </div>

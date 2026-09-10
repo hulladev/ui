@@ -50,8 +50,8 @@ const popoverPlacements = [
         popovertarget="catalog-account-popover"
         aria-label="Open account actions"
       >
-        <Avatar class="size-6" aria-hidden="true">
-          <AvatarFallback class="bg-primary/15 text-[0.58rem] text-primary">SH</AvatarFallback>
+        <Avatar aria-hidden="true">
+          <AvatarFallback>SH</AvatarFallback>
         </Avatar>
         Account
         <ChevronDown aria-hidden="true" class="size-3.5 shrink-0" />
@@ -62,11 +62,11 @@ const popoverPlacements = [
       id="catalog-account-popover"
       placement="bottom-end"
       aria-label="Account actions"
-      class="w-68 p-1.5"
+      class="w-68"
     >
       <div class="flex items-center gap-2.5 p-2.5">
         <Avatar aria-hidden="true">
-          <AvatarFallback class="bg-primary/15 text-primary">SH</AvatarFallback>
+          <AvatarFallback>SH</AvatarFallback>
         </Avatar>
         <span class="grid min-w-0">
           <strong class="text-sm">Samuel Hulla</strong>
@@ -80,19 +80,19 @@ const popoverPlacements = [
         class="flex w-full items-center justify-between rounded-sm px-2.5 py-2 text-left text-xs no-underline hover:bg-foreground/5"
         href="#popover"
       >
-        View profile <Kbd class="border-0 bg-transparent px-0 shadow-none">⌘P</Kbd>
+        View profile <Kbd>⌘P</Kbd>
       </a>
       <a
         class="flex w-full items-center justify-between rounded-sm px-2.5 py-2 text-left text-xs no-underline hover:bg-foreground/5"
         href="#popover"
       >
         Workspace settings
-        <Kbd class="border-0 bg-transparent px-0 shadow-none">⌘,</Kbd>
+        <Kbd>⌘,</Kbd>
       </a>
       <Button
         variant="outline"
         size="sm"
-        class="flex w-full items-center justify-between rounded-sm border-0 bg-transparent px-2.5 py-2 text-left text-xs text-foreground hover:bg-foreground/5"
+        class="w-full"
         popovertarget="catalog-account-popover"
         popovertargetaction="hide"
       >
@@ -131,10 +131,10 @@ const popoverPlacements = [
               <Button variant="outline" popovertarget={id}>
                 Open {placement}
               </Button>
-              <Popover id={id} placement={placement} class="w-68 p-1.5">
+              <Popover id={id} placement={placement} class="w-68">
                 <div class="flex items-center gap-2.5 p-2.5">
                   <Avatar aria-hidden="true">
-                    <AvatarFallback class="bg-primary/15 text-primary">SH</AvatarFallback>
+                    <AvatarFallback>SH</AvatarFallback>
                   </Avatar>
                   <span class="grid min-w-0">
                     <strong class="text-sm">Anchored surface</strong>
@@ -144,7 +144,7 @@ const popoverPlacements = [
                 <Button
                   variant="outline"
                   size="sm"
-                  class="flex w-full items-center justify-between rounded-sm border-0 bg-transparent px-2.5 py-2 text-left text-xs text-foreground hover:bg-foreground/5"
+                  class="w-full"
                   popovertarget={id}
                   popovertargetaction="hide"
                 >

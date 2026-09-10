@@ -37,3 +37,36 @@ test("fits measurement cards at a narrow viewport", async ({ page }) => {
   expect(box).not.toBeNull()
   expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(390)
 })
+
+test("Firefox meter thresholds use the shared semantic palette", async ({ page, browserName }) => {
+  test.skip(
+    browserName !== "firefox",
+    "Firefox exposes its native meter fill through this pseudo-element"
+  )
+  const meter = page.getByRole("meter", { name: "Storage" })
+  for (const theme of ["light", "dark"]) {
+    await page.locator("html").evaluate((element, value) => {
+      element.dataset.theme = value
+    }, theme)
+    for (const [value, token] of [
+      [8, "success"],
+      [18, "warning"],
+      [23, "danger"],
+    ] as const) {
+      const colors = await meter.evaluate(
+        (element, state) => {
+          ;(element as HTMLMeterElement).value = state.value
+          const probe = document.createElement("span")
+          probe.style.backgroundColor = `var(--color-${state.token})`
+          element.parentElement!.append(probe)
+          const expected = getComputedStyle(probe).backgroundColor
+          const actual = getComputedStyle(element, "::-moz-meter-bar").backgroundColor
+          probe.remove()
+          return { actual, expected }
+        },
+        { value, token }
+      )
+      expect(colors.actual, `${theme} ${token}`).toBe(colors.expected)
+    }
+  }
+})

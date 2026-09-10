@@ -1,4 +1,5 @@
 ---
+import Switch from "@/ui/switch/switch.astro"
 import Badge from "@/ui/badge/badge.astro"
 import Button from "@/ui/button/button.astro"
 import TabsContent from "@/ui/tabs/tabs-content.astro"
@@ -11,23 +12,24 @@ import ComponentPreview from "../ComponentPreview.astro"
 const tabsComponent = manifest.library.components.tabs
 ---
 
-<ComponentPreview component="Tabs" hint="← → · Home · End" requirePropsView={true}>
+<ComponentPreview
+  component="Tabs"
+  hint="← → · Home · End · brief panel fade"
+  requirePropsView={true}
+>
   <div slot="variants" class="grid gap-8">
-    <Tabs
-      defaultValue="activity"
-      class="rounded-lg border border-border bg-surface px-4 pt-2 pb-5 shadow-xs"
-    >
+    <Tabs defaultValue="activity">
       <TabsList aria-label="Project details">
         <TabsTrigger value="activity">
           Activity
-          <Badge class="min-w-5 justify-center px-1.5">12</Badge>
+          <Badge class="min-w-5">12</Badge>
         </TabsTrigger>
         <TabsTrigger value="deployments">Deployments</TabsTrigger>
         <TabsTrigger value="settings">Settings</TabsTrigger>
         <TabsTrigger value="archived" disabled>Archived</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="activity" class="px-1">
+      <TabsContent value="activity">
         <div class="grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
           <div class="grid gap-1">
             <p class="m-0 font-medium">Quietly shipping the details</p>
@@ -40,7 +42,7 @@ const tabsComponent = manifest.library.components.tabs
         </div>
       </TabsContent>
 
-      <TabsContent value="deployments" class="px-1">
+      <TabsContent value="deployments">
         <div class="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p class="m-0 font-medium">Production</p>
@@ -50,7 +52,7 @@ const tabsComponent = manifest.library.components.tabs
         </div>
       </TabsContent>
 
-      <TabsContent value="settings" class="px-1">
+      <TabsContent value="settings">
         <div class="grid gap-1">
           <p class="m-0 font-medium">Project access</p>
           <p class="m-0 text-muted-foreground">
@@ -59,7 +61,7 @@ const tabsComponent = manifest.library.components.tabs
         </div>
       </TabsContent>
 
-      <TabsContent value="archived" class="px-1">
+      <TabsContent value="archived">
         Archived projects remain available for ninety days.
       </TabsContent>
     </Tabs>
@@ -68,26 +70,21 @@ const tabsComponent = manifest.library.components.tabs
       <p class="m-0 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground">
         Vertical · manual activation
       </p>
-      <Tabs
-        defaultValue="general"
-        orientation="vertical"
-        activationMode="manual"
-        class="max-w-xl gap-5 rounded-lg border border-border bg-surface p-3 shadow-xs"
-      >
+      <Tabs defaultValue="general" orientation="vertical" activationMode="manual" class="max-w-xl">
         <TabsList aria-label="Workspace settings">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="members">Members</TabsTrigger>
           <TabsTrigger value="billing">Billing</TabsTrigger>
         </TabsList>
-        <TabsContent value="general" class="py-2">
+        <TabsContent value="general">
           <p class="m-0 font-medium">Workspace profile</p>
           <p class="m-0 text-muted-foreground">Naming, visibility, and default project access.</p>
         </TabsContent>
-        <TabsContent value="members" class="py-2">
+        <TabsContent value="members">
           <p class="m-0 font-medium">Member access</p>
           <p class="m-0 text-muted-foreground">Roles, invitations, and sign-in requirements.</p>
         </TabsContent>
-        <TabsContent value="billing" class="py-2">
+        <TabsContent value="billing">
           <p class="m-0 font-medium">Billing details</p>
           <p class="m-0 text-muted-foreground">Plan, payment method, and invoice history.</p>
         </TabsContent>
@@ -117,30 +114,21 @@ const tabsComponent = manifest.library.components.tabs
 
     <div class="prop-controls prop-controls--toggles">
       <label class="prop-disabled">
-        <input type="checkbox" data-tabs-disabled />
-        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <Switch variant="subtle" data-tabs-disabled />
         <span class="label">Disable Events</span>
       </label>
     </div>
 
     <div class="playground-stage block">
-      <Tabs
-        defaultValue="overview"
-        data-playground-tabs
-        class="mx-auto w-full max-w-lg rounded-lg border border-border bg-surface px-4 pt-2 pb-5 shadow-xs"
-      >
+      <Tabs defaultValue="overview" data-playground-tabs class="mx-auto w-full max-w-lg">
         <TabsList aria-label="Playground sections">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="events" data-playground-tabs-events>Events</TabsTrigger>
           <TabsTrigger value="disabled" disabled>Disabled</TabsTrigger>
         </TabsList>
-        <TabsContent value="overview" class="px-1">
-          A compact overview of the current workspace.
-        </TabsContent>
-        <TabsContent value="events" class="px-1">
-          Recent changes and operational events.
-        </TabsContent>
-        <TabsContent value="disabled" class="px-1">
+        <TabsContent value="overview"> A compact overview of the current workspace. </TabsContent>
+        <TabsContent value="events"> Recent changes and operational events. </TabsContent>
+        <TabsContent value="disabled">
           This panel cannot be selected while its tab is disabled.
         </TabsContent>
       </Tabs>

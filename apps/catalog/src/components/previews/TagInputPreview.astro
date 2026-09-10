@@ -1,0 +1,176 @@
+---
+import { X } from "@lucide/astro"
+import Button from "@/ui/button/button.astro"
+import Field from "@/ui/field/field.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import FieldDescription from "@/ui/field/field-description.astro"
+import TagInput from "@/ui/tag-input/tag-input.astro"
+import TagInputControl from "@/ui/tag-input/tag-input-control.astro"
+import TagInputTag from "@/ui/tag-input/tag-input-tag.astro"
+import TagInputRemove from "@/ui/tag-input/tag-input-remove.astro"
+import ComponentPreview from "../ComponentPreview.astro"
+const initialTags = ["Design", "Engineering"]
+---
+
+<ComponentPreview requirePropsView={true} component="TagInput" hint="Enter · Backspace">
+  <div slot="variants" class="grid gap-8">
+    <form data-tags-demo class="grid gap-4">
+      <Field>
+        <FieldLabel for="project-tags">Project labels</FieldLabel>
+        <TagInput>
+          {
+            initialTags.map((tag) => (
+              <TagInputTag data-tag-value={tag}>
+                <span data-tag-label>{tag}</span>
+                <input type="hidden" name="labels" value={tag} />
+                <TagInputRemove aria-label={`Remove ${tag}`}>
+                  <X aria-hidden="true" />
+                </TagInputRemove>
+              </TagInputTag>
+            ))
+          }
+          <TagInputControl
+            id="project-tags"
+            placeholder="Add a label…"
+            aria-describedby="project-tags-help"
+            maxlength={40}
+          />
+        </TagInput>
+        <FieldDescription id="project-tags-help"
+          >Press Enter to add a label. Each label can be removed independently.</FieldDescription
+        >
+      </Field>
+      <p data-tags-status role="status" class="min-h-5 text-xs text-muted-foreground">
+        2 labels selected
+      </p>
+      <div class="flex gap-2">
+        <Button type="submit" size="sm">Save labels</Button>
+        <Button type="reset" size="sm" variant="outline">Reset</Button>
+      </div>
+      <template data-tag-template>
+        <TagInputTag>
+          <span data-tag-label></span>
+          <input type="hidden" name="labels" />
+          <TagInputRemove aria-label="Remove label"><X aria-hidden="true" /></TagInputRemove>
+        </TagInputTag>
+      </template>
+    </form>
+    <fieldset disabled class="grid gap-2">
+      <FieldLabel for="locked-tags">Archived labels</FieldLabel>
+      <TagInput>
+        <TagInputTag
+          ><span>Research</span><TagInputRemove aria-label="Remove Research"
+            ><X aria-hidden="true" /></TagInputRemove
+          ></TagInputTag
+        >
+        <TagInputControl id="locked-tags" placeholder="Labels are locked" />
+      </TagInput>
+    </fieldset>
+    <Field>
+      <FieldLabel for="readonly-tags">Read-only collection</FieldLabel>
+      <TagInput>
+        <TagInputTag>Public</TagInputTag>
+        <TagInputTag>Documentation</TagInputTag>
+        <TagInputControl id="readonly-tags" readonly placeholder="Managed by your team" />
+      </TagInput>
+    </Field>
+  </div>
+
+  <div slot="props" class="prop-playground" data-tags-props>
+    <div class="prop-controls">
+      <label class="prop-control"
+        ><span class="label">Placeholder</span><input
+          data-tags-placeholder
+          value="Add a label…"
+        /></label
+      >
+      <label class="prop-control"
+        ><span class="label">Read only</span><input type="checkbox" data-tags-readonly /></label
+      >
+      <label class="prop-control"
+        ><span class="label">Disabled</span><input type="checkbox" data-tags-disabled /></label
+      >
+    </div>
+    <div class="playground-stage grid gap-3">
+      <TagInput
+        ><TagInputControl
+          aria-label="Tag input playground"
+          placeholder="Add a label…"
+          data-tags-control
+        /></TagInput
+      >
+      <output data-tags-commit aria-live="polite" class="text-xs text-muted-foreground"
+        >Enter a label to commit it</output
+      >
+    </div>
+  </div>
+  <dl slot="facts" class="facts">
+    <div class="fact"><dt class="label">Composition</dt><dd>4 native parts</dd></div>
+    <div class="fact"><dt class="label">Values</dt><dd>Application-owned</dd></div>
+    <div class="fact"><dt class="label">Keyboard</dt><dd>IME-aware entry</dd></div>
+  </dl>
+</ComponentPreview>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>("[data-tags-demo]").forEach((form) => {
+    const root = form.querySelector<HTMLElement>("[data-slot=tag-input]")!
+    const control = root.querySelector<HTMLInputElement>("[data-slot=tag-input-control]")!
+    const template = form.querySelector<HTMLTemplateElement>("[data-tag-template]")!
+    const status = form.querySelector<HTMLElement>("[data-tags-status]")!
+    const tags = () => Array.from(root.querySelectorAll<HTMLElement>("[data-tag-value]"))
+    const initial = tags().map((tag) => tag.dataset.tagValue!)
+    const announce = () => {
+      status.textContent = `${tags().length} labels selected`
+    }
+    const append = (value: string) => {
+      const fragment = template.content.cloneNode(true) as DocumentFragment
+      const tag = fragment.querySelector<HTMLElement>("[data-slot=tag-input-tag]")!
+      tag.dataset.tagValue = value
+      tag.querySelector<HTMLElement>("[data-tag-label]")!.textContent = value
+      tag.querySelector<HTMLInputElement>("input")!.value = value
+      tag.querySelector<HTMLButtonElement>("button")!.setAttribute("aria-label", `Remove ${value}`)
+      root.insertBefore(fragment, control)
+    }
+    control.addEventListener("hulla-tag-add", (event) => {
+      const value = (event as CustomEvent<{ value: string }>).detail.value
+      if (tags().some((tag) => tag.dataset.tagValue?.toLowerCase() === value.toLowerCase())) {
+        event.preventDefault()
+        status.textContent = `${value} is already selected`
+        return
+      }
+      append(value)
+      announce()
+    })
+    root.addEventListener("click", (event) => {
+      const button = (event.target as Element).closest<HTMLButtonElement>(
+        "[data-slot=tag-input-remove]"
+      )
+      if (!button || button.matches(":disabled")) return
+      button.closest("[data-tag-value]")?.remove()
+      control.focus()
+      announce()
+    })
+    form.addEventListener("reset", () => {
+      tags().forEach((tag) => tag.remove())
+      initial.forEach(append)
+      announce()
+    })
+    form.addEventListener("submit", (event) => {
+      event.preventDefault()
+      status.textContent = `Saved: ${new FormData(form).getAll("labels").join(", ") || "No labels"}`
+    })
+  })
+
+  document.querySelectorAll<HTMLElement>("[data-tags-props]").forEach((root) => {
+    const control = root.querySelector<HTMLInputElement>("[data-tags-control]")!
+    root.addEventListener("input", () => {
+      control.placeholder = root.querySelector<HTMLInputElement>("[data-tags-placeholder]")!.value
+      control.readOnly = root.querySelector<HTMLInputElement>("[data-tags-readonly]")!.checked
+      control.disabled = root.querySelector<HTMLInputElement>("[data-tags-disabled]")!.checked
+    })
+    control.addEventListener("hulla-tag-add", (event) => {
+      root.querySelector<HTMLOutputElement>("[data-tags-commit]")!.value =
+        `Committed: ${(event as CustomEvent<{ value: string }>).detail.value}`
+    })
+  })
+</script>

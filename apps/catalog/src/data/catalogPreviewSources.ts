@@ -1,3 +1,9 @@
+import dialogOverlaysSource from "../components/previews/DialogOverlays.astro?raw"
+import backdropCatalogSource from "../components/previews/BackdropPreview.astro?raw"
+import drawerCatalogSource from "../components/previews/DrawerPreview.astro?raw"
+import stepperCatalogSource from "../components/previews/StepperPreview.astro?raw"
+import tagInputCatalogSource from "../components/previews/TagInputPreview.astro?raw"
+import fileUploadCatalogSource from "../components/previews/FileUploadPreview.astro?raw"
 import accordionCatalogSource from "../components/previews/AccordionPreview.astro?raw"
 import alertCatalogSource from "../components/previews/AlertPreview.astro?raw"
 import avatarCatalogSource from "../components/previews/AvatarPreview.astro?raw"
@@ -161,7 +167,15 @@ export const navigationMenuPreviewSources = exactCatalogPreview(
   navigationMenuCatalogSource
 )
 
-export const dialogPreviewSources = exactCatalogPreview("DialogPreview.astro", dialogCatalogSource)
+export const dialogPreviewSources = [
+  ...exactCatalogPreview("DialogPreview.astro", dialogCatalogSource),
+  ...exactCatalogPreview("DialogOverlays.astro", dialogOverlaysSource),
+]
+export const backdropPreviewSources = exactCatalogPreview(
+  "BackdropPreview.astro",
+  backdropCatalogSource
+)
+export const drawerPreviewSources = exactCatalogPreview("DrawerPreview.astro", drawerCatalogSource)
 
 export const tabsPreviewSources = exactCatalogPreview("TabsPreview.astro", tabsCatalogSource)
 
@@ -216,4 +230,19 @@ export const sidebarPreviewSources = exactCatalogPreview(
 export const treeViewPreviewSources = exactCatalogPreview(
   "TreeViewPreview.astro",
   treeViewCatalogSource
+)
+
+export const fileUploadPreviewSources = exactCatalogPreview(
+  "FileUploadPreview.astro",
+  fileUploadCatalogSource
+)
+
+export const tagInputPreviewSources = exactCatalogPreview(
+  "TagInputPreview.astro",
+  tagInputCatalogSource
+)
+
+export const stepperPreviewSources = exactCatalogPreview(
+  "StepperPreview.astro",
+  stepperCatalogSource
 )

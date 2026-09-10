@@ -7,6 +7,7 @@ import FieldLabel from "@/ui/field/field-label.astro"
 import Field from "@/ui/field/field.astro"
 import InputAdornment from "@/ui/input/input-adornment.astro"
 import InputGroup from "@/ui/input/input-group.astro"
+import FileUpload from "@/ui/file-upload/file-upload.astro"
 import Input from "@/ui/input/input.astro"
 import Kbd from "@/ui/kbd/kbd.astro"
 import manifest from "../../../../../generated/ui.manifest.json"
@@ -96,12 +97,7 @@ const inputVariants = ["outline", "filled", "underline"] as const
           <FieldLabel for="input-group-token">API token</FieldLabel>
           <InputGroup>
             <Input id="input-group-token" value="hulla_live_7F2K" readonly />
-            <Button
-              variant="outline"
-              size="sm"
-              aria-label="Copy API token"
-              class="h-full rounded-none border-0 bg-transparent px-3 text-muted-foreground shadow-none hover:border-0 hover:bg-foreground/5 focus-visible:-outline-offset-2"
-            >
+            <Button variant="outline" size="sm" aria-label="Copy API token" class="h-full">
               <Copy aria-hidden="true" class="size-4" />
             </Button>
           </InputGroup>
@@ -155,9 +151,8 @@ const inputVariants = ["outline", "filled", "underline"] as const
         <div class="col-span-full max-[760px]:col-span-1">
           <Field>
             <FieldLabel for="input-file">Attachments</FieldLabel>
-            <Input
+            <FileUpload
               id="input-file"
-              type="file"
               accept=".pdf,image/*"
               multiple
               aria-describedby="input-file-description"

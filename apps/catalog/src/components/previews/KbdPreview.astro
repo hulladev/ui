@@ -1,4 +1,7 @@
 ---
+import CardDescription from "@/ui/card/card-description.astro"
+import CardTitle from "@/ui/card/card-title.astro"
+import Card from "@/ui/card/card.astro"
 import Kbd from "@/ui/kbd/kbd.astro"
 import manifest from "../../../../../generated/ui.manifest.json"
 import ComponentPreview from "../ComponentPreview.astro"
@@ -13,19 +16,15 @@ const shortcuts = [
 
 <ComponentPreview component="Kbd" hint="Non-interactive" requirePropsView={true}>
   <div slot="variants" class="grid gap-4">
-    <div
-      class="relative grid gap-6 overflow-hidden rounded-lg border border-border bg-surface-raised p-[1.35rem] shadow-xs before:absolute before:top-0 before:left-[1.35rem] before:h-0.5 before:w-12 before:bg-primary before:content-['']"
-    >
+    <Card>
       <div class="flex items-center gap-3">
         <span
           class="grid size-8 place-items-center rounded-sm bg-primary/10 font-mono text-sm text-primary"
           aria-hidden="true">⌘</span
         >
         <span class="grid gap-0.5">
-          <strong class="text-sm">Command menu</strong>
-          <small class="text-xs text-muted-foreground">
-            Navigate without leaving the keyboard
-          </small>
+          <CardTitle>Command menu</CardTitle>
+          <CardDescription>Navigate without leaving the keyboard</CardDescription>
         </span>
       </div>
 
@@ -38,7 +37,7 @@ const shortcuts = [
         </span>
         from anywhere.
       </p>
-    </div>
+    </Card>
 
     <div
       class="overflow-hidden rounded-md border border-border bg-surface/85"
@@ -77,19 +76,10 @@ const shortcuts = [
         <span class="label">Key label</span>
         <input type="text" value="⌘ K" maxlength="12" data-kbd-prop-content />
       </label>
-
-      <label class="prop-control">
-        <span class="label">Class override</span>
-        <select aria-label="Kbd class override" data-kbd-prop-tone>
-          <option value="default">Default</option>
-          <option value="strong">text-foreground</option>
-        </select>
-      </label>
     </div>
 
     <div class="playground-stage">
       <Kbd data-playground-kbd data-tone="default">⌘ K</Kbd>
-      <Kbd class="text-foreground" data-playground-kbd data-tone="strong" hidden>⌘ K</Kbd>
     </div>
 
     <code class="prop-readout" data-kbd-prop-readout aria-live="polite"

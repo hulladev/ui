@@ -1,0 +1,114 @@
+---
+import { Upload, Paperclip } from "@lucide/astro"
+import Button from "@/ui/button/button.astro"
+import Field from "@/ui/field/field.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
+import FieldDescription from "@/ui/field/field-description.astro"
+import FieldError from "@/ui/field/field-error.astro"
+import FileUpload from "@/ui/file-upload/file-upload.astro"
+import FileDropzone from "@/ui/file-upload/file-dropzone.astro"
+import ComponentPreview from "../ComponentPreview.astro"
+---
+
+<ComponentPreview requirePropsView={true} component="FileUpload" hint="Picker · drop">
+  <div slot="variants" class="grid gap-8">
+    <form data-file-demo class="grid gap-4">
+      <Field>
+        <FieldLabel id="upload-label" for="upload-assets">Project assets</FieldLabel>
+        <FileDropzone>
+          <Upload class="mx-auto mb-2 size-6 text-muted-foreground" aria-hidden="true" />
+          <span class="font-medium text-foreground">Drop your files here</span>
+          <span class="text-xs text-muted-foreground">or click to browse your device</span>
+          <FileUpload
+            id="upload-assets"
+            name="assets"
+            accept="image/*,.pdf"
+            multiple
+            aria-labelledby="upload-label"
+            aria-describedby="upload-description"
+          />
+        </FileDropzone>
+        <FieldDescription id="upload-description"
+          >Images and PDFs. Files stay on your device in this demo.</FieldDescription
+        >
+      </Field>
+      <output
+        data-upload-files
+        for="upload-assets"
+        class="flex items-center gap-2 text-sm text-muted-foreground"
+        aria-live="polite"
+      >
+        <Paperclip class="size-4" aria-hidden="true" /> No files selected
+      </output>
+      <Button type="reset" variant="outline" size="sm" class="justify-self-start"
+        >Clear selection</Button
+      >
+    </form>
+    <Field>
+      <FieldLabel for="upload-compact">Attach a document</FieldLabel>
+      <FileUpload id="upload-compact" name="document" accept=".pdf" />
+      <FieldDescription>Compact native control for everyday forms.</FieldDescription>
+    </Field>
+    <Field>
+      <FieldLabel for="upload-disabled">Attachments locked</FieldLabel>
+      <FileUpload id="upload-disabled" disabled />
+    </Field>
+    <Field>
+      <FieldLabel for="upload-invalid">Replace attachment</FieldLabel>
+      <FileUpload id="upload-invalid" aria-invalid="true" aria-describedby="upload-error" />
+      <FieldError id="upload-error"
+        >This document could not be read. Choose another file.</FieldError
+      >
+    </Field>
+  </div>
+
+  <div slot="props" class="prop-playground" data-upload-props>
+    <div class="prop-controls">
+      <label class="prop-control"
+        ><span class="label">Accept</span><select data-upload-accept
+          ><option value="">Any file</option><option value="image/*">Images</option><option
+            value=".pdf">PDF</option
+          ></select
+        ></label
+      >
+      <label class="prop-control"
+        ><span class="label">Multiple</span><input type="checkbox" data-upload-multiple /></label
+      >
+      <label class="prop-control"
+        ><span class="label">Disabled</span><input type="checkbox" data-upload-disabled /></label
+      >
+    </div>
+    <div class="playground-stage">
+      <FileUpload aria-label="File upload playground" data-upload-control />
+    </div>
+  </div>
+  <dl slot="facts" class="facts">
+    <div class="fact"><dt class="label">Native</dt><dd>File input + label</dd></div>
+    <div class="fact"><dt class="label">Form data</dt><dd>Actual File objects</dd></div>
+    <div class="fact"><dt class="label">Composes with</dt><dd>Field · Button</dd></div>
+  </dl>
+</ComponentPreview>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>("[data-file-demo]").forEach((form) => {
+    const input = form.querySelector<HTMLInputElement>("input[type=file]")!
+    const output = form.querySelector<HTMLOutputElement>("[data-upload-files]")!
+    const update = () => {
+      output.textContent =
+        Array.from(input.files ?? [])
+          .map((file) => file.name)
+          .join(", ") || "No files selected"
+    }
+    input.addEventListener("change", update)
+    form.addEventListener("reset", () => setTimeout(update, 0))
+  })
+
+  document.querySelectorAll<HTMLElement>("[data-upload-props]").forEach((root) => {
+    const control = root.querySelector<HTMLInputElement>("[data-upload-control]")!
+    root.addEventListener("change", () => {
+      control.accept = root.querySelector<HTMLSelectElement>("[data-upload-accept]")!.value
+      control.multiple = root.querySelector<HTMLInputElement>("[data-upload-multiple]")!.checked
+      control.disabled = root.querySelector<HTMLInputElement>("[data-upload-disabled]")!.checked
+    })
+  })
+</script>

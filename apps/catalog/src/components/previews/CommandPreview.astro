@@ -44,7 +44,7 @@ const command = manifest.library.components.command
         >
       </div>
 
-      <Button class="w-full justify-between" variant="secondary" data-open-command-dialog>
+      <Button class="w-full" variant="secondary" data-open-command-dialog>
         <span>Open command menu</span>
         <span
           class="font-mono text-[0.625rem] tracking-[0.06em] text-muted-foreground uppercase"
@@ -197,7 +197,7 @@ const command = manifest.library.components.command
   aria-label="Global command menu"
   data-command-dialog
 >
-  <Command class="rounded-[inherit] border-0 shadow-none" aria-label="Global actions">
+  <Command aria-label="Global actions">
     <CommandInput
       id="catalog-command-dialog-input"
       placeholder="Where do you want to go?"

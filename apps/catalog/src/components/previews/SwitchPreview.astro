@@ -1,4 +1,5 @@
 ---
+import Card from "@/ui/card/card.astro"
 import FieldDescription from "@/ui/field/field-description.astro"
 import FieldLabel from "@/ui/field/field-label.astro"
 import Field from "@/ui/field/field.astro"
@@ -24,52 +25,97 @@ const preferences = [
 ---
 
 <ComponentPreview component="Switch" hint="Click or press Space" requirePropsView={true}>
-  <div slot="variants" class="grid gap-4">
-    <div
-      class="overflow-hidden rounded-lg border border-border bg-surface-raised shadow-xs"
-      aria-label="Notification preferences"
-    >
+  <div slot="variants" class="grid min-w-0 gap-4">
+    <div class="flex flex-wrap items-center gap-5" aria-label="Switch variants">
       {
-        preferences.map(({ checked, description, id, label }) => (
-          <Field class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-5 border-t border-border px-4 py-4 first:border-t-0">
-            <div class="grid gap-0.5">
-              <FieldLabel for={id}>{label}</FieldLabel>
-              <FieldDescription id={`${id}-description`}>{description}</FieldDescription>
-            </div>
-            <Switch id={id} name={id} aria-describedby={`${id}-description`} checked={checked} />
-          </Field>
+        (
+          [
+            { id: "variant-default", label: "Default", variant: "default" },
+            { id: "variant-subtle", label: "Subtle", variant: "subtle" },
+            {
+              id: "variant-subtle-checked",
+              label: "Subtle checked",
+              variant: "subtle",
+              checked: true,
+            },
+            {
+              id: "variant-subtle-disabled",
+              label: "Subtle disabled",
+              variant: "subtle",
+              disabled: true,
+            },
+            {
+              id: "variant-subtle-disabled-checked",
+              label: "Subtle checked · disabled",
+              variant: "subtle",
+              checked: true,
+              disabled: true,
+            },
+            {
+              id: "variant-subtle-invalid",
+              label: "Subtle invalid",
+              variant: "subtle",
+              "aria-invalid": true,
+            },
+          ] as const
+        ).map(({ label, ...props }) => (
+          <div class="flex min-w-0 max-w-full items-center gap-2">
+            <Switch {...props} />
+            <FieldLabel for={props.id}>{label}</FieldLabel>
+          </div>
         ))
       }
     </div>
+    <Card aria-label="Notification preferences">
+      {
+        preferences.map(({ checked, description, id, label }) => (
+          <Field>
+            <div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
+              <div class="grid min-w-0 gap-0.5">
+                <FieldLabel for={id}>{label}</FieldLabel>
+                <FieldDescription id={`${id}-description`}>{description}</FieldDescription>
+              </div>
+              <Switch id={id} name={id} aria-describedby={`${id}-description`} checked={checked} />
+            </div>
+          </Field>
+        ))
+      }
+    </Card>
 
     <div
-      class="grid grid-cols-2 gap-3 border-t border-border pt-5 max-[480px]:grid-cols-1"
+      class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,14rem),1fr))] gap-3 border-t border-border pt-5"
       aria-label="Switch states"
     >
       <Field
-        class="grid grid-cols-[1fr_auto] items-center rounded-md bg-foreground/[0.04] px-3.5 py-3"
+        ><div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
+          <FieldLabel for="switch-unchecked">Unchecked</FieldLabel>
+          <Switch id="switch-unchecked" />
+        </div></Field
       >
-        <FieldLabel for="switch-unchecked">Unchecked</FieldLabel>
-        <Switch id="switch-unchecked" />
+      <Field
+        ><div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
+          <FieldLabel for="switch-checked">Checked</FieldLabel>
+          <Switch id="switch-checked" checked />
+        </div></Field
+      >
+      <Field
+        ><div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
+          <FieldLabel for="switch-disabled">Disabled</FieldLabel>
+          <Switch id="switch-disabled" disabled />
+        </div></Field
+      >
+      <Field>
+        <div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
+          <FieldLabel for="switch-disabled-checked">Checked · disabled</FieldLabel>
+          <Switch id="switch-disabled-checked" checked disabled />
+        </div>
       </Field>
       <Field
-        class="grid grid-cols-[1fr_auto] items-center rounded-md bg-foreground/[0.04] px-3.5 py-3"
+        ><div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
+          <FieldLabel for="switch-invalid">Invalid</FieldLabel>
+          <Switch id="switch-invalid" aria-invalid="true" />
+        </div></Field
       >
-        <FieldLabel for="switch-checked">Checked</FieldLabel>
-        <Switch id="switch-checked" checked />
-      </Field>
-      <Field
-        class="grid grid-cols-[1fr_auto] items-center rounded-md bg-foreground/[0.04] px-3.5 py-3"
-      >
-        <FieldLabel for="switch-disabled">Disabled</FieldLabel>
-        <Switch id="switch-disabled" disabled />
-      </Field>
-      <Field
-        class="grid grid-cols-[1fr_auto] items-center rounded-md bg-foreground/[0.04] px-3.5 py-3"
-      >
-        <FieldLabel for="switch-invalid">Invalid</FieldLabel>
-        <Switch id="switch-invalid" aria-invalid="true" />
-      </Field>
     </div>
   </div>
 
@@ -93,20 +139,22 @@ const preferences = [
     </div>
 
     <div class="playground-stage">
-      <Field class="grid w-full max-w-sm grid-cols-[1fr_auto] items-center gap-x-5">
-        <div>
-          <FieldLabel for="playground-switch">Sync activity</FieldLabel>
-          <FieldDescription id="playground-switch-help">
-            Keep this workspace current across devices.
-          </FieldDescription>
-        </div>
-        <Switch
-          id="playground-switch"
-          aria-describedby="playground-switch-help"
-          checked
-          data-playground-switch
-        />
-      </Field>
+      <Field class="w-full max-w-sm"
+        ><div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
+          <div>
+            <FieldLabel for="playground-switch">Sync activity</FieldLabel>
+            <FieldDescription id="playground-switch-help">
+              Keep this workspace current across devices.
+            </FieldDescription>
+          </div>
+          <Switch
+            id="playground-switch"
+            aria-describedby="playground-switch-help"
+            checked
+            data-playground-switch
+          />
+        </div></Field
+      >
     </div>
 
     <code class="prop-readout" data-switch-readout aria-live="polite"
@@ -125,7 +173,7 @@ const preferences = [
     </div>
     <div class="fact">
       <dt class="label">Custom props</dt>
-      <dd>none · native attributes</dd>
+      <dd>variant: default · subtle</dd>
     </div>
   </dl>
 </ComponentPreview>

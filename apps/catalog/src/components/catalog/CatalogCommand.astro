@@ -11,10 +11,14 @@ import Command from "@/ui/command/command.astro"
 import Dialog from "@/ui/dialog/dialog.astro"
 import Kbd from "@/ui/kbd/kbd.astro"
 import {
+  getCatalogSectionHref,
+  type CatalogSectionGroup,
   catalogResources,
   catalogSectionGroups,
   catalogSections,
 } from "../../data/catalogNavigation"
+type Props = { group: CatalogSectionGroup }
+const { group: currentGroup } = Astro.props
 ---
 
 <Dialog
@@ -48,7 +52,10 @@ import {
               .map((item) => {
                 const index = catalogSections.indexOf(item)
                 return (
-                  <CommandItem value={item.href} keywords={[...item.keywords]}>
+                  <CommandItem
+                    value={getCatalogSectionHref(item, currentGroup)}
+                    keywords={[...item.keywords]}
+                  >
                     <Component aria-hidden="true" />
                     <span>{item.label}</span>
                     <CommandShortcut>{String(index + 1).padStart(2, "0")}</CommandShortcut>
@@ -150,4 +157,5 @@ import {
     navigate((event as CustomEvent<CommandSelectDetail>).detail.value)
   })
   if (dialog) onDialogDismiss(dialog, closeDialog)
+  document.documentElement.dataset.catalogCommandReady = "true"
 </script>

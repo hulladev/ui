@@ -1,0 +1,125 @@
+---
+import CatalogHeader from "../components/catalog/CatalogHeader.astro"
+import CatalogCommand from "../components/catalog/CatalogCommand.astro"
+import CatalogRail from "../components/catalog/CatalogRail.astro"
+import {
+  catalogPages,
+  catalogSections,
+  getCatalogSectionHref,
+  type CatalogSectionGroup,
+} from "../data/catalogNavigation"
+import manifest from "../../../../generated/ui.manifest.json"
+import "../styles/catalog.css"
+
+type Props = { group: CatalogSectionGroup }
+const { group } = Astro.props
+const frameworkCount = Object.keys(manifest.library.frameworks).length
+const pageIndex = catalogPages.findIndex((page) => page.group === group)
+const currentPage = catalogPages[pageIndex]!
+const previousPage = catalogPages[pageIndex - 1]
+const nextPage = catalogPages[pageIndex + 1]
+const legacyDestinations = Object.fromEntries(
+  catalogSections.map((section) => [section.href, getCatalogSectionHref(section)])
+)
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content="Development catalog for inspecting Hulla UI components and generated framework output."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline define:vars={{ legacyDestinations }}>
+      const destination = legacyDestinations[window.location.hash]
+      if (
+        destination &&
+        destination.split("#")[0] !== (window.location.pathname.replace(/\/$/, "") || "/")
+      ) {
+        const [path, hash] = destination.split("#")
+        window.location.replace(path + window.location.search + "#" + hash)
+      }
+      try {
+        document.documentElement.dataset.theme = localStorage.getItem("catalog-theme") || "light"
+      } catch {
+        /* Storage may be unavailable. */
+      }
+    </script>
+    <title>{group} — Hulla UI</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to component canvas</a>
+    <div class="shell">
+      <CatalogRail
+        group={group}
+        frameworkCount={frameworkCount}
+        schemaVersion={manifest.schemaVersion}
+      />
+
+      <main class="content" id="main">
+        <CatalogHeader
+          group={group}
+          description={currentPage.description}
+          pageNumber={pageIndex + 1}
+        />
+        <slot />
+        <nav class="catalog-pagination" aria-label="Catalog pages">
+          {
+            previousPage && (
+              <a href={previousPage.href} rel="prev">
+                <>
+                  <span>← Previous page</span>
+                  <strong>{previousPage.group}</strong>
+                </>
+              </a>
+            )
+          }
+          {
+            nextPage && (
+              <a href={nextPage.href} rel="next">
+                <>
+                  <span>Next page →</span>
+                  <strong>{nextPage.group}</strong>
+                </>
+              </a>
+            )
+          }
+        </nav>
+      </main>
+    </div>
+    <CatalogCommand group={group} />
+
+    <script>
+      const contrastToggle = document.querySelector<HTMLInputElement>("#contrast")
+      const sectionLinks = Array.from(
+        document.querySelectorAll<HTMLAnchorElement>(
+          '[data-catalog-nav] [data-slot="sidebar-menu-link"][href^="#"]'
+        )
+      )
+
+      const syncSectionNavigation = () => {
+        const activeHash = window.location.hash || sectionLinks[0]?.hash
+        sectionLinks.forEach((link) => {
+          if (link.hash === activeHash) link.setAttribute("aria-current", "page")
+          else link.removeAttribute("aria-current")
+        })
+      }
+
+      if (contrastToggle) contrastToggle.checked = document.documentElement.dataset.theme === "dark"
+      contrastToggle?.addEventListener("change", () => {
+        const theme = contrastToggle.checked ? "dark" : "light"
+        document.documentElement.dataset.theme = theme
+        try {
+          localStorage.setItem("catalog-theme", theme)
+        } catch {
+          /* Storage may be unavailable. */
+        }
+      })
+      window.addEventListener("hashchange", syncSectionNavigation)
+      syncSectionNavigation()
+    </script>
+  </body>
+</html>

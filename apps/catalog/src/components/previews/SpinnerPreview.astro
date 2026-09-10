@@ -5,24 +5,9 @@ import manifest from "../../../../../generated/ui.manifest.json"
 import ComponentPreview from "../ComponentPreview.astro"
 
 const spinner = manifest.library.components.spinner
-const spinnerSizes = [
-  { className: "size-4", label: "Small", value: "sm" },
-  { className: "size-5", label: "Medium", value: "md" },
-  { className: "size-7", label: "Large", value: "lg" },
-] as const
-const spinnerTones = [
-  { className: "text-foreground", label: "Foreground", value: "foreground" },
-  { className: "text-primary", label: "Primary", value: "primary" },
-  { className: "text-success", label: "Success", value: "success" },
-] as const
 ---
 
-<ComponentPreview
-  component="Spinner"
-  hint="Decorative SVG · motion aware"
-  propsLabel="Class composition"
-  requirePropsView={true}
->
+<ComponentPreview component="Spinner" hint="Decorative SVG · motion aware" requirePropsView={true}>
   <div slot="variants" class="grid gap-4">
     <section
       class="relative overflow-hidden rounded-lg border border-border bg-surface-raised p-5 shadow-xs"
@@ -44,7 +29,7 @@ const spinnerTones = [
           </p>
         </div>
         <div role="status" class="flex items-center gap-2 text-xs text-muted-foreground">
-          <Spinner class="text-primary" />
+          <Spinner />
           <span>Working</span>
         </div>
       </div>
@@ -56,68 +41,30 @@ const spinnerTones = [
         Publishing…
       </Button>
       <Button variant="outline" aria-busy="true" disabled>
-        <Spinner class="text-primary" />
+        <Spinner />
         Checking
       </Button>
       <span role="status" class="ml-auto inline-flex items-center gap-2 text-xs text-success">
-        <Spinner class="size-3.5" />
+        <Spinner />
         Connecting securely
       </span>
-    </div>
-
-    <div
-      class="flex items-end justify-between gap-6 rounded-md border border-border bg-surface/80 px-5 py-4"
-      aria-label="Spinner scale"
-    >
-      {
-        spinnerSizes.map(({ className, label }) => (
-          <div class="grid justify-items-center gap-2 text-primary">
-            <Spinner class={className} />
-            <span class="font-mono text-[0.625rem] tracking-wider text-muted-foreground uppercase">
-              {label}
-            </span>
-          </div>
-        ))
-      }
     </div>
   </div>
 
   <div slot="props" class="prop-playground">
     <div class="prop-controls">
       <label class="prop-control">
-        <span class="label">Size class</span>
-        <select aria-label="Spinner size class" data-spinner-size>
-          {spinnerSizes.map(({ label, value }) => <option value={value}>{label}</option>)}
-        </select>
-      </label>
-
-      <label class="prop-control">
-        <span class="label">Color class</span>
-        <select aria-label="Spinner color class" data-spinner-tone>
-          {spinnerTones.map(({ label, value }) => <option value={value}>{label}</option>)}
-        </select>
+        <span class="label">Status label</span>
+        <input type="text" value="Working" data-spinner-label />
       </label>
     </div>
-
     <div class="playground-stage">
-      {
-        spinnerSizes.map(({ className: sizeClass, value: size }) =>
-          spinnerTones.map(({ className: toneClass, value: tone }) => (
-            <Spinner
-              class={`${sizeClass} ${toneClass}`}
-              data-playground-spinner
-              data-size={size}
-              data-tone={tone}
-              hidden={size !== "sm" || tone !== "foreground"}
-            />
-          ))
-        )
-      }
+      <span role="status" class="inline-flex items-center gap-2">
+        <Spinner data-playground-spinner />
+        <span data-spinner-status>Working</span>
+      </span>
     </div>
-
-    <code class="prop-readout" data-spinner-readout aria-live="polite"
-      >&lt;Spinner className="size-4 text-foreground" /&gt;</code
-    >
+    <code class="prop-readout" data-spinner-readout aria-live="polite">&lt;Spinner /&gt;</code>
   </div>
 
   <dl slot="facts" class="facts">

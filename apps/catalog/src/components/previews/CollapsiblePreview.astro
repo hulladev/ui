@@ -1,4 +1,5 @@
 ---
+import Switch from "@/ui/switch/switch.astro"
 import Collapsible from "@/ui/collapsible/collapsible.astro"
 import CollapsibleContent from "@/ui/collapsible/collapsible-content.astro"
 import CollapsibleTrigger from "@/ui/collapsible/collapsible-trigger.astro"
@@ -8,18 +9,22 @@ import ComponentPreview from "../ComponentPreview.astro"
 const collapsible = manifest.library.components.collapsible
 ---
 
-<ComponentPreview component="Collapsible" hint="Enter or Space" requirePropsView={true}>
+<ComponentPreview
+  component="Collapsible"
+  hint="Expand and collapse · immediate content motion"
+  requirePropsView={true}
+>
   <div slot="variants" class="grid gap-4">
     <p class="m-0 text-sm leading-6 text-muted-foreground">
       Each disclosure owns its state, so branches can be composed at any depth.
     </p>
 
-    <Collapsible open class="rounded-lg border border-border bg-surface p-2 shadow-xs">
+    <Collapsible open>
       <CollapsibleTrigger>
         <span class="font-mono text-xs text-primary" aria-hidden="true">01</span>
         Production readiness
       </CollapsibleTrigger>
-      <CollapsibleContent class="pt-1 pl-5">
+      <CollapsibleContent>
         <div class="border-l border-border pl-3">
           <p class="my-2 text-sm leading-6 text-muted-foreground">
             Verify the signals that decide whether the rollout continues.
@@ -30,7 +35,7 @@ const collapsible = manifest.library.components.collapsible
               <span class="font-mono text-xs text-primary" aria-hidden="true">01.1</span>
               Observable signals
             </CollapsibleTrigger>
-            <CollapsibleContent class="px-2 pt-1 pb-2 text-sm text-muted-foreground">
+            <CollapsibleContent>
               Latency, error rate, queue depth, and rollback ownership.
             </CollapsibleContent>
           </Collapsible>
@@ -42,22 +47,15 @@ const collapsible = manifest.library.components.collapsible
   <div slot="props" class="prop-playground">
     <div class="prop-controls prop-controls--toggles">
       <label class="prop-disabled">
-        <input type="checkbox" checked data-collapsible-prop-open />
-        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <Switch variant="subtle" checked data-collapsible-prop-open />
         <span class="label">Open</span>
       </label>
     </div>
 
     <div class="playground-stage block">
-      <Collapsible
-        open
-        data-playground-collapsible
-        class="rounded-lg border border-border bg-surface p-2 shadow-xs"
-      >
+      <Collapsible open data-playground-collapsible>
         <CollapsibleTrigger>Deployment details</CollapsibleTrigger>
-        <CollapsibleContent class="px-2 pt-2 pb-1 text-sm leading-6 text-muted-foreground">
-          Deploys from the main branch after checks pass.
-        </CollapsibleContent>
+        <CollapsibleContent> Deploys from the main branch after checks pass. </CollapsibleContent>
       </Collapsible>
     </div>
 

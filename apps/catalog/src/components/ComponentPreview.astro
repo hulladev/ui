@@ -68,15 +68,15 @@ if (requirePropsView && !hasProps) {
       <label class="canvas-background-control">
         <span>Canvas</span>
         <select aria-label="Canvas background" data-canvas-background-select>
-          <option value="grid" selected>Grid</option>
-          <option value="plain">Plain</option>
+          <option value="grid">Grid</option>
+          <option value="plain" selected>Plain</option>
         </select>
       </label>
       <span class="bench-hint">{hint}</span>
     </div>
   </header>
 
-  <div class="canvas" data-preview-canvas data-background="grid">
+  <div class="canvas" data-preview-canvas data-background="plain">
     <div
       class="preview-panel"
       id={`${previewId}-variants`}
@@ -184,13 +184,13 @@ if (requirePropsView && !hasProps) {
     tabs[nextIndex]?.focus()
   })
 
-  let initialBackground: CanvasBackground = "grid"
+  let initialBackground: CanvasBackground = "plain"
   try {
-    if (window.localStorage.getItem("hulla-catalog-canvas-background") === "plain") {
-      initialBackground = "plain"
+    if (window.localStorage.getItem("hulla-catalog-canvas-background") === "grid") {
+      initialBackground = "grid"
     }
   } catch {
-    // Use the default grid background.
+    // Use the default solid surface.
   }
   setCanvasBackground(initialBackground)
 </script>

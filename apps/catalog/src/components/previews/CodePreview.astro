@@ -1,4 +1,5 @@
 ---
+import Switch from "@/ui/switch/switch.astro"
 import { Check, Copy, FileCode, Info } from "@lucide/astro"
 import { tsx } from "@tanstack/highlight/languages/tsx"
 import Button from "@/ui/button/button.astro"
@@ -64,12 +65,18 @@ const codeComponent = manifest.library.components.code
 
 <ComponentPreview component="Code" hint="Scrollable · selectable" requirePropsView={true}>
   <div slot="variants" class="grid gap-6">
+    <div class="prop-controls prop-controls--toggles">
+      <label class="prop-disabled">
+        <Switch variant="subtle" data-code-reveal-actions />
+        <span>Reveal copy on hover</span>
+      </label>
+    </div>
     <p class="m-0 text-sm leading-7 text-muted-foreground">
       Install the primitives with <Code>bunx hulla ui add code</Code>, then choose either
       highlighting adapter—or both.
     </p>
 
-    <Tabs defaultValue="astro" class="gap-0" data-code-tabs>
+    <Tabs defaultValue="astro" data-code-tabs>
       <CodeBlock>
         <CodeBlockHeader>
           <TabsList aria-label="Implementation file">
@@ -90,7 +97,7 @@ const codeComponent = manifest.library.components.code
         </CodeBlockPath>
 
         <CodeBlockBody>
-          <TabsContent value="astro" class="rounded-none focus-visible:outline-offset-[-2px]">
+          <TabsContent value="astro">
             <CodeBlockContent
               highlighted={highlightedAstro}
               lineNumbers
@@ -98,7 +105,7 @@ const codeComponent = manifest.library.components.code
               insertedLines={[8, 9, 10]}
             />
           </TabsContent>
-          <TabsContent value="react" class="rounded-none focus-visible:outline-offset-[-2px]">
+          <TabsContent value="react">
             <CodeBlockContent
               highlighted={highlightedReact}
               lineNumbers
@@ -106,17 +113,18 @@ const codeComponent = manifest.library.components.code
             />
           </TabsContent>
 
-          <CodeBlockActions>
+          <CodeBlockActions revealOnHover={false}>
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
-              class="size-8 rounded-none border-0 bg-transparent p-0 text-muted-foreground shadow-none hover:bg-transparent hover:text-foreground active:bg-transparent"
               aria-label="Copy active code"
               title="Copy active code"
               data-copy-code
             >
-              <Copy aria-hidden="true" class="size-4" data-copy-icon />
-              <span data-copied-icon hidden><Check aria-hidden="true" class="size-4" /></span>
+              <span data-slot="code-copy-feedback" aria-hidden="true">
+                <Copy data-copy-icon />
+                <Check data-copied-icon />
+              </span>
             </Button>
           </CodeBlockActions>
         </CodeBlockBody>
@@ -159,12 +167,22 @@ const codeComponent = manifest.library.components.code
           <span class="ml-auto shrink-0">Shell</span>
         </CodeBlockPath>
         <CodeBlockBody>
-          <CodeBlockContent
-            highlighted={highlightedShell}
-            lineNumbers
-            highlightedLines={[1]}
-            data-code-playground
-          />
+          {
+            [false, true].flatMap((lineNumbers) =>
+              [false, true].map((wrap) => (
+                <CodeBlockContent
+                  highlighted={highlightedShell}
+                  lineNumbers={lineNumbers}
+                  wrap={wrap}
+                  highlightedLines={[1]}
+                  data-code-playground
+                  data-example-line-numbers={String(lineNumbers)}
+                  data-example-wrap={String(wrap)}
+                  hidden={!lineNumbers || wrap}
+                />
+              ))
+            )
+          }
         </CodeBlockBody>
         <CodeBlockFooter>
           <span>2 commands</span>
@@ -195,6 +213,8 @@ const codeComponent = manifest.library.components.code
 </ComponentPreview>
 
 <script>
+  const copyResetTimers = new WeakMap<HTMLButtonElement, number>()
+
   document.addEventListener("click", async (event) => {
     const button = (event.target as HTMLElement).closest<HTMLButtonElement>("[data-copy-code]")
     const tabs = button?.closest<HTMLElement>("[data-code-tabs]")
@@ -205,28 +225,28 @@ const codeComponent = manifest.library.components.code
     if (!code) return
 
     await navigator.clipboard.writeText(code)
-    const copyIcon = button.querySelector<HTMLElement>("[data-copy-icon]")
-    const copiedIcon = button.querySelector<HTMLElement>("[data-copied-icon]")
-    if (copyIcon) copyIcon.hidden = true
-    if (copiedIcon) copiedIcon.hidden = false
-    window.setTimeout(() => {
-      if (copyIcon) copyIcon.hidden = false
-      if (copiedIcon) copiedIcon.hidden = true
-    }, 1400)
+    window.clearTimeout(copyResetTimers.get(button))
+    button.setAttribute("data-copied", "")
+    button.setAttribute("aria-label", "Copied")
+    copyResetTimers.set(
+      button,
+      window.setTimeout(() => {
+        button.removeAttribute("data-copied")
+        button.setAttribute("aria-label", "Copy active code")
+        copyResetTimers.delete(button)
+      }, 1400)
+    )
   })
 
   const syncCodePlayground = (preview: HTMLElement) => {
     const lineNumbers =
       preview.querySelector<HTMLInputElement>("[data-code-line-numbers]")?.checked ?? true
     const wrap = preview.querySelector<HTMLInputElement>("[data-code-wrap]")?.checked ?? false
-    const content = preview.querySelector<HTMLElement>("[data-code-playground]")
-    if (!content) return
-
-    content.toggleAttribute("data-line-numbers", lineNumbers)
-    content.toggleAttribute("data-wrap", wrap)
-    content.classList.toggle("whitespace-pre", !wrap)
-    content.classList.toggle("whitespace-pre-wrap", wrap)
-    content.classList.toggle("break-words", wrap)
+    preview.querySelectorAll<HTMLElement>("[data-code-playground]").forEach((content) => {
+      content.hidden =
+        content.dataset.exampleLineNumbers !== String(lineNumbers) ||
+        content.dataset.exampleWrap !== String(wrap)
+    })
 
     const readout = preview.querySelector<HTMLElement>("[data-code-prop-readout]")
     if (readout) {
@@ -235,6 +255,15 @@ const codeComponent = manifest.library.components.code
   }
 
   document.addEventListener("input", (event) => {
+    const reveal = (event.target as HTMLElement).closest<HTMLInputElement>(
+      "[data-code-reveal-actions]"
+    )
+    if (reveal) {
+      const actions = reveal
+        .closest('[data-preview-component="code-preview"]')
+        ?.querySelector('[data-slot="code-block-actions"]')
+      actions?.toggleAttribute("data-reveal-on-hover", reveal.checked)
+    }
     const control = (event.target as HTMLElement).closest(
       "[data-code-line-numbers], [data-code-wrap]"
     )

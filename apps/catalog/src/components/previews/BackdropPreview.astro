@@ -1,0 +1,63 @@
+---
+import Backdrop from "@/ui/backdrop/backdrop.astro"
+import Button from "@/ui/button/button.astro"
+import ComponentPreview from "../ComponentPreview.astro"
+---
+
+<ComponentPreview component="Backdrop" hint="Open and close · subtle fade" requirePropsView={true}>
+  <div
+    slot="variants"
+    data-backdrop-demo
+    class="relative isolate grid min-h-56 place-items-center overflow-hidden [transform:translateZ(0)]"
+  >
+    <p>Open the backdrop to dim the content behind it.</p>
+    <Backdrop id="example-backdrop" hidden />
+    <Button
+      class="relative z-10"
+      data-toggle-backdrop
+      aria-controls="example-backdrop"
+      aria-expanded="false">Open backdrop</Button
+    >
+  </div>
+  <div slot="props" class="prop-playground" data-backdrop-demo>
+    <div class="prop-controls">
+      <label class="prop-control"
+        ><span class="label">Hidden</span><input
+          type="checkbox"
+          checked
+          data-backdrop-hidden
+        /></label
+      >
+    </div>
+    <div
+      class="relative isolate grid min-h-56 place-items-center overflow-hidden [transform:translateZ(0)]"
+    >
+      <p>Open the backdrop to dim the content behind it.</p>
+      <Backdrop id="playground-backdrop" hidden />
+      <Button
+        class="relative z-10"
+        data-toggle-backdrop
+        aria-controls="playground-backdrop"
+        aria-expanded="false">Open backdrop</Button
+      >
+    </div>
+  </div>
+</ComponentPreview>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-backdrop-demo]").forEach((demo) => {
+    const backdrop = demo.querySelector<HTMLElement>("[data-slot='backdrop']")
+    const button = demo.querySelector<HTMLButtonElement>("[data-toggle-backdrop]")
+    const control = demo.querySelector<HTMLInputElement>("[data-backdrop-hidden]")
+    if (!backdrop || !button) return
+
+    const setHidden = (hidden: boolean) => {
+      backdrop.hidden = hidden
+      button.textContent = hidden ? "Open backdrop" : "Close backdrop"
+      button.setAttribute("aria-expanded", String(!hidden))
+      if (control) control.checked = hidden
+    }
+    button.addEventListener("click", () => setHidden(!backdrop.hidden))
+    control?.addEventListener("change", () => setHidden(control.checked))
+  })
+</script>

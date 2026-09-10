@@ -1,4 +1,8 @@
 ---
+import CardDescription from "@/ui/card/card-description.astro"
+import CardTitle from "@/ui/card/card-title.astro"
+import CardHeader from "@/ui/card/card-header.astro"
+import Card from "@/ui/card/card.astro"
 import AvatarFallback from "@/ui/avatar/avatar-fallback.astro"
 import Avatar from "@/ui/avatar/avatar.astro"
 import Badge from "@/ui/badge/badge.astro"
@@ -13,7 +17,7 @@ const placements = ["bottom-start", "right", "top-start", "left"] as const
 
 <ComponentPreview
   component="HoverCard"
-  hint="Hover, focus, or press Escape"
+  hint="Hover or focus · subtle surface transition"
   requirePropsView={true}
   propsLabel="Placement"
 >
@@ -22,18 +26,18 @@ const placements = ["bottom-start", "right", "top-start", "left"] as const
     class="grid min-h-80 place-items-center overflow-hidden rounded-lg bg-surface/65 p-8"
   >
     <div class="grid w-full max-w-md gap-5">
-      <div class="grid gap-5 rounded-lg border border-border bg-surface-raised/75 p-5 text-center">
-        <div class="grid gap-2">
+      <Card>
+        <CardHeader>
           <span class="font-mono text-xs tracking-wider text-primary uppercase">Rich preview</span>
-          <strong class="text-lg tracking-tight">Move into the card</strong>
-          <p class="m-0 text-xs leading-6 text-muted-foreground">
-            Supplementary content remains open while the pointer or focus is inside it.
-          </p>
-        </div>
+          <CardTitle>Move into the card</CardTitle>
+          <CardDescription
+            >Supplementary content remains open while the pointer or focus is inside it.</CardDescription
+          >
+        </CardHeader>
 
         <div class="flex items-center justify-center gap-3">
           <Avatar aria-hidden="true">
-            <AvatarFallback class="bg-primary/15 text-primary">SK</AvatarFallback>
+            <AvatarFallback>SK</AvatarFallback>
           </Avatar>
           <a
             id="catalog-hover-card-trigger"
@@ -51,7 +55,7 @@ const placements = ["bottom-start", "right", "top-start", "left"] as const
             <div class="grid gap-4">
               <div class="flex items-start gap-3">
                 <Avatar size="lg" aria-hidden="true">
-                  <AvatarFallback class="bg-primary/15 text-primary">SK</AvatarFallback>
+                  <AvatarFallback>SK</AvatarFallback>
                 </Avatar>
                 <div class="grid gap-1">
                   <strong class="text-base">Sora Kim</strong>
@@ -69,7 +73,7 @@ const placements = ["bottom-start", "right", "top-start", "left"] as const
             </div>
           </HoverCard>
         </div>
-      </div>
+      </Card>
     </div>
   </div>
 
@@ -108,12 +112,7 @@ const placements = ["bottom-start", "right", "top-start", "left"] as const
               >
                 Preview contributor
               </a>
-              <HoverCard
-                id={hoverCardId}
-                triggerId={triggerId}
-                placement={placement}
-                openDelay={150}
-              >
+              <HoverCard id={hoverCardId} triggerId={triggerId} placement={placement}>
                 <div class="grid gap-2">
                   <strong>Sora Kim</strong>
                   <span class="text-xs text-muted-foreground">

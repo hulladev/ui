@@ -1,4 +1,6 @@
 ---
+import Code from "@/ui/code/code.astro"
+import Switch from "@/ui/switch/switch.astro"
 import Accordion from "@/ui/accordion/accordion.astro"
 import AccordionContent from "@/ui/accordion/accordion-content.astro"
 import AccordionItem from "@/ui/accordion/accordion-item.astro"
@@ -11,7 +13,7 @@ const accordion = manifest.library.components.accordion
 
 <ComponentPreview
   component="Accordion"
-  hint="Enter or Space"
+  hint="Expand and collapse · immediate content motion"
   requirePropsView={true}
   variantsLabel="Compositions"
 >
@@ -38,7 +40,7 @@ const accordion = manifest.library.components.accordion
             >
             Confirm the migration path
           </AccordionTrigger>
-          <AccordionContent class="pl-8">
+          <AccordionContent>
             <p>
               Run the migration against a current production snapshot and record the rollback
               command beside the release.
@@ -54,7 +56,7 @@ const accordion = manifest.library.components.accordion
             >
             Review the observable signals
           </AccordionTrigger>
-          <AccordionContent class="pl-8">
+          <AccordionContent>
             <p>
               Choose the latency, error-rate, and queue-depth signals that decide whether the
               rollout continues.
@@ -70,7 +72,7 @@ const accordion = manifest.library.components.accordion
             >
             Name the release owner
           </AccordionTrigger>
-          <AccordionContent class="pl-8">
+          <AccordionContent>
             <p>
               Assign one person to make the final call and keep the escalation channel visible for
               the duration of the rollout.
@@ -86,7 +88,7 @@ const accordion = manifest.library.components.accordion
         <AccordionItem>
           <AccordionTrigger>Can several answers stay open?</AccordionTrigger>
           <AccordionContent>
-            Yes. Omit the native <code>name</code> attribute and every item keeps its own open state.
+            Yes. Omit the native <Code>name</Code> attribute and every item keeps its own open state.
           </AccordionContent>
         </AccordionItem>
         <AccordionItem>
@@ -111,8 +113,7 @@ const accordion = manifest.library.components.accordion
       </label>
 
       <label class="prop-disabled">
-        <input type="checkbox" checked data-accordion-prop-open />
-        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <Switch variant="subtle" checked data-accordion-prop-open />
         <span class="label">First item open</span>
       </label>
     </div>

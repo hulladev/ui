@@ -30,7 +30,7 @@ const regions = [
 
 <ComponentPreview
   component="Table"
-  hint="Eight semantic parts"
+  hint="Clear headers · row rhythm"
   requirePropsView={true}
   variantsLabel="Representations"
 >
@@ -60,9 +60,7 @@ const regions = [
             {
               releases.map((release) => (
                 <TableRow>
-                  <TableHead scope="row" class="font-mono text-foreground">
-                    {release.release}
-                  </TableHead>
+                  <TableHead scope="row">{release.release}</TableHead>
                   <TableCell>
                     <Badge
                       size="sm"
@@ -78,7 +76,7 @@ const regions = [
                     </Badge>
                   </TableCell>
                   <TableCell>{release.owner}</TableCell>
-                  <TableCell class="text-right font-mono text-xs">{release.duration}</TableCell>
+                  <TableCell class="text-right">{release.duration}</TableCell>
                 </TableRow>
               ))
             }
@@ -108,19 +106,10 @@ const regions = [
             {
               regions.map((region) => (
                 <TableRow>
-                  <TableHead scope="row" class="text-foreground">
-                    {region.region}
-                  </TableHead>
+                  <TableHead scope="row">{region.region}</TableHead>
                   <TableCell class="text-right">{region.requests}</TableCell>
-                  <TableCell
-                    class:list={[
-                      "text-right font-medium",
-                      region.change.startsWith("−") ? "text-danger" : "text-success",
-                    ]}
-                  >
-                    {region.change}
-                  </TableCell>
-                  <TableCell class="text-right font-mono text-xs">{region.latency}</TableCell>
+                  <TableCell class="text-right">{region.change}</TableCell>
+                  <TableCell class="text-right">{region.latency}</TableCell>
                 </TableRow>
               ))
             }
@@ -139,19 +128,19 @@ const regions = [
       <Table variant="plain">
         <TableBody>
           <TableRow>
-            <TableHead scope="row" class="pl-1 text-foreground">Build artifacts</TableHead>
+            <TableHead scope="row">Build artifacts</TableHead>
             <TableCell class="text-right">84.2 GB</TableCell>
-            <TableCell class="w-24 text-right text-muted-foreground">68%</TableCell>
+            <TableCell class="w-24 text-right">68%</TableCell>
           </TableRow>
           <TableRow>
-            <TableHead scope="row" class="pl-1 text-foreground">Source maps</TableHead>
+            <TableHead scope="row">Source maps</TableHead>
             <TableCell class="text-right">31.8 GB</TableCell>
-            <TableCell class="w-24 text-right text-muted-foreground">26%</TableCell>
+            <TableCell class="w-24 text-right">26%</TableCell>
           </TableRow>
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableHead scope="row" class="pl-1 text-foreground">Total used</TableHead>
+            <TableHead scope="row">Total used</TableHead>
             <TableCell class="text-right">116 GB</TableCell>
             <TableCell class="text-right">94%</TableCell>
           </TableRow>
@@ -195,16 +184,12 @@ const regions = [
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableHead scope="row" class="text-foreground">
-                  Production
-                </TableHead>
+                <TableHead scope="row">Production</TableHead>
                 <TableCell>Healthy</TableCell>
                 <TableCell class="text-right">42 ms</TableCell>
               </TableRow>
               <TableRow>
-                <TableHead scope="row" class="text-foreground">
-                  Preview
-                </TableHead>
+                <TableHead scope="row">Preview</TableHead>
                 <TableCell>Deploying</TableCell>
                 <TableCell class="text-right">61 ms</TableCell>
               </TableRow>

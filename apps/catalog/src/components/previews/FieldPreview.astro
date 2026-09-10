@@ -1,4 +1,5 @@
 ---
+import Code from "@/ui/code/code.astro"
 import FieldDescription from "@/ui/field/field-description.astro"
 import FieldError from "@/ui/field/field-error.astro"
 import FieldLabel from "@/ui/field/field-label.astro"
@@ -73,13 +74,13 @@ const field = manifest.library.components.field
       <div
         class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 rounded-lg border border-border bg-surface-raised/75 p-5 text-sm"
       >
-        <code class="text-primary">FieldLabel</code>
+        <Code>FieldLabel</Code>
         <span class="text-muted-foreground">Names the associated control.</span>
-        <code class="text-primary">Control</code>
+        <Code>Control</Code>
         <span class="text-muted-foreground">Input, Textarea, Select, or another primitive.</span>
-        <code class="text-primary">FieldDescription</code>
+        <Code>FieldDescription</Code>
         <span class="text-muted-foreground">Adds stable supporting guidance.</span>
-        <code class="text-primary">FieldError</code>
+        <Code>FieldError</Code>
         <span class="text-muted-foreground">Replaces guidance when validation fails.</span>
       </div>
     </div>

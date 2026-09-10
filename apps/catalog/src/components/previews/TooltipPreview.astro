@@ -1,4 +1,5 @@
 ---
+import Code from "@/ui/code/code.astro"
 import Button from "@/ui/button/button.astro"
 import Tooltip from "@/ui/tooltip/tooltip.astro"
 import manifest from "../../../../../generated/ui.manifest.json"
@@ -10,7 +11,7 @@ const placements = ["top", "right", "bottom", "left"] as const
 
 <ComponentPreview
   component="Tooltip"
-  hint="Hover, focus, or press Escape"
+  hint="Hover or focus · subtle surface transition"
   requirePropsView={true}
   propsLabel="Placement"
 >
@@ -28,7 +29,7 @@ const placements = ["top", "right", "bottom", "left"] as const
           >
           <strong class="text-lg tracking-tight">Tooltip</strong>
           <p class="m-0 text-xs leading-6 text-muted-foreground">
-            Descriptive text linked explicitly with <code>aria-describedby</code>.
+            Descriptive text linked explicitly with <Code>aria-describedby</Code>.
           </p>
         </div>
 
@@ -39,7 +40,7 @@ const placements = ["top", "right", "bottom", "left"] as const
           <Tooltip id="catalog-tooltip" triggerId="catalog-tooltip-trigger" placement="top">
             Adds this build to the next release train
           </Tooltip>
-          <span class="font-mono text-[0.65rem] text-muted-foreground">180 ms</span>
+          <span class="font-mono text-[0.65rem] text-muted-foreground">100 ms</span>
         </div>
       </section>
     </div>
@@ -71,7 +72,7 @@ const placements = ["top", "right", "bottom", "left"] as const
               <Button id={triggerId} variant="outline" aria-describedby={tooltipId}>
                 Hover or focus
               </Button>
-              <Tooltip id={tooltipId} triggerId={triggerId} placement={placement} openDelay={150}>
+              <Tooltip id={tooltipId} triggerId={triggerId} placement={placement}>
                 Floating UI resolved: {placement}
               </Tooltip>
             </div>

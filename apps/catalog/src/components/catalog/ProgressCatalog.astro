@@ -23,26 +23,29 @@ const progressSources = [
 const progressUsageSources = [
   {
     code: `---
+import Field from "@/ui/field/field.astro"
+import FieldLabel from "@/ui/field/field-label.astro"
 import Progress from "@/ui/progress/progress.astro"
 ---
 
-<label>
-  Uploading assets
-  <Progress value={68} max={100}>68%</Progress>
-</label>`,
+<Field>
+  <FieldLabel for="upload-progress">Uploading assets</FieldLabel>
+  <Progress id="upload-progress" value={68} max={100}>68%</Progress>
+</Field>`,
     filename: "src/components/upload-progress.astro",
     framework: "Astro",
     language: "astro" as const,
   },
   {
-    code: `import { Progress } from "@/ui/progress"
+    code: `import { Field, FieldLabel } from "@/ui/field"
+import { Progress } from "@/ui/progress"
 
 export function UploadProgress() {
   return (
-    <label>
-      Uploading assets
-      <Progress value={68} max={100}>68%</Progress>
-    </label>
+    <Field>
+      <FieldLabel htmlFor="upload-progress">Uploading assets</FieldLabel>
+      <Progress id="upload-progress" value={68} max={100}>68%</Progress>
+    </Field>
   )
 }`,
     filename: "src/components/upload-progress.tsx",
@@ -77,44 +80,33 @@ export function UploadProgress() {
 </section>
 
 <script>
-  const progressToneClasses = {
-    primary: "text-primary",
-    success: "text-success",
-    warning: "text-warning",
-  } as const
-
   const syncProgressPlayground = (preview: HTMLElement) => {
     const state =
       preview.querySelector<HTMLSelectElement>("[data-progress-state]")?.value ?? "determinate"
     const valueControl = preview.querySelector<HTMLInputElement>("[data-progress-value]")
     const value = Number(valueControl?.value ?? 68)
-    const tone =
-      preview.querySelector<HTMLSelectElement>("[data-progress-tone]")?.value ?? "primary"
-
     if (valueControl) valueControl.disabled = state === "indeterminate"
 
     preview
       .querySelectorAll<HTMLProgressElement>("[data-playground-progress]")
       .forEach((progress) => {
-        progress.hidden = progress.dataset.tone !== tone
         if (state === "indeterminate") progress.removeAttribute("value")
         else progress.value = value
         progress.textContent = state === "indeterminate" ? "In progress" : `${value}%`
       })
 
     const readout = preview.querySelector<HTMLElement>("[data-progress-readout]")
-    const toneClass = progressToneClasses[tone as keyof typeof progressToneClasses]
     if (readout) {
       readout.textContent =
         state === "indeterminate"
-          ? `<Progress className="${toneClass}" />`
-          : `<Progress value={${value}} max={100} className="${toneClass}" />`
+          ? `<Progress />`
+          : `<Progress id="upload-progress" value={${value}} max={100} />`
     }
   }
 
   document.addEventListener("input", (event) => {
     const control = (event.target as HTMLElement).closest(
-      "[data-progress-state], [data-progress-value], [data-progress-tone]"
+      "[data-progress-state], [data-progress-value]"
     )
     const preview = control?.closest<HTMLElement>('[data-preview-component="progress-preview"]')
     if (preview) syncProgressPlayground(preview)

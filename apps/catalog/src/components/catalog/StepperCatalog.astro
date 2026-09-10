@@ -1,0 +1,43 @@
+---
+import { stepperPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import StepperPreview from "../previews/StepperPreview.astro"
+const usageSources = [
+  {
+    code: '---\nimport Stepper from "@/ui/stepper/stepper.astro"\nimport StepperItem from "@/ui/stepper/stepper-item.astro"\nimport StepperLink from "@/ui/stepper/stepper-link.astro"\nimport StepperIndicator from "@/ui/stepper/stepper-indicator.astro"\n---\n\n<nav aria-label="Checkout progress">\n  <Stepper>\n    <StepperItem state="complete">\n      <StepperLink href="/cart"><StepperIndicator>1</StepperIndicator>Cart</StepperLink>\n    </StepperItem>\n    <StepperItem state="current">\n      <StepperLink href="/delivery"><StepperIndicator>2</StepperIndicator>Delivery</StepperLink>\n    </StepperItem>\n  </Stepper>\n</nav>',
+    filename: "src/components/stepper.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: 'import { Stepper, StepperItem, StepperLink, StepperIndicator } from "@/ui/stepper"\n\nexport function CheckoutSteps() {\n  return (\n    <nav aria-label="Checkout progress">\n      <Stepper>\n        <StepperItem state="complete">\n          <StepperLink href="/cart"><StepperIndicator>1</StepperIndicator>Cart</StepperLink>\n        </StepperItem>\n        <StepperItem state="current">\n          <StepperLink href="/delivery"><StepperIndicator>2</StepperIndicator>Delivery</StepperLink>\n        </StepperItem>\n      </Stepper>\n    </nav>\n  )\n}',
+    filename: "src/components/stepper.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+  {
+    code: 'import { Stepper, StepperItem, StepperLink, StepperIndicator } from "@/ui/stepper"\n\nexport function CheckoutSteps() {\n  return (\n    <nav aria-label="Checkout progress">\n      <Stepper>\n        <StepperItem state="complete">\n          <StepperLink href="/cart"><StepperIndicator>1</StepperIndicator>Cart</StepperLink>\n        </StepperItem>\n        <StepperItem state="current">\n          <StepperLink href="/delivery"><StepperIndicator>2</StepperIndicator>Delivery</StepperLink>\n        </StepperItem>\n      </Stepper>\n    </nav>\n  )\n}',
+    filename: "src/components/stepper.tsx",
+    framework: "Solid",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="stepper" aria-labelledby="stepper-title">
+  <div class="section-head">
+    <div><p class="eyebrow">Primitive / Navigation</p><h2 id="stepper-title">Stepper</h2></div>
+    <span class="status">Explicit progress</span>
+  </div>
+  <article class="bench glass-panel" aria-label="Stepper component preview">
+    <div class="workbench">
+      <StepperPreview />
+      <ComponentSource
+        component="Stepper"
+        generatedFamilies={["stepper"]}
+        previewSources={stepperPreviewSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>

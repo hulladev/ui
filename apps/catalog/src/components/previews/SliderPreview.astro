@@ -50,7 +50,7 @@ const mixControls = [
 
       {
         mixControls.map(({ description, id, label, value }) => (
-          <Field class="grid gap-2">
+          <Field>
             <div class="flex items-baseline justify-between gap-3">
               <FieldLabel for={id}>{label}</FieldLabel>
               <output
@@ -76,9 +76,7 @@ const mixControls = [
       }
     </div>
 
-    <Field
-      class="grid gap-2 rounded-xl border border-border bg-surface-raised p-5 shadow-xs max-[480px]:p-4"
-    >
+    <Field>
       <div class="flex items-baseline justify-between gap-4">
         <div>
           <FieldLabel for="release-min">Release window</FieldLabel>
@@ -131,15 +129,15 @@ const mixControls = [
       class="grid grid-cols-3 gap-3 border-t border-border pt-5 max-[560px]:grid-cols-1"
       aria-label="Slider states"
     >
-      <Field class="grid min-w-0 gap-2 rounded-md bg-foreground/[0.04] px-3.5 py-3">
+      <Field class="min-w-0">
         <FieldLabel for="slider-default">Default</FieldLabel>
         <Slider id="slider-default" value="36" aria-label="Default slider" />
       </Field>
-      <Field class="grid min-w-0 gap-2 rounded-md bg-foreground/[0.04] px-3.5 py-3">
+      <Field class="min-w-0">
         <FieldLabel for="slider-disabled">Disabled</FieldLabel>
         <Slider id="slider-disabled" value="64" disabled aria-label="Disabled slider" />
       </Field>
-      <Field class="grid min-w-0 gap-2 rounded-md bg-foreground/[0.04] px-3.5 py-3">
+      <Field class="min-w-0">
         <FieldLabel for="slider-invalid">Invalid</FieldLabel>
         <Slider id="slider-invalid" value="82" aria-invalid="true" aria-label="Invalid slider" />
       </Field>
@@ -176,7 +174,7 @@ const mixControls = [
     </div>
 
     <div class="playground-stage">
-      <Field class="grid w-full max-w-md gap-2">
+      <Field class="w-full max-w-md">
         <div class="flex items-baseline justify-between gap-3">
           <FieldLabel for="playground-slider">Output level</FieldLabel>
           <output

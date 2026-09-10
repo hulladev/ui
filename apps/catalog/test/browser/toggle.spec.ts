@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test"
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/#toggle", { waitUntil: "domcontentloaded" })
+  await page.goto("/forms#toggle", { waitUntil: "domcontentloaded" })
 })
 
 test("toggles a standalone native button with pointer and keyboard", async ({ page }) => {
@@ -46,7 +46,7 @@ test("coordinates independent multiple selection", async ({ page }) => {
 
 test("fits grouped controls at a narrow viewport", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto("/#toggle", { waitUntil: "domcontentloaded" })
+  await page.goto("/forms#toggle", { waitUntil: "domcontentloaded" })
 
   const preview = page.locator('[data-preview-component="toggle-preview"]')
   const box = await preview.boundingBox()

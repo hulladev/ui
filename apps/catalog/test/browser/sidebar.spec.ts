@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test"
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/#sidebar", { waitUntil: "domcontentloaded" })
+  await page.goto("/navigation-overlays#sidebar", { waitUntil: "domcontentloaded" })
 })
 
 test("preserves native landmark and navigation semantics", async ({ page }) => {
@@ -60,7 +60,7 @@ test("keeps the nested sidebar legible in dark mode", async ({ page }) => {
 
 test("fits the composed sidebar at a narrow viewport", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto("/#sidebar", { waitUntil: "domcontentloaded" })
+  await page.goto("/navigation-overlays#sidebar", { waitUntil: "domcontentloaded" })
 
   const sidebar = page.locator("#sidebar [data-slot=sidebar]").first()
   const box = await sidebar.boundingBox()

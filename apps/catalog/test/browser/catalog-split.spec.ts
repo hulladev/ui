@@ -58,7 +58,7 @@ test("stacks the example and source at a narrow viewport", async ({ page }) => {
   await expect(divider).toBeHidden()
 })
 
-test("server-renders source and highlights additional tabs without an editor runtime", async ({
+test("server-renders plain source and lazily highlights tabs without an editor runtime", async ({
   page,
 }) => {
   const pageErrors: Error[] = []
@@ -69,8 +69,8 @@ test("server-renders source and highlights additional tabs without an editor run
   await expect(source.locator("[data-source-output] code")).toContainText(
     '<ComponentPreview component="Button"'
   )
-  await expect(source.locator("[data-diagnostics]")).toHaveText("Server highlighted")
-  await expect(source).toHaveAttribute("data-source-inspector-ready", "true")
+  await expect(source).toHaveAttribute("data-source-inspector-ready", "true", { timeout: 15_000 })
+  await expect(source.locator("[data-diagnostics]")).toHaveText("Exact render")
 
   await source.getByRole("tab", { name: /Minimal/ }).click()
   await source.locator("[data-source-framework-select]").selectOption("React")
@@ -84,12 +84,17 @@ test("server-renders source and highlights additional tabs without an editor run
   await expect(
     source.locator("[data-source-output] .th-keyword", { hasText: "import" }).first()
   ).toBeVisible()
+  const distantSource = page.locator("#separator [data-source-inspector]")
+  await expect(distantSource).not.toHaveAttribute("data-source-inspector-ready", "true")
+  await page.locator('[data-catalog-nav] a[href="#separator"]').click()
+  await expect(distantSource).toHaveAttribute("data-source-inspector-ready", "true")
+  await expect(distantSource.locator("[data-diagnostics]")).toHaveAttribute("data-state", "ready")
   expect(pageErrors).toEqual([])
 })
 
 test("bounds long examples and scrolls source inside the workbench", async ({ page }) => {
   await page.setViewportSize({ height: 1200, width: 1440 })
-  await page.goto("/#select", { waitUntil: "domcontentloaded" })
+  await page.goto("/forms#select", { waitUntil: "domcontentloaded" })
 
   const workbench = page.locator("#select .workbench")
   const source = workbench.locator("[data-source-inspector]")

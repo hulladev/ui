@@ -2,16 +2,20 @@
 import { Search } from "@lucide/astro"
 import Button from "@/ui/button/button.astro"
 import Kbd from "@/ui/kbd/kbd.astro"
+import { catalogPages } from "../../data/catalogNavigation"
+type Props = { group: string; description: string; pageNumber: number }
+const { group, description, pageNumber } = Astro.props
 ---
 
 <header class="masthead">
   <div>
-    <p class="eyebrow">Component development environment</p>
-    <h1>Component foundry.</h1>
-    <p class="lede">
-      Inspect generated components under real framework compilation, switch contrast, and exercise
-      keyboard states before anything reaches the CLI source registry.
+    <p class="eyebrow">
+      Component foundry · {String(pageNumber).padStart(2, "0")} / {
+        String(catalogPages.length).padStart(2, "0")
+      }
     </p>
+    <h1>{group}.</h1>
+    <p class="lede">{description}</p>
   </div>
 
   <Button

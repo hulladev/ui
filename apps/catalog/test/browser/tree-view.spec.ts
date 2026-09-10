@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test"
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/#tree-view", { waitUntil: "domcontentloaded" })
+  await page.goto("/navigation-overlays#tree-view", { waitUntil: "domcontentloaded" })
 })
 
 test("preserves native list structure and tree roles", async ({ page }) => {
@@ -71,7 +71,7 @@ test("supports a focus-only tree without selection state", async ({ page }) => {
 
 test("fits nested content at a narrow viewport", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto("/#tree-view", { waitUntil: "domcontentloaded" })
+  await page.goto("/navigation-overlays#tree-view", { waitUntil: "domcontentloaded" })
 
   const preview = page.locator('[data-preview-component="treeview-preview"]')
   const box = await preview.boundingBox()

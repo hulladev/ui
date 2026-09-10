@@ -1,4 +1,5 @@
 ---
+import Switch from "@/ui/switch/switch.astro"
 import Collapsible from "@/ui/collapsible/collapsible.astro"
 import CollapsibleContent from "@/ui/collapsible/collapsible-content.astro"
 import Sidebar from "@/ui/sidebar/sidebar.astro"
@@ -35,13 +36,13 @@ const sidebar = manifest.library.components.sidebar
 
 <ComponentPreview
   component="Sidebar"
-  hint="Tab · Enter or Space"
+  hint="Click to select · Tab · Enter or Space"
   requirePropsView={true}
   variantsLabel="Composition"
 >
   <div slot="variants" class="sidebar-stage">
-    <Sidebar class="h-[38rem] w-[17rem] rounded-xl border border-border shadow-lg">
-      <SidebarHeader class="flex items-center gap-3">
+    <Sidebar class="h-[38rem] w-[17rem]" data-sidebar-demo>
+      <SidebarHeader>
         <span
           class="grid size-9 shrink-0 place-items-center rounded-md bg-foreground text-primary-foreground shadow-sm"
         >
@@ -124,7 +125,7 @@ const sidebar = manifest.library.components.sidebar
                 </SidebarMenuItem>
               </SidebarMenu>
 
-              <SidebarGroup class="pt-2">
+              <SidebarGroup>
                 <Collapsible open>
                   <SidebarGroupTrigger>
                     <FileText size={13} aria-hidden="true" />
@@ -180,26 +181,32 @@ const sidebar = manifest.library.components.sidebar
 
   <div slot="props" class="prop-playground">
     <div class="prop-controls prop-controls--toggles">
+      <label class="prop-control">
+        <span class="label">Hierarchy lines</span>
+        <select data-sidebar-prop-lines aria-label="Hierarchy lines">
+          <option value="nested">Nested only</option>
+          <option value="none">None</option>
+          <option value="all">All levels</option>
+        </select>
+      </label>
       <label class="prop-disabled">
-        <input type="checkbox" checked data-sidebar-prop-workspace />
-        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <Switch variant="subtle" checked data-sidebar-prop-workspace />
         <span class="label">Workspace open</span>
       </label>
       <label class="prop-disabled">
-        <input type="checkbox" checked data-sidebar-prop-projects />
-        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <Switch variant="subtle" checked data-sidebar-prop-projects />
         <span class="label">Projects open</span>
       </label>
     </div>
 
     <div class="playground-stage sidebar-playground-stage">
-      <Sidebar class="h-80 w-60 rounded-lg border border-border shadow-md">
+      <Sidebar class="h-80 w-60" data-sidebar-demo>
         <SidebarContent aria-label="Example sidebar">
           <SidebarGroup>
             <Collapsible open data-playground-sidebar-workspace>
               <SidebarGroupTrigger>Workspace</SidebarGroupTrigger>
               <CollapsibleContent>
-                <SidebarMenu>
+                <SidebarMenu lines="nested" data-playground-sidebar-menu>
                   <SidebarMenuItem>
                     <SidebarMenuLink href="#sidebar" aria-current="page">
                       Dashboard
@@ -226,7 +233,7 @@ const sidebar = manifest.library.components.sidebar
     </div>
 
     <code class="prop-readout" data-sidebar-prop-readout aria-live="polite"
-      >&lt;Collapsible open&gt;…&lt;/Collapsible&gt;</code
+      >&lt;SidebarMenu lines="nested"&gt;…&lt;/SidebarMenu&gt;</code
     >
   </div>
 
@@ -241,7 +248,27 @@ const sidebar = manifest.library.components.sidebar
     </div>
     <div class="fact">
       <dt class="label">Nesting</dt>
-      <dd>recursive · no depth limit</dd>
+      <dd>rail-aligned rows · lines: none / nested / all</dd>
     </div>
   </dl>
 </ComponentPreview>
+
+<script>
+  document.addEventListener("click", (event) => {
+    if (!(event.target instanceof Element)) return
+    const link = event.target.closest<HTMLAnchorElement>(
+      "[data-sidebar-demo] [data-slot=sidebar-menu-link]"
+    )
+    const sidebar = link?.closest("[data-sidebar-demo]")
+    if (!link || !sidebar || event.defaultPrevented) return
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+      return
+
+    event.preventDefault()
+    if (link.getAttribute("aria-disabled") === "true") return
+    sidebar.querySelectorAll("[data-slot=sidebar-menu-link][aria-current]").forEach((current) => {
+      current.removeAttribute("aria-current")
+    })
+    link.setAttribute("aria-current", "page")
+  })
+</script>

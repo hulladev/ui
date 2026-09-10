@@ -10,7 +10,7 @@ import ToggleGroup from "@/ui/toggle/toggle-group.astro"
 import Toggle from "@/ui/toggle/toggle.astro"
 ---
 
-<ToggleGroup type="multiple" defaultValue={["bold"]} aria-label="Formatting">
+<ToggleGroup type="multiple" defaultValue={["bold", "code"]} aria-label="Formatting">
   <Toggle value="bold">Bold</Toggle>
   <Toggle value="italic">Italic</Toggle>
   <Toggle value="code">Code</Toggle>
@@ -24,7 +24,7 @@ import Toggle from "@/ui/toggle/toggle.astro"
 
 export function FormattingControls() {
   return (
-    <ToggleGroup type="multiple" defaultValue={["bold"]} aria-label="Formatting">
+    <ToggleGroup type="multiple" defaultValue={["bold", "code"]} aria-label="Formatting">
       <Toggle value="bold">Bold</Toggle>
       <Toggle value="italic">Italic</Toggle>
       <Toggle value="code">Code</Toggle>
@@ -64,7 +64,7 @@ export function FormattingControls() {
 <script>
   const syncTogglePlayground = (preview: HTMLElement) => {
     const variant =
-      preview.querySelector<HTMLSelectElement>("[data-toggle-variant]")?.value ?? "default"
+      preview.querySelector<HTMLSelectElement>("[data-toggle-variant]")?.value ?? "outline"
     const size = preview.querySelector<HTMLSelectElement>("[data-toggle-size]")?.value ?? "md"
 
     preview.querySelectorAll<HTMLButtonElement>("[data-playground-toggle]").forEach((toggle) => {

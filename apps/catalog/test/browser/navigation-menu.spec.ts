@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test"
 
 test.beforeEach(async ({ page }, testInfo) => {
   if (testInfo.title.includes("narrow width")) return
-  await page.goto("/#navigation-menu", { waitUntil: "domcontentloaded" })
+  await page.goto("/navigation-overlays#navigation-menu", { waitUntil: "domcontentloaded" })
 })
 
 test("opens rich navigation content on hover and switches without a dropdown role", async ({
@@ -45,7 +45,7 @@ test("uses arrow keys across triggers and restores trigger focus with Escape", a
 
 test("keeps the active panel inside the viewport at narrow width", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto("/#navigation-menu", { waitUntil: "domcontentloaded" })
+  await page.goto("/navigation-overlays#navigation-menu", { waitUntil: "domcontentloaded" })
 
   const navigation = page.getByRole("navigation", { name: "Primary navigation" })
   await expect(navigation).toHaveAttribute("data-state", "closed")

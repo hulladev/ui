@@ -15,6 +15,7 @@ import SidebarMenuItem from "@/ui/sidebar/sidebar-menu-item.astro"
 import SidebarMenuLink from "@/ui/sidebar/sidebar-menu-link.astro"
 import Switch from "@/ui/switch/switch.astro"
 import {
+  getCatalogSectionHref,
   catalogResources,
   catalogSectionGroups,
   catalogSections,
@@ -22,11 +23,12 @@ import {
 } from "../../data/catalogNavigation"
 
 type Props = {
+  group: CatalogSectionGroup
   frameworkCount: number
   schemaVersion: number
 }
 
-const { frameworkCount, schemaVersion } = Astro.props
+const { group: currentGroup, frameworkCount, schemaVersion } = Astro.props
 
 const catalogGroupIcons = {
   Foundations: Boxes,
@@ -79,8 +81,12 @@ const catalogGroupIcons = {
                     return (
                       <SidebarMenuItem>
                         <SidebarMenuLink
-                          href={href}
-                          aria-current={index === 0 ? "page" : undefined}
+                          href={getCatalogSectionHref({ group, href }, currentGroup)}
+                          aria-current={
+                            group === currentGroup && href === groupSections[0]?.href
+                              ? "page"
+                              : undefined
+                          }
                         >
                           <GroupIcon aria-hidden="true" />
                           <span>{label}</span>

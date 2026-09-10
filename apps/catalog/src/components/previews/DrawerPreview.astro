@@ -1,0 +1,128 @@
+---
+import Button from "@/ui/button/button.astro"
+import Dialog from "@/ui/dialog/dialog.astro"
+import DialogHeader from "@/ui/dialog/dialog-header.astro"
+import DialogTitle from "@/ui/dialog/dialog-title.astro"
+import DialogDescription from "@/ui/dialog/dialog-description.astro"
+import DialogFooter from "@/ui/dialog/dialog-footer.astro"
+import Drawer from "@/ui/drawer/drawer.astro"
+import Input from "@/ui/input/input.astro"
+import Label from "@/ui/field/field-label.astro"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const sides = ["right", "left", "top", "bottom"] as const
+---
+
+<ComponentPreview
+  component="Drawer"
+  hint="160 ms edge slide · Escape closes"
+  requirePropsView={true}
+>
+  <div slot="variants" class="flex flex-wrap gap-3">
+    {
+      sides.map((side) => (
+        <Button variant="outline" data-open-drawer={side}>
+          Open {side}
+        </Button>
+      ))
+    }
+  </div>
+  <div slot="props" class="prop-playground">
+    <div class="prop-controls">
+      <label class="prop-control"
+        ><span class="label">Side</span><select aria-label="Drawer side" data-drawer-side
+          >{sides.map((side) => <option value={side}>{side}</option>)}</select
+        ></label
+      >
+      <label class="prop-control"
+        ><span class="label">Dismissible</span><input
+          type="checkbox"
+          checked
+          data-drawer-dismissible
+        /></label
+      >
+    </div>
+    <div class="playground-stage"><Button data-open-drawer-props>Open drawer</Button></div>
+  </div>
+</ComponentPreview>
+
+{
+  sides.map((side) => (
+    <Drawer
+      id={`catalog-drawer-${side}`}
+      hidden
+      side={side}
+      aria-labelledby={`drawer-${side}-title`}
+      aria-describedby={`drawer-${side}-description`}
+    >
+      <DialogHeader>
+        <DialogTitle id={`drawer-${side}-title`}>Release details</DialogTitle>
+        <DialogDescription id={`drawer-${side}-description`}>
+          Review this release while keeping your place on the page.
+        </DialogDescription>
+      </DialogHeader>
+      <div class="grid gap-2">
+        <Label for={`drawer-${side}-name`}>Release name</Label>
+        <Input id={`drawer-${side}-name`} value="September update" />
+      </div>
+      <DialogFooter>
+        <Button variant="outline" data-close-drawer>
+          Close
+        </Button>
+        <Button data-drawer-confirm>Review release</Button>
+      </DialogFooter>
+    </Drawer>
+  ))
+}
+
+<Dialog id="drawer-confirm-dialog" hidden aria-labelledby="drawer-confirm-title">
+  <DialogHeader>
+    <DialogTitle id="drawer-confirm-title">Ready to publish?</DialogTitle>
+    <DialogDescription>This dialog shares the drawer’s focus and dismissal stack.</DialogDescription
+    >
+  </DialogHeader>
+  <DialogFooter><Button data-close-drawer-confirm>Return to drawer</Button></DialogFooter>
+</Dialog>
+
+<script>
+  import { onDialogDismiss } from "@/ui/lib/dialog"
+
+  const drawers = document.querySelectorAll<HTMLElement>("[id^='catalog-drawer-']")
+  const confirm = document.querySelector<HTMLElement>("#drawer-confirm-dialog")
+  // Keep fixed overlays outside ancestors that establish a containing block.
+  drawers.forEach((drawer) => {
+    document.body.append(drawer)
+    const close = () => {
+      drawer.hidden = true
+    }
+    onDialogDismiss(drawer, close)
+    drawer.querySelector("[data-close-drawer]")?.addEventListener("click", close)
+    drawer.querySelector("[data-drawer-confirm]")?.addEventListener("click", () => {
+      if (confirm) confirm.hidden = false
+    })
+  })
+  if (confirm) {
+    document.body.append(confirm)
+    const close = () => {
+      confirm.hidden = true
+    }
+    onDialogDismiss(confirm, close)
+    confirm.querySelector("[data-close-drawer-confirm]")?.addEventListener("click", close)
+  }
+  const open = (side: string, dismissible = true) => {
+    const drawer = document.getElementById(`catalog-drawer-${side}`)
+    if (drawer) {
+      drawer.dataset.dismissible = String(dismissible)
+      drawer.hidden = false
+    }
+  }
+  document.querySelectorAll<HTMLElement>("[data-open-drawer]").forEach((button) => {
+    button.addEventListener("click", () => open(button.dataset.openDrawer ?? "right"))
+  })
+  document.querySelector("[data-open-drawer-props]")?.addEventListener("click", () => {
+    open(
+      document.querySelector<HTMLSelectElement>("[data-drawer-side]")?.value ?? "right",
+      document.querySelector<HTMLInputElement>("[data-drawer-dismissible]")?.checked ?? true
+    )
+  })
+</script>

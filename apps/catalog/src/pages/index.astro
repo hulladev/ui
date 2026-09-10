@@ -1,158 +1,30 @@
 ---
-import AccordionCatalog from "../components/catalog/AccordionCatalog.astro"
-import AlertCatalog from "../components/catalog/AlertCatalog.astro"
+import CatalogLayout from "../layouts/CatalogLayout.astro"
+import ButtonCatalog from "../components/catalog/ButtonCatalog.astro"
 import AvatarCatalog from "../components/catalog/AvatarCatalog.astro"
 import BadgeCatalog from "../components/catalog/BadgeCatalog.astro"
 import BreadcrumbsCatalog from "../components/catalog/BreadcrumbsCatalog.astro"
-import ButtonCatalog from "../components/catalog/ButtonCatalog.astro"
-import CardCatalog from "../components/catalog/CardCatalog.astro"
-import CalendarCatalog from "../components/catalog/CalendarCatalog.astro"
-import CatalogHeader from "../components/catalog/CatalogHeader.astro"
-import CatalogCommand from "../components/catalog/CatalogCommand.astro"
-import CatalogRail from "../components/catalog/CatalogRail.astro"
-import CheckboxCatalog from "../components/catalog/CheckboxCatalog.astro"
-import CodeCatalog from "../components/catalog/CodeCatalog.astro"
-import ComboboxCatalog from "../components/catalog/ComboboxCatalog.astro"
-import CommandCatalog from "../components/catalog/CommandCatalog.astro"
-import CollapsibleCatalog from "../components/catalog/CollapsibleCatalog.astro"
-import DatePickerCatalog from "../components/catalog/DatePickerCatalog.astro"
-import DialogCatalog from "../components/catalog/DialogCatalog.astro"
-import DraggableCatalog from "../components/catalog/DraggableCatalog.astro"
-import DropdownMenuCatalog from "../components/catalog/DropdownMenuCatalog.astro"
-import FieldCatalog from "../components/catalog/FieldCatalog.astro"
-import HoverCardCatalog from "../components/catalog/HoverCardCatalog.astro"
-import InputCatalog from "../components/catalog/InputCatalog.astro"
-import KbdCatalog from "../components/catalog/KbdCatalog.astro"
-import MeterCatalog from "../components/catalog/MeterCatalog.astro"
-import NavigationMenuCatalog from "../components/catalog/NavigationMenuCatalog.astro"
 import PaginationCatalog from "../components/catalog/PaginationCatalog.astro"
-import PopoverCatalog from "../components/catalog/PopoverCatalog.astro"
-import ProgressCatalog from "../components/catalog/ProgressCatalog.astro"
-import RadioCatalog from "../components/catalog/RadioCatalog.astro"
-import ResizableCatalog from "../components/catalog/ResizableCatalog.astro"
-import SelectCatalog from "../components/catalog/SelectCatalog.astro"
-import SeparatorCatalog from "../components/catalog/SeparatorCatalog.astro"
-import SidebarCatalog from "../components/catalog/SidebarCatalog.astro"
+import KbdCatalog from "../components/catalog/KbdCatalog.astro"
+import CodeCatalog from "../components/catalog/CodeCatalog.astro"
 import SkeletonCatalog from "../components/catalog/SkeletonCatalog.astro"
 import SpinnerCatalog from "../components/catalog/SpinnerCatalog.astro"
-import SwitchCatalog from "../components/catalog/SwitchCatalog.astro"
-import TableCatalog from "../components/catalog/TableCatalog.astro"
-import TabsCatalog from "../components/catalog/TabsCatalog.astro"
-import TextareaCatalog from "../components/catalog/TextareaCatalog.astro"
-import TimePickerCatalog from "../components/catalog/TimePickerCatalog.astro"
-import SliderCatalog from "../components/catalog/SliderCatalog.astro"
-import ToastCatalog from "../components/catalog/ToastCatalog.astro"
-import TooltipCatalog from "../components/catalog/TooltipCatalog.astro"
-import ToggleCatalog from "../components/catalog/ToggleCatalog.astro"
-import TreeViewCatalog from "../components/catalog/TreeViewCatalog.astro"
-import {
-  catalogSections,
-  getCatalogSectionId,
-  type CatalogSectionId,
-} from "../data/catalogNavigation"
-import manifest from "../../../../generated/ui.manifest.json"
-import "../styles/catalog.css"
-
-const frameworkCount = Object.keys(manifest.library.frameworks).length
-
-// Keep rendered catalog sections exhaustive with the shared sidebar and command registry.
-const catalogComponents = {
-  accordion: AccordionCatalog,
-  alert: AlertCatalog,
-  avatar: AvatarCatalog,
-  badge: BadgeCatalog,
-  breadcrumbs: BreadcrumbsCatalog,
-  button: ButtonCatalog,
-  calendar: CalendarCatalog,
-  card: CardCatalog,
-  checkbox: CheckboxCatalog,
-  code: CodeCatalog,
-  collapsible: CollapsibleCatalog,
-  combobox: ComboboxCatalog,
-  command: CommandCatalog,
-  "date-picker": DatePickerCatalog,
-  dialog: DialogCatalog,
-  draggable: DraggableCatalog,
-  "dropdown-menu": DropdownMenuCatalog,
-  field: FieldCatalog,
-  "hover-card": HoverCardCatalog,
-  input: InputCatalog,
-  kbd: KbdCatalog,
-  meter: MeterCatalog,
-  "navigation-menu": NavigationMenuCatalog,
-  pagination: PaginationCatalog,
-  popover: PopoverCatalog,
-  progress: ProgressCatalog,
-  radio: RadioCatalog,
-  resizable: ResizableCatalog,
-  select: SelectCatalog,
-  separator: SeparatorCatalog,
-  sidebar: SidebarCatalog,
-  skeleton: SkeletonCatalog,
-  spinner: SpinnerCatalog,
-  slider: SliderCatalog,
-  switch: SwitchCatalog,
-  table: TableCatalog,
-  tabs: TabsCatalog,
-  textarea: TextareaCatalog,
-  "time-picker": TimePickerCatalog,
-  toast: ToastCatalog,
-  toggle: ToggleCatalog,
-  tooltip: TooltipCatalog,
-  "tree-view": TreeViewCatalog,
-} satisfies Record<CatalogSectionId, unknown>
-
-const catalogComponentSections = catalogSections.map((section) => ({
-  ...section,
-  Component: catalogComponents[getCatalogSectionId(section.href)],
-}))
+import ProgressCatalog from "../components/catalog/ProgressCatalog.astro"
+import MeterCatalog from "../components/catalog/MeterCatalog.astro"
+import SeparatorCatalog from "../components/catalog/SeparatorCatalog.astro"
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta
-      name="description"
-      content="Development catalog for inspecting Hulla UI components and generated framework output."
-    />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <title>Hulla UI — Component Foundry</title>
-  </head>
-  <body>
-    <a class="skip-link" href="#main">Skip to component canvas</a>
-    <div class="shell">
-      <CatalogRail frameworkCount={frameworkCount} schemaVersion={manifest.schemaVersion} />
-
-      <main class="content" id="main">
-        <CatalogHeader />
-        {catalogComponentSections.map(({ Component }) => <Component />)}
-      </main>
-    </div>
-    <CatalogCommand />
-
-    <script>
-      const contrastToggle = document.querySelector<HTMLInputElement>("#contrast")
-      const sectionLinks = Array.from(
-        document.querySelectorAll<HTMLAnchorElement>(
-          '[data-catalog-nav] [data-slot="sidebar-menu-link"][href^="#"]'
-        )
-      )
-
-      const syncSectionNavigation = () => {
-        const activeHash = window.location.hash || "#button"
-        sectionLinks.forEach((link) => {
-          if (link.hash === activeHash) link.setAttribute("aria-current", "page")
-          else link.removeAttribute("aria-current")
-        })
-      }
-
-      contrastToggle?.addEventListener("change", () => {
-        document.documentElement.dataset.theme = contrastToggle.checked ? "dark" : "light"
-      })
-      window.addEventListener("hashchange", syncSectionNavigation)
-      syncSectionNavigation()
-    </script>
-  </body>
-</html>
+<CatalogLayout group="Foundations">
+  <ButtonCatalog />
+  <AvatarCatalog />
+  <BadgeCatalog />
+  <BreadcrumbsCatalog />
+  <PaginationCatalog />
+  <KbdCatalog />
+  <CodeCatalog />
+  <SkeletonCatalog />
+  <SpinnerCatalog />
+  <ProgressCatalog />
+  <MeterCatalog />
+  <SeparatorCatalog />
+</CatalogLayout>

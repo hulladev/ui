@@ -77,42 +77,11 @@ export function SaveStatus() {
 </section>
 
 <script>
-  const spinnerClasses = {
-    size: {
-      sm: "size-4",
-      md: "size-5",
-      lg: "size-7",
-    },
-    tone: {
-      foreground: "text-foreground",
-      primary: "text-primary",
-      success: "text-success",
-    },
-  } as const
-
-  const syncSpinnerPlayground = (preview: HTMLElement) => {
-    const size = preview.querySelector<HTMLSelectElement>("[data-spinner-size]")?.value ?? "sm"
-    const tone =
-      preview.querySelector<HTMLSelectElement>("[data-spinner-tone]")?.value ?? "foreground"
-
-    preview.querySelectorAll<SVGElement>("[data-playground-spinner]").forEach((spinner) => {
-      spinner.toggleAttribute(
-        "hidden",
-        spinner.dataset.size !== size || spinner.dataset.tone !== tone
-      )
-    })
-
-    const readout = preview.querySelector<HTMLElement>("[data-spinner-readout]")
-    const sizeClass = spinnerClasses.size[size as keyof typeof spinnerClasses.size]
-    const toneClass = spinnerClasses.tone[tone as keyof typeof spinnerClasses.tone]
-    if (readout) readout.textContent = `<Spinner className="${sizeClass} ${toneClass}" />`
-  }
-
-  document.addEventListener("change", (event) => {
-    const control = (event.target as HTMLElement).closest(
-      "[data-spinner-size], [data-spinner-tone]"
-    )
-    const preview = control?.closest<HTMLElement>('[data-preview-component="spinner-preview"]')
-    if (preview) syncSpinnerPlayground(preview)
+  document.addEventListener("input", (event) => {
+    const control = event.target as HTMLInputElement
+    if (!control.matches("[data-spinner-label]")) return
+    const preview = control.closest('[data-preview-component="spinner-preview"]')
+    const status = preview?.querySelector("[data-spinner-status]")
+    if (status) status.textContent = control.value
   })
 </script>

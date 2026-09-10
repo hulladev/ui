@@ -23,7 +23,7 @@ import SidebarMenuLink from "@/ui/sidebar/sidebar-menu-link.astro"
       <Collapsible open>
         <SidebarGroupTrigger>Projects</SidebarGroupTrigger>
         <CollapsibleContent>
-          <SidebarMenu>
+          <SidebarMenu lines="all">
             <SidebarMenuItem>
               <SidebarMenuLink href="/launchpad" aria-current="page">
                 Launchpad
@@ -62,7 +62,7 @@ export function AppSidebar() {
           <Collapsible open>
             <SidebarGroupTrigger>Projects</SidebarGroupTrigger>
             <CollapsibleContent>
-              <SidebarMenu>
+              <SidebarMenu lines="all">
                 <SidebarMenuItem>
                   <SidebarMenuLink href="/launchpad" aria-current="page">
                     Launchpad
@@ -108,6 +108,9 @@ export function AppSidebar() {
 
 <script>
   const syncSidebarPlayground = (preview: HTMLElement) => {
+    const lines =
+      preview.querySelector<HTMLSelectElement>("[data-sidebar-prop-lines]")?.value ?? "nested"
+    preview.querySelector("[data-playground-sidebar-menu]")?.setAttribute("data-lines", lines)
     const workspaceOpen =
       preview.querySelector<HTMLInputElement>("[data-sidebar-prop-workspace]")?.checked ?? true
     const projectsOpen =
@@ -122,7 +125,7 @@ export function AppSidebar() {
 
     const readout = preview.querySelector<HTMLElement>("[data-sidebar-prop-readout]")
     if (readout) {
-      readout.textContent = `Workspace: ${workspaceOpen ? "open" : "closed"} · Projects: ${
+      readout.textContent = `Lines: ${lines} · Workspace: ${workspaceOpen ? "open" : "closed"} · Projects: ${
         projectsOpen ? "open" : "closed"
       }`
     }
@@ -130,7 +133,7 @@ export function AppSidebar() {
 
   document.addEventListener("input", (event) => {
     const control = (event.target as HTMLElement).closest(
-      "[data-sidebar-prop-workspace], [data-sidebar-prop-projects]"
+      "[data-sidebar-prop-workspace], [data-sidebar-prop-projects], [data-sidebar-prop-lines]"
     )
     const preview = control?.closest<HTMLElement>('[data-preview-component="sidebar-preview"]')
     if (preview) syncSidebarPlayground(preview)

@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test"
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/#tabs", { waitUntil: "domcontentloaded" })
+  await page.goto("/navigation-overlays#tabs", { waitUntil: "domcontentloaded" })
 })
 
 test("links tabs and panels with one selected value", async ({ page }) => {
@@ -54,7 +54,7 @@ test("manual vertical tabs move focus before activation", async ({ page }) => {
 
 test("fits horizontal and vertical tabs at a narrow viewport", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto("/#tabs", { waitUntil: "domcontentloaded" })
+  await page.goto("/navigation-overlays#tabs", { waitUntil: "domcontentloaded" })
 
   const preview = page.locator('[data-preview-component="tabs-preview"]')
   const box = await preview.boundingBox()

@@ -1,18 +1,33 @@
 ---
-import AvatarFallback from "../../../../generated/astro/avatar/avatar-fallback.astro"
-import Avatar from "../../../../generated/astro/avatar/avatar.astro"
-import Button from "../../../../generated/astro/button/button.astro"
-import DialogDescription from "../../../../generated/astro/dialog/dialog-description.astro"
-import DialogFooter from "../../../../generated/astro/dialog/dialog-footer.astro"
-import DialogHeader from "../../../../generated/astro/dialog/dialog-header.astro"
-import DialogTitle from "../../../../generated/astro/dialog/dialog-title.astro"
-import Dialog from "../../../../generated/astro/dialog/dialog.astro"
-import Kbd from "../../../../generated/astro/kbd/kbd.astro"
-import NavigationMenuItem from "../../../../generated/astro/navigation-menu/navigation-menu-item.astro"
-import NavigationMenuLink from "../../../../generated/astro/navigation-menu/navigation-menu-link.astro"
-import NavigationMenuList from "../../../../generated/astro/navigation-menu/navigation-menu-list.astro"
-import NavigationMenu from "../../../../generated/astro/navigation-menu/navigation-menu.astro"
-import Switch from "../../../../generated/astro/switch/switch.astro"
+import AlertDescription from "@/ui/alert/alert-description.astro"
+import AlertTitle from "@/ui/alert/alert-title.astro"
+import Alert from "@/ui/alert/alert.astro"
+import Skeleton from "@/ui/skeleton/skeleton.astro"
+import InputAdornment from "@/ui/input/input-adornment.astro"
+import InputGroup from "@/ui/input/input-group.astro"
+import Input from "@/ui/input/input.astro"
+import Badge from "@/ui/badge/badge.astro"
+import SidebarMenuLink from "@/ui/sidebar/sidebar-menu-link.astro"
+import SidebarMenuItem from "@/ui/sidebar/sidebar-menu-item.astro"
+import SidebarMenu from "@/ui/sidebar/sidebar-menu.astro"
+import SidebarGroupLabel from "@/ui/sidebar/sidebar-group-label.astro"
+import SidebarGroup from "@/ui/sidebar/sidebar-group.astro"
+import SidebarContent from "@/ui/sidebar/sidebar-content.astro"
+import Sidebar from "@/ui/sidebar/sidebar.astro"
+import AvatarFallback from "@/ui/avatar/avatar-fallback.astro"
+import Avatar from "@/ui/avatar/avatar.astro"
+import Button from "@/ui/button/button.astro"
+import DialogDescription from "@/ui/dialog/dialog-description.astro"
+import DialogFooter from "@/ui/dialog/dialog-footer.astro"
+import DialogHeader from "@/ui/dialog/dialog-header.astro"
+import DialogTitle from "@/ui/dialog/dialog-title.astro"
+import Dialog from "@/ui/dialog/dialog.astro"
+import Kbd from "@/ui/kbd/kbd.astro"
+import NavigationMenuItem from "@/ui/navigation-menu/navigation-menu-item.astro"
+import NavigationMenuLink from "@/ui/navigation-menu/navigation-menu-link.astro"
+import NavigationMenuList from "@/ui/navigation-menu/navigation-menu-list.astro"
+import NavigationMenu from "@/ui/navigation-menu/navigation-menu.astro"
+import Switch from "@/ui/switch/switch.astro"
 import "../styles/showcase.css"
 
 const activity = [
@@ -59,32 +74,31 @@ const integrations = ["Linear", "Notion", "Slack", "Figma", "Drive"]
         <span>ORBIT</span>
       </a>
 
-      <NavigationMenu class="site-links" aria-label="Primary navigation">
-        <NavigationMenuList class="m-0 gap-7 bg-transparent p-0 shadow-none ring-0">
-          <NavigationMenuItem>
-            <NavigationMenuLink class="p-0 hover:bg-transparent active:translate-y-0" href="#system"
-              >System</NavigationMenuLink
-            >
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuLink class="p-0 hover:bg-transparent active:translate-y-0" href="#method"
-              >Method</NavigationMenuLink
-            >
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              class="p-0 hover:bg-transparent active:translate-y-0"
-              href="#stories">Stories</NavigationMenuLink
-            >
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
+      <div class="site-links">
+        <NavigationMenu data-showcase-component aria-label="Primary navigation">
+          <NavigationMenuList data-showcase-component>
+            <NavigationMenuItem data-showcase-component>
+              <NavigationMenuLink data-showcase-component href="#system">System</NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem data-showcase-component>
+              <NavigationMenuLink data-showcase-component href="#method">Method</NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem data-showcase-component>
+              <NavigationMenuLink data-showcase-component href="#stories"
+                >Stories</NavigationMenuLink
+              >
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
 
       <div class="nav-actions">
-        <span class="system-state"><span></span>Systems nominal</span>
+        <div class="system-state">
+          <Badge data-showcase-component variant="success" size="sm">Systems nominal</Badge>
+        </div>
         <label class="theme-switch" for="theme-toggle">
           <span class="sr-only">Use light theme</span>
-          <Switch id="theme-toggle" />
+          <Switch data-showcase-component id="theme-toggle" />
         </label>
         <a class="nav-cta" href="#start">Open workspace <span aria-hidden="true">↗</span></a>
       </div>
@@ -127,35 +141,62 @@ const integrations = ["Linear", "Notion", "Slack", "Figma", "Drive"]
               </div>
               <div class="window-meta">
                 <span>Friday · 09:42</span>
-                <Avatar class="window-avatar" size="sm" role="img" aria-label="Samuel Hulla">
-                  <AvatarFallback>SH</AvatarFallback>
+                <Avatar data-showcase-component size="sm" role="img" aria-label="Samuel Hulla">
+                  <AvatarFallback data-showcase-component>SH</AvatarFallback>
                 </Avatar>
               </div>
             </header>
 
             <div class="workspace-body">
-              <aside class="workspace-rail" aria-label="Preview navigation">
-                <p class="rail-label">Space</p>
-                <a class="rail-item rail-item--active" href="#system">
-                  <span class="rail-glyph">◉</span><span>Briefing</span>
-                  <Kbd class="border-0 bg-transparent p-0 shadow-none">1</Kbd>
-                </a>
-                <a class="rail-item" href="#system">
-                  <span class="rail-glyph">⌁</span><span>Signals</span>
-                  <Kbd class="border-0 bg-transparent p-0 shadow-none">2</Kbd>
-                </a>
-                <a class="rail-item" href="#system">
-                  <span class="rail-glyph">◎</span><span>Outcomes</span>
-                  <Kbd class="border-0 bg-transparent p-0 shadow-none">3</Kbd>
-                </a>
-                <p class="rail-label rail-label--spaced">Watching</p>
-                <a class="rail-item" href="#system">
-                  <span class="project-dot project-dot--blue"></span><span>Launch</span><em>7</em>
-                </a>
-                <a class="rail-item" href="#system">
-                  <span class="project-dot project-dot--green"></span><span>Atlas</span><em>3</em>
-                </a>
-              </aside>
+              <div class="workspace-rail">
+                <Sidebar data-showcase-component class="w-full">
+                  <SidebarContent data-showcase-component aria-label="Preview navigation">
+                    <SidebarGroup data-showcase-component
+                      ><SidebarGroupLabel data-showcase-component>Space</SidebarGroupLabel
+                      ><SidebarMenu data-showcase-component
+                        ><SidebarMenuItem data-showcase-component
+                          ><SidebarMenuLink
+                            data-showcase-component
+                            href="#system"
+                            aria-current="page"
+                            ><span>Briefing</span><Kbd data-showcase-component>1</Kbd
+                            ></SidebarMenuLink
+                          ></SidebarMenuItem
+                        >
+                        <SidebarMenuItem data-showcase-component
+                          ><SidebarMenuLink data-showcase-component href="#system"
+                            ><span>Signals</span><Kbd data-showcase-component>2</Kbd
+                            ></SidebarMenuLink
+                          ></SidebarMenuItem
+                        >
+                        <SidebarMenuItem data-showcase-component
+                          ><SidebarMenuLink data-showcase-component href="#system"
+                            ><span>Outcomes</span><Kbd data-showcase-component>3</Kbd
+                            ></SidebarMenuLink
+                          ></SidebarMenuItem
+                        ></SidebarMenu
+                      ></SidebarGroup
+                    >
+                    <SidebarGroup data-showcase-component
+                      ><SidebarGroupLabel data-showcase-component>Watching</SidebarGroupLabel
+                      ><SidebarMenu data-showcase-component>
+                        <SidebarMenuItem data-showcase-component
+                          ><SidebarMenuLink data-showcase-component href="#system"
+                            ><span>Launch</span><Badge data-showcase-component size="sm">7</Badge
+                            ></SidebarMenuLink
+                          ></SidebarMenuItem
+                        >
+                        <SidebarMenuItem data-showcase-component
+                          ><SidebarMenuLink data-showcase-component href="#system"
+                            ><span>Atlas</span><Badge data-showcase-component size="sm">3</Badge
+                            ></SidebarMenuLink
+                          ></SidebarMenuItem
+                        >
+                      </SidebarMenu></SidebarGroup
+                    >
+                  </SidebarContent>
+                </Sidebar>
+              </div>
 
               <div class="briefing">
                 <div class="briefing-head">
@@ -163,7 +204,7 @@ const integrations = ["Linear", "Notion", "Slack", "Figma", "Drive"]
                     <p class="micro-label">Executive briefing / 014</p>
                     <h2>Good morning, Sam.</h2>
                   </div>
-                  <span class="briefing-status"><span></span>Live</span>
+                  <Badge data-showcase-component variant="success" size="sm">Live</Badge>
                 </div>
 
                 <div class="signal-summary">
@@ -176,21 +217,30 @@ const integrations = ["Linear", "Notion", "Slack", "Figma", "Drive"]
                       The launch remains on track. One dependency needs a decision before 14:00.
                     </p>
                     <div class="summary-tags">
-                      <span>12 sources read</span><span>3 changes</span><span>1 decision</span>
+                      <Badge data-showcase-component size="sm">12 sources read</Badge><Badge
+                        data-showcase-component
+                        size="sm">3 changes</Badge
+                      ><Badge data-showcase-component size="sm">1 decision</Badge>
                     </div>
                   </div>
                 </div>
 
                 <div class="priority-card">
-                  <div class="priority-icon" aria-hidden="true">!</div>
-                  <div>
-                    <p class="micro-label">Decision needed</p>
-                    <h3>Confirm the migration window</h3>
-                    <p>Platform and Support are aligned. Customer Success needs final timing.</p>
-                  </div>
-                  <Button variant="outline" size="sm" aria-label="Open decision" data-open-decision
-                    >↗</Button
-                  >
+                  <Alert data-showcase-component variant="warning">
+                    <AlertTitle data-showcase-component>Confirm the migration window</AlertTitle>
+                    <AlertDescription data-showcase-component
+                      >Platform and Support are aligned. Customer Success needs final timing.</AlertDescription
+                    >
+                    <div class="mt-3">
+                      <Button
+                        data-showcase-component
+                        variant="outline"
+                        size="sm"
+                        aria-label="Open decision"
+                        data-open-decision>Open decision ↗</Button
+                      >
+                    </div>
+                  </Alert>
                 </div>
 
                 <div class="activity-list">
@@ -211,10 +261,17 @@ const integrations = ["Linear", "Notion", "Slack", "Figma", "Drive"]
             </div>
 
             <footer class="command-dock">
-              <span class="command-add" aria-hidden="true">+</span>
-              <span class="command-placeholder">Ask Orbit about your workspace…</span>
-              <Kbd class="border-0 bg-transparent p-0 shadow-none">⌘ K</Kbd>
-              <Button variant="outline" size="sm">Run <span aria-hidden="true">↗</span></Button>
+              <InputGroup data-showcase-component>
+                <Input
+                  data-showcase-component
+                  aria-label="Ask Orbit"
+                  placeholder="Ask Orbit about your workspace…"
+                />
+                <InputAdornment data-showcase-component
+                  ><Kbd data-showcase-component>⌘ K</Kbd></InputAdornment
+                >
+                <Button data-showcase-component variant="outline" size="sm">Run ↗</Button>
+              </InputGroup>
             </footer>
           </article>
 
@@ -230,7 +287,7 @@ const integrations = ["Linear", "Notion", "Slack", "Figma", "Drive"]
               <small>Quick command</small>
               <strong>Prepare the Monday brief</strong>
             </div>
-            <Kbd class="border-0 bg-transparent p-0 shadow-none">↵</Kbd>
+            <Kbd data-showcase-component>↵</Kbd>
           </aside>
         </div>
       </section>
@@ -286,10 +343,13 @@ const integrations = ["Linear", "Notion", "Slack", "Figma", "Drive"]
             <div class="mini-command">
               <span class="command-symbol" aria-hidden="true">⌘</span>
               <span>What is blocking launch?</span>
-              <Kbd class="border-0 bg-transparent p-0 shadow-none">↵</Kbd>
+              <Kbd data-showcase-component>↵</Kbd>
             </div>
             <div class="answer-stack">
-              <span></span><span></span><span></span>
+              <Skeleton data-showcase-component class="h-2 w-[92%]" /><Skeleton
+                data-showcase-component
+                class="h-2 w-[78%]"
+              /><Skeleton data-showcase-component class="h-2 w-[56%]" />
             </div>
           </article>
 
@@ -358,8 +418,8 @@ const integrations = ["Linear", "Notion", "Slack", "Figma", "Drive"]
           that energy deciding, not reconstructing.
         </blockquote>
         <div class="story-person">
-          <Avatar size="lg" role="img" aria-label="Ana Rios">
-            <AvatarFallback>AR</AvatarFallback>
+          <Avatar data-showcase-component size="lg" role="img" aria-label="Ana Rios">
+            <AvatarFallback data-showcase-component>AR</AvatarFallback>
           </Avatar>
           <div><strong>Ana Rios</strong><small>VP Operations · Northline</small></div>
         </div>
@@ -392,15 +452,18 @@ const integrations = ["Linear", "Notion", "Slack", "Figma", "Drive"]
     </footer>
 
     <Dialog
+      data-showcase-component
       id="decision-dialog"
       hidden
       aria-labelledby="decision-title"
       aria-describedby="decision-description"
     >
-      <DialogHeader>
+      <DialogHeader data-showcase-component>
         <p class="micro-label">Decision / Migration window</p>
-        <DialogTitle id="decision-title">Confirm the migration window</DialogTitle>
-        <DialogDescription id="decision-description">
+        <DialogTitle data-showcase-component id="decision-title"
+          >Confirm the migration window</DialogTitle
+        >
+        <DialogDescription data-showcase-component id="decision-description">
           Platform and Support are ready for the proposed window. Confirming now will notify
           Customer Success and schedule the operational checklist.
         </DialogDescription>
@@ -417,36 +480,39 @@ const integrations = ["Linear", "Notion", "Slack", "Figma", "Drive"]
         </div>
       </div>
 
-      <DialogFooter>
-        <Button variant="outline" data-close-decision>Not yet</Button>
-        <Button variant="secondary" data-open-impact>Review impact</Button>
-        <Button data-confirm-decision>Confirm window</Button>
+      <DialogFooter data-showcase-component>
+        <Button data-showcase-component variant="outline" data-close-decision>Not yet</Button>
+        <Button data-showcase-component variant="secondary" data-open-impact>Review impact</Button>
+        <Button data-showcase-component data-confirm-decision>Confirm window</Button>
       </DialogFooter>
     </Dialog>
 
     <Dialog
+      data-showcase-component
       id="impact-dialog"
       contentClass="max-w-md"
       hidden
       aria-labelledby="impact-title"
       aria-describedby="impact-description"
     >
-      <DialogHeader>
+      <DialogHeader data-showcase-component>
         <p class="micro-label">Nested layer / Impact</p>
-        <DialogTitle id="impact-title">Twelve minutes, read-only.</DialogTitle>
-        <DialogDescription id="impact-description">
+        <DialogTitle data-showcase-component id="impact-title"
+          >Twelve minutes, read-only.</DialogTitle
+        >
+        <DialogDescription data-showcase-component id="impact-description">
           Active sessions remain connected. Writes queue automatically and resume when the migration
           completes.
         </DialogDescription>
       </DialogHeader>
 
-      <DialogFooter>
-        <Button autofocus data-close-impact>Back to decision</Button>
+      <DialogFooter data-showcase-component>
+        <Button data-showcase-component autofocus data-close-impact>Back to decision</Button>
       </DialogFooter>
     </Dialog>
 
     <script>
-      import { onDialogDismiss } from "../../../../generated/astro/lib/dialog"
+      import { onDialogDismiss } from "@/ui/lib/dialog"
 
       const toggle = document.querySelector<HTMLInputElement>("#theme-toggle")
       const decisionDialog = document.querySelector<HTMLElement>("#decision-dialog")

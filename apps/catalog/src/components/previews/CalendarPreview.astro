@@ -1,4 +1,5 @@
 ---
+import Switch from "@/ui/switch/switch.astro"
 import Calendar from "@/ui/calendar/calendar.astro"
 import manifest from "../../../../../generated/ui.manifest.json"
 import ComponentPreview from "../ComponentPreview.astro"
@@ -21,11 +22,7 @@ const unavailableDates = [{ start: "2026-07-20", end: "2026-07-22" }, "2026-07-2
         >
         <span class="text-xs text-muted-foreground">ISO value · localized display</span>
       </div>
-      <Calendar
-        defaultValue="2026-07-30"
-        today="2026-07-30"
-        class="mx-auto border border-border bg-surface shadow-xs"
-      />
+      <Calendar defaultValue="2026-07-30" today="2026-07-30" class="mx-auto" />
     </div>
 
     <div class="grid content-start gap-3">
@@ -40,7 +37,7 @@ const unavailableDates = [{ start: "2026-07-20", end: "2026-07-22" }, "2026-07-2
         defaultValue={{ start: "2026-07-28", end: "2026-08-02" }}
         disabledDates={unavailableDates}
         today="2026-07-30"
-        class="mx-auto border border-border bg-surface shadow-xs"
+        class="mx-auto"
       />
     </div>
   </div>
@@ -67,8 +64,7 @@ const unavailableDates = [{ start: "2026-07-20", end: "2026-07-22" }, "2026-07-2
 
     <div class="prop-controls prop-controls--toggles">
       <label class="prop-disabled">
-        <input type="checkbox" checked data-calendar-disabled-dates />
-        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <Switch variant="subtle" checked data-calendar-disabled-dates />
         <span class="label">Unavailable dates</span>
       </label>
     </div>
@@ -80,7 +76,7 @@ const unavailableDates = [{ start: "2026-07-20", end: "2026-07-22" }, "2026-07-2
         weekStartsOn={1}
         disabledDates={unavailableDates}
         data-playground-calendar
-        class="mx-auto border border-border bg-surface shadow-sm"
+        class="mx-auto"
       />
     </div>
 

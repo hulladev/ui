@@ -14,40 +14,23 @@ const badgeVariants = [
 ] as const
 ---
 
-<ComponentPreview component="Badge" hint="Non-interactive" requirePropsView={true}>
+<ComponentPreview component="Badge" hint="Solid light · tonal dark" requirePropsView={true}>
   <div
     slot="variants"
     class="grid overflow-hidden rounded-md border border-border bg-surface-raised shadow-xs"
   >
-    <div
-      class="grid grid-cols-[minmax(5rem,0.8fr)_repeat(3,minmax(6rem,1fr))] items-center gap-2 border-b border-border bg-foreground p-3 font-mono text-xs font-medium tracking-wider text-background uppercase max-[760px]:grid-cols-3 max-[760px]:[&>:first-child]:hidden"
-      aria-hidden="true"
-    >
-      <span>Variant</span>
-      <span>Small</span>
-      <span>Medium</span>
-      <span>Large</span>
-    </div>
     {
       badgeVariants.map(({ label, sample, variant }) => (
-        <div class="grid grid-cols-[minmax(5rem,0.8fr)_repeat(3,minmax(6rem,1fr))] items-center gap-2 border-t border-border p-3 first:border-t-0 max-[760px]:grid-cols-3">
-          <span class="font-mono text-xs font-medium tracking-wider text-muted-foreground uppercase max-[760px]:col-span-full">
+        <div class="flex flex-wrap items-start gap-x-4 gap-y-3 border-t border-border p-3 first:border-t-0">
+          <span class="w-full font-mono text-xs font-medium tracking-wider text-muted-foreground uppercase">
             {label}
           </span>
           {badgeSizes.map((size) => (
-            <span class="justify-self-start">
+            <span class="inline-flex flex-col items-start gap-2">
+              <span class="font-mono text-[0.625rem] text-muted-foreground uppercase">
+                {size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
+              </span>
               <Badge size={size} variant={variant}>
-                {variant === "success" && (
-                  <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path
-                      d="m4 8.25 2.4 2.4L12 5.5"
-                      stroke="currentColor"
-                      stroke-width="1.75"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                )}
                 {sample}
               </Badge>
             </span>

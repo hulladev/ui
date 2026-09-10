@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test"
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/#radio", { waitUntil: "domcontentloaded" })
+  await page.goto("/forms#radio", { waitUntil: "domcontentloaded" })
 })
 
 test("uses native pointer and keyboard selection within a named group", async ({ page }) => {
@@ -51,7 +51,7 @@ test("keeps disabled radios unavailable", async ({ page }) => {
 
 test("fits the radio preview at a narrow viewport", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto("/#radio", { waitUntil: "domcontentloaded" })
+  await page.goto("/forms#radio", { waitUntil: "domcontentloaded" })
 
   const preview = page.locator('[data-preview-component="radio-radiogroup-preview"]')
   const box = await preview.boundingBox()

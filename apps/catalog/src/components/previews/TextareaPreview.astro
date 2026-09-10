@@ -12,7 +12,11 @@ const textareaSizes = ["sm", "md", "lg"] as const
 const textareaVariants = ["outline", "filled", "underline"] as const
 ---
 
-<ComponentPreview component="Textarea" hint="Tab to focus · drag to resize" requirePropsView={true}>
+<ComponentPreview
+  component="Textarea"
+  hint="Tab to focus · drag to resize · three surface styles"
+  requirePropsView={true}
+>
   <div slot="variants" class="grid gap-8">
     <div class="grid gap-5" aria-label="Textarea style variants">
       {

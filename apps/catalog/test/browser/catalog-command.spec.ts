@@ -5,6 +5,9 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator("#catalog-navigation-input")).toHaveAttribute("aria-controls", /.+/, {
     timeout: 15_000,
   })
+  await expect(page.locator("html")).toHaveAttribute("data-catalog-command-ready", "true", {
+    timeout: 15_000,
+  })
 })
 
 test("opens from the global shortcut and navigates to filtered component sections", async ({
@@ -33,6 +36,7 @@ test("searches component aliases and closes cleanly with Escape", async ({ page 
   const input = page.locator("#catalog-navigation-input")
 
   await page.keyboard.press("ControlOrMeta+KeyK")
+  await expect(dialog).toBeVisible()
   await input.fill("range")
 
   await expect(dialog.getByRole("option", { name: /Slider/ })).toBeVisible()

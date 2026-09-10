@@ -5,6 +5,11 @@ test.beforeEach(async ({ page }) => {
 })
 
 test("highlights Astro frontmatter and component scripts", async ({ page }) => {
+  await expect(page.locator("#code [data-source-inspector]")).toHaveAttribute(
+    "data-source-inspector-ready",
+    "true",
+    { timeout: 15_000 }
+  )
   const output = page.locator("#code [data-source-output]")
   const frontmatterImport = output.locator("[data-code-line]", {
     hasText: 'import { Check, Copy, FileCode, Info } from "@lucide/astro"',
@@ -110,4 +115,20 @@ test("keeps code metadata inside a narrow viewport", async ({ page }) => {
     (blockBox?.x ?? 0) + (blockBox?.width ?? 0)
   )
   await expect(actions.getByRole("button", { name: "Copy active code" })).toBeVisible()
+})
+
+test("code playground switches actual public prop combinations", async ({ page }) => {
+  await page.locator("#code").getByRole("tab", { name: "Props", exact: true }).click()
+  const active = page.locator("#code [data-code-playground]:not([hidden])")
+  await expect(active).toHaveCount(1)
+  await expect(active).toHaveAttribute("data-line-numbers", "true")
+  await expect(active).toHaveCSS("white-space", "pre")
+  await page.locator("#code [data-code-wrap]").check()
+  await expect(active).toHaveCount(1)
+  await expect(active).toHaveAttribute("data-wrap", "true")
+  await expect(active).toHaveCSS("white-space", "pre-wrap")
+  await page.locator("#code [data-code-line-numbers]").uncheck()
+  await expect(active).not.toHaveAttribute("data-line-numbers")
+  await page.locator("#code [data-code-wrap]").uncheck()
+  await expect(active).toHaveCSS("white-space", "pre")
 })

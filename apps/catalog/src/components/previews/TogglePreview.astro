@@ -1,4 +1,7 @@
 ---
+import CardTitle from "@/ui/card/card-title.astro"
+import Card from "@/ui/card/card.astro"
+import Code from "@/ui/code/code.astro"
 import ToggleGroup from "@/ui/toggle/toggle-group.astro"
 import Toggle from "@/ui/toggle/toggle.astro"
 import manifest from "../../../../../generated/ui.manifest.json"
@@ -6,39 +9,32 @@ import ComponentPreview from "../ComponentPreview.astro"
 
 const toggle = manifest.library.components.toggle
 const sizes = ["sm", "md", "lg"] as const
-const variants = ["default", "outline"] as const
+const variants = ["outline", "ghost", "inverted"] as const
 ---
 
 <ComponentPreview
   component="Toggle"
-  hint="Press state · standalone or grouped"
+  hint="Press to toggle · subtle press feedback"
   propsLabel="Visual axes"
   requirePropsView={true}
 >
   <div slot="variants" class="grid gap-4">
-    <section
-      class="grid gap-4 rounded-lg border border-border bg-surface-raised p-4 shadow-xs"
-      aria-labelledby="toggle-formatting-title"
-    >
+    <Card aria-labelledby="toggle-formatting-title">
       <div class="flex items-start justify-between gap-6 max-[560px]:flex-col">
         <div class="grid gap-1">
           <span class="font-mono text-[0.6875rem] tracking-wider text-primary uppercase"
             >Composer controls</span
           >
-          <h3 id="toggle-formatting-title" class="m-0 text-sm font-semibold">Text formatting</h3>
+          <CardTitle id="toggle-formatting-title">Text formatting</CardTitle>
           <p class="m-0 max-w-sm text-xs leading-relaxed text-muted-foreground">
-            Each control exposes its persistent state through <code>aria-pressed</code>.
+            Each control exposes its persistent state through <Code>aria-pressed</Code>.
           </p>
         </div>
 
         <ToggleGroup type="multiple" defaultValue={["bold", "code"]} aria-label="Text formatting">
-          <Toggle value="bold" variant="outline" aria-label="Bold"
-            ><strong aria-hidden="true">B</strong></Toggle
-          >
-          <Toggle value="italic" variant="outline" aria-label="Italic"
-            ><em aria-hidden="true">I</em></Toggle
-          >
-          <Toggle value="code" variant="outline" aria-label="Inline code"
+          <Toggle value="bold" aria-label="Bold"><strong aria-hidden="true">B</strong></Toggle>
+          <Toggle value="italic" aria-label="Italic"><em aria-hidden="true">I</em></Toggle>
+          <Toggle value="code" aria-label="Inline code"
             ><span class="font-mono" aria-hidden="true">&lt;/&gt;</span></Toggle
           >
         </ToggleGroup>
@@ -56,19 +52,26 @@ const variants = ["default", "outline"] as const
           Follow live
         </Toggle>
       </div>
-    </section>
+    </Card>
 
-    <div class="grid grid-cols-2 gap-3 max-[600px]:grid-cols-1" aria-label="Toggle variants">
+    <div class="grid gap-3" aria-label="Toggle variants">
       {
         variants.map((variant) => (
           <div class="flex items-center justify-between gap-3 rounded-md border border-border bg-surface/80 px-3 py-2">
             <span class="font-mono text-[0.6875rem] text-muted-foreground">{variant}</span>
-            <Toggle variant={variant} defaultPressed>
-              Pinned
-            </Toggle>
+            <div class="flex gap-1">
+              <Toggle variant={variant}>Pin</Toggle>
+              <Toggle variant={variant} defaultPressed>
+                Pinned
+              </Toggle>
+            </div>
           </div>
         ))
       }
+    </div>
+    <div class="flex flex-wrap items-center gap-3" aria-label="Disabled toggle states">
+      <Toggle disabled>Unavailable</Toggle>
+      <Toggle disabled defaultPressed>On · unavailable</Toggle>
     </div>
   </div>
 
@@ -105,7 +108,7 @@ const variants = ["default", "outline"] as const
               data-playground-toggle
               data-playground-size={size}
               data-playground-variant={variant}
-              hidden={variant !== "default" || size !== "md"}
+              hidden={variant !== "outline" || size !== "md"}
             >
               Pin release
             </Toggle>
@@ -115,7 +118,7 @@ const variants = ["default", "outline"] as const
     </div>
 
     <code class="prop-readout" data-toggle-readout aria-live="polite"
-      >&lt;Toggle variant="default" size="md"&gt;Pin release&lt;/Toggle&gt;</code
+      >&lt;Toggle variant="outline" size="md"&gt;Pin release&lt;/Toggle&gt;</code
     >
   </div>
 

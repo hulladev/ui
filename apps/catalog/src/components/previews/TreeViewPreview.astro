@@ -1,4 +1,5 @@
 ---
+import { FileCode2, FileText, Folder, FolderOpen, Layers, Palette } from "@lucide/astro"
 import TreeGroup from "@/ui/tree-view/tree-group.astro"
 import TreeItemLabel from "@/ui/tree-view/tree-item-label.astro"
 import TreeItem from "@/ui/tree-view/tree-item.astro"
@@ -15,11 +16,11 @@ const treeView = manifest.library.components["tree-view"]
   propsLabel="Selection model"
   requirePropsView={true}
 >
-  <div slot="variants" class="grid gap-4">
+  <div slot="variants" class="@container grid gap-4">
     <section
-      class="grid grid-cols-[minmax(0,1fr)_minmax(13rem,0.65fr)] overflow-hidden rounded-lg border border-border bg-surface-raised shadow-xs max-[700px]:grid-cols-1"
+      class="grid grid-cols-1 overflow-hidden rounded-lg border border-border bg-surface-raised shadow-xs @min-[36rem]:grid-cols-[minmax(0,1fr)_minmax(13rem,0.65fr)]"
     >
-      <div class="border-r border-border p-4 max-[700px]:border-r-0 max-[700px]:border-b">
+      <div class="border-b border-border p-4 @min-[36rem]:border-r @min-[36rem]:border-b-0">
         <div class="mb-3 flex items-baseline justify-between gap-4 px-2">
           <div>
             <span class="font-mono text-[0.6875rem] tracking-wider text-primary uppercase"
@@ -30,43 +31,79 @@ const treeView = manifest.library.components["tree-view"]
           <span class="font-mono text-[0.6875rem] text-muted-foreground">main</span>
         </div>
 
-        <TreeView aria-label="Repository files" defaultValue="button.tsx">
+        <TreeView
+          aria-label="Repository files"
+          defaultValue="button.tsx"
+          class="[&_[aria-expanded=true]>[data-slot=tree-item-label]>.tree-folder-closed]:hidden [&_[aria-expanded=false]>[data-slot=tree-item-label]>.tree-folder-open]:hidden"
+        >
           <TreeItem value="apps" defaultExpanded>
-            <TreeItemLabel><span aria-hidden="true">◇</span> apps</TreeItemLabel>
+            <TreeItemLabel
+              ><Folder class="tree-folder-closed" aria-hidden="true" focusable="false" /><FolderOpen
+                class="tree-folder-open"
+                aria-hidden="true"
+                focusable="false"
+              /> apps</TreeItemLabel
+            >
             <TreeGroup>
               <TreeItem value="catalog" defaultExpanded>
-                <TreeItemLabel><span aria-hidden="true">◇</span> catalog</TreeItemLabel>
+                <TreeItemLabel
+                  ><Folder
+                    class="tree-folder-closed"
+                    aria-hidden="true"
+                    focusable="false"
+                  /><FolderOpen class="tree-folder-open" aria-hidden="true" focusable="false" /> catalog</TreeItemLabel
+                >
                 <TreeGroup>
                   <TreeItem value="index.astro">
-                    <TreeItemLabel><span aria-hidden="true">·</span> index.astro</TreeItemLabel>
+                    <TreeItemLabel
+                      ><FileCode2 aria-hidden="true" focusable="false" /> index.astro</TreeItemLabel
+                    >
                   </TreeItem>
                 </TreeGroup>
               </TreeItem>
             </TreeGroup>
           </TreeItem>
           <TreeItem value="packages" defaultExpanded>
-            <TreeItemLabel><span aria-hidden="true">◇</span> packages</TreeItemLabel>
+            <TreeItemLabel
+              ><Folder class="tree-folder-closed" aria-hidden="true" focusable="false" /><FolderOpen
+                class="tree-folder-open"
+                aria-hidden="true"
+                focusable="false"
+              /> packages</TreeItemLabel
+            >
             <TreeGroup>
               <TreeItem value="components" defaultExpanded>
-                <TreeItemLabel><span aria-hidden="true">◇</span> components</TreeItemLabel>
+                <TreeItemLabel
+                  ><Folder
+                    class="tree-folder-closed"
+                    aria-hidden="true"
+                    focusable="false"
+                  /><FolderOpen class="tree-folder-open" aria-hidden="true" focusable="false" /> components</TreeItemLabel
+                >
                 <TreeGroup>
                   <TreeItem value="button.tsx">
                     <TreeItemLabel>
-                      <span class="text-primary" aria-hidden="true">◆</span> button.tsx
+                      <FileCode2 aria-hidden="true" focusable="false" /> button.tsx
                     </TreeItemLabel>
                   </TreeItem>
                   <TreeItem value="toggle.tsx">
-                    <TreeItemLabel><span aria-hidden="true">◆</span> toggle.tsx</TreeItemLabel>
+                    <TreeItemLabel
+                      ><FileCode2 aria-hidden="true" focusable="false" /> toggle.tsx</TreeItemLabel
+                    >
                   </TreeItem>
                   <TreeItem value="tree-view.tsx" aria-disabled="true">
-                    <TreeItemLabel><span aria-hidden="true">◆</span> tree-view.tsx</TreeItemLabel>
+                    <TreeItemLabel
+                      ><FileCode2 aria-hidden="true" focusable="false" /> tree-view.tsx</TreeItemLabel
+                    >
                   </TreeItem>
                 </TreeGroup>
               </TreeItem>
             </TreeGroup>
           </TreeItem>
           <TreeItem value="readme">
-            <TreeItemLabel><span aria-hidden="true">·</span> README.md</TreeItemLabel>
+            <TreeItemLabel
+              ><FileText aria-hidden="true" focusable="false" /> README.md</TreeItemLabel
+            >
           </TreeItem>
         </TreeView>
       </div>
@@ -100,16 +137,23 @@ const treeView = manifest.library.components["tree-view"]
 
     <div class="playground-stage">
       <TreeView
-        class="w-64 max-w-full rounded-md border border-border bg-surface p-2 shadow-xs [&_[data-slot=tree-item-label]]:min-h-7 [&_[data-slot=tree-item-label]]:font-mono [&_[data-slot=tree-item-label]]:text-xs"
+        class="w-64 max-w-full"
         aria-label="Workspace tree"
         defaultValue="design"
         data-playground-tree
       >
         <TreeItem value="workspace" defaultExpanded>
-          <TreeItemLabel>Workspace</TreeItemLabel>
+          <TreeItemLabel><Folder aria-hidden="true" focusable="false" />Workspace</TreeItemLabel>
           <TreeGroup>
-            <TreeItem value="design"><TreeItemLabel>Design</TreeItemLabel></TreeItem>
-            <TreeItem value="engineering"><TreeItemLabel>Engineering</TreeItemLabel></TreeItem>
+            <TreeItem value="design"
+              ><TreeItemLabel><Palette aria-hidden="true" focusable="false" />Design</TreeItemLabel
+              ></TreeItem
+            >
+            <TreeItem value="engineering"
+              ><TreeItemLabel
+                ><Layers aria-hidden="true" focusable="false" />Engineering</TreeItemLabel
+              ></TreeItem
+            >
           </TreeGroup>
         </TreeItem>
       </TreeView>

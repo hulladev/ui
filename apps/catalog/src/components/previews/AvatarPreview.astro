@@ -1,4 +1,7 @@
 ---
+import Badge from "@/ui/badge/badge.astro"
+import CardTitle from "@/ui/card/card-title.astro"
+import Card from "@/ui/card/card.astro"
 import Avatar from "@/ui/avatar/avatar.astro"
 import AvatarFallback from "@/ui/avatar/avatar-fallback.astro"
 import AvatarImage from "@/ui/avatar/avatar-image.astro"
@@ -33,10 +36,7 @@ const teammates = [
 
 <ComponentPreview component="Avatar" hint="Non-interactive" requirePropsView={true}>
   <div slot="variants" class="grid gap-5">
-    <div
-      class="overflow-hidden rounded-lg border border-border bg-surface-raised shadow-xs"
-      aria-label="Team directory example"
-    >
+    <Card aria-label="Team directory example">
       <div class="flex items-center justify-between border-b border-border px-4 py-3">
         <div>
           <p
@@ -44,36 +44,31 @@ const teammates = [
           >
             Project Atlas
           </p>
-          <h3 class="mt-1 text-base font-semibold tracking-[-0.02em]">Core team</h3>
+          <CardTitle>Core team</CardTitle>
         </div>
         <span class="font-mono text-xs text-muted-foreground">03 / 03</span>
       </div>
 
       <div>
         {
-          teammates.map(({ description, initials, name, src }, index) => (
+          teammates.map(({ description, initials, name, src }) => (
             <div class="flex items-center gap-3 border-t border-border px-4 py-3 first:border-t-0">
               <Avatar role="img" aria-label={name}>
-                <AvatarFallback
-                  class:list={[
-                    index === 1 && "bg-primary/10 text-primary",
-                    index === 2 && "bg-success/10 text-success",
-                  ]}
-                >
-                  {initials}
-                </AvatarFallback>
+                <AvatarFallback>{initials}</AvatarFallback>
                 {src && <AvatarImage src={src} alt="" />}
               </Avatar>
               <span class="min-w-0 flex-1">
                 <strong class="block truncate text-sm font-medium">{name}</strong>
                 <small class="block truncate text-xs text-muted-foreground">{description}</small>
               </span>
-              <span class="size-2 rounded-full bg-success" aria-label="Available" />
+              <Badge variant="success" size="sm">
+                Available
+              </Badge>
             </div>
           ))
         }
       </div>
-    </div>
+    </Card>
 
     <div class="flex items-end justify-between gap-5 px-1">
       <span class="font-mono text-xs font-medium tracking-wider text-muted-foreground uppercase">
@@ -87,7 +82,12 @@ const teammates = [
                 <AvatarFallback>SK</AvatarFallback>
                 <AvatarImage src="/avatar-sora.svg" alt="" />
               </Avatar>
-              <span class="font-mono text-[0.6875rem] text-muted-foreground">{size}</span>
+              <Avatar role="img" size={size} aria-label={`Initials, ${size} avatar`}>
+                <AvatarFallback>SK</AvatarFallback>
+              </Avatar>
+              <span class="font-mono text-[0.6875rem] text-muted-foreground">
+                {size} · {size === "sm" ? 24 : size === "md" ? 32 : 40}px
+              </span>
             </span>
           ))
         }
@@ -96,7 +96,7 @@ const teammates = [
 
     <div class="flex items-center gap-3 rounded-md border border-dashed border-border p-3">
       <Avatar role="img" aria-label="Fallback example">
-        <AvatarFallback class="bg-warning/10 text-warning">FX</AvatarFallback>
+        <AvatarFallback>FX</AvatarFallback>
         <AvatarImage src={unavailableAvatarSrc} alt="" />
       </Avatar>
       <div>

@@ -1,0 +1,43 @@
+---
+import { fileUploadPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import FileUploadPreview from "../previews/FileUploadPreview.astro"
+const usageSources = [
+  {
+    code: '---\nimport FileUpload from "@/ui/file-upload/file-upload.astro"\nimport FileDropzone from "@/ui/file-upload/file-dropzone.astro"\n---\n\n<FileDropzone>\n  <span>Drop files here or click to browse</span>\n  <FileUpload name="attachments" aria-label="Attachments" multiple />\n</FileDropzone>',
+    filename: "src/components/file-upload.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: 'import { FileDropzone, FileUpload } from "@/ui/file-upload"\n\nexport function Attachments() {\n  return (\n    <FileDropzone>\n      <span>Drop files here or click to browse</span>\n      <FileUpload name="attachments" aria-label="Attachments" multiple />\n    </FileDropzone>\n  )\n}',
+    filename: "src/components/file-upload.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+  {
+    code: 'import { FileDropzone, FileUpload } from "@/ui/file-upload"\n\nexport function Attachments() {\n  return (\n    <FileDropzone>\n      <span>Drop files here or click to browse</span>\n      <FileUpload name="attachments" aria-label="Attachments" multiple />\n    </FileDropzone>\n  )\n}',
+    filename: "src/components/file-upload.tsx",
+    framework: "Solid",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="file-upload" aria-labelledby="file-upload-title">
+  <div class="section-head">
+    <div><p class="eyebrow">Primitive / Forms</p><h2 id="file-upload-title">File Upload</h2></div>
+    <span class="status">Native file selection</span>
+  </div>
+  <article class="bench glass-panel" aria-label="FileUpload component preview">
+    <div class="workbench">
+      <FileUploadPreview />
+      <ComponentSource
+        component="FileUpload"
+        generatedFamilies={["file-upload"]}
+        previewSources={fileUploadPreviewSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>

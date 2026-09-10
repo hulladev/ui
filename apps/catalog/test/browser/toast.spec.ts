@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test"
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/#toast", { waitUntil: "load" })
+  await page.goto("/layout-feedback#toast", { waitUntil: "load" })
 })
 
 test("gives each pushed toast an independent dismissal timer", async ({ page }) => {

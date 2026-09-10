@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test"
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/#command", { waitUntil: "domcontentloaded" })
+  await page.goto("/navigation-overlays#command", { waitUntil: "domcontentloaded" })
   await expect(page.locator("#catalog-command-input")).toHaveAttribute("aria-controls", /.+/, {
     timeout: 15_000,
   })

@@ -1,0 +1,38 @@
+---
+import ComponentSource from "../ComponentSource.astro"
+import BackdropPreview from "../previews/BackdropPreview.astro"
+import { backdropPreviewSources } from "../../data/catalogPreviewSources"
+const usageSources = [
+  {
+    code: `---
+import Backdrop from "@/ui/backdrop/backdrop.astro"
+---
+
+<Backdrop />`,
+    filename: "src/components/backdrop-example.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+]
+---
+
+<section class="component-section" id="backdrop" aria-labelledby="backdrop-section-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Overlay</p><h2 id="backdrop-section-title">Backdrop</h2><p>
+        A decorative screen layer. Its owner decides how interaction and dismissal work.
+      </p>
+    </div>
+  </div>
+  <article class="bench glass-panel" aria-label="Backdrop component preview">
+    <div class="workbench">
+      <BackdropPreview />
+      <ComponentSource
+        component="Backdrop"
+        generatedFamilies={["backdrop"]}
+        previewSources={backdropPreviewSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>

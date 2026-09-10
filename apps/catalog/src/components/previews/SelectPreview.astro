@@ -23,7 +23,11 @@ const selectVariants = ["outline", "filled", "underline"] as const
 const selectModes = ["single", "multiple"] as const
 ---
 
-<ComponentPreview component="Select" hint="Arrows · Space · typeahead" requirePropsView={true}>
+<ComponentPreview
+  component="Select"
+  hint="Arrows · Space · typeahead · shared field sizing"
+  requirePropsView={true}
+>
   <div slot="variants" class="grid gap-8">
     <div
       class="grid grid-cols-2 items-start gap-6 max-[760px]:grid-cols-1"

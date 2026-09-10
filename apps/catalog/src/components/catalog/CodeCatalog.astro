@@ -72,7 +72,7 @@ const highlighted = highlighter.highlight("const ready = true", { language: "ts"
   <CodeBlockPath>src/lib/status.ts</CodeBlockPath>
   <CodeBlockBody>
     <CodeBlockContent {highlighted} lineNumbers highlightedLines={[1]} />
-    <CodeBlockActions><Button variant="outline" size="sm">Copy</Button></CodeBlockActions>
+    <CodeBlockActions revealOnHover><Button variant="ghost" size="sm">Copy</Button></CodeBlockActions>
   </CodeBlockBody>
 </CodeBlock>`,
     filename: "src/components/status-code.astro",
@@ -103,7 +103,7 @@ export function StatusCode() {
       <CodeBlockPath>src/lib/status.ts</CodeBlockPath>
       <CodeBlockBody>
         <CodeBlockContent highlighted={highlighted} lineNumbers highlightedLines={[1]} />
-        <CodeBlockActions><Button variant="outline" size="sm">Copy</Button></CodeBlockActions>
+        <CodeBlockActions revealOnHover><Button variant="ghost" size="sm">Copy</Button></CodeBlockActions>
       </CodeBlockBody>
     </CodeBlock>
   )

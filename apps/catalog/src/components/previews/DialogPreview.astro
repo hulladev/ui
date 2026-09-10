@@ -1,4 +1,5 @@
 ---
+import Switch from "@/ui/switch/switch.astro"
 import Button from "@/ui/button/button.astro"
 import manifest from "../../../../../generated/ui.manifest.json"
 import ComponentPreview from "../ComponentPreview.astro"
@@ -6,7 +7,11 @@ import ComponentPreview from "../ComponentPreview.astro"
 const dialog = manifest.library.components.dialog
 ---
 
-<ComponentPreview component="Dialog" hint="Escape closes the top layer" requirePropsView={true}>
+<ComponentPreview
+  component="Dialog"
+  hint="160 ms entry and exit · Escape closes"
+  requirePropsView={true}
+>
   <div slot="variants" class="grid gap-7">
     <div class="grid grid-cols-3 gap-3 max-[760px]:grid-cols-1" aria-label="Dialog variants">
       <div
@@ -168,8 +173,7 @@ const dialog = manifest.library.components.dialog
       </label>
 
       <label class="prop-disabled">
-        <input type="checkbox" checked data-dialog-prop-dismissible />
-        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <Switch variant="subtle" checked data-dialog-prop-dismissible />
         <span class="label">Dismissible</span>
       </label>
     </div>

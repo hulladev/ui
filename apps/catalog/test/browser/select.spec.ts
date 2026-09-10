@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test"
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/#select", { waitUntil: "domcontentloaded" })
+  await page.goto("/forms#select", { waitUntil: "domcontentloaded" })
 })
 
 test("selects one option and synchronizes the native form control", async ({ page }) => {
@@ -72,7 +72,7 @@ test("supports keyboard navigation, grouping, and typeahead", async ({ page }) =
 
 test("fits the custom and native controls at a narrow viewport", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto("/#select", { waitUntil: "domcontentloaded" })
+  await page.goto("/forms#select", { waitUntil: "domcontentloaded" })
 
   const trigger = page.locator("#select-team-trigger")
   const nativeSelect = page.locator("#native-select-office")

@@ -1,4 +1,5 @@
 ---
+import Switch from "@/ui/switch/switch.astro"
 import Badge from "@/ui/badge/badge.astro"
 import NavigationMenuContent from "@/ui/navigation-menu/navigation-menu-content.astro"
 import NavigationMenuItem from "@/ui/navigation-menu/navigation-menu-item.astro"
@@ -68,11 +69,11 @@ const solutionLinks = [
       class="relative z-10 border-b border-border bg-surface-raised/88 px-4 py-3 backdrop-blur-xl"
     >
       <NavigationMenu aria-label="Primary navigation" class="mx-auto w-full max-w-4xl">
-        <NavigationMenuList class="w-full bg-transparent p-0 shadow-none ring-0">
+        <NavigationMenuList class="w-full">
           <NavigationMenuItem>
             <NavigationMenuLink
               href="#navigation-menu"
-              class="mr-3 min-h-10 items-center px-1 py-2 hover:bg-transparent"
+              class="mr-3 min-h-10"
               aria-label="Northstar home"
             >
               <span
@@ -89,22 +90,20 @@ const solutionLinks = [
               <div class="grid gap-2 sm:grid-cols-[1.05fr_1.5fr]">
                 <NavigationMenuLink
                   href="#navigation-menu"
-                  class="group relative min-h-64 overflow-hidden bg-foreground p-5 text-background hover:bg-foreground"
+                  class="group relative min-h-64 overflow-hidden"
                 >
                   <span class="relative z-1 mt-auto grid gap-3 self-end">
                     <span
-                      class="font-mono text-[0.65rem] font-medium tracking-[0.14em] text-background/60 uppercase"
+                      class="font-mono text-[0.65rem] font-medium tracking-[0.14em] text-muted-foreground uppercase"
                       >New workspace</span
                     >
                     <strong class="text-2xl leading-none tracking-[-0.045em]">
                       See the whole field.
                     </strong>
-                    <span class="max-w-52 text-xs leading-5 text-background/65">
+                    <span class="max-w-52 text-xs leading-5 text-muted-foreground">
                       Northstar 2.0 turns scattered work into a clear operating picture.
                     </span>
-                    <Badge class="mt-2 w-fit border-background/20 bg-background/10 text-background"
-                      >Explore the release →</Badge
-                    >
+                    <Badge class="mt-2 w-fit">Explore the release →</Badge>
                   </span>
                   <span
                     class="absolute -top-12 -right-12 size-48 rounded-full border border-background/20 transition-transform duration-500 group-hover/navigation-link:scale-110"
@@ -174,17 +173,13 @@ const solutionLinks = [
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuLink
-              href="#navigation-menu"
-              class="min-h-10 items-center px-3.5 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
+            <NavigationMenuLink href="#navigation-menu" class="min-h-10"
               >Customers</NavigationMenuLink
             >
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuLink
-              href="#navigation-menu"
-              class="ml-auto min-h-10 items-center bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+            <NavigationMenuLink href="#navigation-menu" class="ml-auto min-h-10"
               >Get started <span aria-hidden="true">↗</span></NavigationMenuLink
             >
           </NavigationMenuItem>
@@ -225,8 +220,7 @@ const solutionLinks = [
 
     <div class="prop-controls prop-controls--toggles">
       <label class="prop-disabled">
-        <input type="checkbox" data-navigation-menu-disabled />
-        <span class="toggle-track" aria-hidden="true"><span></span></span>
+        <Switch variant="subtle" data-navigation-menu-disabled />
         <span class="label">Disable Solutions</span>
       </label>
     </div>

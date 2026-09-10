@@ -6,7 +6,7 @@ const generatedFamiliesFor = async (page: Page, sectionId: string) =>
     .evaluateAll((records) => records.map((record) => record.getAttribute("data-filename") ?? ""))
 
 test("documents independent primitives in separate catalog sections", async ({ page }) => {
-  await page.goto("/", { waitUntil: "domcontentloaded" })
+  await page.goto("/forms", { waitUntil: "domcontentloaded" })
 
   const navigation = page.locator("[data-catalog-nav]")
   for (const label of ["Input", "Field", "Tooltip", "HoverCard"]) {
@@ -22,12 +22,6 @@ test("documents independent primitives in separate catalog sections", async ({ p
   await expect(
     page.locator("#field").getByRole("heading", { name: "Field", exact: true })
   ).toBeVisible()
-  await expect(
-    page.locator("#tooltip").getByRole("heading", { name: "Tooltip", exact: true })
-  ).toBeVisible()
-  await expect(
-    page.locator("#hover-card").getByRole("heading", { name: "HoverCard", exact: true })
-  ).toBeVisible()
 
   expect(await generatedFamiliesFor(page, "#input")).toEqual(
     expect.arrayContaining([expect.stringContaining("/input/")])
@@ -38,6 +32,13 @@ test("documents independent primitives in separate catalog sections", async ({ p
   expect(await generatedFamiliesFor(page, "#field")).toEqual(
     expect.arrayContaining([expect.stringContaining("/field/")])
   )
+  await page.goto("/navigation-overlays", { waitUntil: "domcontentloaded" })
+  await expect(
+    page.locator("#tooltip").getByRole("heading", { name: "Tooltip", exact: true })
+  ).toBeVisible()
+  await expect(
+    page.locator("#hover-card").getByRole("heading", { name: "HoverCard", exact: true })
+  ).toBeVisible()
   expect(await generatedFamiliesFor(page, "#tooltip")).toEqual(
     expect.arrayContaining([expect.stringContaining("/tooltip/")])
   )
@@ -45,3 +46,44 @@ test("documents independent primitives in separate catalog sections", async ({ p
     expect.arrayContaining([expect.stringContaining("/hover-card/")])
   )
 })
+
+for (const theme of ["light", "dark"]) {
+  test(`fields keep consistent gaps beside taller controls in ${theme} mode`, async ({ page }) => {
+    await page.goto("/forms#field", { waitUntil: "domcontentloaded" })
+    await page.locator("html").evaluate((element, value) => {
+      element.dataset.theme = value
+    }, theme)
+    // Simulate a user resizing the textarea: its neighbouring field must not redistribute space.
+    await page.locator("#field-notes").evaluate((element) => {
+      element.style.height = "240px"
+    })
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: 900 })
+      for (const id of ["field-project-name", "field-owner-email", "field-region", "field-notes"]) {
+        const spacing = await page.locator(`#${id}`).evaluate((control) => {
+          const field = control.closest('[data-slot="field"]')!
+          const label = field.querySelector('[data-slot="label"]')!
+          const message = field.querySelector('[data-slot="description"], [data-slot="error"]')!
+          return {
+            before: control.getBoundingClientRect().top - label.getBoundingClientRect().bottom,
+            after: message.getBoundingClientRect().top - control.getBoundingClientRect().bottom,
+          }
+        })
+        expect(spacing.before, `${id} label gap at ${width}px`).toBeCloseTo(6, 0)
+        expect(spacing.after, `${id} message gap at ${width}px`).toBeCloseTo(6, 0)
+      }
+    }
+    const label = page.locator('label[for="field-project-name"]')
+    expect(await label.evaluate((element) => getComputedStyle(element, "::after").marginLeft)).toBe(
+      "2px"
+    )
+    await label.click()
+    await expect(page.locator("#field-project-name")).toBeFocused()
+    await expect(page.locator("#field-project-name")).toHaveAttribute("required", "")
+    await expect(page.locator("#field-region")).toBeDisabled()
+    await expect(page.locator("#field-owner-email")).toHaveAttribute(
+      "aria-describedby",
+      "field-owner-error"
+    )
+  })
+}

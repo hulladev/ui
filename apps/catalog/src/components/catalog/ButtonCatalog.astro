@@ -41,9 +41,9 @@ import ButtonGroup from "@/ui/button/button-group.astro"
 ---
 
 <ButtonGroup aria-label="Document actions">
-  <Button variant="outline">Preview</Button>
-  <Button variant="outline">Duplicate</Button>
-  <Button>Publish</Button>
+  <Button variant="outline">Cancel</Button>
+  <Button variant="inverted">Preview</Button>
+  <Button variant="danger">Delete</Button>
 </ButtonGroup>`,
     filename: "src/components/button-demo.astro",
     framework: "Astro",
@@ -55,9 +55,9 @@ import ButtonGroup from "@/ui/button/button-group.astro"
 export function ButtonDemo() {
   return (
     <ButtonGroup aria-label="Document actions">
-      <Button variant="outline">Preview</Button>
-      <Button variant="outline">Duplicate</Button>
-      <Button>Publish</Button>
+      <Button variant="outline">Cancel</Button>
+      <Button variant="inverted">Preview</Button>
+      <Button variant="danger">Delete</Button>
     </ButtonGroup>
   )
 }`,

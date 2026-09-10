@@ -78,8 +78,7 @@ export function ShortcutHint() {
   const syncKbdPlayground = (preview: HTMLElement) => {
     const content =
       preview.querySelector<HTMLInputElement>("[data-kbd-prop-content]")?.value.trim() || "Key"
-    const tone =
-      preview.querySelector<HTMLSelectElement>("[data-kbd-prop-tone]")?.value ?? "default"
+    const tone = "default"
 
     preview.querySelectorAll<HTMLElement>("[data-playground-kbd]").forEach((kbd) => {
       kbd.hidden = kbd.dataset.tone !== tone
@@ -87,18 +86,11 @@ export function ShortcutHint() {
     })
 
     const readout = preview.querySelector<HTMLElement>("[data-kbd-prop-readout]")
-    if (readout) {
-      readout.textContent =
-        tone === "strong"
-          ? `<Kbd className="text-foreground">${content}</Kbd>`
-          : `<Kbd>${content}</Kbd>`
-    }
+    if (readout) readout.textContent = `<Kbd>${content}</Kbd>`
   }
 
   document.addEventListener("input", (event) => {
-    const control = (event.target as HTMLElement).closest(
-      "[data-kbd-prop-content], [data-kbd-prop-tone]"
-    )
+    const control = (event.target as HTMLElement).closest("[data-kbd-prop-content]")
     const preview = control?.closest<HTMLElement>('[data-preview-component="kbd-preview"]')
     if (preview) syncKbdPlayground(preview)
   })
