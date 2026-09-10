@@ -1,5 +1,9 @@
+import { interactiveRow } from "@/+css/interactive-row.css"
 import { splitProps, type JSX } from "solid-js"
 import { cn } from "@/lib/style"
+import { resolve } from "@hulla/ui"
+
+const $interactiveRow = resolve(interactiveRow)
 
 export type TreeItemLabelProps = JSX.IntrinsicElements["span"]
 
@@ -11,7 +15,8 @@ export function TreeItemLabel(props: TreeItemLabelProps) {
       {...rest}
       data-slot="tree-item-label"
       class={cn(
-        "flex min-h-8 min-w-0 cursor-default select-none items-center gap-2 rounded-md px-2 text-sm text-muted-foreground transition-[background-color,color] duration-100 hover:bg-hover-surface hover:text-foreground motion-reduce:transition-none [&_svg]:size-4 [&_svg]:shrink-0",
+        "flex min-h-8 min-w-0 cursor-default select-none items-center gap-2 px-2 text-sm [&_svg]:size-4 [&_svg]:shrink-0",
+        $interactiveRow("default"),
         local.class
       )}
     >

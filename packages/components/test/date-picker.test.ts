@@ -24,7 +24,18 @@ describe("Calendar authored contract", () => {
       expect(source).toContain('data-slot="calendar-day"')
       expect(source).toContain('aria-live="polite"')
       expect(source).toContain("aria-selected")
+      expect(source).toContain("@/+css/calendar.css")
     }
+  })
+
+  test("keeps single-day hover and selection shapes aligned without joining ranges", async () => {
+    const styles = await readFile(resolve(componentRoot, "+css/calendar.css.ts"), "utf8")
+
+    expect(styles).toContain("place-items-center rounded-md")
+    expect(styles).toContain("hover:bg-hover-surface")
+    expect(styles).toContain("data-[in-range=true]:rounded-none")
+    expect(styles).toContain("data-[range-start=true]:rounded-l-md")
+    expect(styles).toContain("data-[range-end=true]:rounded-r-md")
   })
 
   test("implements roving focus, paging, range preview, and locale direction", async () => {

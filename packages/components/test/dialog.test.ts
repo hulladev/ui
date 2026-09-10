@@ -6,9 +6,10 @@ const componentRoot = resolve(import.meta.dir, "../src")
 
 describe("Dialog authored contract", () => {
   test("targets overlay and content styling explicitly", async () => {
-    const [astro, react] = await Promise.all([
+    const [astro, react, styles] = await Promise.all([
       readFile(resolve(componentRoot, "astro/dialog/dialog.astro"), "utf8"),
       readFile(resolve(componentRoot, "react/dialog/dialog.react.tsx"), "utf8"),
+      readFile(resolve(componentRoot, "+css/dialog.css.ts"), "utf8"),
     ])
 
     expect(astro).toContain("contentClass?: string")
@@ -19,5 +20,10 @@ describe("Dialog authored contract", () => {
     expect(react).toContain("contentStyle?: CSSProperties")
     expect(react).toContain("$overlayVariant(variant),\n        className")
     expect(react).toContain("$variant(variant),\n          contentClassName")
+    expect(styles).toContain("has-[>[data-slot=command]]:max-w-2xl")
+    expect(styles).toContain("has-[>[data-slot=command]]:p-0")
+    expect(styles).toContain("[&>[data-slot=command]]:rounded-[inherit]")
+    expect(styles).toContain("[&>[data-slot=command]]:border-0")
+    expect(styles).toContain("[&>[data-slot=command]]:shadow-none")
   })
 })

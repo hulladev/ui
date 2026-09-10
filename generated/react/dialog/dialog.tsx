@@ -16,7 +16,7 @@ const $overlayVariant = vn({
 })
 const $variant = vn({
   compact:
-    "starting:[transform:translateY(4px)_scale(0.98)] max-w-lg rounded-lg border border-border p-6 shadow-(--shadow-overlay) dark:border-foreground/15 dark:bg-surface-raised/84 dark:backdrop-blur-2xl",
+    "starting:[transform:translateY(4px)_scale(0.98)] max-w-lg rounded-lg border border-border p-6 shadow-(--shadow-overlay) has-[>[data-slot=command]]:max-w-2xl has-[>[data-slot=command]]:p-0 [&>[data-slot=command]]:rounded-[inherit] [&>[data-slot=command]]:border-0 [&>[data-slot=command]]:shadow-none dark:border-foreground/15 dark:bg-surface-raised/84 dark:backdrop-blur-2xl",
   workspace:
     "starting:[transform:translateY(4px)] flex h-[calc(100dvh-1rem)] max-w-[90rem] flex-col rounded-lg border border-border shadow-(--shadow-overlay) dark:border-foreground/15 dark:bg-surface-raised/88 dark:backdrop-blur-2xl sm:h-[calc(100dvh-3rem)]",
   fullscreen: "flex h-dvh max-w-none flex-col rounded-none border-0 shadow-none",

@@ -1,3 +1,4 @@
+import { calendarDay } from "@/+css/calendar.css"
 import { For, mergeProps, splitProps, type JSX } from "solid-js"
 import { createMutableRef, exposeRef, createLifecycleEffect } from "@/lib/solid"
 import {
@@ -14,6 +15,9 @@ import {
   type CalendarValueChangeDetail,
 } from "@/lib/calendar"
 import { cn } from "@/lib/style"
+import { resolve } from "@hulla/ui"
+
+const $calendarDay = resolve(calendarDay)
 
 type CalendarBaseProps = Omit<JSX.IntrinsicElements["div"], "defaultValue"> & {
   defaultMonth?: string
@@ -42,9 +46,6 @@ type RangeCalendarProps = {
 }
 
 export type CalendarProps = CalendarBaseProps & (SingleCalendarProps | RangeCalendarProps)
-
-const dayClassName =
-  "relative isolate grid h-9 w-full place-items-center border-0 bg-transparent p-0 text-[0.8125rem] font-medium tabular-nums text-foreground transition-[background-color,color,box-shadow,transform] duration-100 ease-out after:pointer-events-none after:absolute after:bottom-1 after:left-1/2 after:size-1 after:-translate-x-1/2 after:rounded-full after:bg-transparent after:content-[''] hover:z-10 hover:bg-foreground/[0.065] active:scale-[0.94] focus-visible:z-20 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-focus-ring disabled:pointer-events-none disabled:text-muted-foreground disabled:line-through disabled:decoration-current/45 motion-reduce:transition-none data-[outside=true]:text-muted-foreground data-[today=true]:after:bg-primary group-data-[selection-mode=single]/calendar:data-[selected=true]:rounded-md group-data-[selection-mode=single]/calendar:data-[selected=true]:bg-primary group-data-[selection-mode=single]/calendar:data-[selected=true]:text-primary-foreground group-data-[selection-mode=single]/calendar:data-[selected=true]:shadow-sm group-data-[selection-mode=single]/calendar:data-[selected=true]:after:bg-primary-foreground data-[in-range=true]:rounded-none data-[in-range=true]:bg-primary/12 data-[range-preview=true]:rounded-none data-[range-preview=true]:bg-primary/[0.07] data-[range-start=true]:z-10 data-[range-start=true]:rounded-l-md data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-start=true]:shadow-sm data-[range-start=true]:after:bg-primary-foreground data-[range-end=true]:z-10 data-[range-end=true]:rounded-r-md data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-end=true]:shadow-sm data-[range-end=true]:after:bg-primary-foreground data-[range-start=true][data-range-end=true]:rounded-md dark:data-[in-range=true]:bg-primary/18 dark:data-[range-preview=true]:bg-primary/10"
 
 export function Calendar(props: CalendarProps) {
   const [local, rest] = splitProps(
@@ -266,7 +267,7 @@ export function Calendar(props: CalendarProps) {
                         data-selected={day.selected ? "true" : undefined}
                         data-slot="calendar-day"
                         data-today={day.today ? "true" : undefined}
-                        class={dayClassName}
+                        class={$calendarDay("default")}
                       >
                         {day.day}
                       </button>

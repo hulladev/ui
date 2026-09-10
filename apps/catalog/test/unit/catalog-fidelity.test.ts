@@ -14,6 +14,7 @@ const examples = [
   ...readdirSync(previews)
     .filter((file) => file.endsWith(".astro"))
     .map((file) => resolve(previews, file)),
+  resolve(root, "src/components/catalog/CatalogCommand.astro"),
   resolve(root, "src/pages/showcase.astro"),
 ]
 for (const path of examples) {
@@ -27,6 +28,9 @@ for (const path of examples) {
     for (const tag of source.matchAll(/<([A-Z]\w*)\b(?:"[^"]*"|'[^']*'|[^>])*?>/g)) {
       if (!imports.has(tag[1])) continue
       expect(tag[0], `${file}: inline styling`).not.toMatch(/\sstyle=/)
+      expect(tag[0], `${file}: nested styling escape hatch`).not.toMatch(
+        /\s(?:content|overlay|panel|viewport|trigger|body|header|footer)(?:Class|ClassName|Style)=/
+      )
       // Skeleton geometry and its documented animation variable are the primitive's API.
       if (tag[1] === "Skeleton") continue
       expect(tag[0], `${file}: dynamic class overrides`).not.toMatch(/\sclass(?::list)?=\{/)

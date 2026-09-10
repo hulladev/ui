@@ -1,16 +1,22 @@
 ---
+import { interactiveRow } from "@/+css/interactive-row.css"
 import { sidebarMenuControls } from "@/+css/sidebar.css"
 import { cn } from "@/lib/style"
 import { resolve } from "@hulla/ui"
 import type { HTMLAttributes } from "astro/types"
 
 const $control = resolve(sidebarMenuControls)
+const $interactiveRow = resolve(interactiveRow)
 
 type Props = HTMLAttributes<"a">
 
 const { class: className, ...props } = Astro.props as Props
 ---
 
-<a {...props} data-slot="sidebar-menu-link" class={cn($control("default"), className)}>
+<a
+  {...props}
+  data-slot="sidebar-menu-link"
+  class={cn($control("default"), $interactiveRow("default"), className)}
+>
   <slot />
 </a>

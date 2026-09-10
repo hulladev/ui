@@ -1,5 +1,9 @@
+import { interactiveRow } from "@/+css/interactive-row.css"
 import { cn } from "@/lib/style"
+import { resolve } from "@hulla/ui"
 import type { ComponentPropsWithRef } from "react"
+
+const $interactiveRow = resolve(interactiveRow)
 
 export type TreeItemLabelProps = ComponentPropsWithRef<"span">
 
@@ -9,7 +13,8 @@ export function TreeItemLabel({ children, className, ...props }: TreeItemLabelPr
       {...props}
       data-slot="tree-item-label"
       className={cn(
-        "flex min-h-8 min-w-0 cursor-default select-none items-center gap-2 rounded-md px-2 text-sm text-muted-foreground transition-[background-color,color] duration-100 hover:bg-hover-surface hover:text-foreground motion-reduce:transition-none [&_svg]:size-4 [&_svg]:shrink-0",
+        "flex min-h-8 min-w-0 cursor-default select-none items-center gap-2 px-2 text-sm [&_svg]:size-4 [&_svg]:shrink-0",
+        $interactiveRow("default"),
         className
       )}
     >

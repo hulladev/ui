@@ -23,6 +23,14 @@ async function readGeneratedSidebarPart(
   )
 }
 
+async function readGeneratedTreeItemLabel(framework: "astro" | "react"): Promise<string> {
+  const extension = framework === "astro" ? "astro" : "tsx"
+  return readFile(
+    resolve(repositoryRoot, `generated/${framework}/tree-view/tree-item-label.${extension}`),
+    "utf8"
+  )
+}
+
 describe("Sidebar generated contract", () => {
   test("preserves native landmark, list, link, and button semantics", async () => {
     const [root, content, menu, item, link, button] = await Promise.all([
@@ -67,5 +75,29 @@ describe("Sidebar generated contract", () => {
     )
 
     for (const source of sources) expect(source).toContain("aria-[current=page]")
+  })
+
+  test("shares the tree-view row interaction treatment", async () => {
+    const sidebarSources = await Promise.all(
+      (["astro", "react"] as const).flatMap((framework) => [
+        readGeneratedSidebarPart(framework, "sidebar-menu-link"),
+        readGeneratedSidebarPart(framework, "sidebar-menu-button"),
+        readGeneratedSidebarPart(framework, "sidebar-menu-trigger"),
+      ])
+    )
+    const treeSources = await Promise.all(
+      (["astro", "react"] as const).map(readGeneratedTreeItemLabel)
+    )
+
+    for (const source of [...sidebarSources, ...treeSources]) {
+      expect(source).toContain("rounded-md")
+      expect(source).toContain("duration-100")
+      expect(source).toContain("hover:bg-hover-surface")
+      expect(source).toContain("hover:text-foreground")
+    }
+
+    for (const source of sidebarSources) {
+      expect(source).not.toContain("aria-[current=page]:before")
+    }
   })
 })

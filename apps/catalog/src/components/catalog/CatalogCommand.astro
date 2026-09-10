@@ -23,12 +23,11 @@ const { group: currentGroup } = Astro.props
 
 <Dialog
   id="catalog-navigation-dialog"
-  contentClass="max-w-2xl p-0"
   hidden
   aria-label="Navigate the component catalog"
   data-catalog-command-dialog
 >
-  <Command class="rounded-[inherit] border-0 shadow-none" aria-label="Catalog destinations">
+  <Command aria-label="Catalog destinations">
     <CommandInput
       id="catalog-navigation-input"
       placeholder="Search components and sections…"
