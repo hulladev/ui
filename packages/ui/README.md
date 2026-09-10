@@ -1,7 +1,7 @@
 # @hulla/ui
 
-Deterministic, atomic source-component registry generation for Astro, React, Solid, Svelte, and
-Vue.
+Deterministic, atomic source-component registry generation. The official Hulla registry currently
+publishes Astro, React, and Solid targets.
 
 ```ts
 import { createLibrary } from "@hulla/ui"

@@ -6,14 +6,15 @@ tree-shakeable without a font, sprite, CDN, or client-side loader.
 
 ## Framework packages
 
-| Target  | Package          |
-| ------- | ---------------- |
-| Vanilla | `lucide`         |
-| Astro   | `@lucide/astro`  |
-| React   | `lucide-react`   |
-| Solid   | `lucide-solid`   |
-| Svelte  | `@lucide/svelte` |
-| Vue     | `@lucide/vue`    |
+| Target  | Package         |
+| ------- | --------------- |
+| Vanilla | `lucide`        |
+| Astro   | `@lucide/astro` |
+| React   | `lucide-react`  |
+| Solid   | `lucide-solid`  |
+
+Svelte and Vue adapters will declare their matching Lucide packages when those registry targets
+ship.
 
 Only declare an adapter when a generated framework tree actually imports it. Component-level
 package metadata must repeat that dependency so installing a generated component also installs its

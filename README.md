@@ -5,9 +5,10 @@ Hulla UI is the source-component registry and deterministic generator used by th
 contributors; application developers install components through `hulla`, not directly from this
 workspace.
 
-The generator turns framework-specific source templates into complete, validated registries for
-Astro, React, Solid, Svelte, and Vue. Every build is staged, compared by content, and swapped into
-place atomically, so failed generation never leaves a partially updated registry.
+The generator turns framework-specific source templates into complete, validated registries. The
+official Hulla registry currently ships Astro, React, and Solid components; Svelte and Vue adapters
+remain planned. Every build is staged, compared by content, and swapped into place atomically, so
+failed generation never leaves a partially updated registry.
 
 ## Start developing
 
@@ -65,8 +66,12 @@ bun run verify
 
 - [Contributing](./contributing.md)
 - [Component authoring](./docs/component-authoring.md)
+- [File upload, tag input, and stepper](./docs/form-and-stepper-primitives.md)
 - [Iconography](./docs/iconography.md)
 - [Generator API and CLI](./docs/generator-api.md)
 - [Build architecture](./docs/architecture.md)
+- [Framework generation](./docs/framework-generation.md)
+- [Consumer installation and local dogfooding](./docs/consumer-installation.md)
+- [Beta compatibility and release process](./docs/beta-release.md)
 
 For application installation flows, see the [`hulla` CLI](https://github.com/hulladev/cli).
