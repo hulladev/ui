@@ -18,6 +18,7 @@ const { class: className, size = "md", variant = "neutral", ...props } = Astro.p
 <span
   {...props}
   data-slot="badge"
+  data-variant={variant}
   class={cn(
     "inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-[6px] border font-medium leading-none antialiased [&>svg]:shrink-0",
     $variant(variant),

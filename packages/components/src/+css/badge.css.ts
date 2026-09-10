@@ -5,7 +5,7 @@ export const badgeVariants = vn({
   primary:
     "border-transparent bg-primary text-primary-foreground dark:bg-primary/15 dark:text-primary-text",
   success: "border-transparent bg-success text-on-emphasis dark:bg-success/15 dark:text-success",
-  warning: "border-transparent bg-warning text-foreground dark:bg-warning/15 dark:text-warning",
+  warning: "border-transparent bg-warning text-on-emphasis dark:bg-warning/15 dark:text-warning",
   danger: "border-transparent bg-danger text-on-emphasis dark:bg-danger/15 dark:text-danger",
 })
 

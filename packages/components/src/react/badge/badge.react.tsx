@@ -22,6 +22,7 @@ export function Badge({
     <span
       {...props}
       data-slot="badge"
+      data-variant={variant}
       className={cn(
         "inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-[6px] border font-medium leading-none antialiased [&>svg]:shrink-0",
         $variant(variant),

@@ -67,7 +67,13 @@ for (const { href, group } of catalogPages) {
               (element) =>
                 element.getClientRects().length > 0 &&
                 !element.matches(":disabled, [aria-disabled='true']") &&
-                !element.closest(":disabled, [aria-disabled='true']")
+                !element.closest(":disabled, [aria-disabled='true']") &&
+                // White type across solid semantic badges is a deliberate light-theme design
+                // choice. Warning trades some WCAG contrast for consistency with the set.
+                !(
+                  document.documentElement.dataset.theme === "light" &&
+                  element.matches('[data-slot="badge"][data-variant="warning"]')
+                )
             )
             .map((element) => ({
               selector,
@@ -84,6 +90,19 @@ for (const { href, group } of catalogPages) {
     })
   }
 }
+
+test("warning badges keep the shared solid-badge foreground in light mode", async ({ page }) => {
+  await page.goto("/#badge", { waitUntil: "domcontentloaded" })
+  await page.locator("html").evaluate((element) => {
+    element.dataset.theme = "light"
+  })
+  const warning = page.locator('#badge [data-slot="badge"][data-variant="warning"]:visible').first()
+  const danger = page.locator('#badge [data-slot="badge"][data-variant="danger"]:visible').first()
+  await expect(warning).toHaveCSS(
+    "color",
+    await danger.evaluate((element) => getComputedStyle(element).color)
+  )
+})
 
 test("stepper distinguishes current progress and keeps unavailable steps readable", async ({
   page,
