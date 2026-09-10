@@ -1,0 +1,59 @@
+---
+import Alert from "@/components/alert/alert.astro"
+import AlertDescription from "@/components/alert/alert-description.astro"
+import AlertTitle from "@/components/alert/alert-title.astro"
+import Badge from "@/components/badge/badge.astro"
+import Button from "@/components/button/button.astro"
+import Card from "@/components/card/card.astro"
+import CardContent from "@/components/card/card-content.astro"
+import CardDescription from "@/components/card/card-description.astro"
+import CardHeader from "@/components/card/card-header.astro"
+import CardTitle from "@/components/card/card-title.astro"
+import Code from "@/components/code/code.astro"
+import Input from "@/components/input/input.astro"
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Hulla Astro consumer</title>
+  </head>
+  <body>
+    <main
+      data-framework="astro"
+      class="mx-auto flex min-h-screen max-w-3xl flex-col justify-center gap-8 px-6 py-16"
+    >
+      <header class="space-y-3">
+        <Badge variant="primary">Clean-room Astro</Badge>
+        <h1 class="text-4xl font-semibold tracking-[-0.04em]">Hulla primitives, installed</h1>
+        <p class="max-w-2xl text-lg text-muted-foreground">
+          This page starts without Tailwind or theme wiring and is built only after the packed CLI
+          installs the registry.
+        </p>
+      </header>
+
+      <Card data-testid="card" variant="elevated">
+        <CardHeader>
+          <CardTitle>Production defaults</CardTitle>
+          <CardDescription
+            >Every visible control below comes from the generated source.</CardDescription
+          >
+        </CardHeader>
+        <CardContent class="space-y-5">
+          <Input aria-label="Project name" placeholder="Project name" />
+          <div class="flex flex-wrap gap-3">
+            <Button data-testid="button">Create project</Button>
+            <Button variant="outline">Read docs</Button>
+          </div>
+          <Alert variant="important">
+            <AlertTitle>Theme active</AlertTitle>
+            <AlertDescription>
+              Tokens, typography, borders, and focus styles are provided by <Code>styles.css</Code>.
+            </AlertDescription>
+          </Alert>
+        </CardContent>
+      </Card>
+    </main>
+  </body>
+</html>

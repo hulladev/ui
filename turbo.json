@@ -1,6 +1,7 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "globalEnv": ["CI"],
+  "globalPassThroughEnv": ["HULLA_CATALOG_VITE_CACHE_DIR"],
   "ui": "tui",
   "tasks": {
     "build": {

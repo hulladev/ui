@@ -9,6 +9,7 @@
         "@commitlint/cli": "^19.8.1",
         "@floating-ui/dom": "catalog:",
         "@hulla/ui": "workspace:*",
+        "@playwright/test": "^1.62.0",
         "@repo/eslint-config": "workspace:*",
         "@repo/typescript-config": "workspace:*",
         "@tanstack/highlight": "^0.0.9",
@@ -105,7 +106,7 @@
     },
     "packages/ui": {
       "name": "@hulla/ui",
-      "version": "0.0.1",
+      "version": "0.0.2-beta.0",
       "bin": {
         "uigen": "./dist/bin/uigen.js",
       },

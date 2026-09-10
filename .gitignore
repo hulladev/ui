@@ -18,6 +18,7 @@ blob-report
 .playwright-cli
 playwright-report
 test-results
+.consumer-sandbox
 
 # Turbo
 .turbo

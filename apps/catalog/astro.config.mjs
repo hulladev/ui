@@ -56,6 +56,9 @@ function reloadGeneratedOutput() {
 
 export default defineConfig({
   vite: {
+    // Concurrent dev, catalog-test, and consumer-test servers must not invalidate
+    // each other's optimized dependency URLs.
+    cacheDir: process.env.HULLA_CATALOG_VITE_CACHE_DIR,
     plugins: [reloadGeneratedOutput(), tailwindcss()],
     server: {
       watch: {

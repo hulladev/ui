@@ -8,14 +8,15 @@ export default defineConfig({
   workers: 3,
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   use: {
-    baseURL: "http://127.0.0.1:4323",
+    baseURL: "http://127.0.0.1:4325",
     trace: "on-first-retry",
   },
   webServer: {
-    command: "bunx astro dev --host 127.0.0.1 --port 4323",
-    reuseExistingServer: !process.env.CI,
+    command:
+      "HULLA_CATALOG_VITE_CACHE_DIR=node_modules/.vite/catalog-tests bunx astro dev --host 127.0.0.1 --port 4325",
+    reuseExistingServer: false,
     timeout: 120_000,
-    url: "http://127.0.0.1:4323",
+    url: "http://127.0.0.1:4325",
   },
   projects: [
     {
