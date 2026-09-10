@@ -102,7 +102,7 @@ async function fixture(): Promise<Fixture> {
     },
     copyFilesRoot: "./src",
     copyFiles: {
-      shared: ["lib/style.ts", "styles.css"],
+      shared: ["lib/style.ts", { src: "styles.css", globalStyle: true }],
     },
     packageJson: {
       base: {
@@ -155,6 +155,12 @@ describe("deterministic generation", () => {
 
     const manifest = JSON.parse(await readFile(join(current.generated, "ui.manifest.json"), "utf8"))
     expect(manifest.library.components.button.frameworks).toEqual(["astro", "react"])
+    expect(manifest.library.copyFiles.shared).toContainEqual({
+      dest: "styles.css",
+      globalStyle: true,
+      required: true,
+      src: "styles.css",
+    })
     expect(manifest.files["react/button/button.tsx"]).toMatch(/^[a-f0-9]{64}$/)
     expect(
       JSON.parse(await readFile(join(current.generated, "react/package.json"), "utf8")).dependencies
@@ -280,6 +286,18 @@ describe("deterministic generation", () => {
     await expect(unsafe.build({ quiet: true })).rejects.toThrow(
       "Multiple sources emit the same react file"
     )
+  })
+
+  test("rejects global stylesheet metadata on non-CSS files", async () => {
+    const current = await fixture()
+    await expect(
+      createLibrary({
+        ...current.config,
+        copyFiles: {
+          shared: [{ src: "lib/style.ts", globalStyle: true }],
+        },
+      }).build({ quiet: true })
+    ).rejects.toThrow("globalStyle must target a .css file")
   })
 
   test("skips optional copy files without affecting other framework output", async () => {

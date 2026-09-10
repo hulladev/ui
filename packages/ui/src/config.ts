@@ -1,6 +1,6 @@
 import { constants } from "node:fs"
 import { access, readFile, stat } from "node:fs/promises"
-import { dirname, resolve } from "node:path"
+import { dirname, extname, resolve } from "node:path"
 import { cwd } from "node:process"
 import {
   parseJsonConfigFileContent,
@@ -52,12 +52,16 @@ function normalizeCopyFile(entry: CopyFileEntry): NormalizedCopyFile {
   if (entry.dest !== undefined && (typeof entry.dest !== "string" || !entry.dest.trim())) {
     throw new Error("copyFiles entry dest must be a non-empty string when provided")
   }
+  if (entry.globalStyle && extname(entry.dest ?? entry.src).toLowerCase() !== ".css") {
+    throw new Error("copyFiles entries marked globalStyle must target a .css file")
+  }
 
   return {
     src: entry.src,
     dest: entry.dest ?? entry.src,
     required: entry.required ?? true,
     ...(entry.description ? { description: entry.description } : {}),
+    ...(entry.globalStyle ? { globalStyle: true } : {}),
   }
 }
 

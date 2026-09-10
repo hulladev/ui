@@ -9,6 +9,7 @@ export type CopyFileEntry =
       dest?: string
       required?: boolean
       description?: string
+      globalStyle?: boolean
     }
 
 export type NormalizedCopyFile = {
@@ -16,6 +17,7 @@ export type NormalizedCopyFile = {
   dest: string
   required: boolean
   description?: string
+  globalStyle?: boolean
 }
 
 export type OutputDirs<F extends Frameworks> = {
