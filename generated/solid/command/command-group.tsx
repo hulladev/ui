@@ -16,7 +16,7 @@ export function CommandGroup(props: CommandGroupProps) {
       role={local.role}
       data-slot="command-group"
       class={cn(
-        "overflow-hidden p-1 text-foreground [&+&]:mt-1 [&+&]:border-t [&+&]:border-border [&+&]:pt-2",
+        "overflow-hidden py-0 text-foreground [&+&]:mt-1.5 [&+&]:border-t [&+&]:border-border [&+&]:pt-1.5",
         local.class
       )}
     >

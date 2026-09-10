@@ -12,10 +12,7 @@ export function Field(props: FieldProps) {
     <div
       {...rest}
       data-slot="field"
-      class={cn(
-        "group/field grid min-w-0 gap-1.5 text-left has-[:disabled]:opacity-70",
-        local.class
-      )}
+      class={cn("group/field grid min-w-0 content-start gap-1.5 text-left", local.class)}
     >
       {local.children}
     </div>

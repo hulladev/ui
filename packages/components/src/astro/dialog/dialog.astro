@@ -1,4 +1,5 @@
 ---
+import Backdrop from "../backdrop/backdrop.astro"
 import { dialogOverlayVariants, dialogVariants } from "@/+css/dialog.css"
 import { cn } from "@/lib/style"
 import type { HTMLAttributes } from "astro/types"
@@ -40,18 +41,19 @@ const {
   role={role}
   tabindex={tabindex}
   class={cn(
-    "fixed inset-0 z-[calc(var(--hulla-layer-base,1000)+var(--hulla-layer-order,0))] grid max-h-dvh place-items-center overflow-y-auto overscroll-contain bg-foreground/40 backdrop-blur-[3px] focus:outline-none motion-reduce:backdrop-blur-none dark:bg-background/72 dark:backdrop-blur-[8px] [&[hidden]]:hidden",
+    "fixed inset-0 z-[calc(var(--hulla-layer-base,1000)+var(--hulla-layer-order,0))] grid max-h-dvh place-items-center overflow-y-auto overscroll-contain focus:outline-none transition-[display] duration-160 [transition-behavior:allow-discrete] motion-reduce:transition-none [&[hidden]]:hidden [&[hidden]]:pointer-events-none [&[hidden]>[data-slot=backdrop]]:opacity-0 [&[hidden]>[data-slot=dialog]]:opacity-0",
     $overlayVariant(variant),
     className
   )}
   style={style}
 >
+  <Backdrop />
   <div
     data-slot="dialog"
     data-variant={variant}
     tabindex="-1"
     class={cn(
-      "group/dialog relative my-auto w-full overflow-hidden bg-surface-raised text-foreground focus:outline-none",
+      "group/dialog relative my-auto w-full overflow-hidden bg-surface-raised text-foreground focus:outline-none transition-[opacity,transform] duration-160 ease-out starting:opacity-0 motion-reduce:transition-none",
       $variant(variant),
       contentClass
     )}

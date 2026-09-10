@@ -1,17 +1,22 @@
+import { sidebarMenuLayout } from "@/+css/sidebar.css"
+import { resolve } from "@hulla/ui"
 import { cn } from "@/lib/style"
 import type { ComponentPropsWithRef } from "react"
 
-export type SidebarMenuProps = ComponentPropsWithRef<"ul">
+const $menu = resolve(sidebarMenuLayout)
 
-export function SidebarMenu({ children, className, ...props }: SidebarMenuProps) {
+export type SidebarMenuProps = ComponentPropsWithRef<"ul"> & {
+  /** Hierarchy lines for this branch. Defaults to nested; descendants may override. */
+  lines?: "none" | "nested" | "all"
+}
+
+export function SidebarMenu({ children, className, lines, ...props }: SidebarMenuProps) {
   return (
     <ul
       {...props}
       data-slot="sidebar-menu"
-      className={cn(
-        "m-0 grid min-w-0 list-none gap-0.5 p-0 [&_[data-slot=sidebar-menu]]:ml-4 [&_[data-slot=sidebar-menu]]:mt-0.5 [&_[data-slot=sidebar-menu]]:border-l [&_[data-slot=sidebar-menu]]:border-border [&_[data-slot=sidebar-menu]]:pl-2",
-        className
-      )}
+      data-lines={lines}
+      className={cn($menu("default"), className)}
     >
       {children}
     </ul>

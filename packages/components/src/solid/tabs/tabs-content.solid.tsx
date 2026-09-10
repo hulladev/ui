@@ -23,7 +23,7 @@ export function TabsContent(props: TabsContentProps) {
       data-slot="tabs-content"
       data-value={local.value}
       class={cn(
-        "min-w-0 rounded-sm text-sm leading-6 text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring",
+        "min-w-0 rounded-sm transition-opacity duration-120 ease-out starting:opacity-0 motion-reduce:transition-none text-sm leading-6 text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring",
         local.class
       )}
     >

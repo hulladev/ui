@@ -1,16 +1,16 @@
 import { vn } from "@/lib/style"
 
 export const badgeVariants = vn({
-  neutral: "border-border bg-foreground/5 text-muted-foreground",
+  neutral: "border-transparent bg-foreground/10 text-foreground dark:bg-foreground/15",
   primary:
-    "border-primary/25 bg-primary/10 text-[color-mix(in_oklab,var(--color-primary)_68%,var(--color-foreground))]",
-  success: "border-success/25 bg-success/10 text-success",
-  warning: "border-warning/25 bg-warning/10 text-warning",
-  danger: "border-danger/25 bg-danger/10 text-danger",
+    "border-transparent bg-primary text-primary-foreground dark:bg-primary/15 dark:text-primary-text",
+  success: "border-transparent bg-success text-on-emphasis dark:bg-success/15 dark:text-success",
+  warning: "border-transparent bg-warning text-foreground dark:bg-warning/15 dark:text-warning",
+  danger: "border-transparent bg-danger text-on-emphasis dark:bg-danger/15 dark:text-danger",
 })
 
 export const badgeSizes = vn({
-  sm: "h-5 gap-1 rounded-sm px-1.5 text-[0.6875rem] [&>svg]:size-3",
-  md: "h-6 gap-1.5 rounded-sm px-2 text-xs [&>svg]:size-3.5",
-  lg: "h-7 gap-1.5 rounded-sm px-2.5 text-[0.8125rem] [&>svg]:size-4",
+  sm: "h-5 gap-1.5 px-1.5 text-xs [&>svg]:size-3",
+  md: "h-6 gap-1.5 px-2 text-[0.8125rem] [&>svg]:size-3.5",
+  lg: "h-7 gap-2 px-2.5 text-sm [&>svg]:size-4",
 })

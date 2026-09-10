@@ -22,14 +22,6 @@ const commands: Command[] = [
     label: "Astro",
     args: ["bunx", "astro", "check", "--root", "src/astro"],
   },
-  {
-    label: "Svelte",
-    args: ["bunx", "svelte-check", "--tsconfig", "src/svelte/tsconfig.json"],
-  },
-  {
-    label: "Vue",
-    args: ["bunx", "vue-tsc", "--noEmit", "-p", "src/vue/tsconfig.json"],
-  },
 ]
 
 for (const command of commands) {

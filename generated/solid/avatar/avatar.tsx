@@ -2,9 +2,9 @@ import { vn, cn } from "@/lib/style"
 import { mergeProps, splitProps, type JSX } from "solid-js"
 
 const $size = vn({
-  sm: "size-8 text-xs",
-  md: "size-10 text-sm",
-  lg: "size-12 text-base",
+  sm: "size-6 text-[0.6875rem]",
+  md: "size-8 text-sm",
+  lg: "size-10 text-lg",
 })
 
 export type AvatarProps = JSX.IntrinsicElements["span"] & {

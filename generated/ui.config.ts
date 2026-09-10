@@ -3,13 +3,11 @@ import type { UILibrary } from "@hulla/ui"
 export const config = {
   schemaVersion: 1,
   name: "@hulla/ui",
-  version: "0.0.0",
+  version: "0.0.2-beta.0",
   frameworks: {
     astro: "./astro",
     react: "./react",
     solid: "./solid",
-    svelte: "./svelte",
-    vue: "./vue",
   },
   components: {
     accordion: {
@@ -19,6 +17,9 @@ export const config = {
       frameworks: ["astro", "react", "solid"],
     },
     avatar: {
+      frameworks: ["astro", "react", "solid"],
+    },
+    backdrop: {
       frameworks: ["astro", "react", "solid"],
     },
     badge: {
@@ -66,10 +67,16 @@ export const config = {
     draggable: {
       frameworks: ["astro", "react", "solid"],
     },
+    drawer: {
+      frameworks: ["astro", "react", "solid"],
+    },
     "dropdown-menu": {
       frameworks: ["astro", "react", "solid"],
     },
     field: {
+      frameworks: ["astro", "react", "solid"],
+    },
+    "file-upload": {
       frameworks: ["astro", "react", "solid"],
     },
     "hover-card": {
@@ -120,6 +127,9 @@ export const config = {
     spinner: {
       frameworks: ["astro", "react", "solid"],
     },
+    stepper: {
+      frameworks: ["astro", "react", "solid"],
+    },
     switch: {
       frameworks: ["astro", "react", "solid"],
     },
@@ -127,6 +137,9 @@ export const config = {
       frameworks: ["astro", "react", "solid"],
     },
     tabs: {
+      frameworks: ["astro", "react", "solid"],
+    },
+    "tag-input": {
       frameworks: ["astro", "react", "solid"],
     },
     textarea: {
@@ -151,6 +164,12 @@ export const config = {
   author: "Samuel Hulla",
   copyFiles: {
     shared: [
+      {
+        src: "lib/tag-input.ts",
+        dest: "lib/tag-input.ts",
+        required: true,
+        description: "Framework-neutral tag entry keyboard and commit behavior",
+      },
       {
         src: "lib/style.ts",
         dest: "lib/style.ts",
@@ -264,6 +283,7 @@ export const config = {
         dest: "styles.css",
         required: true,
         description: "Shared Hulla design tokens and Tailwind theme",
+        globalStyle: true,
       },
     ],
     solid: [

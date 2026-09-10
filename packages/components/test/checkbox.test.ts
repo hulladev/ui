@@ -35,11 +35,12 @@ describe("Checkbox generated contract", () => {
     for (const source of sources) {
       expect(source).toContain("checked:bg-primary")
       expect(source).toContain("before:-translate-y-px")
-      expect(source).toContain("dark:bg-foreground/[0.1]")
+      expect(source).toContain("dark:enabled:bg-foreground/[0.1]")
       expect(source).toContain("dark:checked:bg-primary")
       expect(source).toContain("indeterminate:bg-primary")
       expect(source).toContain("focus-visible:outline-focus-ring")
-      expect(source).toContain("disabled:opacity-50")
+      expect(source).toContain("bg-disabled-foreground")
+      expect(source).not.toContain("disabled:opacity-50")
       expect(source).toContain("aria-invalid:border-danger")
     }
   })

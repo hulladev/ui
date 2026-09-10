@@ -15,7 +15,7 @@ export function SelectGroup(props: SelectGroupProps) {
       {...rest}
       role={local.role}
       data-slot="select-group"
-      class={cn("py-0.5 not-first:border-t not-first:border-border not-first:pt-1.5", local.class)}
+      class={cn("py-0 not-first:border-t not-first:border-border", local.class)}
     >
       {local.children}
     </div>

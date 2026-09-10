@@ -1,4 +1,4 @@
-import { cn } from "@/lib/style"
+import { vn, cn } from "@/lib/style"
 import {
   connectTimePicker,
   createTimeOptions,
@@ -14,6 +14,20 @@ import { useEffect, useImperativeHandle, useRef, type ComponentPropsWithRef } fr
 import { Button } from "../button/button"
 import { InputGroup } from "../input/input-group"
 import { Popover } from "../popover/popover"
+
+const $size = vn({
+  sm: "h-8 rounded-sm px-2.5 text-[0.8125rem] [&[type=file]]:leading-[1.875rem] file:text-[0.8125rem]",
+  md: "h-10 rounded-md px-3 text-sm [&[type=file]]:leading-[2.375rem] file:text-sm",
+  lg: "h-12 rounded-md px-3.5 text-base [&[type=file]]:leading-[2.875rem] file:text-base",
+})
+const $variant = vn({
+  outline:
+    "border border-foreground/25 bg-surface shadow-[inset_0_1px_2px_oklch(0_0_0/0.025)] enabled:not-focus-visible:not-aria-invalid:hover:border-foreground/40 focus-visible:ring-2 focus-visible:ring-focus-ring/25 focus-visible:border-focus-ring enabled:aria-invalid:border-danger enabled:aria-invalid:hover:border-danger disabled:border-disabled-border disabled:bg-disabled-surface disabled:shadow-none",
+  filled:
+    "border border-transparent bg-foreground/[0.075] shadow-none enabled:not-focus-visible:not-aria-invalid:hover:bg-foreground/[0.12] focus-visible:ring-2 focus-visible:ring-focus-ring/25 focus-visible:border-focus-ring focus-visible:bg-surface enabled:aria-invalid:border-danger/65 enabled:aria-invalid:bg-danger/[0.055] disabled:border-disabled-border disabled:bg-disabled-surface disabled:shadow-none",
+  underline:
+    "rounded-none border-0 border-b border-border bg-transparent px-0 shadow-none enabled:not-focus-visible:not-aria-invalid:hover:border-foreground/40 focus-visible:border-focus-ring focus-visible:shadow-[0_1px_0_var(--color-focus-ring)] enabled:aria-invalid:border-danger disabled:border-disabled-border disabled:bg-transparent disabled:shadow-none",
+})
 
 export type TimePickerProps = Omit<ComponentPropsWithRef<"div">, "defaultValue"> & {
   defaultValue?: string | null
@@ -115,13 +129,19 @@ export function TimePicker({
       data-step={step}
       className={cn("relative inline-grid min-w-0", className)}
     >
-      <Button
-        variant="outline"
+      <button
+        type="button"
+        data-control
+        aria-invalid={props["aria-invalid"]}
         disabled={disabled}
         aria-expanded="false"
         aria-haspopup="dialog"
         data-slot="time-picker-trigger"
-        className="min-w-48 justify-between gap-3 bg-surface px-3 text-left font-normal shadow-xs"
+        className={cn(
+          "flex w-full min-w-0 appearance-none items-center justify-between gap-3 text-left font-normal text-foreground antialiased transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none disabled:cursor-not-allowed disabled:text-disabled-foreground [&>svg]:shrink-0",
+          $size("md"),
+          $variant("outline")
+        )}
       >
         <span
           data-slot="time-picker-value"
@@ -145,7 +165,7 @@ export function TimePicker({
             strokeLinejoin="round"
           />
         </svg>
-      </Button>
+      </button>
 
       <input
         type="hidden"

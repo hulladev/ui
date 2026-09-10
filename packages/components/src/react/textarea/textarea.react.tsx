@@ -25,7 +25,7 @@ export function Textarea({
       data-control=""
       data-slot="textarea"
       className={cn(
-        "block w-full min-w-0 resize-y appearance-none text-foreground antialiased placeholder:text-muted-foreground/65 transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-55 read-only:cursor-default aria-invalid:placeholder:text-danger/60",
+        "block w-full min-w-0 resize-y appearance-none text-foreground antialiased placeholder:text-muted-foreground transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none disabled:cursor-not-allowed disabled:text-disabled-foreground disabled:placeholder:text-disabled-foreground enabled:aria-invalid:placeholder:text-danger/60",
         $size(controlSize),
         $variant(variant),
         className

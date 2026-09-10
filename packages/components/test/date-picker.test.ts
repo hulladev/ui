@@ -50,14 +50,16 @@ describe("Calendar authored contract", () => {
 })
 
 describe("Date picker composition", () => {
-  test("renders the shared Button, Popover, Calendar, and TimePicker components", async () => {
+  test("uses input styling for triggers and shared components for picker contents", async () => {
     for (const framework of ["astro", "react"] as const) {
       const [datePicker, dateTimePicker] = await Promise.all([
         readComponent(framework, "date-picker", "date-picker"),
         readComponent(framework, "date-picker", "date-time-picker"),
       ])
 
-      expect(datePicker).toContain("../button/button")
+      expect(datePicker).toContain("@/+css/form-control.css")
+      expect(datePicker).toContain("<button")
+      expect(dateTimePicker).toContain("@/+css/form-control.css")
       expect(datePicker).toContain("../calendar/calendar")
       expect(datePicker).toContain("../popover/popover")
       expect(dateTimePicker).toContain("../button/button")

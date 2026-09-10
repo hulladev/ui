@@ -1,3 +1,5 @@
+import { formControlSizes, formControlVariants } from "@/+css/form-control.css"
+import { resolve } from "@hulla/ui"
 import { mergeProps, splitProps, type JSX } from "solid-js"
 import { createMutableRef, exposeRef, createLifecycleEffect } from "@/lib/solid"
 import {
@@ -14,9 +16,11 @@ import {
   type DatePickerValueChangeDetail,
 } from "@/lib/date-picker"
 import { cn } from "@/lib/style"
-import { Button } from "../button/button.solid"
 import { Calendar } from "../calendar/calendar.solid"
 import { Popover } from "../popover/popover.solid"
+
+const $size = resolve(formControlSizes)
+const $variant = resolve(formControlVariants)
 
 type DatePickerBaseProps = Omit<JSX.IntrinsicElements["div"], "defaultValue"> & {
   defaultMonth?: string
@@ -148,13 +152,19 @@ export function DatePicker(props: DatePickerProps) {
       data-slot="date-picker"
       class={cn("relative inline-grid min-w-0", local.class)}
     >
-      <Button
-        variant="outline"
+      <button
+        type="button"
+        data-control
+        aria-invalid={rest["aria-invalid"]}
         disabled={local.disabled}
         aria-expanded="false"
         aria-haspopup="dialog"
         data-slot="date-picker-trigger"
-        class="min-w-52 justify-between gap-3 bg-surface px-3 text-left font-normal shadow-xs"
+        class={cn(
+          "flex w-full min-w-0 appearance-none items-center justify-between gap-3 text-left font-normal text-foreground antialiased transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none disabled:cursor-not-allowed disabled:text-disabled-foreground disabled:placeholder:text-disabled-foreground [&>svg]:shrink-0",
+          $size("md"),
+          $variant("outline")
+        )}
       >
         <span
           data-slot="date-picker-value"
@@ -177,7 +187,7 @@ export function DatePicker(props: DatePickerProps) {
             stroke-linejoin="round"
           />
         </svg>
-      </Button>
+      </button>
 
       {local.selectionMode === "range" ? (
         <>

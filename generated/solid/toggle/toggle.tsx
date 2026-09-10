@@ -9,15 +9,17 @@ import {
 } from "@/lib/toggle"
 
 const $size = vn({
-  sm: "min-h-7 gap-1.5 rounded-sm px-2 text-xs",
-  md: "min-h-8 gap-1.5 rounded-sm px-2.5 text-[0.8125rem]",
-  lg: "min-h-10 gap-2 rounded-md px-3 text-sm",
+  sm: "h-7 gap-1.5 rounded-[6px] px-2.5 text-xs [&>svg]:size-3.5",
+  md: "h-8 gap-1.5 rounded-[7px] px-3 text-sm [&>svg]:size-4",
+  lg: "h-9 gap-2 rounded-[8px] px-3 text-base [&>svg]:size-4.5",
 })
 const $variant = vn({
-  default:
-    "border-transparent bg-transparent text-muted-foreground shadow-none hover:bg-foreground/[0.05] hover:text-foreground aria-pressed:text-primary aria-pressed:[&_svg]:fill-current",
   outline:
-    "border-border bg-surface text-muted-foreground shadow-xs hover:border-foreground/25 hover:bg-foreground/[0.04] hover:text-foreground aria-pressed:border-primary/45 aria-pressed:text-primary aria-pressed:[&_svg]:fill-current",
+    "border-foreground/20 bg-transparent text-foreground shadow-none enabled:hover:border-foreground/40 enabled:hover:bg-foreground/[0.08] enabled:aria-pressed:border-primary/60 enabled:aria-pressed:bg-selected-surface enabled:aria-pressed:hover:bg-selected-hover-surface enabled:aria-pressed:text-primary-text",
+  ghost:
+    "border-transparent bg-transparent text-muted-foreground shadow-none enabled:hover:bg-foreground/[0.08] enabled:hover:text-foreground enabled:aria-pressed:bg-selected-surface enabled:aria-pressed:hover:bg-selected-hover-surface enabled:aria-pressed:text-primary-text",
+  inverted:
+    "border-foreground/20 bg-transparent text-foreground shadow-none enabled:hover:border-foreground/40 enabled:hover:bg-foreground/[0.08] enabled:aria-pressed:border-foreground enabled:aria-pressed:bg-foreground enabled:aria-pressed:text-background enabled:aria-pressed:hover:border-foreground/80 enabled:aria-pressed:hover:bg-foreground/80",
 })
 
 export type ToggleProps = Omit<JSX.IntrinsicElements["button"], "aria-pressed"> & {
@@ -31,7 +33,7 @@ export type ToggleProps = Omit<JSX.IntrinsicElements["button"], "aria-pressed"> 
 export function Toggle(props: ToggleProps) {
   const [local, rest] = splitProps(
     mergeProps(
-      { defaultPressed: false, size: "md", type: "button", variant: "default" } as const,
+      { defaultPressed: false, size: "md", type: "button", variant: "outline" } as const,
       props
     ),
     ["children", "class", "defaultPressed", "onPressedChange", "pressed", "size", "type", "variant"]
@@ -88,7 +90,7 @@ export function Toggle(props: ToggleProps) {
       data-state={resolvedPressed() ? "on" : "off"}
       data-variant={local.variant}
       class={cn(
-        "inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap border font-medium leading-none outline-none transition-[background-color,border-color,color,box-shadow,transform] duration-150 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring active:translate-y-px disabled:pointer-events-none disabled:opacity-40 motion-reduce:transition-none motion-reduce:active:translate-y-0 [&_svg]:pointer-events-none [&_svg]:size-[1em] [&_svg]:shrink-0",
+        "inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap border font-medium leading-none outline-none transition-[background-color,border-color,color,box-shadow,translate] duration-120 ease-out focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring enabled:not-aria-disabled:active:translate-y-px disabled:cursor-not-allowed disabled:text-disabled-foreground disabled:bg-disabled-surface disabled:border-disabled-border disabled:shadow-none disabled:aria-pressed:bg-foreground/10 disabled:aria-pressed:border-disabled-foreground/40 motion-reduce:transition-none motion-reduce:enabled:not-aria-disabled:active:translate-y-0 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         $variant(local.variant),
         $size(local.size),
         local.class

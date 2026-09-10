@@ -1,14 +1,26 @@
 import { cn } from "@/lib/style"
 import type { ComponentPropsWithRef } from "react"
 
-export type CodeBlockActionsProps = ComponentPropsWithRef<"div">
+export type CodeBlockActionsProps = ComponentPropsWithRef<"div"> & {
+  /** Reveal on pointer hover or keyboard focus; always visible on touch devices. */
+  revealOnHover?: boolean
+}
 
-export function CodeBlockActions({ children, className, ...props }: CodeBlockActionsProps) {
+export function CodeBlockActions({
+  children,
+  className,
+  revealOnHover = false,
+  ...props
+}: CodeBlockActionsProps) {
   return (
     <div
       {...props}
       data-slot="code-block-actions"
-      className={cn("ml-auto flex shrink-0 items-center gap-1.5", className)}
+      data-reveal-on-hover={revealOnHover || undefined}
+      className={cn(
+        "ml-auto flex shrink-0 items-center gap-1.5 [&_[data-slot=code-copy-feedback]]:relative [&_[data-slot=code-copy-feedback]]:block [&_[data-slot=code-copy-feedback]]:size-3.5 [&_[data-slot=code-copy-feedback]>svg]:absolute [&_[data-slot=code-copy-feedback]>svg]:inset-0 [&_[data-slot=code-copy-feedback]>svg]:size-full [&_[data-slot=code-copy-feedback]>svg]:transition-[opacity,transform] [&_[data-slot=code-copy-feedback]>svg]:duration-150 motion-reduce:[&_[data-slot=code-copy-feedback]>svg]:transition-none [&_[data-copy-icon]]:scale-100 [&_[data-copy-icon]]:opacity-100 [&_[data-copied-icon]]:scale-75 [&_[data-copied-icon]]:opacity-0 [&_[data-copied]_[data-copy-icon]]:scale-75 [&_[data-copied]_[data-copy-icon]]:opacity-0 [&_[data-copied]_[data-copied-icon]]:scale-100 [&_[data-copied]_[data-copied-icon]]:opacity-100 [@media(hover:hover)_and_(pointer:fine)]:data-[reveal-on-hover]:opacity-0 group-hover/code-block:data-[reveal-on-hover]:opacity-100 group-focus-within/code-block:data-[reveal-on-hover]:opacity-100",
+        className
+      )}
     >
       {children}
     </div>

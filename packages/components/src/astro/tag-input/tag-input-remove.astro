@@ -1,0 +1,19 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = Omit<HTMLAttributes<"button">, "aria-label"> & { "aria-label": string }
+const { class: className, type = "button", ...props } = Astro.props as Props
+---
+
+<button
+  {...props}
+  type={type}
+  data-slot="tag-input-remove"
+  class={cn(
+    "inline-flex size-6 shrink-0 items-center justify-center rounded-[0.25rem] text-muted-foreground transition-colors enabled:hover:bg-hover-surface enabled:hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus-ring disabled:cursor-not-allowed disabled:text-disabled-foreground motion-reduce:transition-none [&>svg]:size-3",
+    className
+  )}
+>
+  <slot />
+</button>

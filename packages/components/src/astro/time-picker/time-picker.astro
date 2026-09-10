@@ -1,4 +1,6 @@
 ---
+import { formControlSizes, formControlVariants } from "@/+css/form-control.css"
+import { resolve } from "@hulla/ui"
 import { cn } from "@/lib/style"
 import {
   createTimeOptions,
@@ -11,6 +13,9 @@ import type { HTMLAttributes } from "astro/types"
 import Button from "../button/button.astro"
 import InputGroup from "../input/input-group.astro"
 import Popover from "../popover/popover.astro"
+
+const $size = resolve(formControlSizes)
+const $variant = resolve(formControlVariants)
 
 type Props = Omit<HTMLAttributes<"div">, "defaultValue"> & {
   defaultValue?: string | null
@@ -72,13 +77,19 @@ const initialPeriod = Number(draftValue.slice(0, 2)) < 12 ? "am" : "pm"
   data-step={step}
   class={cn("relative inline-grid min-w-0", className)}
 >
-  <Button
-    variant="outline"
+  <button
+    type="button"
+    data-control
+    aria-invalid={props["aria-invalid"]}
     disabled={disabled}
     aria-expanded="false"
     aria-haspopup="dialog"
     data-slot="time-picker-trigger"
-    class="min-w-48 justify-between gap-3 bg-surface px-3 text-left font-normal shadow-xs"
+    class={cn(
+      "flex w-full min-w-0 appearance-none items-center justify-between gap-3 text-left font-normal text-foreground antialiased transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none disabled:cursor-not-allowed disabled:text-disabled-foreground [&>svg]:shrink-0",
+      $size("md"),
+      $variant("outline")
+    )}
   >
     <span
       data-slot="time-picker-value"
@@ -96,7 +107,7 @@ const initialPeriod = Number(draftValue.slice(0, 2)) < 12 ? "am" : "pm"
         stroke-linecap="round"
         stroke-linejoin="round"></path>
     </svg>
-  </Button>
+  </button>
 
   <input
     type="hidden"

@@ -1,4 +1,6 @@
 ---
+import { formControlSizes, formControlVariants } from "@/+css/form-control.css"
+import { resolve } from "@hulla/ui"
 import {
   formatCalendarValue,
   serializeCalendarValue,
@@ -8,9 +10,11 @@ import {
 } from "@/lib/calendar"
 import { cn } from "@/lib/style"
 import type { HTMLAttributes } from "astro/types"
-import Button from "../button/button.astro"
 import Calendar from "../calendar/calendar.astro"
 import Popover from "../popover/popover.astro"
+
+const $size = resolve(formControlSizes)
+const $variant = resolve(formControlVariants)
 
 type DatePickerBaseProps = Omit<HTMLAttributes<"div">, "defaultValue"> & {
   defaultMonth?: string
@@ -83,13 +87,19 @@ const endName =
   data-slot="date-picker"
   class={cn("relative inline-grid min-w-0", className)}
 >
-  <Button
-    variant="outline"
+  <button
+    type="button"
+    data-control
+    aria-invalid={props["aria-invalid"]}
     disabled={disabled}
     aria-expanded="false"
     aria-haspopup="dialog"
     data-slot="date-picker-trigger"
-    class="min-w-52 justify-between gap-3 bg-surface px-3 text-left font-normal shadow-xs"
+    class={cn(
+      "flex w-full min-w-0 appearance-none items-center justify-between gap-3 text-left font-normal text-foreground antialiased transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none disabled:cursor-not-allowed disabled:text-disabled-foreground disabled:placeholder:text-disabled-foreground [&>svg]:shrink-0",
+      $size("md"),
+      $variant("outline")
+    )}
   >
     <span
       data-slot="date-picker-value"
@@ -106,7 +116,7 @@ const endName =
         stroke-linecap="round"
         stroke-linejoin="round"></path>
     </svg>
-  </Button>
+  </button>
 
   {
     selectionMode === "range" ? (

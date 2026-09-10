@@ -43,7 +43,7 @@ type RangeCalendarProps = {
 export type CalendarProps = CalendarBaseProps & (SingleCalendarProps | RangeCalendarProps)
 
 const dayClassName =
-  "relative isolate grid h-9 w-full place-items-center border-0 bg-transparent p-0 text-[0.8125rem] font-medium tabular-nums text-foreground transition-[background-color,color,box-shadow,transform] duration-100 ease-out after:pointer-events-none after:absolute after:bottom-1 after:left-1/2 after:size-1 after:-translate-x-1/2 after:rounded-full after:bg-transparent after:content-[''] hover:z-10 hover:bg-foreground/[0.065] active:scale-[0.94] focus-visible:z-20 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-focus-ring disabled:pointer-events-none disabled:text-muted-foreground/30 disabled:line-through disabled:decoration-current/45 motion-reduce:transition-none data-[outside=true]:text-muted-foreground/45 data-[today=true]:after:bg-primary group-data-[selection-mode=single]/calendar:data-[selected=true]:rounded-md group-data-[selection-mode=single]/calendar:data-[selected=true]:bg-primary group-data-[selection-mode=single]/calendar:data-[selected=true]:text-primary-foreground group-data-[selection-mode=single]/calendar:data-[selected=true]:shadow-sm group-data-[selection-mode=single]/calendar:data-[selected=true]:after:bg-primary-foreground data-[in-range=true]:rounded-none data-[in-range=true]:bg-primary/12 data-[range-preview=true]:rounded-none data-[range-preview=true]:bg-primary/[0.07] data-[range-start=true]:z-10 data-[range-start=true]:rounded-l-md data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-start=true]:shadow-sm data-[range-start=true]:after:bg-primary-foreground data-[range-end=true]:z-10 data-[range-end=true]:rounded-r-md data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-end=true]:shadow-sm data-[range-end=true]:after:bg-primary-foreground data-[range-start=true][data-range-end=true]:rounded-md dark:data-[in-range=true]:bg-primary/18 dark:data-[range-preview=true]:bg-primary/10"
+  "relative isolate grid h-9 w-full place-items-center border-0 bg-transparent p-0 text-[0.8125rem] font-medium tabular-nums text-foreground transition-[background-color,color,box-shadow,transform] duration-100 ease-out after:pointer-events-none after:absolute after:bottom-1 after:left-1/2 after:size-1 after:-translate-x-1/2 after:rounded-full after:bg-transparent after:content-[''] hover:z-10 hover:bg-foreground/[0.065] active:scale-[0.94] focus-visible:z-20 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-focus-ring disabled:pointer-events-none disabled:text-muted-foreground disabled:line-through disabled:decoration-current/45 motion-reduce:transition-none data-[outside=true]:text-muted-foreground data-[today=true]:after:bg-primary group-data-[selection-mode=single]/calendar:data-[selected=true]:rounded-md group-data-[selection-mode=single]/calendar:data-[selected=true]:bg-primary group-data-[selection-mode=single]/calendar:data-[selected=true]:text-primary-foreground group-data-[selection-mode=single]/calendar:data-[selected=true]:shadow-sm group-data-[selection-mode=single]/calendar:data-[selected=true]:after:bg-primary-foreground data-[in-range=true]:rounded-none data-[in-range=true]:bg-primary/12 data-[range-preview=true]:rounded-none data-[range-preview=true]:bg-primary/[0.07] data-[range-start=true]:z-10 data-[range-start=true]:rounded-l-md data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-start=true]:shadow-sm data-[range-start=true]:after:bg-primary-foreground data-[range-end=true]:z-10 data-[range-end=true]:rounded-r-md data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-end=true]:shadow-sm data-[range-end=true]:after:bg-primary-foreground data-[range-start=true][data-range-end=true]:rounded-md dark:data-[in-range=true]:bg-primary/18 dark:data-[range-preview=true]:bg-primary/10"
 
 export function Calendar(props: CalendarProps) {
   const {
@@ -172,7 +172,7 @@ export function Calendar(props: CalendarProps) {
           type="button"
           aria-label="Previous month"
           data-slot="calendar-previous"
-          className="grid size-8 place-items-center rounded-md border border-transparent bg-transparent text-muted-foreground transition-[background-color,color,transform] duration-100 hover:bg-foreground/[0.06] hover:text-foreground active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus-ring disabled:pointer-events-none disabled:opacity-30 motion-reduce:transition-none"
+          className="grid size-8 place-items-center rounded-md border border-transparent bg-transparent text-muted-foreground transition-[background-color,color,transform] duration-100 enabled:hover:bg-hover-surface enabled:hover:text-foreground enabled:active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus-ring disabled:cursor-not-allowed disabled:text-disabled-foreground motion-reduce:transition-none"
         >
           <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" className="size-4">
             <path
@@ -197,7 +197,7 @@ export function Calendar(props: CalendarProps) {
           type="button"
           aria-label="Next month"
           data-slot="calendar-next"
-          className="grid size-8 place-items-center rounded-md border border-transparent bg-transparent text-muted-foreground transition-[background-color,color,transform] duration-100 hover:bg-foreground/[0.06] hover:text-foreground active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus-ring disabled:pointer-events-none disabled:opacity-30 motion-reduce:transition-none"
+          className="grid size-8 place-items-center rounded-md border border-transparent bg-transparent text-muted-foreground transition-[background-color,color,transform] duration-100 enabled:hover:bg-hover-surface enabled:hover:text-foreground enabled:active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-focus-ring disabled:cursor-not-allowed disabled:text-disabled-foreground motion-reduce:transition-none"
         >
           <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" className="size-4">
             <path
@@ -225,7 +225,7 @@ export function Calendar(props: CalendarProps) {
                 aria-label={weekday.longLabel}
                 title={weekday.longLabel}
                 data-slot="calendar-weekday"
-                className="h-7 p-0 text-center text-[0.625rem] font-semibold tracking-[0.08em] text-muted-foreground/75 uppercase"
+                className="h-7 p-0 text-center text-xs font-medium tracking-[0.02em] text-muted-foreground uppercase"
               >
                 {weekday.label}
               </th>

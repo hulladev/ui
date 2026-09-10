@@ -3,9 +3,9 @@ import type { ComponentPropsWithRef } from "react"
 
 const $variant = vn({
   default:
-    "text-foreground hover:bg-foreground/6 data-[highlighted=true]:bg-foreground/6 dark:hover:bg-foreground/8 dark:data-[highlighted=true]:bg-foreground/8",
+    "text-foreground enabled:hover:bg-hover-surface enabled:data-[highlighted=true]:bg-hover-surface",
   danger:
-    "text-danger hover:bg-danger/10 data-[highlighted=true]:bg-danger/10 dark:hover:bg-danger/14 dark:data-[highlighted=true]:bg-danger/14",
+    "text-danger enabled:hover:bg-danger/10 enabled:data-[highlighted=true]:bg-danger/10 dark:enabled:hover:bg-danger/15 dark:enabled:data-[highlighted=true]:bg-danger/15",
 })
 
 export type DropdownMenuItemProps = ComponentPropsWithRef<"button"> & {
@@ -30,7 +30,7 @@ export function DropdownMenuItem({
       data-slot="dropdown-menu-item"
       data-variant={variant}
       className={cn(
-        "flex min-h-8 w-full cursor-pointer select-none items-center gap-2 rounded-none px-2 py-1.5 text-left text-[0.8125rem] leading-5 outline-none transition-colors duration-100 disabled:pointer-events-none disabled:opacity-45 [&_[data-slot=kbd]]:ml-auto [&_[data-slot=kbd]]:border-0 [&_[data-slot=kbd]]:bg-transparent [&_[data-slot=kbd]]:px-0 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted-foreground",
+        "flex min-h-8 w-full cursor-pointer select-none items-center gap-2 rounded-none px-3 py-2 text-left text-[0.8125rem] leading-5 outline-none transition-colors duration-100 disabled:cursor-not-allowed disabled:text-disabled-foreground [&_[data-slot=kbd]]:ml-auto [&_[data-slot=kbd]]:border-0 [&_[data-slot=kbd]]:bg-transparent [&_[data-slot=kbd]]:px-0 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted-foreground",
         $variant(variant),
         className
       )}

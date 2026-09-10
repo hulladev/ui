@@ -23,7 +23,7 @@ export function NativeSelect(props: NativeSelectProps) {
       data-control=""
       data-slot="control"
       class={cn(
-        "block w-full min-w-0 cursor-pointer text-foreground antialiased transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-55 [&[multiple]]:h-auto [&[multiple]]:cursor-default [&[multiple]]:py-2",
+        "block w-full min-w-0 cursor-pointer text-foreground antialiased transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none disabled:cursor-not-allowed disabled:text-disabled-foreground disabled:placeholder:text-disabled-foreground [&[multiple]]:h-auto [&[multiple]]:cursor-default [&[multiple]]:py-2",
         $size(local.controlSize),
         $variant(local.variant),
         "pr-9 [&[multiple]]:pr-3",

@@ -30,7 +30,7 @@ export function SelectContent(props: SelectContentProps) {
       class={cn(
         $surface,
         $placement(local.placement),
-        "min-w-[anchor-size(width)] max-w-[min(28rem,calc(100vw-1rem))] overscroll-contain p-1",
+        "min-w-[anchor-size(width)] max-w-[min(28rem,calc(100vw-1rem))] overscroll-contain p-0",
         local.class
       )}
     >

@@ -1,19 +1,19 @@
 ---
+import { sidebarMenuLayout } from "@/+css/sidebar.css"
+import { resolve } from "@hulla/ui"
 import { cn } from "@/lib/style"
 import type { HTMLAttributes } from "astro/types"
 
-type Props = HTMLAttributes<"ul">
+const $menu = resolve(sidebarMenuLayout)
 
-const { class: className, ...props } = Astro.props as Props
+type Props = HTMLAttributes<"ul"> & {
+  /** Hierarchy lines for this branch. Defaults to nested; descendants may override. */
+  lines?: "none" | "nested" | "all"
+}
+
+const { class: className, lines, ...props } = Astro.props as Props
 ---
 
-<ul
-  {...props}
-  data-slot="sidebar-menu"
-  class={cn(
-    "m-0 grid min-w-0 list-none gap-0.5 p-0 [&_[data-slot=sidebar-menu]]:ml-4 [&_[data-slot=sidebar-menu]]:mt-0.5 [&_[data-slot=sidebar-menu]]:border-l [&_[data-slot=sidebar-menu]]:border-border [&_[data-slot=sidebar-menu]]:pl-2",
-    className
-  )}
->
+<ul {...props} data-slot="sidebar-menu" data-lines={lines} class={cn($menu("default"), className)}>
   <slot />
 </ul>

@@ -16,7 +16,7 @@ const { class: className, filter = true, loop = true, ...props } = Astro.props a
   data-loop={loop ? "true" : "false"}
   data-slot="command"
   class={cn(
-    "flex w-full min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-surface-raised text-foreground shadow-lg",
+    "flex w-full min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-surface-raised text-foreground shadow-(--shadow-raised)",
     className
   )}
 >

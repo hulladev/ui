@@ -2,11 +2,11 @@ import { vn } from "@/lib/style"
 
 export const formControlVariants = vn({
   outline:
-    "border border-border bg-surface shadow-xs hover:border-foreground/25 focus-visible:border-primary aria-invalid:border-danger aria-invalid:hover:border-danger",
+    "border border-foreground/25 bg-surface shadow-[inset_0_1px_2px_oklch(0_0_0/0.025)] enabled:not-focus-visible:not-aria-invalid:hover:border-foreground/40 focus-visible:ring-2 focus-visible:ring-focus-ring/25 focus-visible:border-focus-ring enabled:aria-invalid:border-danger enabled:aria-invalid:hover:border-danger disabled:border-disabled-border disabled:bg-disabled-surface disabled:shadow-none",
   filled:
-    "border border-transparent bg-foreground/[0.055] shadow-none hover:bg-foreground/[0.075] focus-visible:border-primary/55 focus-visible:bg-surface aria-invalid:border-danger/65 aria-invalid:bg-danger/[0.055]",
+    "border border-transparent bg-foreground/[0.075] shadow-none enabled:not-focus-visible:not-aria-invalid:hover:bg-foreground/[0.12] focus-visible:ring-2 focus-visible:ring-focus-ring/25 focus-visible:border-focus-ring focus-visible:bg-surface enabled:aria-invalid:border-danger/65 enabled:aria-invalid:bg-danger/[0.055] disabled:border-disabled-border disabled:bg-disabled-surface disabled:shadow-none",
   underline:
-    "rounded-none border-0 border-b border-border bg-transparent px-0 shadow-none hover:border-foreground/35 focus-visible:border-primary aria-invalid:border-danger",
+    "rounded-none border-0 border-b border-border bg-transparent px-0 shadow-none enabled:not-focus-visible:not-aria-invalid:hover:border-foreground/40 focus-visible:border-focus-ring focus-visible:shadow-[0_1px_0_var(--color-focus-ring)] enabled:aria-invalid:border-danger disabled:border-disabled-border disabled:bg-transparent disabled:shadow-none",
 })
 
 export const formControlSizes = vn({
@@ -17,11 +17,11 @@ export const formControlSizes = vn({
 
 export const formControlGroupVariants = vn({
   outline:
-    "border border-border bg-surface shadow-xs hover:border-foreground/25 focus-within:border-primary has-[[data-control][aria-invalid=true]]:border-danger",
+    "border border-foreground/25 bg-surface shadow-[inset_0_1px_2px_oklch(0_0_0/0.025)] has-[[data-control]:enabled]:not-focus-within:not-has-[[data-control][aria-invalid=true]:enabled]:hover:border-foreground/40 focus-within:ring-2 focus-within:ring-focus-ring/25 focus-within:border-focus-ring has-[[data-control][aria-invalid=true]:enabled]:border-danger",
   filled:
-    "border border-transparent bg-foreground/[0.055] shadow-none hover:bg-foreground/[0.075] focus-within:border-primary/55 focus-within:bg-surface has-[[data-control][aria-invalid=true]]:border-danger/65 has-[[data-control][aria-invalid=true]]:bg-danger/[0.055]",
+    "border border-transparent bg-foreground/[0.075] shadow-none has-[[data-control]:enabled]:not-focus-within:not-has-[[data-control][aria-invalid=true]:enabled]:hover:bg-foreground/[0.12] focus-within:ring-2 focus-within:ring-focus-ring/25 focus-within:border-focus-ring focus-within:bg-surface has-[[data-control][aria-invalid=true]:enabled]:border-danger/65 has-[[data-control][aria-invalid=true]:enabled]:bg-danger/[0.055]",
   underline:
-    "rounded-none border-0 border-b border-border bg-transparent shadow-none hover:border-foreground/35 focus-within:border-primary has-[[data-control][aria-invalid=true]]:border-danger",
+    "rounded-none border-0 border-b border-border bg-transparent shadow-none has-[[data-control]:enabled]:not-focus-within:not-has-[[data-control][aria-invalid=true]:enabled]:hover:border-foreground/40 focus-within:border-focus-ring focus-within:shadow-[0_1px_0_var(--color-focus-ring)] has-[[data-control][aria-invalid=true]:enabled]:border-danger",
 })
 
 export const formControlGroupSizes = vn({

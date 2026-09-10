@@ -17,7 +17,7 @@ type Props = HTMLAttributes<"div"> & {
 const {
   class: className,
   closeDelay = 100,
-  openDelay = 180,
+  openDelay = 100,
   placement = "top",
   popover = "hint",
   role = "tooltip",
@@ -61,7 +61,7 @@ const {
         this.controller ??= connectFloatingLayer(this, {
           closeDelay: Number(this.dataset.closeDelay ?? 100),
           offset: 7,
-          openDelay: Number(this.dataset.openDelay ?? 180),
+          openDelay: Number(this.dataset.openDelay ?? 100),
           placement: (this.dataset.placement ?? "top") as Placement,
           triggerId,
         })

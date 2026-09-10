@@ -1,14 +1,16 @@
 import { vn } from "@/lib/style"
 
 export const toggleVariants = vn({
-  default:
-    "border-transparent bg-transparent text-muted-foreground shadow-none hover:bg-foreground/[0.05] hover:text-foreground aria-pressed:text-primary aria-pressed:[&_svg]:fill-current",
   outline:
-    "border-border bg-surface text-muted-foreground shadow-xs hover:border-foreground/25 hover:bg-foreground/[0.04] hover:text-foreground aria-pressed:border-primary/45 aria-pressed:text-primary aria-pressed:[&_svg]:fill-current",
+    "border-foreground/20 bg-transparent text-foreground shadow-none enabled:hover:border-foreground/40 enabled:hover:bg-foreground/[0.08] enabled:aria-pressed:border-primary/60 enabled:aria-pressed:bg-selected-surface enabled:aria-pressed:hover:bg-selected-hover-surface enabled:aria-pressed:text-primary-text",
+  ghost:
+    "border-transparent bg-transparent text-muted-foreground shadow-none enabled:hover:bg-foreground/[0.08] enabled:hover:text-foreground enabled:aria-pressed:bg-selected-surface enabled:aria-pressed:hover:bg-selected-hover-surface enabled:aria-pressed:text-primary-text",
+  inverted:
+    "border-foreground/20 bg-transparent text-foreground shadow-none enabled:hover:border-foreground/40 enabled:hover:bg-foreground/[0.08] enabled:aria-pressed:border-foreground enabled:aria-pressed:bg-foreground enabled:aria-pressed:text-background enabled:aria-pressed:hover:border-foreground/80 enabled:aria-pressed:hover:bg-foreground/80",
 })
 
 export const toggleSizes = vn({
-  sm: "min-h-7 gap-1.5 rounded-sm px-2 text-xs",
-  md: "min-h-8 gap-1.5 rounded-sm px-2.5 text-[0.8125rem]",
-  lg: "min-h-10 gap-2 rounded-md px-3 text-sm",
+  sm: "h-7 gap-1.5 rounded-[6px] px-2.5 text-xs [&>svg]:size-3.5",
+  md: "h-8 gap-1.5 rounded-[7px] px-3 text-sm [&>svg]:size-4",
+  lg: "h-9 gap-2 rounded-[8px] px-3 text-base [&>svg]:size-4.5",
 })

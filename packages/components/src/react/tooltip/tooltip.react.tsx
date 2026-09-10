@@ -19,7 +19,7 @@ export function Tooltip({
   children,
   className,
   closeDelay = 100,
-  openDelay = 180,
+  openDelay = 100,
   placement = "top",
   popover = "hint",
   role = "tooltip",

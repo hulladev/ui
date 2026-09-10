@@ -35,7 +35,7 @@ async function run(command: Command): Promise<void> {
 
 try {
   await symlink(join(packageRoot, "node_modules"), join(temporaryRoot, "node_modules"), "dir")
-  for (const framework of ["astro", "react", "solid", "svelte", "vue"]) {
+  for (const framework of ["astro", "react", "solid"]) {
     await cp(join(repositoryRoot, "generated", framework), join(temporaryRoot, framework), {
       recursive: true,
     })
@@ -62,16 +62,6 @@ try {
       label: "Astro",
       framework: "astro",
       args: ["bunx", "astro", "check", "--root", join(temporaryRoot, "astro")],
-    },
-    {
-      label: "Svelte",
-      framework: "svelte",
-      args: ["bunx", "svelte-check", "--tsconfig", join(temporaryRoot, "svelte/tsconfig.json")],
-    },
-    {
-      label: "Vue",
-      framework: "vue",
-      args: ["bunx", "vue-tsc", "--noEmit", "-p", join(temporaryRoot, "vue/tsconfig.json")],
     },
   ]
 

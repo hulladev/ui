@@ -10,7 +10,7 @@ export function TableHead({ children, className, scope = "col", ...props }: Tabl
       scope={scope}
       data-slot="table-head"
       className={cn(
-        "px-4 py-3 align-bottom text-xs font-medium tracking-wide text-muted-foreground",
+        "px-4 py-3 align-bottom text-[0.8125rem] font-semibold text-foreground",
         className
       )}
     >

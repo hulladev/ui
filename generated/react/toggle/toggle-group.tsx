@@ -82,7 +82,7 @@ export function ToggleGroup({
       data-slot="toggle-group"
       data-type={type}
       className={cn(
-        "isolate inline-flex w-fit items-stretch data-[orientation=horizontal]:flex-row data-[orientation=horizontal]:[&>[data-slot=toggle]:not(:first-child)]:-ml-px data-[orientation=horizontal]:[&>[data-slot=toggle]:not(:first-child)]:rounded-l-none data-[orientation=horizontal]:[&>[data-slot=toggle]:not(:last-child)]:rounded-r-none data-[orientation=vertical]:flex-col data-[orientation=vertical]:[&>[data-slot=toggle]:not(:first-child)]:-mt-px data-[orientation=vertical]:[&>[data-slot=toggle]:not(:first-child)]:rounded-t-none data-[orientation=vertical]:[&>[data-slot=toggle]:not(:last-child)]:rounded-b-none",
+        "isolate inline-flex w-fit items-stretch gap-1 data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col",
         className
       )}
     >

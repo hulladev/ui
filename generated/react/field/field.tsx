@@ -10,10 +10,7 @@ export function Field({ children, className, ...props }: FieldProps) {
     <div
       {...props}
       data-slot="field"
-      className={cn(
-        "group/field grid min-w-0 gap-1.5 text-left has-[:disabled]:opacity-70",
-        className
-      )}
+      className={cn("group/field grid min-w-0 content-start gap-1.5 text-left", className)}
     >
       {children}
     </div>

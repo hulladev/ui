@@ -45,7 +45,7 @@ export function Command({
       data-loop={loop ? "true" : "false"}
       data-slot="command"
       className={cn(
-        "flex w-full min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-surface-raised text-foreground shadow-lg",
+        "flex w-full min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-surface-raised text-foreground shadow-(--shadow-raised)",
         className
       )}
     >

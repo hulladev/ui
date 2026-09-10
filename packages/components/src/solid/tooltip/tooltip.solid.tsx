@@ -21,7 +21,7 @@ export function Tooltip(props: TooltipProps) {
     mergeProps(
       {
         closeDelay: 100,
-        openDelay: 180,
+        openDelay: 100,
         placement: "top",
         popover: "hint",
         role: "tooltip",

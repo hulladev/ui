@@ -14,7 +14,7 @@ export function DropdownMenuSeparator(props: DropdownMenuSeparatorProps) {
       {...rest}
       role={local.role}
       data-slot="dropdown-menu-separator"
-      class={cn("mx-0 my-1 border-0 border-t border-border", local.class)}
+      class={cn("m-0 border-0 border-t border-border", local.class)}
     />
   )
 }

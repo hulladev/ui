@@ -23,7 +23,7 @@ export function Badge({
       {...props}
       data-slot="badge"
       className={cn(
-        "inline-flex shrink-0 items-center justify-center whitespace-nowrap border font-medium leading-none tracking-[0.01em] antialiased [&>svg]:shrink-0",
+        "inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-[6px] border font-medium leading-none antialiased [&>svg]:shrink-0",
         $variant(variant),
         $size(size),
         className

@@ -10,7 +10,7 @@ const { class: className, ...props } = Astro.props as Props
 <footer
   {...props}
   data-slot="card-footer"
-  class={cn("mt-auto flex flex-wrap items-center gap-2", className)}
+  class={cn("mt-auto flex flex-wrap items-center gap-3 border-t border-border pt-5", className)}
 >
   <slot />
 </footer>

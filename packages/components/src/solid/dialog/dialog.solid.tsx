@@ -1,5 +1,6 @@
 import { createMutableRef, exposeRef, onMountEffect } from "@/lib/solid"
 import { mergeProps, splitProps, type JSX } from "solid-js"
+import { Backdrop } from "../backdrop/backdrop.solid"
 import { dialogOverlayVariants, dialogVariants } from "@/+css/dialog.css"
 import { connectDialog, onDialogDismiss, type DialogDismissReason } from "@/lib/dialog"
 import { cn } from "@/lib/style"
@@ -83,18 +84,19 @@ export function Dialog(props: DialogProps) {
             }
       }
       class={cn(
-        "fixed inset-0 grid max-h-dvh place-items-center overflow-y-auto overscroll-contain bg-foreground/40 backdrop-blur-[3px] focus:outline-none motion-reduce:backdrop-blur-none dark:bg-background/72 dark:backdrop-blur-[8px] [&[hidden]]:hidden",
+        "fixed inset-0 grid max-h-dvh place-items-center overflow-y-auto overscroll-contain focus:outline-none transition-[display] duration-160 [transition-behavior:allow-discrete] motion-reduce:transition-none [&[hidden]]:hidden [&[hidden]]:pointer-events-none [&[hidden]>[data-slot=backdrop]]:opacity-0 [&[hidden]>[data-slot=dialog]]:opacity-0",
         $overlayVariant(local.variant),
         local.class
       )}
     >
+      <Backdrop />
       <div
         data-slot="dialog"
         data-variant={local.variant}
         tabindex={-1}
         style={local.contentStyle}
         class={cn(
-          "group/dialog relative my-auto w-full overflow-hidden bg-surface-raised text-foreground focus:outline-none",
+          "group/dialog relative my-auto w-full overflow-hidden bg-surface-raised text-foreground focus:outline-none transition-[opacity,transform] duration-160 ease-out starting:opacity-0 motion-reduce:transition-none",
           $variant(local.variant),
           local.contentClassName
         )}

@@ -10,7 +10,10 @@ export function CardFooter(props: CardFooterProps) {
     <footer
       {...rest}
       data-slot="card-footer"
-      class={cn("mt-auto flex flex-wrap items-center gap-2", local.class)}
+      class={cn(
+        "mt-auto flex flex-wrap items-center gap-3 border-t border-border pt-5",
+        local.class
+      )}
     >
       {local.children}
     </footer>

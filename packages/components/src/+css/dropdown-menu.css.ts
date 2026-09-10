@@ -2,7 +2,7 @@ import { vn } from "@/lib/style"
 
 export const dropdownMenuItemVariants = vn({
   default:
-    "text-foreground hover:bg-foreground/6 data-[highlighted=true]:bg-foreground/6 dark:hover:bg-foreground/8 dark:data-[highlighted=true]:bg-foreground/8",
+    "text-foreground enabled:hover:bg-hover-surface enabled:data-[highlighted=true]:bg-hover-surface",
   danger:
-    "text-danger hover:bg-danger/10 data-[highlighted=true]:bg-danger/10 dark:hover:bg-danger/14 dark:data-[highlighted=true]:bg-danger/14",
+    "text-danger enabled:hover:bg-danger/10 enabled:data-[highlighted=true]:bg-danger/10 dark:enabled:hover:bg-danger/15 dark:enabled:data-[highlighted=true]:bg-danger/15",
 })

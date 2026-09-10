@@ -90,7 +90,7 @@ describe("Code authored contract", () => {
       const header = await readCodePart(framework, "code-block-header")
 
       expect(header).toContain("has-[>[data-slot=tabs-list]]:p-0")
-      expect(header).toContain("[&>[data-slot=tabs-list]]:h-12")
+      expect(header).toContain("[&>[data-slot=tabs-list]]:h-9")
       expect(header).toContain("[&>[data-slot=tabs-list]]:gap-0")
       expect(header).toContain("[&>[data-slot=tabs-list]>[data-slot=tabs-trigger]]:border-r")
       expect(header).toContain(

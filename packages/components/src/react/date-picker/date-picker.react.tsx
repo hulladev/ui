@@ -1,3 +1,5 @@
+import { formControlSizes, formControlVariants } from "@/+css/form-control.css"
+import { resolve } from "@hulla/ui"
 import {
   formatCalendarValue,
   serializeCalendarValue,
@@ -13,9 +15,11 @@ import {
 } from "@/lib/date-picker"
 import { cn } from "@/lib/style"
 import { useEffect, useImperativeHandle, useRef, type ComponentPropsWithRef } from "react"
-import { Button } from "../button/button.react"
 import { Calendar } from "../calendar/calendar.react"
 import { Popover } from "../popover/popover.react"
+
+const $size = resolve(formControlSizes)
+const $variant = resolve(formControlVariants)
 
 type DatePickerBaseProps = Omit<ComponentPropsWithRef<"div">, "defaultValue"> & {
   defaultMonth?: string
@@ -141,13 +145,19 @@ export function DatePicker(props: DatePickerProps) {
       data-slot="date-picker"
       className={cn("relative inline-grid min-w-0", className)}
     >
-      <Button
-        variant="outline"
+      <button
+        type="button"
+        data-control
+        aria-invalid={rootProps["aria-invalid"]}
         disabled={disabled}
         aria-expanded="false"
         aria-haspopup="dialog"
         data-slot="date-picker-trigger"
-        className="min-w-52 justify-between gap-3 bg-surface px-3 text-left font-normal shadow-xs"
+        className={cn(
+          "flex w-full min-w-0 appearance-none items-center justify-between gap-3 text-left font-normal text-foreground antialiased transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none disabled:cursor-not-allowed disabled:text-disabled-foreground disabled:placeholder:text-disabled-foreground [&>svg]:shrink-0",
+          $size("md"),
+          $variant("outline")
+        )}
       >
         <span
           data-slot="date-picker-value"
@@ -170,7 +180,7 @@ export function DatePicker(props: DatePickerProps) {
             strokeLinejoin="round"
           />
         </svg>
-      </Button>
+      </button>
 
       {selectionMode === "range" ? (
         <>

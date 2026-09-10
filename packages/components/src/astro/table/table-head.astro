@@ -11,10 +11,7 @@ const { class: className, scope = "col", ...props } = Astro.props as Props
   {...props}
   scope={scope}
   data-slot="table-head"
-  class={cn(
-    "px-4 py-3 align-bottom text-xs font-medium tracking-wide text-muted-foreground",
-    className
-  )}
+  class={cn("px-4 py-3 align-bottom text-[0.8125rem] font-semibold text-foreground", className)}
 >
   <slot />
 </th>

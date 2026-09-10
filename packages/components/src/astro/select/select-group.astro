@@ -10,7 +10,7 @@ const { class: className, role = "group", ...props } = Astro.props as Props
   {...props}
   role={role}
   data-slot="select-group"
-  class={cn("py-0.5 not-first:border-t not-first:border-border not-first:pt-1.5", className)}
+  class={cn("py-0 not-first:border-t not-first:border-border", className)}
 >
   <slot />
 </div>

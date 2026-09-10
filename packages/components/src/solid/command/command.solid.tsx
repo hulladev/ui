@@ -44,7 +44,7 @@ export function Command(props: CommandProps) {
       data-loop={local.loop ? "true" : "false"}
       data-slot="command"
       class={cn(
-        "flex w-full min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-surface-raised text-foreground shadow-lg",
+        "flex w-full min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-surface-raised text-foreground shadow-(--shadow-raised)",
         local.class
       )}
     >

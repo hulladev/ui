@@ -19,7 +19,7 @@ export function HoverCard({
   children,
   className,
   closeDelay = 300,
-  openDelay = 200,
+  openDelay = 120,
   placement = "bottom-start",
   popover = "hint",
   triggerId,
@@ -51,7 +51,7 @@ export function HoverCard({
       data-slot="hover-card"
       className={cn(
         $layer,
-        "max-h-[calc(100vh-1rem)] w-80 max-w-[calc(100vw-1rem)] overflow-auto rounded-md border border-border/85 bg-surface-raised p-4 text-sm text-foreground shadow-xl ring-1 ring-foreground/5",
+        "max-h-[calc(100vh-1rem)] w-80 max-w-[calc(100vw-1rem)] overflow-auto rounded-md border border-border/85 bg-surface-raised p-4 text-sm text-foreground shadow-(--shadow-floating) ring-1 ring-foreground/5",
         className
       )}
     >

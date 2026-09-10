@@ -8,7 +8,7 @@ export function CommandSeparator({ className, ...props }: CommandSeparatorProps)
     <hr
       {...props}
       data-slot="command-separator"
-      className={cn("-mx-1 my-1 h-px border-0 bg-border", className)}
+      className={cn("mx-0 my-1.5 h-px border-0 bg-border", className)}
     />
   )
 }

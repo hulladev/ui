@@ -1,17 +1,18 @@
 ---
 import { vn, cn } from "@/lib/style"
+import Backdrop from "../backdrop/backdrop.astro"
 import type { HTMLAttributes } from "astro/types"
 
 const $overlayVariant = vn({
-  compact: "p-4",
-  workspace: "p-2 sm:p-6",
+  compact: "p-4 [&[hidden]>[data-slot=dialog]]:[transform:translateY(4px)_scale(0.98)]",
+  workspace: "p-2 sm:p-6 [&[hidden]>[data-slot=dialog]]:[transform:translateY(4px)]",
   fullscreen: "p-0",
 })
 const $variant = vn({
   compact:
-    "max-w-lg rounded-lg border border-border p-6 shadow-[0_1.5rem_5rem_-1.75rem_oklch(0_0_0/0.28)] dark:border-foreground/15 dark:bg-surface-raised/84 dark:shadow-[0_1.75rem_7rem_-2rem_oklch(0_0_0/0.9),inset_0_1px_0_oklch(1_0_0/0.08)] dark:backdrop-blur-2xl",
+    "starting:[transform:translateY(4px)_scale(0.98)] max-w-lg rounded-lg border border-border p-6 shadow-(--shadow-overlay) dark:border-foreground/15 dark:bg-surface-raised/84 dark:backdrop-blur-2xl",
   workspace:
-    "flex h-[calc(100dvh-1rem)] max-w-[90rem] flex-col rounded-lg border border-border shadow-[0_1.5rem_5rem_-1.75rem_oklch(0_0_0/0.28)] dark:border-foreground/15 dark:bg-surface-raised/88 dark:shadow-[0_1.75rem_7rem_-2rem_oklch(0_0_0/0.9),inset_0_1px_0_oklch(1_0_0/0.08)] dark:backdrop-blur-2xl sm:h-[calc(100dvh-3rem)]",
+    "starting:[transform:translateY(4px)] flex h-[calc(100dvh-1rem)] max-w-[90rem] flex-col rounded-lg border border-border shadow-(--shadow-overlay) dark:border-foreground/15 dark:bg-surface-raised/88 dark:backdrop-blur-2xl sm:h-[calc(100dvh-3rem)]",
   fullscreen: "flex h-dvh max-w-none flex-col rounded-none border-0 shadow-none",
 })
 
@@ -48,18 +49,19 @@ const {
   role={role}
   tabindex={tabindex}
   class={cn(
-    "fixed inset-0 z-[calc(var(--hulla-layer-base,1000)+var(--hulla-layer-order,0))] grid max-h-dvh place-items-center overflow-y-auto overscroll-contain bg-foreground/40 backdrop-blur-[3px] focus:outline-none motion-reduce:backdrop-blur-none dark:bg-background/72 dark:backdrop-blur-[8px] [&[hidden]]:hidden",
+    "fixed inset-0 z-[calc(var(--hulla-layer-base,1000)+var(--hulla-layer-order,0))] grid max-h-dvh place-items-center overflow-y-auto overscroll-contain focus:outline-none transition-[display] duration-160 [transition-behavior:allow-discrete] motion-reduce:transition-none [&[hidden]]:hidden [&[hidden]]:pointer-events-none [&[hidden]>[data-slot=backdrop]]:opacity-0 [&[hidden]>[data-slot=dialog]]:opacity-0",
     $overlayVariant(variant),
     className
   )}
   style={style}
 >
+  <Backdrop />
   <div
     data-slot="dialog"
     data-variant={variant}
     tabindex="-1"
     class={cn(
-      "group/dialog relative my-auto w-full overflow-hidden bg-surface-raised text-foreground focus:outline-none",
+      "group/dialog relative my-auto w-full overflow-hidden bg-surface-raised text-foreground focus:outline-none transition-[opacity,transform] duration-160 ease-out starting:opacity-0 motion-reduce:transition-none",
       $variant(variant),
       contentClass
     )}

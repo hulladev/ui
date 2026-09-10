@@ -8,7 +8,10 @@ export function CardFooter({ children, className, ...props }: CardFooterProps) {
     <footer
       {...props}
       data-slot="card-footer"
-      className={cn("mt-auto flex flex-wrap items-center gap-2", className)}
+      className={cn(
+        "mt-auto flex flex-wrap items-center gap-3 border-t border-border pt-5",
+        className
+      )}
     >
       {children}
     </footer>

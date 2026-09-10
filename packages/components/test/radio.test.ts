@@ -38,7 +38,8 @@ describe("Radio generated contract", () => {
       expect(source).toContain("checked:bg-primary")
       expect(source).toContain("checked:before:scale-100")
       expect(source).toContain("focus-visible:outline-focus-ring")
-      expect(source).toContain("disabled:opacity-50")
+      expect(source).toContain("bg-disabled-foreground")
+      expect(source).not.toContain("disabled:opacity-50")
       expect(source).toContain("aria-invalid:border-danger")
       expect(source).toContain("aria-invalid:checked:bg-danger")
     }

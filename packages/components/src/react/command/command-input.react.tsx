@@ -50,7 +50,7 @@ export function CommandInput({
         type={type}
         data-slot="command-input"
         className={cn(
-          "h-full min-w-0 flex-1 appearance-none border-0 bg-transparent p-0 text-sm text-foreground caret-primary outline-none placeholder:text-muted-foreground/65 disabled:cursor-not-allowed disabled:opacity-55 [&::-webkit-search-cancel-button]:hidden",
+          "h-full min-w-0 flex-1 appearance-none border-0 bg-transparent p-0 text-sm text-foreground caret-primary outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:text-muted-foreground [&::-webkit-search-cancel-button]:hidden",
           className
         )}
       />

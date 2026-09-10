@@ -48,7 +48,7 @@ function focusDialog(element: HTMLElement) {
   const target =
     element.querySelector<HTMLElement>("[autofocus]") ??
     focusableElements(element)[0] ??
-    element.querySelector<HTMLElement>("[data-slot='dialog']") ??
+    element.querySelector<HTMLElement>("[data-slot='dialog'], [data-slot='drawer']") ??
     element
 
   target.focus({ preventScroll: true })
@@ -186,6 +186,10 @@ export function connectDialog(element: HTMLElement): DialogController {
 
     if (element.hidden) {
       deactivate()
+      // A CSS display transition can keep a closed layer painted briefly.
+      // It must stop accepting focus and assistive-technology interaction immediately.
+      element.setAttribute("inert", "")
+      element.setAttribute("aria-hidden", "true")
     } else {
       activate()
     }
@@ -205,7 +209,8 @@ export function connectDialog(element: HTMLElement): DialogController {
   }
 
   const onPointerDown = (event: PointerEvent) => {
-    if (layer?.isTop && event.target === element) {
+    const backdrop = element.querySelector(":scope > [data-slot='backdrop']")
+    if (layer?.isTop && (event.target === element || event.target === backdrop)) {
       requestDismiss(element, "backdrop")
     }
   }

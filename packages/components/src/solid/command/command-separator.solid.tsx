@@ -10,7 +10,7 @@ export function CommandSeparator(props: CommandSeparatorProps) {
     <hr
       {...rest}
       data-slot="command-separator"
-      class={cn("-mx-1 my-1 h-px border-0 bg-border", local.class)}
+      class={cn("mx-0 my-1.5 h-px border-0 bg-border", local.class)}
     />
   )
 }

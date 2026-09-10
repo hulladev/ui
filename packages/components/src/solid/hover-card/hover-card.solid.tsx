@@ -19,7 +19,7 @@ export type HoverCardProps = Omit<JSX.IntrinsicElements["div"], "popover"> & {
 export function HoverCard(props: HoverCardProps) {
   const [local, rest] = splitProps(
     mergeProps(
-      { closeDelay: 300, openDelay: 200, placement: "bottom-start", popover: "hint" } as const,
+      { closeDelay: 300, openDelay: 120, placement: "bottom-start", popover: "hint" } as const,
       props
     ),
     ["children", "class", "closeDelay", "openDelay", "placement", "popover", "triggerId"]
@@ -54,7 +54,7 @@ export function HoverCard(props: HoverCardProps) {
       data-slot="hover-card"
       class={cn(
         $layer,
-        "max-h-[calc(100vh-1rem)] w-80 max-w-[calc(100vw-1rem)] overflow-auto rounded-md border border-border/85 bg-surface-raised p-4 text-sm text-foreground shadow-xl ring-1 ring-foreground/5",
+        "max-h-[calc(100vh-1rem)] w-80 max-w-[calc(100vw-1rem)] overflow-auto rounded-md border border-border/85 bg-surface-raised p-4 text-sm text-foreground shadow-(--shadow-floating) ring-1 ring-foreground/5",
         local.class
       )}
     >

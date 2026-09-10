@@ -44,7 +44,7 @@ describe("Textarea generated contract", () => {
     }
   })
 
-  test("styles focus, disabled, read-only, and invalid native states", async () => {
+  test("styles focus, disabled, and invalid native states", async () => {
     const sources = await Promise.all([
       readGeneratedTextarea("astro"),
       readGeneratedTextarea("react"),
@@ -52,9 +52,8 @@ describe("Textarea generated contract", () => {
 
     for (const source of sources) {
       expect(source).toContain("focus-visible:outline-none")
-      expect(source).toContain("focus-visible:border-primary")
+      expect(source).toContain("focus-visible:border-focus-ring")
       expect(source).toContain("disabled:cursor-not-allowed")
-      expect(source).toContain("read-only:cursor-default")
       expect(source).toContain("aria-invalid:border-danger")
     }
   })

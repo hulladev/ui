@@ -5,7 +5,7 @@ import { cn } from "@/lib/style"
 import type { Placement } from "@floating-ui/dom"
 
 const $layer =
-  "fixed top-0 left-0 m-0 invisible pointer-events-none scale-[0.98] opacity-0 transition-[display,opacity,overlay,transform,visibility] duration-150 ease-out [transition-behavior:allow-discrete] [&[data-positioned=true]:popover-open]:visible [&[data-positioned=true]:popover-open]:pointer-events-auto [&[data-positioned=true]:popover-open]:scale-100 [&[data-positioned=true]:popover-open]:opacity-100 motion-reduce:transition-none"
+  "fixed top-0 left-0 m-0 invisible pointer-events-none opacity-0 transition-[display,opacity,overlay,translate,visibility] duration-120 ease-out [transition-behavior:allow-discrete] [&[data-placement^=top]]:translate-y-0.5 [&[data-placement^=bottom]]:-translate-y-0.5 [&[data-placement^=left]]:translate-x-0.5 [&[data-placement^=right]]:-translate-x-0.5 [&[data-positioned=true]:popover-open]:visible [&[data-positioned=true]:popover-open]:pointer-events-auto [&[data-positioned=true]:popover-open]:translate-none [&[data-positioned=true]:popover-open]:opacity-100 starting:[&[data-positioned=true]:popover-open]:opacity-0 starting:[&[data-positioned=true][data-placement^=top]:popover-open]:translate-y-0.5 starting:[&[data-positioned=true][data-placement^=bottom]:popover-open]:-translate-y-0.5 starting:[&[data-positioned=true][data-placement^=left]:popover-open]:translate-x-0.5 starting:[&[data-positioned=true][data-placement^=right]:popover-open]:-translate-x-0.5 motion-reduce:transition-none motion-reduce:translate-none"
 
 export type HoverCardProps = Omit<JSX.IntrinsicElements["div"], "popover"> & {
   closeDelay?: number
@@ -18,7 +18,7 @@ export type HoverCardProps = Omit<JSX.IntrinsicElements["div"], "popover"> & {
 export function HoverCard(props: HoverCardProps) {
   const [local, rest] = splitProps(
     mergeProps(
-      { closeDelay: 300, openDelay: 200, placement: "bottom-start", popover: "hint" } as const,
+      { closeDelay: 300, openDelay: 120, placement: "bottom-start", popover: "hint" } as const,
       props
     ),
     ["children", "class", "closeDelay", "openDelay", "placement", "popover", "triggerId"]
@@ -53,7 +53,7 @@ export function HoverCard(props: HoverCardProps) {
       data-slot="hover-card"
       class={cn(
         $layer,
-        "max-h-[calc(100vh-1rem)] w-80 max-w-[calc(100vw-1rem)] overflow-auto rounded-md border border-border/85 bg-surface-raised p-4 text-sm text-foreground shadow-xl ring-1 ring-foreground/5",
+        "max-h-[calc(100vh-1rem)] w-80 max-w-[calc(100vw-1rem)] overflow-auto rounded-md border border-border/85 bg-surface-raised p-4 text-sm text-foreground shadow-(--shadow-floating) ring-1 ring-foreground/5",
         local.class
       )}
     >

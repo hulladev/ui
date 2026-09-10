@@ -8,7 +8,7 @@ export function CardTitle({ children, className, ...props }: CardTitleProps) {
     <h3
       {...props}
       data-slot="card-title"
-      className={cn("text-lg font-semibold leading-6 tracking-[-0.025em]", className)}
+      className={cn("text-xl font-semibold leading-7 tracking-[-0.025em]", className)}
     >
       {children}
     </h3>

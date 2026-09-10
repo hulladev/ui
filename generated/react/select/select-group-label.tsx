@@ -9,7 +9,7 @@ export function SelectGroupLabel({ children, className, ...props }: SelectGroupL
       {...props}
       data-slot="select-group-label"
       className={cn(
-        "px-2 pt-1.5 pb-1 font-mono text-[0.625rem] font-medium tracking-[0.08em] text-muted-foreground uppercase",
+        "px-3 pt-2 pb-1 font-mono text-[0.625rem] font-medium tracking-[0.08em] text-muted-foreground uppercase",
         className
       )}
     >

@@ -1,3 +1,5 @@
+import { formControlSizes, formControlVariants } from "@/+css/form-control.css"
+import { resolve } from "@hulla/ui"
 import { createMutableRef, exposeRef, createLifecycleEffect, onMountEffect } from "@/lib/solid"
 import { mergeProps, splitProps, type JSX } from "solid-js"
 import { cn } from "@/lib/style"
@@ -15,6 +17,9 @@ import {
 import { Button } from "../button/button.solid"
 import { InputGroup } from "../input/input-group.solid"
 import { Popover } from "../popover/popover.solid"
+
+const $size = resolve(formControlSizes)
+const $variant = resolve(formControlVariants)
 
 export type TimePickerProps = Omit<JSX.IntrinsicElements["div"], "defaultValue"> & {
   defaultValue?: string | null
@@ -129,13 +134,19 @@ export function TimePicker(props: TimePickerProps) {
       data-step={local.step}
       class={cn("relative inline-grid min-w-0", local.class)}
     >
-      <Button
-        variant="outline"
+      <button
+        type="button"
+        data-control
+        aria-invalid={rest["aria-invalid"]}
         disabled={local.disabled}
         aria-expanded="false"
         aria-haspopup="dialog"
         data-slot="time-picker-trigger"
-        class="min-w-48 justify-between gap-3 bg-surface px-3 text-left font-normal shadow-xs"
+        class={cn(
+          "flex w-full min-w-0 appearance-none items-center justify-between gap-3 text-left font-normal text-foreground antialiased transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none disabled:cursor-not-allowed disabled:text-disabled-foreground [&>svg]:shrink-0",
+          $size("md"),
+          $variant("outline")
+        )}
       >
         <span
           data-slot="time-picker-value"
@@ -161,7 +172,7 @@ export function TimePicker(props: TimePickerProps) {
             stroke-linejoin="round"
           />
         </svg>
-      </Button>
+      </button>
 
       <input
         type="hidden"

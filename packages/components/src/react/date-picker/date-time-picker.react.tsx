@@ -1,3 +1,5 @@
+import { formControlSizes, formControlVariants } from "@/+css/form-control.css"
+import { resolve } from "@hulla/ui"
 import { type CalendarDisabledDate } from "@/lib/calendar"
 import {
   connectDateTimePicker,
@@ -13,6 +15,9 @@ import { Button } from "../button/button.react"
 import { Calendar } from "../calendar/calendar.react"
 import { Popover } from "../popover/popover.react"
 import { TimePicker } from "../time-picker/time-picker.react"
+
+const $size = resolve(formControlSizes)
+const $variant = resolve(formControlVariants)
 
 export type DateTimePickerProps = Omit<ComponentPropsWithRef<"div">, "defaultValue"> & {
   defaultMonth?: string
@@ -121,13 +126,19 @@ export function DateTimePicker({
       data-slot="date-time-picker"
       className={cn("relative inline-grid min-w-0", className)}
     >
-      <Button
-        variant="outline"
+      <button
+        type="button"
+        data-control
+        aria-invalid={props["aria-invalid"]}
         disabled={disabled}
         aria-expanded="false"
         aria-haspopup="dialog"
         data-slot="date-time-picker-trigger"
-        className="min-w-60 justify-between gap-3 bg-surface px-3 text-left font-normal shadow-xs"
+        className={cn(
+          "flex w-full min-w-0 appearance-none items-center justify-between gap-3 text-left font-normal text-foreground antialiased transition-[background-color,border-color,box-shadow,color] duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none disabled:cursor-not-allowed disabled:text-disabled-foreground disabled:placeholder:text-disabled-foreground [&>svg]:shrink-0",
+          $size("md"),
+          $variant("outline")
+        )}
       >
         <span
           data-slot="date-time-picker-value"
@@ -157,7 +168,7 @@ export function DateTimePicker({
             strokeLinejoin="round"
           />
         </svg>
-      </Button>
+      </button>
 
       <input
         type="hidden"

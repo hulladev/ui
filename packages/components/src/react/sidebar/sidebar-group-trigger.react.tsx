@@ -9,7 +9,7 @@ export function SidebarGroupTrigger({ children, className, ...props }: SidebarGr
       {...props}
       data-slot="sidebar-group-trigger"
       className={cn(
-        "flex min-h-8 w-full list-none items-center gap-2 rounded-md px-2.5 font-mono text-[0.6875rem] font-medium tracking-[0.08em] text-muted-foreground uppercase transition-colors duration-150 after:ml-auto after:size-1.5 after:shrink-0 after:-translate-y-0.5 after:rotate-45 after:border-r after:border-b after:border-current after:transition-transform after:duration-200 hover:bg-foreground/[0.045] hover:text-foreground group-open/collapsible:after:translate-y-0.5 group-open/collapsible:after:rotate-[225deg] motion-reduce:transition-none motion-reduce:after:transition-none [&::-webkit-details-marker]:hidden",
+        "flex min-h-8 w-full list-none items-center gap-2 rounded-[4px] px-2.5 font-mono text-[0.6875rem] font-medium tracking-[0.08em] text-muted-foreground uppercase transition-colors duration-150 after:ml-auto after:size-1.5 after:shrink-0 after:-translate-y-0.5 after:rotate-45 after:border-r after:border-b after:border-current after:transition-transform after:duration-200 hover:bg-hover-surface hover:text-foreground group-open/collapsible:after:translate-y-0.5 group-open/collapsible:after:rotate-[225deg] motion-reduce:transition-none motion-reduce:after:transition-none [&::-webkit-details-marker]:hidden",
         className
       )}
     >

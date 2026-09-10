@@ -16,7 +16,7 @@ export function TableHead(props: TableHeadProps) {
       scope={local.scope}
       data-slot="table-head"
       class={cn(
-        "px-4 py-3 align-bottom text-xs font-medium tracking-wide text-muted-foreground",
+        "px-4 py-3 align-bottom text-[0.8125rem] font-semibold text-foreground",
         local.class
       )}
     >

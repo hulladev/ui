@@ -1,0 +1,87 @@
+---
+import Backdrop from "../backdrop/backdrop.astro"
+import { drawerOverlaySides, drawerSides } from "@/+css/drawer.css"
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+import { resolve } from "@hulla/ui"
+
+const $overlaySide = resolve(drawerOverlaySides)
+const $side = resolve(drawerSides)
+
+type Props = HTMLAttributes<"div"> & {
+  contentClass?: string
+  contentStyle?: HTMLAttributes<"div">["style"]
+  dismissible?: boolean
+  side?: typeof $side.infer
+}
+
+const {
+  "aria-modal": ariaModal = true,
+  class: className,
+  contentClass,
+  contentStyle,
+  dismissible = true,
+  hidden = false,
+  role = "dialog",
+  style,
+  tabindex = -1,
+  side = "right",
+  ...props
+} = Astro.props as Props
+---
+
+<hulla-drawer
+  {...props}
+  hidden={hidden}
+  aria-modal={ariaModal}
+  data-dismissible={dismissible}
+  data-slot="drawer-overlay"
+  data-state={hidden ? "closed" : "open"}
+  data-side={side}
+  role={role}
+  tabindex={tabindex}
+  class={cn(
+    "fixed inset-0 z-[calc(var(--hulla-layer-base,1000)+var(--hulla-layer-order,0))] grid max-h-dvh overflow-hidden overscroll-contain focus:outline-none transition-[display] duration-160 [transition-behavior:allow-discrete] motion-reduce:transition-none [&[hidden]]:hidden [&[hidden]]:pointer-events-none [&[hidden]>[data-slot=backdrop]]:opacity-0",
+    $overlaySide(side),
+    className
+  )}
+  style={style}
+>
+  <Backdrop />
+  <div
+    data-slot="drawer"
+    data-side={side}
+    tabindex="-1"
+    class={cn(
+      "group/drawer relative flex min-h-0 flex-col gap-6 overflow-y-auto overscroll-contain bg-surface-raised p-6 text-foreground shadow-(--shadow-overlay) focus:outline-none transition-transform duration-160 ease-out motion-reduce:transition-none",
+      $side(side),
+      contentClass
+    )}
+    style={contentStyle}
+  >
+    <slot />
+  </div>
+</hulla-drawer>
+
+<script>
+  import { connectDialog, type DialogController } from "@/lib/dialog"
+
+  const elementName = "hulla-drawer"
+
+  if (!customElements.get(elementName)) {
+    class HullaDrawerElement extends HTMLElement {
+      controller: DialogController | undefined
+
+      connectedCallback() {
+        this.controller ??= connectDialog(this)
+      }
+
+      disconnectedCallback() {
+        this.controller?.destroy()
+        this.controller = undefined
+      }
+    }
+
+    customElements.define(elementName, HullaDrawerElement)
+  }
+</script>

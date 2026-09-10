@@ -24,7 +24,7 @@ export function Button({
       {...props}
       type={type}
       className={cn(
-        "relative inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap border font-medium leading-none tracking-[-0.01em] antialiased shadow-xs transition-[background-color,border-color,color,transform] duration-150 ease-out active:scale-[0.98] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring disabled:cursor-not-allowed disabled:border-border disabled:bg-foreground/5 disabled:text-muted-foreground disabled:shadow-none disabled:transform-none",
+        "relative inline-flex shrink-0 select-none items-center justify-center whitespace-nowrap border font-medium leading-none tracking-[-0.01em] antialiased [&>svg]:shrink-0 transition-[background-color,border-color,color,translate] duration-120 ease-out motion-safe:enabled:not-aria-disabled:active:translate-y-px motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus-ring disabled:cursor-not-allowed disabled:border-disabled-border disabled:bg-disabled-surface disabled:text-disabled-foreground disabled:shadow-none",
         $variant(variant),
         $size(size),
         className

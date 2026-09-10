@@ -10,18 +10,16 @@ function withPackageJsonUpdates<T extends object, U extends object>(
 
 export const ui = createLibrary({
   name: "@hulla/ui",
-  version: "0.0.0",
+  version: "0.0.2-beta.0",
   author: "Samuel Hulla",
   url: "https://hulla.dev/docs/ui",
   basePath: fileURLToPath(new URL("..", import.meta.url)),
   tsconfigPath: "./tsconfig.json",
-  frameworks: ["astro", "react", "solid", "svelte", "vue"],
+  frameworks: ["astro", "react", "solid"],
   inputDirs: {
     astro: "./src/astro",
     react: "./src/react",
     solid: "./src/solid",
-    svelte: "./src/svelte",
-    vue: "./src/vue",
   },
   outputDirs: {
     rootDir: "../../generated",
@@ -29,13 +27,15 @@ export const ui = createLibrary({
       astro: "astro",
       react: "react",
       solid: "solid",
-      svelte: "svelte",
-      vue: "vue",
     },
   },
   copyFilesRoot: "./src",
   copyFiles: {
     shared: [
+      {
+        src: "lib/tag-input.ts",
+        description: "Framework-neutral tag entry keyboard and commit behavior",
+      },
       {
         src: "lib/style.ts",
         description: "Shared class and variant composition helpers",
@@ -111,6 +111,7 @@ export const ui = createLibrary({
       {
         src: "styles.css",
         description: "Shared Hulla design tokens and Tailwind theme",
+        globalStyle: true,
       },
     ],
     solid: [
@@ -138,6 +139,7 @@ export const ui = createLibrary({
         },
         devDependencies: {
           ...packageJson.devDependencies,
+          "@tailwindcss/vite": "^4.1.13",
           typescript: "*",
         },
       }),
@@ -169,20 +171,6 @@ export const ui = createLibrary({
             "solid-js": "^1.9.0",
           },
         }),
-      svelte: (packageJson) =>
-        withPackageJsonUpdates(packageJson, {
-          dependencies: {
-            ...packageJson.dependencies,
-            svelte: "^5.0.0",
-          },
-        }),
-      vue: (packageJson) =>
-        withPackageJsonUpdates(packageJson, {
-          dependencies: {
-            ...packageJson.dependencies,
-            vue: "^3.5.0",
-          },
-        }),
     },
   },
   tsconfig: {
@@ -203,11 +191,6 @@ export const ui = createLibrary({
         compilerOptions: {
           jsx: "preserve",
           jsxImportSource: "solid-js",
-        },
-      },
-      vue: {
-        compilerOptions: {
-          jsx: "preserve",
         },
       },
     },

@@ -1,0 +1,28 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = Omit<HTMLAttributes<"input">, "type">
+const { class: className, ...props } = Astro.props as Props
+---
+
+<input
+  {...props}
+  type="text"
+  data-slot="tag-input-control"
+  class={cn(
+    "min-h-7 min-w-20 flex-1 border-0 bg-transparent px-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:text-disabled-foreground disabled:placeholder:text-disabled-foreground",
+    className
+  )}
+/>
+
+<script>
+  import { handleTagInputKeyDown } from "@/lib/tag-input"
+
+  document.addEventListener("keydown", (event) => {
+    const input = event.target
+    if (input instanceof HTMLInputElement && input.dataset.slot === "tag-input-control") {
+      handleTagInputKeyDown(event, input)
+    }
+  })
+</script>

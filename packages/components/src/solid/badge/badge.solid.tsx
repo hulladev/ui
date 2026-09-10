@@ -24,7 +24,7 @@ export function Badge(props: BadgeProps) {
       {...rest}
       data-slot="badge"
       class={cn(
-        "inline-flex shrink-0 items-center justify-center whitespace-nowrap border font-medium leading-none tracking-[0.01em] antialiased [&>svg]:shrink-0",
+        "inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-[6px] border font-medium leading-none antialiased [&>svg]:shrink-0",
         $variant(local.variant),
         $size(local.size),
         local.class

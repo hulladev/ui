@@ -43,7 +43,8 @@ describe("Slider generated contract", () => {
       expect(source).toContain("[&::-webkit-slider-thumb]:bg-primary")
       expect(source).toContain("[&::-moz-range-thumb]:bg-primary")
       expect(source).toContain("focus-visible:[&::-webkit-slider-thumb]:ring-focus-ring")
-      expect(source).toContain("disabled:opacity-50")
+      expect(source).toContain("bg-disabled-foreground")
+      expect(source).not.toContain("disabled:opacity-50")
       expect(source).toContain("aria-invalid:[&::-webkit-slider-thumb]:bg-danger")
       expect(source).toContain("dark:[&::-webkit-slider-runnable-track]:bg-foreground/[0.22]")
     }

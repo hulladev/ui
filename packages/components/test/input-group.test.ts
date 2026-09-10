@@ -24,7 +24,7 @@ describe("InputGroup generated contract", () => {
 
     for (const source of sources) {
       expect(source).toContain("[&>[data-control]]")
-      expect(source).toContain("has-[[data-control][aria-invalid=true]]")
+      expect(source).toContain("has-[[data-control][aria-invalid=true]:enabled]")
       expect(source).not.toContain("[&>[data-slot=control]]")
     }
   })

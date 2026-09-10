@@ -1,0 +1,97 @@
+---
+import { vn, cn } from "@/lib/style"
+import Backdrop from "../backdrop/backdrop.astro"
+import type { HTMLAttributes } from "astro/types"
+
+const $overlaySide = vn({
+  right: "justify-items-end [&[hidden]>[data-slot=drawer]]:[transform:translateX(100%)]",
+  left: "justify-items-start [&[hidden]>[data-slot=drawer]]:[transform:translateX(-100%)]",
+  top: "items-start [&[hidden]>[data-slot=drawer]]:[transform:translateY(-100%)]",
+  bottom: "items-end [&[hidden]>[data-slot=drawer]]:[transform:translateY(100%)]",
+})
+const $side = vn({
+  right:
+    "h-dvh w-[min(24rem,calc(100vw-2rem))] border-l border-border starting:[transform:translateX(100%)]",
+  left: "h-dvh w-[min(24rem,calc(100vw-2rem))] border-r border-border starting:[transform:translateX(-100%)]",
+  top: "max-h-[calc(100dvh-2rem)] w-full border-b border-border starting:[transform:translateY(-100%)]",
+  bottom:
+    "max-h-[calc(100dvh-2rem)] w-full border-t border-border starting:[transform:translateY(100%)]",
+})
+
+type Props = HTMLAttributes<"div"> & {
+  contentClass?: string
+  contentStyle?: HTMLAttributes<"div">["style"]
+  dismissible?: boolean
+  side?: typeof $side.infer
+}
+
+const {
+  "aria-modal": ariaModal = true,
+  class: className,
+  contentClass,
+  contentStyle,
+  dismissible = true,
+  hidden = false,
+  role = "dialog",
+  style,
+  tabindex = -1,
+  side = "right",
+  ...props
+} = Astro.props as Props
+---
+
+<hulla-drawer
+  {...props}
+  hidden={hidden}
+  aria-modal={ariaModal}
+  data-dismissible={dismissible}
+  data-slot="drawer-overlay"
+  data-state={hidden ? "closed" : "open"}
+  data-side={side}
+  role={role}
+  tabindex={tabindex}
+  class={cn(
+    "fixed inset-0 z-[calc(var(--hulla-layer-base,1000)+var(--hulla-layer-order,0))] grid max-h-dvh overflow-hidden overscroll-contain focus:outline-none transition-[display] duration-160 [transition-behavior:allow-discrete] motion-reduce:transition-none [&[hidden]]:hidden [&[hidden]]:pointer-events-none [&[hidden]>[data-slot=backdrop]]:opacity-0",
+    $overlaySide(side),
+    className
+  )}
+  style={style}
+>
+  <Backdrop />
+  <div
+    data-slot="drawer"
+    data-side={side}
+    tabindex="-1"
+    class={cn(
+      "group/drawer relative flex min-h-0 flex-col gap-6 overflow-y-auto overscroll-contain bg-surface-raised p-6 text-foreground shadow-(--shadow-overlay) focus:outline-none transition-transform duration-160 ease-out motion-reduce:transition-none",
+      $side(side),
+      contentClass
+    )}
+    style={contentStyle}
+  >
+    <slot />
+  </div>
+</hulla-drawer>
+
+<script>
+  import { connectDialog, type DialogController } from "@/lib/dialog"
+
+  const elementName = "hulla-drawer"
+
+  if (!customElements.get(elementName)) {
+    class HullaDrawerElement extends HTMLElement {
+      controller: DialogController | undefined
+
+      connectedCallback() {
+        this.controller ??= connectDialog(this)
+      }
+
+      disconnectedCallback() {
+        this.controller?.destroy()
+        this.controller = undefined
+      }
+    }
+
+    customElements.define(elementName, HullaDrawerElement)
+  }
+</script>
