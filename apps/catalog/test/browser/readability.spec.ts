@@ -63,7 +63,12 @@ for (const { href, group } of catalogPages) {
         ]
         return checks.flatMap(({ selector, pseudo }) =>
           Array.from(document.querySelectorAll(selector))
-            .filter((element) => element.getClientRects().length > 0)
+            .filter(
+              (element) =>
+                element.getClientRects().length > 0 &&
+                !element.matches(":disabled, [aria-disabled='true']") &&
+                !element.closest(":disabled, [aria-disabled='true']")
+            )
             .map((element) => ({
               selector,
               text: element.textContent?.trim().slice(0, 50) || element.getAttribute("id"),

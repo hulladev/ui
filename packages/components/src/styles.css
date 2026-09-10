@@ -25,7 +25,7 @@
   --color-warning: oklch(0.77 0.13 85);
   --color-danger: oklch(0.56 0.18 27);
   --color-on-emphasis: oklch(0.99 0.005 245);
-  --color-disabled-foreground: var(--color-muted-foreground);
+  --color-disabled-foreground: color-mix(in oklab, var(--color-muted-foreground) 75%, transparent);
   --color-disabled-surface: color-mix(in oklab, var(--color-foreground) 3.5%, transparent);
   --color-disabled-border: color-mix(in oklab, var(--color-foreground) 8%, transparent);
   --color-hover-surface: color-mix(in oklab, var(--color-foreground) 8%, transparent);
