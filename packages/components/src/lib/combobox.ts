@@ -361,7 +361,7 @@ export function connectCombobox(root: HTMLElement): ComboboxController {
     filterOptions()
     updateInputDisplay()
     if (!focusFromPointer) showContent()
-    setHighlighted(enabledVisibleOptions()[0])
+    setHighlighted(focusFromPointer ? undefined : enabledVisibleOptions()[0])
   }
 
   function onInput() {

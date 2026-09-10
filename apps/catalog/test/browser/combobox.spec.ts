@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test"
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/#combobox", { waitUntil: "domcontentloaded" })
+  await page.goto("/forms#combobox", { waitUntil: "domcontentloaded" })
   await expect(page.locator("#combobox-team-input")).toHaveAttribute("aria-controls", /.+/, {
     timeout: 15_000,
   })
@@ -17,6 +17,41 @@ test("stays open when the editable input is clicked", async ({ page }) => {
   await expect(input).toBeFocused()
   await expect(input).toHaveAttribute("aria-expanded", "true")
   await expect(page.locator(`#${contentId}`)).toBeVisible()
+  await expect(input).not.toHaveAttribute("aria-activedescendant")
+  await expect(page.locator(`#${contentId} [data-highlighted='true']`)).toHaveCount(0)
+  await expect(
+    page.locator(`#${contentId}`).getByRole("option", { name: "Engineering" })
+  ).toHaveAttribute("aria-selected", "true")
+})
+
+test("highlights hovered options and supports keyboard navigation after pointer opening", async ({
+  page,
+}) => {
+  const input = page.locator("#combobox-team-input")
+  const contentId = await input.getAttribute("aria-controls")
+  const content = page.locator(`#${contentId}`)
+  const design = content.getByRole("option", { name: "Design", exact: true })
+  const engineering = content.getByRole("option", { name: "Engineering" })
+
+  await input.click()
+  await input.press("ArrowDown")
+  await expect(design).toHaveAttribute("data-highlighted", "true")
+  await expect(input).toHaveAttribute("aria-activedescendant", (await design.getAttribute("id"))!)
+  await input.press("ArrowDown")
+  await expect(engineering).toHaveAttribute("data-highlighted", "true")
+  await design.hover()
+  await expect(design).toHaveAttribute("data-highlighted", "true")
+  await expect(engineering).not.toHaveAttribute("data-highlighted", "true")
+})
+
+test("preserves the initial highlight on keyboard focus", async ({ page }) => {
+  const input = page.locator("#combobox-team-input")
+  await input.focus()
+  const contentId = await input.getAttribute("aria-controls")
+  const design = page.locator(`#${contentId}`).getByRole("option", { name: "Design", exact: true })
+
+  await expect(design).toHaveAttribute("data-highlighted", "true")
+  await expect(input).toHaveAttribute("aria-activedescendant", (await design.getAttribute("id"))!)
 })
 
 test("filters options and selects one result with the keyboard", async ({ page }) => {
@@ -99,11 +134,11 @@ test("adds multiple values while keeping focus in the editable input", async ({ 
 
 test("fits the input and popup at a narrow viewport", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto("/#combobox", { waitUntil: "domcontentloaded" })
 
   const input = page.locator("#combobox-team-input")
   await input.focus()
   const contentId = await input.getAttribute("aria-controls")
+  await expect(page.locator(`#${contentId}`)).toBeVisible()
   const inputBox = await input.boundingBox()
   const contentBox = await page.locator(`#${contentId}`).boundingBox()
 
