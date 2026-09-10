@@ -1,4 +1,6 @@
 ---
+import RadioGroupLegend from "@/ui/radio/radio-group-legend.astro"
+import FieldContent from "@/ui/field/field-content.astro"
 import FieldDescription from "@/ui/field/field-description.astro"
 import FieldLabel from "@/ui/field/field-label.astro"
 import Field from "@/ui/field/field.astro"
@@ -40,23 +42,21 @@ const plans = [
 >
   <div slot="variants" class="grid gap-3">
     <RadioGroup>
-      <legend class="mb-1 text-sm font-medium text-foreground">Choose a workspace plan</legend>
+      <RadioGroupLegend>Choose a workspace plan</RadioGroupLegend>
       {
         plans.map(({ checked, description, id, label, value }) => (
-          <Field>
-            <div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
-              <Radio
-                id={id}
-                name="workspace-plan"
-                value={value}
-                aria-describedby={`${id}-description`}
-                checked={checked}
-              />
-              <div class="grid gap-0.5">
-                <FieldLabel for={id}>{label}</FieldLabel>
-                <FieldDescription id={`${id}-description`}>{description}</FieldDescription>
-              </div>
-            </div>
+          <Field orientation="horizontal">
+            <Radio
+              id={id}
+              name="workspace-plan"
+              value={value}
+              aria-describedby={`${id}-description`}
+              checked={checked}
+            />
+            <FieldContent>
+              <FieldLabel for={id}>{label}</FieldLabel>
+              <FieldDescription id={`${id}-description`}>{description}</FieldDescription>
+            </FieldContent>
           </Field>
         ))
       }
@@ -65,36 +65,26 @@ const plans = [
       class="mt-2 grid grid-cols-2 gap-3 border-t border-border pt-5 max-[480px]:grid-cols-1"
       aria-label="Radio states"
     >
-      <Field
-        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
-          <Radio id="radio-unchecked" name="radio-state-unchecked" />
-          <FieldLabel for="radio-unchecked">Unchecked</FieldLabel>
-        </div></Field
-      >
-      <Field
-        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
-          <Radio id="radio-checked" name="radio-state-checked" checked />
-          <FieldLabel for="radio-checked">Checked</FieldLabel>
-        </div></Field
-      >
-      <Field
-        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
-          <Radio id="radio-disabled" name="radio-state-disabled" disabled />
-          <FieldLabel for="radio-disabled">Disabled</FieldLabel>
-        </div></Field
-      >
-      <Field>
-        <div class="flex items-center gap-4">
-          <Radio id="radio-disabled-checked" name="radio-disabled-checked" checked disabled />
-          <FieldLabel for="radio-disabled-checked">Checked · disabled</FieldLabel>
-        </div>
+      <Field orientation="horizontal">
+        <Radio id="radio-unchecked" name="radio-state-unchecked" />
+        <FieldLabel for="radio-unchecked">Unchecked</FieldLabel>
       </Field>
-      <Field
-        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
-          <Radio id="radio-invalid" name="radio-state-invalid" aria-invalid="true" />
-          <FieldLabel for="radio-invalid">Invalid</FieldLabel>
-        </div></Field
-      >
+      <Field orientation="horizontal">
+        <Radio id="radio-checked" name="radio-state-checked" checked />
+        <FieldLabel for="radio-checked">Checked</FieldLabel>
+      </Field>
+      <Field orientation="horizontal">
+        <Radio id="radio-disabled" name="radio-state-disabled" disabled />
+        <FieldLabel for="radio-disabled">Disabled</FieldLabel>
+      </Field>
+      <Field orientation="horizontal">
+        <Radio id="radio-disabled-checked" name="radio-disabled-checked" checked disabled />
+        <FieldLabel for="radio-disabled-checked">Checked · disabled</FieldLabel>
+      </Field>
+      <Field orientation="horizontal">
+        <Radio id="radio-invalid" name="radio-state-invalid" aria-invalid="true" />
+        <FieldLabel for="radio-invalid">Invalid</FieldLabel>
+      </Field>
     </div>
   </div>
 
@@ -118,24 +108,22 @@ const plans = [
     </div>
 
     <div class="playground-stage">
-      <Field class="w-full max-w-sm"
-        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
-          <Radio
-            id="playground-radio"
-            name="playground-plan"
-            value="studio"
-            aria-describedby="playground-radio-help"
-            checked
-            data-playground-radio
-          />
-          <div>
-            <FieldLabel for="playground-radio">Studio plan</FieldLabel>
-            <FieldDescription id="playground-radio-help">
-              Shared tools for a growing product team.
-            </FieldDescription>
-          </div>
-        </div></Field
-      >
+      <Field class="w-full max-w-sm" orientation="horizontal">
+        <Radio
+          id="playground-radio"
+          name="playground-plan"
+          value="studio"
+          aria-describedby="playground-radio-help"
+          checked
+          data-playground-radio
+        />
+        <FieldContent>
+          <FieldLabel for="playground-radio">Studio plan</FieldLabel>
+          <FieldDescription id="playground-radio-help">
+            Shared tools for a growing product team.
+          </FieldDescription>
+        </FieldContent>
+      </Field>
     </div>
 
     <code class="prop-readout" data-radio-readout aria-live="polite"

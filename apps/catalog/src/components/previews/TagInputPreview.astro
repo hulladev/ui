@@ -1,5 +1,6 @@
 ---
-import { X } from "@lucide/astro"
+import TagInputLabel from "@/ui/tag-input/tag-input-label.astro"
+import FieldStatus from "@/ui/field/field-status.astro"
 import Button from "@/ui/button/button.astro"
 import Field from "@/ui/field/field.astro"
 import FieldLabel from "@/ui/field/field-label.astro"
@@ -21,11 +22,9 @@ const initialTags = ["Design", "Engineering"]
           {
             initialTags.map((tag) => (
               <TagInputTag data-tag-value={tag}>
-                <span data-tag-label>{tag}</span>
+                <TagInputLabel data-tag-label>{tag}</TagInputLabel>
                 <input type="hidden" name="labels" value={tag} />
-                <TagInputRemove aria-label={`Remove ${tag}`}>
-                  <X aria-hidden="true" />
-                </TagInputRemove>
+                <TagInputRemove aria-label={`Remove ${tag}`} />
               </TagInputTag>
             ))
           }
@@ -40,18 +39,16 @@ const initialTags = ["Design", "Engineering"]
           >Press Enter to add a label. Each label can be removed independently.</FieldDescription
         >
       </Field>
-      <p data-tags-status role="status" class="min-h-5 text-xs text-muted-foreground">
-        2 labels selected
-      </p>
+      <FieldStatus data-tags-status role="status"> 2 labels selected </FieldStatus>
       <div class="flex gap-2">
         <Button type="submit" size="sm">Save labels</Button>
         <Button type="reset" size="sm" variant="outline">Reset</Button>
       </div>
       <template data-tag-template>
         <TagInputTag>
-          <span data-tag-label></span>
+          <TagInputLabel data-tag-label />
           <input type="hidden" name="labels" />
-          <TagInputRemove aria-label="Remove label"><X aria-hidden="true" /></TagInputRemove>
+          <TagInputRemove aria-label="Remove label" />
         </TagInputTag>
       </template>
     </form>
@@ -59,9 +56,9 @@ const initialTags = ["Design", "Engineering"]
       <FieldLabel for="locked-tags">Archived labels</FieldLabel>
       <TagInput>
         <TagInputTag
-          ><span>Research</span><TagInputRemove aria-label="Remove Research"
-            ><X aria-hidden="true" /></TagInputRemove
-          ></TagInputTag
+          ><TagInputLabel>Research</TagInputLabel><TagInputRemove
+            aria-label="Remove Research"
+          /></TagInputTag
         >
         <TagInputControl id="locked-tags" placeholder="Labels are locked" />
       </TagInput>
@@ -99,13 +96,11 @@ const initialTags = ["Design", "Engineering"]
           data-tags-control
         /></TagInput
       >
-      <output data-tags-commit aria-live="polite" class="text-xs text-muted-foreground"
-        >Enter a label to commit it</output
-      >
+      <FieldStatus data-tags-commit aria-live="polite">Enter a label to commit it</FieldStatus>
     </div>
   </div>
   <dl slot="facts" class="facts">
-    <div class="fact"><dt class="label">Composition</dt><dd>4 native parts</dd></div>
+    <div class="fact"><dt class="label">Composition</dt><dd>5 native parts</dd></div>
     <div class="fact"><dt class="label">Values</dt><dd>Application-owned</dd></div>
     <div class="fact"><dt class="label">Keyboard</dt><dd>IME-aware entry</dd></div>
   </dl>

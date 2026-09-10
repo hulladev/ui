@@ -1,4 +1,6 @@
 ---
+import HoverCardDescription from "@/ui/hover-card/hover-card-description.astro"
+import HoverCardTitle from "@/ui/hover-card/hover-card-title.astro"
 import CardDescription from "@/ui/card/card-description.astro"
 import CardTitle from "@/ui/card/card-title.astro"
 import CardHeader from "@/ui/card/card-header.astro"
@@ -58,13 +60,13 @@ const placements = ["bottom-start", "right", "top-start", "left"] as const
                   <AvatarFallback>SK</AvatarFallback>
                 </Avatar>
                 <div class="grid gap-1">
-                  <strong class="text-base">Sora Kim</strong>
-                  <span class="text-xs text-muted-foreground">@sora · Prague</span>
+                  <HoverCardTitle>Sora Kim</HoverCardTitle>
+                  <HoverCardDescription>@sora · Prague</HoverCardDescription>
                 </div>
               </div>
-              <p class="m-0 text-xs leading-6 text-muted-foreground">
+              <HoverCardDescription>
                 Design systems engineer making complex product surfaces feel inevitable.
-              </p>
+              </HoverCardDescription>
               <div class="flex items-center gap-2 border-t border-border pt-3">
                 <Badge variant="outline">Design systems</Badge>
                 <span class="ml-auto text-xs text-muted-foreground">42 components</span>
@@ -114,10 +116,8 @@ const placements = ["bottom-start", "right", "top-start", "left"] as const
               </a>
               <HoverCard id={hoverCardId} triggerId={triggerId} placement={placement}>
                 <div class="grid gap-2">
-                  <strong>Sora Kim</strong>
-                  <span class="text-xs text-muted-foreground">
-                    Design systems engineer · Prague
-                  </span>
+                  <HoverCardTitle>Sora Kim</HoverCardTitle>
+                  <HoverCardDescription>Design systems engineer · Prague</HoverCardDescription>
                 </div>
               </HoverCard>
             </div>

@@ -23,22 +23,22 @@ const hoverCardSources = [
 const usageSources = [
   {
     code: `---
+import HoverCardDescription from "@/ui/hover-card/hover-card-description.astro"
+import HoverCardTitle from "@/ui/hover-card/hover-card-title.astro"
 import HoverCard from "@/ui/hover-card/hover-card.astro"
 ---
 
-<a id="author-trigger" href="/people/sora" aria-details="author-card">
-  Sora Kim
-</a>
+<a id="author-trigger" href="/people/sora" aria-details="author-card"> Sora Kim </a>
 <HoverCard id="author-card" triggerId="author-trigger">
-  <strong>Sora Kim</strong>
-  <p>Design systems engineer · Prague</p>
+  <HoverCardTitle>Sora Kim</HoverCardTitle>
+  <HoverCardDescription>Design systems engineer · Prague</HoverCardDescription>
 </HoverCard>`,
     filename: "src/components/author-preview.astro",
     framework: "Astro",
     language: "astro" as const,
   },
   {
-    code: `import { HoverCard } from "@/ui/hover-card"
+    code: `import { HoverCardDescription, HoverCardTitle, HoverCard } from "@/ui/hover-card"
 
 export function AuthorPreview() {
   return (
@@ -47,8 +47,8 @@ export function AuthorPreview() {
         Sora Kim
       </a>
       <HoverCard id="author-card" triggerId="author-trigger">
-        <strong>Sora Kim</strong>
-        <p>Design systems engineer · Prague</p>
+        <HoverCardTitle>Sora Kim</HoverCardTitle>
+        <HoverCardDescription>Design systems engineer · Prague</HoverCardDescription>
       </HoverCard>
     </>
   )

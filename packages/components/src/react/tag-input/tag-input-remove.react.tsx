@@ -21,7 +21,11 @@ export function TagInputRemove({
         className
       )}
     >
-      {children}
+      {children ?? (
+        <svg aria-hidden="true" viewBox="0 0 16 16" fill="none">
+          <path d="m4 4 8 8m0-8-8 8" stroke="currentColor" strokeLinecap="round" />
+        </svg>
+      )}
     </button>
   )
 }

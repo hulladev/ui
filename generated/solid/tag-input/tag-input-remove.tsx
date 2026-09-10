@@ -17,7 +17,11 @@ export function TagInputRemove(props: TagInputRemoveProps) {
         local.class
       )}
     >
-      {local.children}
+      {local.children ?? (
+        <svg aria-hidden="true" viewBox="0 0 16 16" fill="none">
+          <path d="m4 4 8 8m0-8-8 8" stroke="currentColor" stroke-linecap="round" />
+        </svg>
+      )}
     </button>
   )
 }

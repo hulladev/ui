@@ -6,12 +6,14 @@ import BreadcrumbsPreview from "../previews/BreadcrumbsPreview.astro"
 const usageSources = [
   {
     code: `---
+import BreadcrumbEllipsis from "@/ui/breadcrumbs/breadcrumb-ellipsis.astro"
 import BreadcrumbItem from "@/ui/breadcrumbs/breadcrumb-item.astro"
 import Breadcrumbs from "@/ui/breadcrumbs/breadcrumbs.astro"
 ---
 
 <Breadcrumbs>
   <BreadcrumbItem><a href="/projects">Projects</a></BreadcrumbItem>
+  <BreadcrumbItem><BreadcrumbEllipsis /></BreadcrumbItem>
   <BreadcrumbItem><a href="/projects/atlas">Atlas</a></BreadcrumbItem>
   <BreadcrumbItem aria-current="page">Settings</BreadcrumbItem>
 </Breadcrumbs>`,
@@ -20,13 +22,20 @@ import Breadcrumbs from "@/ui/breadcrumbs/breadcrumbs.astro"
     language: "astro" as const,
   },
   {
-    code: `import { BreadcrumbItem, Breadcrumbs } from "@/ui/breadcrumbs"
+    code: `import { BreadcrumbItem, Breadcrumbs, BreadcrumbEllipsis } from "@/ui/breadcrumbs"
 
 export function ProjectBreadcrumbs() {
   return (
     <Breadcrumbs>
-      <BreadcrumbItem><a href="/projects">Projects</a></BreadcrumbItem>
-      <BreadcrumbItem><a href="/projects/atlas">Atlas</a></BreadcrumbItem>
+      <BreadcrumbItem>
+        <a href="/projects">Projects</a>
+      </BreadcrumbItem>
+      <BreadcrumbItem>
+        <BreadcrumbEllipsis />
+      </BreadcrumbItem>
+      <BreadcrumbItem>
+        <a href="/projects/atlas">Atlas</a>
+      </BreadcrumbItem>
       <BreadcrumbItem aria-current="page">Settings</BreadcrumbItem>
     </Breadcrumbs>
   )

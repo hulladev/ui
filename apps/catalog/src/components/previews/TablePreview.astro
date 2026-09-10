@@ -1,4 +1,5 @@
 ---
+import TableContainer from "@/ui/table/table-container.astro"
 import Badge from "@/ui/badge/badge.astro"
 import TableBody from "@/ui/table/table-body.astro"
 import TableCaption from "@/ui/table/table-caption.astro"
@@ -45,7 +46,7 @@ const regions = [
         </div>
         <span class="text-xs text-muted-foreground">3 active</span>
       </div>
-      <div class="overflow-x-auto rounded-md border border-border bg-surface">
+      <TableContainer>
         <Table variant="divided" class="min-w-[30rem]">
           <TableCaption>Active releases ordered by most recent deployment.</TableCaption>
           <TableHeader>
@@ -82,7 +83,7 @@ const regions = [
             }
           </TableBody>
         </Table>
-      </div>
+      </TableContainer>
     </section>
 
     <section class="grid gap-2.5" aria-labelledby="table-striped-label">

@@ -23,51 +23,57 @@ const switchSources = [
 const switchUsageSources = [
   {
     code: `---
+import FieldHeader from "@/ui/field/field-header.astro"
+import FieldContent from "@/ui/field/field-content.astro"
 import FieldDescription from "@/ui/field/field-description.astro"
 import FieldLabel from "@/ui/field/field-label.astro"
 import Field from "@/ui/field/field.astro"
 import Switch from "@/ui/switch/switch.astro"
 ---
 
-<Field class="grid-cols-[1fr_auto] items-center gap-x-5">
-  <div>
-    <FieldLabel for="weekly-digest">Weekly digest</FieldLabel>
-    <FieldDescription id="weekly-digest-help">
-      Receive a summary every Monday morning.
-    </FieldDescription>
-  </div>
-  <Switch
-    id="weekly-digest"
-    variant="subtle"
-    name="weeklyDigest"
-    aria-describedby="weekly-digest-help"
-    checked
-  />
-</Field>`,
+<Field
+  ><FieldHeader>
+    <FieldContent>
+      <FieldLabel for="weekly-digest">Weekly digest</FieldLabel>
+      <FieldDescription id="weekly-digest-help">
+        Receive a summary every Monday morning.
+      </FieldDescription>
+    </FieldContent>
+    <Switch
+      id="weekly-digest"
+      variant="subtle"
+      name="weeklyDigest"
+      aria-describedby="weekly-digest-help"
+      checked
+    />
+  </FieldHeader></Field
+>`,
     filename: "src/components/digest-preference.astro",
     framework: "Astro",
     language: "astro" as const,
   },
   {
-    code: `import { Field, FieldDescription, FieldLabel } from "@/ui/field"
+    code: `import { FieldHeader, FieldContent, Field, FieldDescription, FieldLabel } from "@/ui/field"
 import { Switch } from "@/ui/switch"
 
 export function DigestPreference() {
   return (
-    <Field className="grid-cols-[1fr_auto] items-center gap-x-5">
-      <div>
-        <FieldLabel htmlFor="weekly-digest">Weekly digest</FieldLabel>
-        <FieldDescription id="weekly-digest-help">
-          Receive a summary every Monday morning.
-        </FieldDescription>
-      </div>
-      <Switch
-        id="weekly-digest"
-        variant="subtle"
-        name="weeklyDigest"
-        aria-describedby="weekly-digest-help"
-        defaultChecked
-      />
+    <Field>
+      <FieldHeader>
+        <FieldContent>
+          <FieldLabel htmlFor="weekly-digest">Weekly digest</FieldLabel>
+          <FieldDescription id="weekly-digest-help">
+            Receive a summary every Monday morning.
+          </FieldDescription>
+        </FieldContent>
+        <Switch
+          id="weekly-digest"
+          variant="subtle"
+          name="weeklyDigest"
+          aria-describedby="weekly-digest-help"
+          defaultChecked
+        />
+      </FieldHeader>
     </Field>
   )
 }`,

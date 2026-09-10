@@ -1,0 +1,15 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"div">
+const { class: className, ...props } = Astro.props as Props
+---
+
+<div
+  {...props}
+  data-slot="field-header"
+  class={cn("flex min-w-0 items-baseline justify-between gap-3", className)}
+>
+  <slot />
+</div>

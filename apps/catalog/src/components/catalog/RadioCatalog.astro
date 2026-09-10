@@ -23,6 +23,8 @@ const radioSources = [
 const radioUsageSources = [
   {
     code: `---
+import RadioGroupLegend from "@/ui/radio/radio-group-legend.astro"
+import FieldContent from "@/ui/field/field-content.astro"
 import FieldDescription from "@/ui/field/field-description.astro"
 import FieldLabel from "@/ui/field/field-label.astro"
 import Field from "@/ui/field/field.astro"
@@ -31,8 +33,8 @@ import Radio from "@/ui/radio/radio.astro"
 ---
 
 <RadioGroup>
-  <legend class="text-sm font-medium">Choose a workspace plan</legend>
-  <Field class="grid-cols-[auto_1fr] items-start gap-x-4">
+  <RadioGroupLegend>Choose a workspace plan</RadioGroupLegend>
+  <Field orientation="horizontal">
     <Radio
       id="plan-studio"
       name="plan"
@@ -40,12 +42,12 @@ import Radio from "@/ui/radio/radio.astro"
       aria-describedby="plan-studio-help"
       checked
     />
-    <div>
+    <FieldContent>
       <FieldLabel for="plan-studio">Studio</FieldLabel>
       <FieldDescription id="plan-studio-help">
         Shared tools for a growing product team.
       </FieldDescription>
-    </div>
+    </FieldContent>
   </Field>
 </RadioGroup>`,
     filename: "src/components/plan-picker.astro",
@@ -53,14 +55,14 @@ import Radio from "@/ui/radio/radio.astro"
     language: "astro" as const,
   },
   {
-    code: `import { Field, FieldDescription, FieldLabel } from "@/ui/field"
-import { Radio, RadioGroup } from "@/ui/radio"
+    code: `import { FieldContent, Field, FieldDescription, FieldLabel } from "@/ui/field"
+import { Radio, RadioGroup, RadioGroupLegend } from "@/ui/radio"
 
 export function PlanPicker() {
   return (
     <RadioGroup>
-      <legend className="text-sm font-medium">Choose a workspace plan</legend>
-      <Field className="grid-cols-[auto_1fr] items-start gap-x-4">
+      <RadioGroupLegend>Choose a workspace plan</RadioGroupLegend>
+      <Field orientation="horizontal">
         <Radio
           id="plan-studio"
           name="plan"
@@ -68,12 +70,12 @@ export function PlanPicker() {
           aria-describedby="plan-studio-help"
           defaultChecked
         />
-        <div>
+        <FieldContent>
           <FieldLabel htmlFor="plan-studio">Studio</FieldLabel>
           <FieldDescription id="plan-studio-help">
             Shared tools for a growing product team.
           </FieldDescription>
-        </div>
+        </FieldContent>
       </Field>
     </RadioGroup>
   )

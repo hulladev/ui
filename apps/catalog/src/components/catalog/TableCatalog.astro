@@ -23,6 +23,7 @@ const tableSources = [
 const usageSources = [
   {
     code: `---
+import TableContainer from "@/ui/table/table-container.astro"
 import Table from "@/ui/table/table.astro"
 import TableBody from "@/ui/table/table-body.astro"
 import TableCaption from "@/ui/table/table-caption.astro"
@@ -32,29 +33,32 @@ import TableHeader from "@/ui/table/table-header.astro"
 import TableRow from "@/ui/table/table-row.astro"
 ---
 
-<Table variant="divided">
-  <TableCaption>Recent production releases.</TableCaption>
-  <TableHeader>
-    <TableRow>
-      <TableHead>Release</TableHead>
-      <TableHead>Status</TableHead>
-      <TableHead class="text-right">Duration</TableHead>
-    </TableRow>
-  </TableHeader>
-  <TableBody>
-    <TableRow>
-      <TableHead scope="row">v2.8.0</TableHead>
-      <TableCell>Ready</TableCell>
-      <TableCell class="text-right">4m 12s</TableCell>
-    </TableRow>
-  </TableBody>
-</Table>`,
+<TableContainer>
+  <Table variant="divided">
+    <TableCaption>Recent production releases.</TableCaption>
+    <TableHeader>
+      <TableRow>
+        <TableHead>Release</TableHead>
+        <TableHead>Status</TableHead>
+        <TableHead class="text-right">Duration</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      <TableRow>
+        <TableHead scope="row">v2.8.0</TableHead>
+        <TableCell>Ready</TableCell>
+        <TableCell class="text-right">4m 12s</TableCell>
+      </TableRow>
+    </TableBody>
+  </Table>
+</TableContainer>`,
     filename: "src/components/release-table.astro",
     framework: "Astro",
     language: "astro" as const,
   },
   {
     code: `import {
+  TableContainer,
   Table,
   TableBody,
   TableCaption,
@@ -66,23 +70,25 @@ import TableRow from "@/ui/table/table-row.astro"
 
 export function ReleaseTable() {
   return (
-    <Table variant="divided">
-      <TableCaption>Recent production releases.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Release</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead className="text-right">Duration</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow>
-          <TableHead scope="row">v2.8.0</TableHead>
-          <TableCell>Ready</TableCell>
-          <TableCell className="text-right">4m 12s</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+    <TableContainer>
+      <Table variant="divided">
+        <TableCaption>Recent production releases.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Release</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead className="text-right">Duration</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableHead scope="row">v2.8.0</TableHead>
+            <TableCell>Ready</TableCell>
+            <TableCell className="text-right">4m 12s</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </TableContainer>
   )
 }`,
     filename: "src/components/release-table.tsx",

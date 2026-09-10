@@ -6,6 +6,9 @@ import NavigationMenuPreview from "../previews/NavigationMenuPreview.astro"
 const usageSources = [
   {
     code: `---
+import NavigationMenuLinkDescription from "@/ui/navigation-menu/navigation-menu-link-description.astro"
+import NavigationMenuLinkTitle from "@/ui/navigation-menu/navigation-menu-link-title.astro"
+import NavigationMenuLinkContent from "@/ui/navigation-menu/navigation-menu-link-content.astro"
 import NavigationMenuContent from "@/ui/navigation-menu/navigation-menu-content.astro"
 import NavigationMenuItem from "@/ui/navigation-menu/navigation-menu-item.astro"
 import NavigationMenuLink from "@/ui/navigation-menu/navigation-menu-link.astro"
@@ -19,7 +22,13 @@ import NavigationMenu from "@/ui/navigation-menu/navigation-menu.astro"
     <NavigationMenuItem value="product">
       <NavigationMenuTrigger>Product</NavigationMenuTrigger>
       <NavigationMenuContent>
-        <NavigationMenuLink href="/product/atlas">Atlas</NavigationMenuLink>
+        <NavigationMenuLink href="/product/atlas"
+          ><NavigationMenuLinkContent
+            ><NavigationMenuLinkTitle>Atlas</NavigationMenuLinkTitle><NavigationMenuLinkDescription
+              >Plan across teams.</NavigationMenuLinkDescription
+            ></NavigationMenuLinkContent
+          ></NavigationMenuLink
+        >
         <NavigationMenuLink href="/product/signals">Signals</NavigationMenuLink>
       </NavigationMenuContent>
     </NavigationMenuItem>
@@ -34,6 +43,9 @@ import NavigationMenu from "@/ui/navigation-menu/navigation-menu.astro"
   },
   {
     code: `import {
+  NavigationMenuLinkDescription,
+  NavigationMenuLinkTitle,
+  NavigationMenuLinkContent,
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
@@ -49,7 +61,12 @@ export function SiteNavigation() {
         <NavigationMenuItem value="product">
           <NavigationMenuTrigger>Product</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <NavigationMenuLink href="/product/atlas">Atlas</NavigationMenuLink>
+            <NavigationMenuLink href="/product/atlas">
+              <NavigationMenuLinkContent>
+                <NavigationMenuLinkTitle>Atlas</NavigationMenuLinkTitle>
+                <NavigationMenuLinkDescription>Plan across teams.</NavigationMenuLinkDescription>
+              </NavigationMenuLinkContent>
+            </NavigationMenuLink>
             <NavigationMenuLink href="/product/signals">Signals</NavigationMenuLink>
           </NavigationMenuContent>
         </NavigationMenuItem>

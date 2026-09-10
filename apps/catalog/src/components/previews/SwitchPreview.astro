@@ -1,4 +1,6 @@
 ---
+import FieldContent from "@/ui/field/field-content.astro"
+import FieldHeader from "@/ui/field/field-header.astro"
 import Card from "@/ui/card/card.astro"
 import FieldDescription from "@/ui/field/field-description.astro"
 import FieldLabel from "@/ui/field/field-label.astro"
@@ -70,13 +72,13 @@ const preferences = [
       {
         preferences.map(({ checked, description, id, label }) => (
           <Field>
-            <div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
-              <div class="grid min-w-0 gap-0.5">
+            <FieldHeader>
+              <FieldContent>
                 <FieldLabel for={id}>{label}</FieldLabel>
                 <FieldDescription id={`${id}-description`}>{description}</FieldDescription>
-              </div>
+              </FieldContent>
               <Switch id={id} name={id} aria-describedby={`${id}-description`} checked={checked} />
-            </div>
+            </FieldHeader>
           </Field>
         ))
       }
@@ -87,34 +89,34 @@ const preferences = [
       aria-label="Switch states"
     >
       <Field
-        ><div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
+        ><FieldHeader>
           <FieldLabel for="switch-unchecked">Unchecked</FieldLabel>
           <Switch id="switch-unchecked" />
-        </div></Field
+        </FieldHeader></Field
       >
       <Field
-        ><div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
+        ><FieldHeader>
           <FieldLabel for="switch-checked">Checked</FieldLabel>
           <Switch id="switch-checked" checked />
-        </div></Field
+        </FieldHeader></Field
       >
       <Field
-        ><div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
+        ><FieldHeader>
           <FieldLabel for="switch-disabled">Disabled</FieldLabel>
           <Switch id="switch-disabled" disabled />
-        </div></Field
+        </FieldHeader></Field
       >
       <Field>
-        <div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
+        <FieldHeader>
           <FieldLabel for="switch-disabled-checked">Checked · disabled</FieldLabel>
           <Switch id="switch-disabled-checked" checked disabled />
-        </div>
+        </FieldHeader>
       </Field>
       <Field
-        ><div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
+        ><FieldHeader>
           <FieldLabel for="switch-invalid">Invalid</FieldLabel>
           <Switch id="switch-invalid" aria-invalid="true" />
-        </div></Field
+        </FieldHeader></Field
       >
     </div>
   </div>
@@ -140,7 +142,7 @@ const preferences = [
 
     <div class="playground-stage">
       <Field class="w-full max-w-sm"
-        ><div class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
+        ><FieldHeader>
           <div>
             <FieldLabel for="playground-switch">Sync activity</FieldLabel>
             <FieldDescription id="playground-switch-help">
@@ -153,7 +155,7 @@ const preferences = [
             checked
             data-playground-switch
           />
-        </div></Field
+        </FieldHeader></Field
       >
     </div>
 

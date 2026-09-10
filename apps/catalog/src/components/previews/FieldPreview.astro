@@ -1,4 +1,6 @@
 ---
+import Checkbox from "@/ui/checkbox/checkbox.astro"
+import FieldContent from "@/ui/field/field-content.astro"
 import Code from "@/ui/code/code.astro"
 import FieldDescription from "@/ui/field/field-description.astro"
 import FieldError from "@/ui/field/field-error.astro"
@@ -66,6 +68,16 @@ const field = manifest.library.components.field
         </FieldDescription>
       </Field>
     </div>
+
+    <Field orientation="horizontal">
+      <Checkbox id="field-notifications" aria-describedby="field-notifications-description" />
+      <FieldContent>
+        <FieldLabel for="field-notifications">Release notifications</FieldLabel>
+        <FieldDescription id="field-notifications-description">
+          Horizontal fields place a control beside its label and supporting text.
+        </FieldDescription>
+      </FieldContent>
+    </Field>
 
     <div class="grid gap-3 border-t border-border pt-6" aria-label="Field anatomy">
       <span class="font-mono text-xs font-medium tracking-wider text-primary uppercase">

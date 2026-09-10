@@ -1,2 +1,5 @@
 export * from "./file-upload"
 export * from "./file-dropzone"
+export * from "./file-dropzone-icon"
+export * from "./file-dropzone-title"
+export * from "./file-dropzone-description"

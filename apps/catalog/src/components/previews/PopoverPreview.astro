@@ -1,4 +1,8 @@
 ---
+import PopoverLink from "@/ui/popover/popover-link.astro"
+import PopoverDescription from "@/ui/popover/popover-description.astro"
+import PopoverTitle from "@/ui/popover/popover-title.astro"
+import PopoverHeader from "@/ui/popover/popover-header.astro"
 import AvatarFallback from "@/ui/avatar/avatar-fallback.astro"
 import Avatar from "@/ui/avatar/avatar.astro"
 import Button from "@/ui/button/button.astro"
@@ -64,31 +68,23 @@ const popoverPlacements = [
       aria-label="Account actions"
       class="w-68"
     >
-      <div class="flex items-center gap-2.5 p-2.5">
+      <PopoverHeader>
         <Avatar aria-hidden="true">
           <AvatarFallback>SH</AvatarFallback>
         </Avatar>
-        <span class="grid min-w-0">
-          <strong class="text-sm">Samuel Hulla</strong>
-          <small class="overflow-hidden text-xs text-ellipsis text-muted-foreground">
-            samuel@hulla.dev
-          </small>
-        </span>
-      </div>
+        <div class="grid min-w-0">
+          <PopoverTitle>Samuel Hulla</PopoverTitle>
+          <PopoverDescription> samuel@hulla.dev </PopoverDescription>
+        </div>
+      </PopoverHeader>
       <Separator class="my-1" />
-      <a
-        class="flex w-full items-center justify-between rounded-sm px-2.5 py-2 text-left text-xs no-underline hover:bg-foreground/5"
-        href="#popover"
-      >
+      <PopoverLink href="#popover">
         View profile <Kbd>⌘P</Kbd>
-      </a>
-      <a
-        class="flex w-full items-center justify-between rounded-sm px-2.5 py-2 text-left text-xs no-underline hover:bg-foreground/5"
-        href="#popover"
-      >
+      </PopoverLink>
+      <PopoverLink href="#popover">
         Workspace settings
         <Kbd>⌘,</Kbd>
-      </a>
+      </PopoverLink>
       <Button
         variant="outline"
         size="sm"
@@ -132,15 +128,15 @@ const popoverPlacements = [
                 Open {placement}
               </Button>
               <Popover id={id} placement={placement} class="w-68">
-                <div class="flex items-center gap-2.5 p-2.5">
+                <PopoverHeader>
                   <Avatar aria-hidden="true">
                     <AvatarFallback>SH</AvatarFallback>
                   </Avatar>
-                  <span class="grid min-w-0">
-                    <strong class="text-sm">Anchored surface</strong>
-                    <small class="text-xs text-muted-foreground">{placement}</small>
-                  </span>
-                </div>
+                  <div class="grid min-w-0">
+                    <PopoverTitle>Anchored surface</PopoverTitle>
+                    <PopoverDescription>{placement}</PopoverDescription>
+                  </div>
+                </PopoverHeader>
                 <Button
                   variant="outline"
                   size="sm"

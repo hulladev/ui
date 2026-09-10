@@ -1,4 +1,5 @@
 ---
+import TableContainer from "@/ui/table/table-container.astro"
 import StepperIndicator from "@/ui/stepper/stepper-indicator.astro"
 import StepperItem from "@/ui/stepper/stepper-item.astro"
 import Stepper from "@/ui/stepper/stepper.astro"
@@ -159,7 +160,7 @@ import Table from "@/ui/table/table.astro"
         >
       </div>
 
-      <div class="overflow-x-auto rounded-md border border-border">
+      <TableContainer>
         <Table variant="divided" class="min-w-168" aria-label="Active releases">
           <TableHeader>
             <TableRow>
@@ -196,7 +197,7 @@ import Table from "@/ui/table/table.astro"
             </TableRow>
           </TableBody>
         </Table>
-      </div>
+      </TableContainer>
     </section>
   </div>
 

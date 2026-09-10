@@ -1,4 +1,7 @@
 ---
+import FieldLabel from "@/ui/field/field-label.astro"
+import FieldOutput from "@/ui/field/field-output.astro"
+import FieldHeader from "@/ui/field/field-header.astro"
 import Meter from "@/ui/meter/meter.astro"
 import manifest from "../../../../../generated/ui.manifest.json"
 import ComponentPreview from "../ComponentPreview.astro"
@@ -43,15 +46,16 @@ const signals = [
 >
   <div slot="variants" class="grid w-full gap-6">
     {
-      signals.map(({ detail, high, label, low, max, optimum, value }) => (
+      signals.map(({ detail, high, label, low, max, optimum, value }, index) => (
         <div class="grid gap-2">
-          <div class="flex justify-between gap-4 text-sm">
+          <FieldHeader>
             <>
-              <span>{label}</span>
-              <span class="text-muted-foreground">{detail}</span>
+              <FieldLabel for={`meter-signal-${index}`}>{label}</FieldLabel>
+              <FieldOutput>{detail}</FieldOutput>
             </>
-          </div>
+          </FieldHeader>
           <Meter
+            id={`meter-signal-${index}`}
             aria-label={label}
             value={value}
             min={0}
@@ -89,11 +93,12 @@ const signals = [
 
     <div class="playground-stage">
       <div class="grid w-72 max-w-full gap-2">
-        <div class="flex justify-between gap-4 text-xs">
-          <span>Signal quality</span>
-          <output class="font-mono text-muted-foreground" data-meter-output>72 / 100</output>
-        </div>
+        <FieldHeader>
+          <FieldLabel for="meter-playground">Signal quality</FieldLabel>
+          <FieldOutput data-meter-output>72 / 100</FieldOutput>
+        </FieldHeader>
         <Meter
+          id="meter-playground"
           value={72}
           min={0}
           max={100}

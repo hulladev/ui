@@ -1,0 +1,11 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"div">
+const { class: className, ...props } = Astro.props as Props
+---
+
+<div {...props} data-slot="popover-header" class={cn("flex items-center gap-2.5 p-2.5", className)}>
+  <slot />
+</div>

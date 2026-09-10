@@ -1,0 +1,15 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"legend">
+const { class: className, ...props } = Astro.props as Props
+---
+
+<legend
+  {...props}
+  data-slot="radio-group-legend"
+  class={cn("mb-1 text-sm font-medium text-foreground", className)}
+>
+  <slot />
+</legend>

@@ -1,0 +1,11 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"span">
+const { class: className, ...props } = Astro.props as Props
+---
+
+<span {...props} data-slot="tag-input-label" class={cn("min-w-0 truncate", className)}>
+  <slot />
+</span>

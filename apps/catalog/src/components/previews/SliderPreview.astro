@@ -1,4 +1,8 @@
 ---
+import FieldContent from "@/ui/field/field-content.astro"
+import SliderMarks from "@/ui/slider/slider-marks.astro"
+import FieldOutput from "@/ui/field/field-output.astro"
+import FieldHeader from "@/ui/field/field-header.astro"
 import FieldDescription from "@/ui/field/field-description.astro"
 import FieldLabel from "@/ui/field/field-label.astro"
 import Field from "@/ui/field/field.astro"
@@ -51,16 +55,12 @@ const mixControls = [
       {
         mixControls.map(({ description, id, label, value }) => (
           <Field>
-            <div class="flex items-baseline justify-between gap-3">
+            <FieldHeader>
               <FieldLabel for={id}>{label}</FieldLabel>
-              <output
-                for={id}
-                class="min-w-10 text-right font-mono text-xs tabular-nums text-muted-foreground"
-                data-slider-output={id}
-              >
+              <FieldOutput for={id} data-slider-output={id}>
                 {value}%
-              </output>
-            </div>
+              </FieldOutput>
+            </FieldHeader>
             <Slider
               id={id}
               name={id}
@@ -77,19 +77,13 @@ const mixControls = [
     </div>
 
     <Field>
-      <div class="flex items-baseline justify-between gap-4">
-        <div>
+      <FieldHeader>
+        <FieldContent>
           <FieldLabel for="release-min">Release window</FieldLabel>
-          <p class="mt-0.5 text-xs text-muted-foreground">Select the minimum and maximum tail.</p>
-        </div>
-        <output
-          for="release-min release-max"
-          class="shrink-0 font-mono text-xs tabular-nums text-muted-foreground"
-          data-range-slider-output
-        >
-          28–74 ms
-        </output>
-      </div>
+          <FieldDescription>Select the minimum and maximum tail.</FieldDescription>
+        </FieldContent>
+        <FieldOutput for="release-min release-max" data-range-slider-output> 28–74 ms </FieldOutput>
+      </FieldHeader>
       <RangeSlider
         aria-label="Release window"
         aria-describedby="release-description"
@@ -112,14 +106,11 @@ const mixControls = [
           aria-label="Maximum release"
         />
       </RangeSlider>
-      <div
-        aria-hidden="true"
-        class="flex justify-between font-mono text-[0.625rem] tabular-nums text-muted-foreground"
-      >
+      <SliderMarks aria-hidden="true">
         <span>0 ms</span>
         <span>60</span>
         <span>120 ms</span>
-      </div>
+      </SliderMarks>
       <FieldDescription id="release-description">
         Each thumb remains an independent native range input.
       </FieldDescription>
@@ -175,16 +166,10 @@ const mixControls = [
 
     <div class="playground-stage">
       <Field class="w-full max-w-md">
-        <div class="flex items-baseline justify-between gap-3">
+        <FieldHeader>
           <FieldLabel for="playground-slider">Output level</FieldLabel>
-          <output
-            for="playground-slider"
-            class="font-mono text-xs tabular-nums text-muted-foreground"
-            data-playground-slider-output
-          >
-            64
-          </output>
-        </div>
+          <FieldOutput for="playground-slider" data-playground-slider-output> 64 </FieldOutput>
+        </FieldHeader>
         <Slider
           id="playground-slider"
           name="outputLevel"

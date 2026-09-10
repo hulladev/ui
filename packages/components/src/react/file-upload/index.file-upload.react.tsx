@@ -1,2 +1,5 @@
 export * from "./file-upload.react"
 export * from "./file-dropzone.react"
+export * from "./file-dropzone-icon.react"
+export * from "./file-dropzone-title.react"
+export * from "./file-dropzone-description.react"

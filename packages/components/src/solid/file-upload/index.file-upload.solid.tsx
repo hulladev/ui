@@ -1,2 +1,5 @@
 export * from "./file-upload.solid"
 export * from "./file-dropzone.solid"
+export * from "./file-dropzone-icon.solid"
+export * from "./file-dropzone-title.solid"
+export * from "./file-dropzone-description.solid"

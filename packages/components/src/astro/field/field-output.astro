@@ -1,0 +1,15 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"output">
+const { class: className, ...props } = Astro.props as Props
+---
+
+<output
+  {...props}
+  data-slot="field-output"
+  class={cn("shrink-0 font-mono text-xs tabular-nums text-muted-foreground", className)}
+>
+  <slot />
+</output>

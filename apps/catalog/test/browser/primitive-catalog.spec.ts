@@ -59,6 +59,27 @@ for (const theme of ["light", "dark"]) {
     })
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: 900 })
+      const horizontal = page
+        .locator('[data-slot="field"][data-orientation="horizontal"]')
+        .filter({ has: page.locator("#field-notifications") })
+      const positions = await horizontal.evaluate((field) => {
+        const control = field.querySelector("input")!.getBoundingClientRect()
+        const content = field.querySelector('[data-slot="field-content"]')!.getBoundingClientRect()
+        return {
+          gap: content.left - control.right,
+          top: content.top - control.top,
+          overflow: field.scrollWidth - field.clientWidth,
+          wrappers: field.querySelectorAll('[data-slot="field-row"]').length,
+        }
+      })
+      expect(positions.gap).toBeCloseTo(16, 0)
+      expect(positions.top).toBeCloseTo(0, 0)
+      expect(positions.overflow).toBeLessThanOrEqual(1)
+      expect(positions.wrappers).toBe(0)
+      const checkbox = page.locator("#field-notifications")
+      const checked = await checkbox.isChecked()
+      await page.locator('label[for="field-notifications"]').click()
+      await expect(checkbox).toBeChecked({ checked: !checked })
       for (const id of ["field-project-name", "field-owner-email", "field-region", "field-notes"]) {
         const spacing = await page.locator(`#${id}`).evaluate((control) => {
           const field = control.closest('[data-slot="field"]')!

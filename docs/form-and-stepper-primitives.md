@@ -17,9 +17,13 @@ as a direct child and provide its accessible name with `aria-label` or `aria-lab
 label surface reflects the input's keyboard focus and disabled styling; it does not assign IDs or
 propagate form attributes. No client-side controller is required.
 
+Compose upload copy with `FileDropzoneIcon`, `FileDropzoneTitle`, and
+`FileDropzoneDescription`. Use `FieldStatus` outside the dropzone to display the selected filenames
+or validation feedback; update it from the native change/reset events.
+
 ## Tag input
 
-Use `TagInput` (div), `TagInputTag` (span), `TagInputRemove` (button), and `TagInputControl` (text
+Use `TagInput` (div), `TagInputTag` and `TagInputLabel` (spans), `TagInputRemove` (button), and `TagInputControl` (text
 input). The container supplies a wrapping field surface. Tags and remove controls are explicit
 children; the application owns the collection, deduplication, validation, reset, and form values.
 Use repeated hidden inputs for repeated form values. Native hidden inputs are intentional form
@@ -41,7 +45,8 @@ available. Collection-level errors and live announcements should be rendered by 
 Backspace on an empty draft focuses the last enabled remove control in the same `TagInput`; it does
 not delete a value. Remove controls use native Enter/Space activation. `TagInputRemove` requires an
 accessible `aria-label`, accepts native button props, and defaults to `type="button"`. Give its
-children an icon or text. After removing a focused tag, return focus to the text control or another
+children an icon or text to override the default close SVG. Use `TagInputLabel` for truncating
+label text and `FieldStatus` for application-owned announcements. After removing a focused tag, return focus to the text control or another
 appropriate tag. For a disabled collection, a native disabled fieldset disables both entry and
 removal without implicit state propagation.
 
@@ -56,6 +61,7 @@ its rendered values and lifecycle.
 The current item receives `aria-current="step"`. Use one current item per stepper.
 
 Compose items with `StepperIndicator` (span), `StepperLink` (anchor), or `StepperButton` (button).
+Use `StepperContent` to group a step label with a `StepperDescription`, without custom text or spacing classes.
 Indicators take explicit numbers or icons and show a checkmark when their item is complete.
 Slim progress marks follow the list orientation, with a stronger stroke for the current step. Upcoming steps keep readable labels even when their
 buttons are disabled. Links preserve native navigation; buttons default to

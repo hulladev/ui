@@ -23,49 +23,45 @@ const checkboxSources = [
 const checkboxUsageSources = [
   {
     code: `---
+import FieldContent from "@/ui/field/field-content.astro"
 import Checkbox from "@/ui/checkbox/checkbox.astro"
 import FieldDescription from "@/ui/field/field-description.astro"
 import FieldLabel from "@/ui/field/field-label.astro"
 import Field from "@/ui/field/field.astro"
 ---
 
-<Field class="grid-cols-[auto_1fr] items-start gap-x-4">
-  <Checkbox
-    id="release-notes"
-    name="releaseNotes"
-    aria-describedby="release-notes-help"
-    checked
-  />
-  <div>
+<Field orientation="horizontal">
+  <Checkbox id="release-notes" name="releaseNotes" aria-describedby="release-notes-help" checked />
+  <FieldContent>
     <FieldLabel for="release-notes">Review release notes</FieldLabel>
     <FieldDescription id="release-notes-help">
       Confirm the copy, destination, and audience.
     </FieldDescription>
-  </div>
+  </FieldContent>
 </Field>`,
     filename: "src/components/release-check.astro",
     framework: "Astro",
     language: "astro" as const,
   },
   {
-    code: `import { Checkbox } from "@/ui/checkbox"
-import { Field, FieldDescription, FieldLabel } from "@/ui/field"
+    code: `import { FieldContent, Field, FieldDescription, FieldLabel } from "@/ui/field"
+import { Checkbox } from "@/ui/checkbox"
 
 export function ReleaseCheck() {
   return (
-    <Field className="grid-cols-[auto_1fr] items-start gap-x-4">
+    <Field orientation="horizontal">
       <Checkbox
         id="release-notes"
         name="releaseNotes"
         aria-describedby="release-notes-help"
         defaultChecked
       />
-      <div>
+      <FieldContent>
         <FieldLabel htmlFor="release-notes">Review release notes</FieldLabel>
         <FieldDescription id="release-notes-help">
           Confirm the copy, destination, and audience.
         </FieldDescription>
-      </div>
+      </FieldContent>
     </Field>
   )
 }`,

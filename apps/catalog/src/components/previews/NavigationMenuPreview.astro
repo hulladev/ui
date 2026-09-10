@@ -1,4 +1,7 @@
 ---
+import NavigationMenuLinkDescription from "@/ui/navigation-menu/navigation-menu-link-description.astro"
+import NavigationMenuLinkTitle from "@/ui/navigation-menu/navigation-menu-link-title.astro"
+import NavigationMenuLinkContent from "@/ui/navigation-menu/navigation-menu-link-content.astro"
 import Switch from "@/ui/switch/switch.astro"
 import Badge from "@/ui/badge/badge.astro"
 import NavigationMenuContent from "@/ui/navigation-menu/navigation-menu-content.astro"
@@ -100,9 +103,9 @@ const solutionLinks = [
                     <strong class="text-2xl leading-none tracking-[-0.045em]">
                       See the whole field.
                     </strong>
-                    <span class="max-w-52 text-xs leading-5 text-muted-foreground">
+                    <NavigationMenuLinkDescription>
                       Northstar 2.0 turns scattered work into a clear operating picture.
-                    </span>
+                    </NavigationMenuLinkDescription>
                     <Badge class="mt-2 w-fit">Explore the release →</Badge>
                   </span>
                   <span
@@ -120,8 +123,8 @@ const solutionLinks = [
                         <span class="mt-0.5 font-mono text-[0.625rem] text-muted-foreground">
                           {link.index}
                         </span>
-                        <span class="grid min-w-0 gap-0.5">
-                          <strong class="text-sm font-medium tracking-[-0.015em]">
+                        <NavigationMenuLinkContent>
+                          <NavigationMenuLinkTitle>
                             {link.label}
                             <span
                               class="ml-1 inline-block text-muted-foreground transition-transform group-hover/navigation-link:translate-x-1"
@@ -129,11 +132,11 @@ const solutionLinks = [
                             >
                               →
                             </span>
-                          </strong>
-                          <span class="text-xs leading-5 text-muted-foreground">
+                          </NavigationMenuLinkTitle>
+                          <NavigationMenuLinkDescription>
                             {link.description}
-                          </span>
-                        </span>
+                          </NavigationMenuLinkDescription>
+                        </NavigationMenuLinkContent>
                       </NavigationMenuLink>
                     ))
                   }
@@ -158,12 +161,12 @@ const solutionLinks = [
                   {
                     solutionLinks.map((link) => (
                       <NavigationMenuLink href="#navigation-menu">
-                        <span class="grid gap-1">
-                          <strong class="text-sm font-medium">{link.label}</strong>
-                          <span class="text-xs leading-5 text-muted-foreground">
+                        <NavigationMenuLinkContent>
+                          <NavigationMenuLinkTitle>{link.label}</NavigationMenuLinkTitle>
+                          <NavigationMenuLinkDescription>
                             {link.description}
-                          </span>
-                        </span>
+                          </NavigationMenuLinkDescription>
+                        </NavigationMenuLinkContent>
                       </NavigationMenuLink>
                     ))
                   }
@@ -237,16 +240,19 @@ const solutionLinks = [
             <NavigationMenuContent class="w-[min(28rem,calc(100vw-4rem))]">
               <div class="grid sm:grid-cols-2">
                 <NavigationMenuLink href="#navigation-menu">
-                  <span class="grid gap-1">
-                    <strong>Atlas</strong>
-                    <span class="text-xs text-muted-foreground">Plan across teams.</span>
-                  </span>
+                  <NavigationMenuLinkContent>
+                    <NavigationMenuLinkTitle>Atlas</NavigationMenuLinkTitle>
+                    <NavigationMenuLinkDescription>Plan across teams.</NavigationMenuLinkDescription
+                    >
+                  </NavigationMenuLinkContent>
                 </NavigationMenuLink>
                 <NavigationMenuLink href="#navigation-menu">
-                  <span class="grid gap-1">
-                    <strong>Signals</strong>
-                    <span class="text-xs text-muted-foreground">Read product momentum.</span>
-                  </span>
+                  <NavigationMenuLinkContent>
+                    <NavigationMenuLinkTitle>Signals</NavigationMenuLinkTitle>
+                    <NavigationMenuLinkDescription
+                      >Read product momentum.</NavigationMenuLinkDescription
+                    >
+                  </NavigationMenuLinkContent>
                 </NavigationMenuLink>
               </div>
             </NavigationMenuContent>
@@ -257,12 +263,12 @@ const solutionLinks = [
             >
             <NavigationMenuContent class="w-[min(28rem,calc(100vw-4rem))]">
               <NavigationMenuLink href="#navigation-menu">
-                <span class="grid gap-1">
-                  <strong>Product teams</strong>
-                  <span class="text-xs text-muted-foreground">
+                <NavigationMenuLinkContent>
+                  <NavigationMenuLinkTitle>Product teams</NavigationMenuLinkTitle>
+                  <NavigationMenuLinkDescription>
                     Shape, review, and ship in one trail.
-                  </span>
-                </span>
+                  </NavigationMenuLinkDescription>
+                </NavigationMenuLinkContent>
               </NavigationMenuLink>
             </NavigationMenuContent>
           </NavigationMenuItem>

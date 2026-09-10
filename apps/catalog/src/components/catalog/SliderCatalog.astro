@@ -65,6 +65,8 @@ const sliderSources = [
 const sliderUsageSources = [
   {
     code: `---
+import FieldOutput from "@/ui/field/field-output.astro"
+import FieldHeader from "@/ui/field/field-header.astro"
 import FieldDescription from "@/ui/field/field-description.astro"
 import FieldLabel from "@/ui/field/field-label.astro"
 import Field from "@/ui/field/field.astro"
@@ -75,12 +77,16 @@ import Slider from "@/ui/slider/slider.astro"
 ---
 
 <div class="grid gap-6">
-  <Field class="grid gap-2">
-    <FieldLabel for="volume">Volume</FieldLabel>
+  <Field>
+    <FieldHeader
+      ><FieldLabel for="volume">Volume</FieldLabel><FieldOutput id="volume-output" for="volume"
+        >60</FieldOutput
+      ></FieldHeader
+    >
     <Slider id="volume" name="volume" min="0" max="100" step="5" value="60" />
   </Field>
 
-  <Field class="grid gap-2">
+  <Field>
     <FieldLabel for="budget-min">Budget range</FieldLabel>
     <RangeSlider aria-label="Budget range" aria-describedby="budget-help">
       <RangeSliderMin
@@ -106,24 +112,45 @@ import Slider from "@/ui/slider/slider.astro"
       Each value is submitted as an independent native input.
     </FieldDescription>
   </Field>
-</div>`,
+</div>
+
+<script>
+  const slider = document.querySelector<HTMLInputElement>("#volume")!
+  const output = document.querySelector<HTMLOutputElement>("#volume-output")!
+  slider.addEventListener("input", () => {
+    output.value = slider.value
+  })
+</script>`,
     filename: "src/components/slider-controls.astro",
     framework: "Astro",
     language: "astro" as const,
   },
   {
-    code: `import { Field, FieldDescription, FieldLabel } from "@/ui/field"
+    code: `import { useState } from "react"
+import { FieldOutput, FieldHeader, Field, FieldDescription, FieldLabel } from "@/ui/field"
 import { RangeSlider, RangeSliderMax, RangeSliderMin, Slider } from "@/ui/slider"
 
 export function SliderControls() {
+  const [volume, setVolume] = useState(60)
   return (
     <div className="grid gap-6">
-      <Field className="grid gap-2">
-        <FieldLabel htmlFor="volume">Volume</FieldLabel>
-        <Slider id="volume" name="volume" min={0} max={100} step={5} defaultValue={60} />
+      <Field>
+        <FieldHeader>
+          <FieldLabel htmlFor="volume">Volume</FieldLabel>
+          <FieldOutput htmlFor="volume">{volume}</FieldOutput>
+        </FieldHeader>
+        <Slider
+          id="volume"
+          name="volume"
+          min={0}
+          max={100}
+          step={5}
+          value={volume}
+          onChange={(event) => setVolume(Number(event.currentTarget.value))}
+        />
       </Field>
 
-      <Field className="grid gap-2">
+      <Field>
         <FieldLabel htmlFor="budget-min">Budget range</FieldLabel>
         <RangeSlider aria-label="Budget range" aria-describedby="budget-help">
           <RangeSliderMin

@@ -1,1 +1,5 @@
 export * from "./popover.solid"
+export * from "./popover-header.solid"
+export * from "./popover-title.solid"
+export * from "./popover-description.solid"
+export * from "./popover-link.solid"

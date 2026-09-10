@@ -4,19 +4,78 @@ import ComponentSource from "../ComponentSource.astro"
 import FileUploadPreview from "../previews/FileUploadPreview.astro"
 const usageSources = [
   {
-    code: '---\nimport FileUpload from "@/ui/file-upload/file-upload.astro"\nimport FileDropzone from "@/ui/file-upload/file-dropzone.astro"\n---\n\n<FileDropzone>\n  <span>Drop files here or click to browse</span>\n  <FileUpload name="attachments" aria-label="Attachments" multiple />\n</FileDropzone>',
+    code: `---
+import FileDropzoneIcon from "@/ui/file-upload/file-dropzone-icon.astro"
+import FileDropzoneDescription from "@/ui/file-upload/file-dropzone-description.astro"
+import FileDropzoneTitle from "@/ui/file-upload/file-dropzone-title.astro"
+import FileUpload from "@/ui/file-upload/file-upload.astro"
+import FileDropzone from "@/ui/file-upload/file-dropzone.astro"
+---
+
+<FileDropzone>
+  <FileDropzoneIcon aria-hidden="true"
+    ><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      ><path d="M12 16V4m-5 5 5-5 5 5M4 16v4h16v-4"></path></svg
+    ></FileDropzoneIcon
+  >
+  <FileDropzoneTitle>Drop your files here</FileDropzoneTitle>
+  <FileDropzoneDescription>or click to browse your device</FileDropzoneDescription>
+  <FileUpload name="attachments" aria-label="Attachments" multiple />
+</FileDropzone>`,
     filename: "src/components/file-upload.astro",
     framework: "Astro",
     language: "astro" as const,
   },
   {
-    code: 'import { FileDropzone, FileUpload } from "@/ui/file-upload"\n\nexport function Attachments() {\n  return (\n    <FileDropzone>\n      <span>Drop files here or click to browse</span>\n      <FileUpload name="attachments" aria-label="Attachments" multiple />\n    </FileDropzone>\n  )\n}',
+    code: `import {
+  FileDropzoneIcon,
+  FileDropzoneDescription,
+  FileDropzoneTitle,
+  FileDropzone,
+  FileUpload,
+} from "@/ui/file-upload"
+
+export function Attachments() {
+  return (
+    <FileDropzone>
+      <FileDropzoneIcon aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M12 16V4m-5 5 5-5 5 5M4 16v4h16v-4" />
+        </svg>
+      </FileDropzoneIcon>
+      <FileDropzoneTitle>Drop your files here</FileDropzoneTitle>
+      <FileDropzoneDescription>or click to browse your device</FileDropzoneDescription>
+      <FileUpload name="attachments" aria-label="Attachments" multiple />
+    </FileDropzone>
+  )
+}`,
     filename: "src/components/file-upload.tsx",
     framework: "React",
     language: "tsx" as const,
   },
   {
-    code: 'import { FileDropzone, FileUpload } from "@/ui/file-upload"\n\nexport function Attachments() {\n  return (\n    <FileDropzone>\n      <span>Drop files here or click to browse</span>\n      <FileUpload name="attachments" aria-label="Attachments" multiple />\n    </FileDropzone>\n  )\n}',
+    code: `import {
+  FileDropzoneIcon,
+  FileDropzoneDescription,
+  FileDropzoneTitle,
+  FileDropzone,
+  FileUpload,
+} from "@/ui/file-upload"
+
+export function Attachments() {
+  return (
+    <FileDropzone>
+      <FileDropzoneIcon aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M12 16V4m-5 5 5-5 5 5M4 16v4h16v-4" />
+        </svg>
+      </FileDropzoneIcon>
+      <FileDropzoneTitle>Drop your files here</FileDropzoneTitle>
+      <FileDropzoneDescription>or click to browse your device</FileDropzoneDescription>
+      <FileUpload name="attachments" aria-label="Attachments" multiple />
+    </FileDropzone>
+  )
+}`,
     filename: "src/components/file-upload.tsx",
     framework: "Solid",
     language: "tsx" as const,

@@ -21,6 +21,10 @@ const popoverSources = [
 ]
 
 const astroUsage = `---
+import PopoverLink from "@/ui/popover/popover-link.astro"
+import PopoverDescription from "@/ui/popover/popover-description.astro"
+import PopoverTitle from "@/ui/popover/popover-title.astro"
+import PopoverHeader from "@/ui/popover/popover-header.astro"
 import Button from "@/ui/button/button.astro"
 import Popover from "@/ui/popover/popover.astro"
 ---
@@ -28,35 +32,36 @@ import Popover from "@/ui/popover/popover.astro"
 <Button popovertarget="account-actions">Account</Button>
 
 <Popover id="account-actions" placement="bottom-end" aria-label="Account actions">
-  <a href="/profile">View profile</a>
-  <Button
-    variant="outline"
-    popovertarget="account-actions"
-    popovertargetaction="hide"
+  <PopoverHeader
+    ><div>
+      <PopoverTitle>Samuel Hulla</PopoverTitle><PopoverDescription
+        >samuel@hulla.dev</PopoverDescription
+      >
+    </div></PopoverHeader
   >
+  <PopoverLink href="/profile">View profile</PopoverLink>
+  <Button variant="outline" popovertarget="account-actions" popovertargetaction="hide">
     Close
   </Button>
 </Popover>`
 
-const reactUsage = `import { Button } from "@/ui/button"
-import { Popover } from "@/ui/popover"
+const reactUsage = `import { PopoverLink, PopoverDescription, PopoverTitle, PopoverHeader, Popover } from "@/ui/popover"
+import { Button } from "@/ui/button"
 
 export function AccountActions() {
   return (
     <>
       <Button popoverTarget="account-actions">Account</Button>
 
-      <Popover
-        id="account-actions"
-        placement="bottom-end"
-        aria-label="Account actions"
-      >
-        <a href="/profile">View profile</a>
-        <Button
-          variant="outline"
-          popoverTarget="account-actions"
-          popoverTargetAction="hide"
-        >
+      <Popover id="account-actions" placement="bottom-end" aria-label="Account actions">
+        <PopoverHeader>
+          <div>
+            <PopoverTitle>Samuel Hulla</PopoverTitle>
+            <PopoverDescription>samuel@hulla.dev</PopoverDescription>
+          </div>
+        </PopoverHeader>
+        <PopoverLink href="/profile">View profile</PopoverLink>
+        <Button variant="outline" popoverTarget="account-actions" popoverTargetAction="hide">
           Close
         </Button>
       </Popover>

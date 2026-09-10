@@ -1,4 +1,8 @@
 ---
+import FieldStatus from "@/ui/field/field-status.astro"
+import FileDropzoneDescription from "@/ui/file-upload/file-dropzone-description.astro"
+import FileDropzoneTitle from "@/ui/file-upload/file-dropzone-title.astro"
+import FileDropzoneIcon from "@/ui/file-upload/file-dropzone-icon.astro"
 import { Upload, Paperclip } from "@lucide/astro"
 import Button from "@/ui/button/button.astro"
 import Field from "@/ui/field/field.astro"
@@ -16,9 +20,9 @@ import ComponentPreview from "../ComponentPreview.astro"
       <Field>
         <FieldLabel id="upload-label" for="upload-assets">Project assets</FieldLabel>
         <FileDropzone>
-          <Upload class="mx-auto mb-2 size-6 text-muted-foreground" aria-hidden="true" />
-          <span class="font-medium text-foreground">Drop your files here</span>
-          <span class="text-xs text-muted-foreground">or click to browse your device</span>
+          <FileDropzoneIcon aria-hidden="true"><Upload /></FileDropzoneIcon>
+          <FileDropzoneTitle>Drop your files here</FileDropzoneTitle>
+          <FileDropzoneDescription>or click to browse your device</FileDropzoneDescription>
           <FileUpload
             id="upload-assets"
             name="assets"
@@ -32,14 +36,9 @@ import ComponentPreview from "../ComponentPreview.astro"
           >Images and PDFs. Files stay on your device in this demo.</FieldDescription
         >
       </Field>
-      <output
-        data-upload-files
-        for="upload-assets"
-        class="flex items-center gap-2 text-sm text-muted-foreground"
-        aria-live="polite"
-      >
-        <Paperclip class="size-4" aria-hidden="true" /> No files selected
-      </output>
+      <FieldStatus data-upload-files for="upload-assets" aria-live="polite">
+        <Paperclip aria-hidden="true" /> No files selected
+      </FieldStatus>
       <Button type="reset" variant="outline" size="sm" class="justify-self-start"
         >Clear selection</Button
       >

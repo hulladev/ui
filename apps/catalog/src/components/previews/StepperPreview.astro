@@ -1,4 +1,6 @@
 ---
+import StepperDescription from "@/ui/stepper/stepper-description.astro"
+import StepperContent from "@/ui/stepper/stepper-content.astro"
 import Button from "@/ui/button/button.astro"
 import Field from "@/ui/field/field.astro"
 import FieldLabel from "@/ui/field/field-label.astro"
@@ -27,14 +29,12 @@ const descriptions = ["The essentials", "Your collaborators", "One last look"]
                   aria-label={`${index + 1} ${label}`}
                 >
                   <StepperIndicator>{String(index + 1).padStart(2, "0")}</StepperIndicator>
-                  <span class="grid gap-1">
+                  <StepperContent>
                     <>
                       <span>{label}</span>
-                      <span class="text-xs font-normal leading-4 text-muted-foreground">
-                        {descriptions[index]}
-                      </span>
+                      <StepperDescription>{descriptions[index]}</StepperDescription>
                     </>
-                  </span>
+                  </StepperContent>
                 </StepperButton>
               </StepperItem>
             ))

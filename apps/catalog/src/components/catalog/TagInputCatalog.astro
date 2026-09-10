@@ -11,13 +11,91 @@ const usageSources = [
     language: "astro" as const,
   },
   {
-    code: 'import { useRef, useState } from "react"\nimport { TagInput, TagInputControl, TagInputTag, TagInputRemove } from "@/ui/tag-input"\n\nexport function Labels() {\n  const [tags, setTags] = useState(["Design"])\n  const inputRef = useRef<HTMLInputElement>(null)\n  return (\n    <TagInput>\n      {tags.map((tag) => (\n        <TagInputTag key={tag}>\n          <span>{tag}</span>\n          <input type="hidden" name="labels" value={tag} />\n          <TagInputRemove aria-label={`Remove ${tag}`} onClick={() => { setTags(tags.filter((item) => item !== tag)); inputRef.current?.focus() }}>\n            ×\n          </TagInputRemove>\n        </TagInputTag>\n      ))}\n      <TagInputControl ref={inputRef} aria-label="Add label" onTagAdd={(tag) => {\n        if (tags.includes(tag)) return false\n        setTags([...tags, tag])\n      }} />\n    </TagInput>\n  )\n}',
+    code: `import { useRef, useState } from "react"
+import {
+  TagInput,
+  TagInputControl,
+  TagInputTag,
+  TagInputLabel,
+  TagInputRemove,
+} from "@/ui/tag-input"
+
+export function Labels() {
+  const [tags, setTags] = useState(["Design"])
+  const inputRef = useRef<HTMLInputElement>(null)
+  return (
+    <TagInput>
+      {tags.map((tag) => (
+        <TagInputTag key={tag}>
+          <TagInputLabel>{tag}</TagInputLabel>
+          <input type="hidden" name="labels" value={tag} />
+          <TagInputRemove
+            aria-label={\`Remove \${tag}\`}
+            onClick={() => {
+              setTags(tags.filter((item) => item !== tag))
+              inputRef.current?.focus()
+            }}
+          />
+        </TagInputTag>
+      ))}
+      <TagInputControl
+        ref={inputRef}
+        aria-label="Add label"
+        onTagAdd={(tag) => {
+          if (tags.includes(tag)) return false
+          setTags([...tags, tag])
+        }}
+      />
+    </TagInput>
+  )
+}`,
     filename: "src/components/tag-input.tsx",
     framework: "React",
     language: "tsx" as const,
   },
   {
-    code: 'import { createSignal, For } from "solid-js"\nimport { TagInput, TagInputControl, TagInputTag, TagInputRemove } from "@/ui/tag-input"\n\nexport function Labels() {\n  const [tags, setTags] = createSignal(["Design"])\n  let inputRef: HTMLInputElement | undefined\n  return (\n    <TagInput>\n      <For each={tags()}>{(tag) => (\n        <TagInputTag>\n          <span>{tag}</span>\n          <input type="hidden" name="labels" value={tag} />\n          <TagInputRemove aria-label={`Remove ${tag}`} onClick={() => { setTags(tags().filter((item) => item !== tag)); inputRef?.focus() }}>\n            ×\n          </TagInputRemove>\n        </TagInputTag>\n      )}</For>\n      <TagInputControl ref={(element) => { inputRef = element }} aria-label="Add label" onTagAdd={(tag) => {\n        if (tags().includes(tag)) return false\n        setTags([...tags(), tag])\n      }} />\n    </TagInput>\n  )\n}',
+    code: `import { createSignal, For } from "solid-js"
+import {
+  TagInput,
+  TagInputControl,
+  TagInputTag,
+  TagInputLabel,
+  TagInputRemove,
+} from "@/ui/tag-input"
+
+export function Labels() {
+  const [tags, setTags] = createSignal(["Design"])
+  let inputRef: HTMLInputElement | undefined
+  return (
+    <TagInput>
+      <For each={tags()}>
+        {(tag) => (
+          <TagInputTag>
+            <TagInputLabel>{tag}</TagInputLabel>
+            <input type="hidden" name="labels" value={tag} />
+            <TagInputRemove
+              aria-label={\`Remove \${tag}\`}
+              onClick={() => {
+                setTags(tags().filter((item) => item !== tag))
+                inputRef?.focus()
+              }}
+            />
+          </TagInputTag>
+        )}
+      </For>
+      <TagInputControl
+        ref={(element) => {
+          inputRef = element
+        }}
+        aria-label="Add label"
+        onTagAdd={(tag) => {
+          if (tags().includes(tag)) return false
+          setTags([...tags(), tag])
+        }}
+      />
+    </TagInput>
+  )
+}`,
     filename: "src/components/tag-input.tsx",
     framework: "Solid",
     language: "tsx" as const,

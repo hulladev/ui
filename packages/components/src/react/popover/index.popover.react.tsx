@@ -1,1 +1,5 @@
 export * from "./popover.react"
+export * from "./popover-header.react"
+export * from "./popover-title.react"
+export * from "./popover-description.react"
+export * from "./popover-link.react"

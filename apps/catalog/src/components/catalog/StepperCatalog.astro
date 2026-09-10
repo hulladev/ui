@@ -4,19 +4,114 @@ import ComponentSource from "../ComponentSource.astro"
 import StepperPreview from "../previews/StepperPreview.astro"
 const usageSources = [
   {
-    code: '---\nimport Stepper from "@/ui/stepper/stepper.astro"\nimport StepperItem from "@/ui/stepper/stepper-item.astro"\nimport StepperLink from "@/ui/stepper/stepper-link.astro"\nimport StepperIndicator from "@/ui/stepper/stepper-indicator.astro"\n---\n\n<nav aria-label="Checkout progress">\n  <Stepper>\n    <StepperItem state="complete">\n      <StepperLink href="/cart"><StepperIndicator>1</StepperIndicator>Cart</StepperLink>\n    </StepperItem>\n    <StepperItem state="current">\n      <StepperLink href="/delivery"><StepperIndicator>2</StepperIndicator>Delivery</StepperLink>\n    </StepperItem>\n  </Stepper>\n</nav>',
+    code: `---
+import StepperDescription from "@/ui/stepper/stepper-description.astro"
+import StepperContent from "@/ui/stepper/stepper-content.astro"
+import Stepper from "@/ui/stepper/stepper.astro"
+import StepperItem from "@/ui/stepper/stepper-item.astro"
+import StepperLink from "@/ui/stepper/stepper-link.astro"
+import StepperIndicator from "@/ui/stepper/stepper-indicator.astro"
+---
+
+<nav aria-label="Checkout progress">
+  <Stepper>
+    <StepperItem state="complete">
+      <StepperLink href="/cart"
+        ><StepperIndicator>1</StepperIndicator><StepperContent
+          ><span>Cart</span><StepperDescription>Review items</StepperDescription></StepperContent
+        ></StepperLink
+      >
+    </StepperItem>
+    <StepperItem state="current">
+      <StepperLink href="/delivery"
+        ><StepperIndicator>2</StepperIndicator><StepperContent
+          ><span>Delivery</span><StepperDescription>Choose an address</StepperDescription
+          ></StepperContent
+        ></StepperLink
+      >
+    </StepperItem>
+  </Stepper>
+</nav>`,
     filename: "src/components/stepper.astro",
     framework: "Astro",
     language: "astro" as const,
   },
   {
-    code: 'import { Stepper, StepperItem, StepperLink, StepperIndicator } from "@/ui/stepper"\n\nexport function CheckoutSteps() {\n  return (\n    <nav aria-label="Checkout progress">\n      <Stepper>\n        <StepperItem state="complete">\n          <StepperLink href="/cart"><StepperIndicator>1</StepperIndicator>Cart</StepperLink>\n        </StepperItem>\n        <StepperItem state="current">\n          <StepperLink href="/delivery"><StepperIndicator>2</StepperIndicator>Delivery</StepperLink>\n        </StepperItem>\n      </Stepper>\n    </nav>\n  )\n}',
+    code: `import {
+  StepperDescription,
+  StepperContent,
+  Stepper,
+  StepperItem,
+  StepperLink,
+  StepperIndicator,
+} from "@/ui/stepper"
+
+export function CheckoutSteps() {
+  return (
+    <nav aria-label="Checkout progress">
+      <Stepper>
+        <StepperItem state="complete">
+          <StepperLink href="/cart">
+            <StepperIndicator>1</StepperIndicator>
+            <StepperContent>
+              <span>Cart</span>
+              <StepperDescription>Review items</StepperDescription>
+            </StepperContent>
+          </StepperLink>
+        </StepperItem>
+        <StepperItem state="current">
+          <StepperLink href="/delivery">
+            <StepperIndicator>2</StepperIndicator>
+            <StepperContent>
+              <span>Delivery</span>
+              <StepperDescription>Choose an address</StepperDescription>
+            </StepperContent>
+          </StepperLink>
+        </StepperItem>
+      </Stepper>
+    </nav>
+  )
+}`,
     filename: "src/components/stepper.tsx",
     framework: "React",
     language: "tsx" as const,
   },
   {
-    code: 'import { Stepper, StepperItem, StepperLink, StepperIndicator } from "@/ui/stepper"\n\nexport function CheckoutSteps() {\n  return (\n    <nav aria-label="Checkout progress">\n      <Stepper>\n        <StepperItem state="complete">\n          <StepperLink href="/cart"><StepperIndicator>1</StepperIndicator>Cart</StepperLink>\n        </StepperItem>\n        <StepperItem state="current">\n          <StepperLink href="/delivery"><StepperIndicator>2</StepperIndicator>Delivery</StepperLink>\n        </StepperItem>\n      </Stepper>\n    </nav>\n  )\n}',
+    code: `import {
+  StepperDescription,
+  StepperContent,
+  Stepper,
+  StepperItem,
+  StepperLink,
+  StepperIndicator,
+} from "@/ui/stepper"
+
+export function CheckoutSteps() {
+  return (
+    <nav aria-label="Checkout progress">
+      <Stepper>
+        <StepperItem state="complete">
+          <StepperLink href="/cart">
+            <StepperIndicator>1</StepperIndicator>
+            <StepperContent>
+              <span>Cart</span>
+              <StepperDescription>Review items</StepperDescription>
+            </StepperContent>
+          </StepperLink>
+        </StepperItem>
+        <StepperItem state="current">
+          <StepperLink href="/delivery">
+            <StepperIndicator>2</StepperIndicator>
+            <StepperContent>
+              <span>Delivery</span>
+              <StepperDescription>Choose an address</StepperDescription>
+            </StepperContent>
+          </StepperLink>
+        </StepperItem>
+      </Stepper>
+    </nav>
+  )
+}`,
     filename: "src/components/stepper.tsx",
     framework: "Solid",
     language: "tsx" as const,

@@ -1,4 +1,5 @@
 ---
+import FieldContent from "@/ui/field/field-content.astro"
 import Checkbox from "@/ui/checkbox/checkbox.astro"
 import FieldDescription from "@/ui/field/field-description.astro"
 import FieldLabel from "@/ui/field/field-label.astro"
@@ -32,19 +33,12 @@ const checklist = [
     <div class="grid gap-4" aria-label="Release checklist">
       {
         checklist.map(({ checked, description, id, label }) => (
-          <Field>
-            <div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
-              <Checkbox
-                id={id}
-                name={id}
-                aria-describedby={`${id}-description`}
-                checked={checked}
-              />
-              <div class="grid gap-0.5">
-                <FieldLabel for={id}>{label}</FieldLabel>
-                <FieldDescription id={`${id}-description`}>{description}</FieldDescription>
-              </div>
-            </div>
+          <Field orientation="horizontal">
+            <Checkbox id={id} name={id} aria-describedby={`${id}-description`} checked={checked} />
+            <FieldContent>
+              <FieldLabel for={id}>{label}</FieldLabel>
+              <FieldDescription id={`${id}-description`}>{description}</FieldDescription>
+            </FieldContent>
           </Field>
         ))
       }
@@ -54,42 +48,30 @@ const checklist = [
       class="grid grid-cols-2 gap-3 border-t border-border pt-5 max-[480px]:grid-cols-1"
       aria-label="Checkbox states"
     >
-      <Field
-        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
-          <Checkbox id="checkbox-unchecked" />
-          <FieldLabel for="checkbox-unchecked">Unchecked</FieldLabel>
-        </div></Field
-      >
-      <Field
-        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
-          <Checkbox id="checkbox-checked" checked />
-          <FieldLabel for="checkbox-checked">Checked</FieldLabel>
-        </div></Field
-      >
-      <Field
-        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
-          <Checkbox id="checkbox-indeterminate" data-checkbox-indeterminate />
-          <FieldLabel for="checkbox-indeterminate">Indeterminate</FieldLabel>
-        </div></Field
-      >
-      <Field
-        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
-          <Checkbox id="checkbox-disabled" disabled />
-          <FieldLabel for="checkbox-disabled">Disabled</FieldLabel>
-        </div></Field
-      >
-      <Field>
-        <div class="flex items-center gap-4">
-          <Checkbox id="checkbox-disabled-checked" checked disabled />
-          <FieldLabel for="checkbox-disabled-checked">Checked · disabled</FieldLabel>
-        </div>
+      <Field orientation="horizontal">
+        <Checkbox id="checkbox-unchecked" />
+        <FieldLabel for="checkbox-unchecked">Unchecked</FieldLabel>
       </Field>
-      <Field
-        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
-          <Checkbox id="checkbox-invalid" aria-invalid="true" />
-          <FieldLabel for="checkbox-invalid">Invalid</FieldLabel>
-        </div></Field
-      >
+      <Field orientation="horizontal">
+        <Checkbox id="checkbox-checked" checked />
+        <FieldLabel for="checkbox-checked">Checked</FieldLabel>
+      </Field>
+      <Field orientation="horizontal">
+        <Checkbox id="checkbox-indeterminate" data-checkbox-indeterminate />
+        <FieldLabel for="checkbox-indeterminate">Indeterminate</FieldLabel>
+      </Field>
+      <Field orientation="horizontal">
+        <Checkbox id="checkbox-disabled" disabled />
+        <FieldLabel for="checkbox-disabled">Disabled</FieldLabel>
+      </Field>
+      <Field orientation="horizontal">
+        <Checkbox id="checkbox-disabled-checked" checked disabled />
+        <FieldLabel for="checkbox-disabled-checked">Checked · disabled</FieldLabel>
+      </Field>
+      <Field orientation="horizontal">
+        <Checkbox id="checkbox-invalid" aria-invalid="true" />
+        <FieldLabel for="checkbox-invalid">Invalid</FieldLabel>
+      </Field>
     </div>
   </div>
 
@@ -113,22 +95,20 @@ const checklist = [
     </div>
 
     <div class="playground-stage">
-      <Field class="w-full max-w-sm"
-        ><div class="grid grid-cols-[auto_1fr] items-start gap-x-4">
-          <Checkbox
-            id="playground-checkbox"
-            aria-describedby="playground-checkbox-help"
-            checked
-            data-playground-checkbox
-          />
-          <div>
-            <FieldLabel for="playground-checkbox">Include archived projects</FieldLabel>
-            <FieldDescription id="playground-checkbox-help">
-              Search results will include inactive work.
-            </FieldDescription>
-          </div>
-        </div></Field
-      >
+      <Field class="w-full max-w-sm" orientation="horizontal">
+        <Checkbox
+          id="playground-checkbox"
+          aria-describedby="playground-checkbox-help"
+          checked
+          data-playground-checkbox
+        />
+        <FieldContent>
+          <FieldLabel for="playground-checkbox">Include archived projects</FieldLabel>
+          <FieldDescription id="playground-checkbox-help">
+            Search results will include inactive work.
+          </FieldDescription>
+        </FieldContent>
+      </Field>
     </div>
 
     <code class="prop-readout" data-checkbox-readout aria-live="polite"

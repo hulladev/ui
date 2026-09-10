@@ -1,0 +1,11 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"strong">
+const { class: className, ...props } = Astro.props as Props
+---
+
+<strong {...props} data-slot="popover-title" class={cn("block text-sm font-semibold", className)}>
+  <slot />
+</strong>

@@ -1,4 +1,5 @@
 ---
+import TagInputLabel from "@/ui/tag-input/tag-input-label.astro"
 import TagInput from "@/ui/tag-input/tag-input.astro"
 import TagInputControl from "@/ui/tag-input/tag-input-control.astro"
 import TagInputTag from "@/ui/tag-input/tag-input-tag.astro"
@@ -9,9 +10,9 @@ import TagInputRemove from "@/ui/tag-input/tag-input-remove.astro"
   <TagInputControl aria-label="Add label" />
   <template>
     <TagInputTag>
-      <span></span>
+      <TagInputLabel></TagInputLabel>
       <input type="hidden" name="labels" />
-      <TagInputRemove aria-label="Remove label">×</TagInputRemove>
+      <TagInputRemove aria-label="Remove label"></TagInputRemove>
     </TagInputTag>
   </template>
 </TagInput>
@@ -22,7 +23,7 @@ import TagInputRemove from "@/ui/tag-input/tag-input-remove.astro"
   root.addEventListener("hulla-tag-add", (event) => {
     const value = (event as CustomEvent<{ value: string }>).detail.value
     const fragment = root.querySelector("template")!.content.cloneNode(true) as DocumentFragment
-    fragment.querySelector("span span")!.textContent = value
+    fragment.querySelector("[data-slot=tag-input-label]")!.textContent = value
     fragment.querySelector("input")!.value = value
     const remove = fragment.querySelector("button")!
     remove.setAttribute("aria-label", `Remove ${value}`)

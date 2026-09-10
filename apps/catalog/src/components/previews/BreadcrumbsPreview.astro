@@ -1,4 +1,5 @@
 ---
+import BreadcrumbEllipsis from "@/ui/breadcrumbs/breadcrumb-ellipsis.astro"
 import CardTitle from "@/ui/card/card-title.astro"
 import Card from "@/ui/card/card.astro"
 import BreadcrumbItem from "@/ui/breadcrumbs/breadcrumb-item.astro"
@@ -42,8 +43,7 @@ const breadcrumbs = manifest.library.components.breadcrumbs
         <Breadcrumbs aria-label="Documentation breadcrumb">
           <BreadcrumbItem><a href="#breadcrumbs">Docs</a></BreadcrumbItem>
           <BreadcrumbItem>
-            <span aria-hidden="true" class="font-mono tracking-[0.12em]">···</span>
-            <span class="sr-only">More pages</span>
+            <BreadcrumbEllipsis />
           </BreadcrumbItem>
           <BreadcrumbItem><a href="#breadcrumbs">Components</a></BreadcrumbItem>
           <BreadcrumbItem aria-current="page">Breadcrumbs</BreadcrumbItem>
@@ -82,8 +82,7 @@ const breadcrumbs = manifest.library.components.breadcrumbs
       <Breadcrumbs data-playground-breadcrumbs data-composition="collapsed" hidden>
         <BreadcrumbItem><a href="#breadcrumbs">Workspace</a></BreadcrumbItem>
         <BreadcrumbItem>
-          <span aria-hidden="true" class="font-mono tracking-[0.12em]">···</span>
-          <span class="sr-only">More pages</span>
+          <BreadcrumbEllipsis />
         </BreadcrumbItem>
         <BreadcrumbItem aria-current="page">Atlas</BreadcrumbItem>
       </Breadcrumbs>

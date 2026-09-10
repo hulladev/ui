@@ -1,0 +1,18 @@
+---
+import { cn } from "@/lib/style"
+import type { HTMLAttributes } from "astro/types"
+
+type Props = HTMLAttributes<"output">
+const { class: className, ...props } = Astro.props as Props
+---
+
+<output
+  {...props}
+  data-slot="field-status"
+  class={cn(
+    "flex min-h-5 items-center gap-2 text-xs text-muted-foreground [&>svg]:size-4 [&>svg]:shrink-0",
+    className
+  )}
+>
+  <slot />
+</output>
