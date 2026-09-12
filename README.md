@@ -1,12 +1,12 @@
-# Hulla UI
+`@hulla/ui`
 
-Hulla UI is the source-component registry and deterministic generator used by the
+`@hulla/ui` is the source-component registry and deterministic generator used by the
 [`hulla` CLI](https://github.com/hulladev/cli). This repository is for library authors and
-contributors; application developers install components through `hulla`, not directly from this
+contributors; application developers install components through `hulla` (CLI), not directly from this
 workspace.
 
 The generator turns framework-specific source templates into complete, validated registries. The
-official Hulla registry currently ships Astro, React, and Solid components; Svelte and Vue adapters
+official component registry currently ships Astro, React, and Solid components; Svelte and Vue adapters
 remain planned. Every build is staged, compared by content, and swapped into place atomically, so
 failed generation never leaves a partially updated registry.
 
