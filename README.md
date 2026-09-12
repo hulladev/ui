@@ -1,4 +1,4 @@
-`@hulla/ui`
+# `@hulla/ui`
 
 `@hulla/ui` is the source-component registry and deterministic generator used by the
 [`hulla` CLI](https://github.com/hulladev/cli). This repository is for library authors and
