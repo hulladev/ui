@@ -63,8 +63,9 @@ decision explicit first.
 - Name local style resolver functions with a singular `$` prefix matching the visual axis, such as
   `$variant` and `$size`. Keep public prop names native or consumer-facing; for example, Input's
   `controlSize` prop is resolved through the internal `$size` style function.
-- Use `style({ composer: twMerge })` through the shared helpers in `src/lib/style.ts` when class
-  composition is needed.
+- Use the configured `@hulla/style` helpers in `src/lib/style.ts` when class composition is
+  needed. The canonical examples use `cn`'s optimized `cn` export as the composer; the CLI also
+  supports selecting `tailwind-merge` for consumer installs.
 - Give each interactive state one deliberate focus treatment. Do not stack a global outline with a
   component border or ring when both communicate the same focus state. When a component owns a
   variant-specific focus treatment, explicitly suppress the global outline and verify every
