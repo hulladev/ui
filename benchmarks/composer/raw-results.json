@@ -1,0 +1,493 @@
+{
+  "metadata": [
+    {
+      "name": "@hulla/style",
+      "version": "0.4.0",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/hulladev/style.git",
+        "directory": "packages/style"
+      }
+    },
+    {
+      "name": "tailwind-merge",
+      "version": "3.6.0",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/dcastil/tailwind-merge.git"
+      }
+    },
+    {
+      "name": "cn",
+      "version": "0.3.0",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/shadcn-ui/cn.git",
+        "directory": "packages/cn"
+      }
+    },
+    {
+      "name": "esbuild",
+      "version": "0.27.3",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/evanw/esbuild.git"
+      }
+    }
+  ],
+  "compatibility": {
+    "cases": 951,
+    "corpus": 310,
+    "mismatches": [
+      {
+        "name": "cn-twMerge",
+        "input": "h-5 w-9 bg-foreground/[0.12] shadow-inner before:left-0.5 before:size-3.5 before:bg-surface-raised before:shadow-sm enabled:checked:border-primary enabled:checked:bg-primary checked:before:translate-x-4 enabled:not-aria-invalid:hover:border-foreground/40 enabled:checked:not-aria-invalid:hover:border-primary enabled:checked:not-aria-invalid:hover:bg-[color-mix(in_oklab,var(--color-primary)_84%,var(--color-foreground))] dark:enabled:checked:not-aria-invalid:hover:bg-[color-mix(in_oklab,var(--color-primary)_84%,var(--color-background))] disabled:checked:border-disabled-foreground disabled:checked:bg-disabled-foreground dark:enabled:bg-foreground/[0.18] dark:before:bg-foreground dark:before:shadow-[0_1px_3px_rgb(0_0_0/0.72),0_0_0_1px_rgb(255_255_255/0.1)] enabled:dark:checked:bg-primary border-[color-mix(in_oklab,var(--color-danger)_84%,var(--color-foreground))] shadow-none",
+        "expected": "h-5 w-9 bg-foreground/[0.12] shadow-inner before:left-0.5 before:size-3.5 before:bg-surface-raised before:shadow-sm enabled:checked:border-primary enabled:checked:bg-primary checked:before:translate-x-4 enabled:not-aria-invalid:hover:border-foreground/40 enabled:checked:not-aria-invalid:hover:border-primary enabled:checked:not-aria-invalid:hover:bg-[color-mix(in_oklab,var(--color-primary)_84%,var(--color-foreground))] dark:enabled:checked:not-aria-invalid:hover:bg-[color-mix(in_oklab,var(--color-primary)_84%,var(--color-background))] disabled:checked:border-disabled-foreground disabled:checked:bg-disabled-foreground dark:enabled:bg-foreground/[0.18] dark:before:bg-foreground dark:before:shadow-[0_1px_3px_rgb(0_0_0/0.72),0_0_0_1px_rgb(255_255_255/0.1)] enabled:dark:checked:bg-primary border-[color-mix(in_oklab,var(--color-danger)_84%,var(--color-foreground))] shadow-none",
+        "actual": "h-5 w-9 bg-foreground/[0.12] before:left-0.5 before:size-3.5 before:bg-surface-raised before:shadow-sm enabled:checked:border-primary enabled:checked:bg-primary checked:before:translate-x-4 enabled:not-aria-invalid:hover:border-foreground/40 enabled:checked:not-aria-invalid:hover:border-primary enabled:checked:not-aria-invalid:hover:bg-[color-mix(in_oklab,var(--color-primary)_84%,var(--color-foreground))] dark:enabled:checked:not-aria-invalid:hover:bg-[color-mix(in_oklab,var(--color-primary)_84%,var(--color-background))] disabled:checked:border-disabled-foreground disabled:checked:bg-disabled-foreground dark:enabled:bg-foreground/[0.18] dark:before:bg-foreground dark:before:shadow-[0_1px_3px_rgb(0_0_0/0.72),0_0_0_1px_rgb(255_255_255/0.1)] enabled:dark:checked:bg-primary border-[color-mix(in_oklab,var(--color-danger)_84%,var(--color-foreground))] shadow-none"
+      },
+      {
+        "name": "cn-cn",
+        "input": "h-5 w-9 bg-foreground/[0.12] shadow-inner before:left-0.5 before:size-3.5 before:bg-surface-raised before:shadow-sm enabled:checked:border-primary enabled:checked:bg-primary checked:before:translate-x-4 enabled:not-aria-invalid:hover:border-foreground/40 enabled:checked:not-aria-invalid:hover:border-primary enabled:checked:not-aria-invalid:hover:bg-[color-mix(in_oklab,var(--color-primary)_84%,var(--color-foreground))] dark:enabled:checked:not-aria-invalid:hover:bg-[color-mix(in_oklab,var(--color-primary)_84%,var(--color-background))] disabled:checked:border-disabled-foreground disabled:checked:bg-disabled-foreground dark:enabled:bg-foreground/[0.18] dark:before:bg-foreground dark:before:shadow-[0_1px_3px_rgb(0_0_0/0.72),0_0_0_1px_rgb(255_255_255/0.1)] enabled:dark:checked:bg-primary border-[color-mix(in_oklab,var(--color-danger)_84%,var(--color-foreground))] shadow-none",
+        "expected": "h-5 w-9 bg-foreground/[0.12] shadow-inner before:left-0.5 before:size-3.5 before:bg-surface-raised before:shadow-sm enabled:checked:border-primary enabled:checked:bg-primary checked:before:translate-x-4 enabled:not-aria-invalid:hover:border-foreground/40 enabled:checked:not-aria-invalid:hover:border-primary enabled:checked:not-aria-invalid:hover:bg-[color-mix(in_oklab,var(--color-primary)_84%,var(--color-foreground))] dark:enabled:checked:not-aria-invalid:hover:bg-[color-mix(in_oklab,var(--color-primary)_84%,var(--color-background))] disabled:checked:border-disabled-foreground disabled:checked:bg-disabled-foreground dark:enabled:bg-foreground/[0.18] dark:before:bg-foreground dark:before:shadow-[0_1px_3px_rgb(0_0_0/0.72),0_0_0_1px_rgb(255_255_255/0.1)] enabled:dark:checked:bg-primary border-[color-mix(in_oklab,var(--color-danger)_84%,var(--color-foreground))] shadow-none",
+        "actual": "h-5 w-9 bg-foreground/[0.12] before:left-0.5 before:size-3.5 before:bg-surface-raised before:shadow-sm enabled:checked:border-primary enabled:checked:bg-primary checked:before:translate-x-4 enabled:not-aria-invalid:hover:border-foreground/40 enabled:checked:not-aria-invalid:hover:border-primary enabled:checked:not-aria-invalid:hover:bg-[color-mix(in_oklab,var(--color-primary)_84%,var(--color-foreground))] dark:enabled:checked:not-aria-invalid:hover:bg-[color-mix(in_oklab,var(--color-primary)_84%,var(--color-background))] disabled:checked:border-disabled-foreground disabled:checked:bg-disabled-foreground dark:enabled:bg-foreground/[0.18] dark:before:bg-foreground dark:before:shadow-[0_1px_3px_rgb(0_0_0/0.72),0_0_0_1px_rgb(255_255_255/0.1)] enabled:dark:checked:bg-primary border-[color-mix(in_oklab,var(--color-danger)_84%,var(--color-foreground))] shadow-none"
+      }
+    ]
+  },
+  "bundles": {
+    "tailwind": {
+      "minified": 27804,
+      "gzip": 8833
+    },
+    "cn-twMerge": {
+      "minified": 26785,
+      "gzip": 11060
+    },
+    "cn-cn": {
+      "minified": 26785,
+      "gzip": 11060
+    }
+  },
+  "results": [
+    {
+      "runtime": "node",
+      "implementationName": "tailwind",
+      "scenarioName": "final-stable",
+      "ns": 1668.0405533333328,
+      "samples": [
+        1644.9036066666667, 1664.5780600000005, 1668.0405533333328, 1713.864446666668,
+        1724.3174999999987
+      ],
+      "checksum": 1603350000,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "cn-twMerge",
+      "scenarioName": "final-stable",
+      "ns": 1655.0883333333331,
+      "samples": [
+        1643.639720000001, 1649.8530600000004, 1655.0883333333331, 1671.6608333333338,
+        1695.485280000001
+      ],
+      "checksum": 1603350000,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "cn-cn",
+      "scenarioName": "final-stable",
+      "ns": 25.03861333333333,
+      "samples": [
+        17.903886666666672, 19.425553333333358, 25.03861333333333, 25.18805333333333,
+        25.675000000000004
+      ],
+      "checksum": 1603350000,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "tailwind",
+      "scenarioName": "full-stable",
+      "ns": 1773.0979166666666,
+      "samples": [
+        1751.9031249999994, 1751.9666666666656, 1773.0979166666666, 1774.7319416666664,
+        1839.3614583333335
+      ],
+      "checksum": 1282680000,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "cn-twMerge",
+      "scenarioName": "full-stable",
+      "ns": 1696.0829916666664,
+      "samples": [
+        1667.0076416666652, 1682.2069500000018, 1696.0829916666664, 1709.6263833333333,
+        1712.0527750000003
+      ],
+      "checksum": 1282680000,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "cn-cn",
+      "scenarioName": "full-stable",
+      "ns": 36.72083333333334,
+      "samples": [
+        31.89235833333335, 32.40590000000007, 36.72083333333334, 42.90451666666666,
+        43.91839999999997
+      ],
+      "checksum": 1282680000,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "tailwind",
+      "scenarioName": "full-rotating",
+      "ns": 1433.0974000000006,
+      "samples": [
+        1418.5395749999998, 1426.781775, 1433.0974000000006, 1436.6093750000005, 1497.9552125000005
+      ],
+      "checksum": 678348104,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "cn-twMerge",
+      "scenarioName": "full-rotating",
+      "ns": 1366.7010375000004,
+      "samples": [
+        1318.6276000000007, 1330.5255125, 1366.7010375000004, 1368.4671875000004, 1398.2380125000007
+      ],
+      "checksum": 678348104,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "cn-cn",
+      "scenarioName": "full-rotating",
+      "ns": 47.440099999999944,
+      "samples": [
+        40.86093750000002, 42.67603749999998, 47.440099999999944, 50.86197500000002,
+        56.08488750000004
+      ],
+      "checksum": 678348104,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "tailwind",
+      "scenarioName": "real-corpus",
+      "ns": 5147.2979166666655,
+      "samples": [
+        5125.195833333333, 5128.250683333333, 5147.2979166666655, 5150.444449999998,
+        5179.532649999999
+      ],
+      "checksum": 211501514,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "cn-twMerge",
+      "scenarioName": "real-corpus",
+      "ns": 495.11598333333325,
+      "samples": [
+        486.16806666666673, 491.4187499999997, 495.11598333333325, 499.0590166666669,
+        505.53681666666677
+      ],
+      "checksum": 211495599,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "cn-cn",
+      "scenarioName": "real-corpus",
+      "ns": 82.45069999999994,
+      "samples": [
+        73.5118, 74.85625000000007, 82.45069999999994, 88.06388333333335, 88.86943333333335
+      ],
+      "checksum": 211495599,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "tailwind",
+      "scenarioName": "mixed-inputs",
+      "ns": 991.3750000000002,
+      "samples": [
+        978.5826333333329, 982.0020833333331, 991.3750000000002, 998.1034666666665,
+        1002.8867999999998
+      ],
+      "checksum": 362320000,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "cn-twMerge",
+      "scenarioName": "mixed-inputs",
+      "ns": 1024.4118166666663,
+      "samples": [
+        987.1326333333334, 990.1409833333332, 1024.4118166666663, 1047.9395833333333,
+        1076.0673666666667
+      ],
+      "checksum": 362320000,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "cn-cn",
+      "scenarioName": "mixed-inputs",
+      "ns": 149.77568333333315,
+      "samples": [
+        143.19791666666669, 143.7257, 149.77568333333315, 153.82083333333347, 153.8985999999999
+      ],
+      "checksum": 362320000,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "tailwind",
+      "scenarioName": "cold-diverse",
+      "ns": 18896.015625000004,
+      "samples": [
+        18649.713624999997, 18751.65624999998, 18896.015625000004, 19196.130124999996,
+        19825.729124999998
+      ],
+      "checksum": 62871592,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "cn-twMerge",
+      "scenarioName": "cold-diverse",
+      "ns": 8346.666625000005,
+      "samples": [
+        7962.651000000001, 8164.494874999996, 8346.666625000005, 8578.974000000002,
+        8800.442749999998
+      ],
+      "checksum": 62871592,
+      "corpus": 310
+    },
+    {
+      "runtime": "node",
+      "implementationName": "cn-cn",
+      "scenarioName": "cold-diverse",
+      "ns": 9040.9115,
+      "samples": [
+        8539.739624999997, 8837.072874999996, 9040.9115, 9401.015625000007, 9437.359374999996
+      ],
+      "checksum": 62871592,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "tailwind",
+      "scenarioName": "final-stable",
+      "ns": 126.61722666666681,
+      "samples": [
+        124.95777999999993, 125.33305333333335, 126.61722666666681, 128.42083333333335,
+        128.69722666666652
+      ],
+      "checksum": 1603350000,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "cn-twMerge",
+      "scenarioName": "final-stable",
+      "ns": 195.3058333333333,
+      "samples": [191.81833333333336, 192.65944, 195.3058333333333, 197.00528, 197.16916666666654],
+      "checksum": 1603350000,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "cn-cn",
+      "scenarioName": "final-stable",
+      "ns": 13.127220000000033,
+      "samples": [
+        13.11027999999998, 13.121386666666647, 13.127220000000033, 13.553886666666651, 14.12222
+      ],
+      "checksum": 1603350000,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "tailwind",
+      "scenarioName": "full-stable",
+      "ns": 318.48333333333335,
+      "samples": [
+        314.0309083333335, 318.2159750000001, 318.48333333333335, 319.6621499999997,
+        319.7465249999998
+      ],
+      "checksum": 1282680000,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "cn-twMerge",
+      "scenarioName": "full-stable",
+      "ns": 212.19583333333344,
+      "samples": [
+        209.5520833333334, 209.6128416666668, 212.19583333333344, 218.0694416666667,
+        223.21701666666664
+      ],
+      "checksum": 1282680000,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "cn-cn",
+      "scenarioName": "full-stable",
+      "ns": 27.426741666666683,
+      "samples": [
+        27.21840833333336, 27.392366666666668, 27.426741666666683, 28.08437499999995,
+        28.57951666666665
+      ],
+      "checksum": 1282680000,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "tailwind",
+      "scenarioName": "full-rotating",
+      "ns": 303.56249999999994,
+      "samples": [
+        297.86093750000015, 301.5015625, 303.56249999999994, 304.77603750000026, 306.89896250000004
+      ],
+      "checksum": 678348104,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "cn-twMerge",
+      "scenarioName": "full-rotating",
+      "ns": 198.7369750000001,
+      "samples": [
+        191.99009999999993, 193.8322874999999, 198.7369750000001, 200.36822499999988,
+        203.87083750000005
+      ],
+      "checksum": 678348104,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "cn-cn",
+      "scenarioName": "full-rotating",
+      "ns": 33.066662500000014,
+      "samples": [
+        32.28958750000004, 32.48801250000009, 33.066662500000014, 33.313024999999996,
+        33.315112500000055
+      ],
+      "checksum": 678348104,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "tailwind",
+      "scenarioName": "real-corpus",
+      "ns": 4719.900699999999,
+      "samples": [
+        4632.328466666669, 4640.6951333333345, 4719.900699999999, 4728.257649999999,
+        4779.3951333333325
+      ],
+      "checksum": 211570870,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "cn-twMerge",
+      "scenarioName": "real-corpus",
+      "ns": 140.9465333333332,
+      "samples": [
+        110.54235000000006, 128.80068333333318, 140.9465333333332, 145.8180666666666,
+        148.79651666666666
+      ],
+      "checksum": 211570870,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "cn-cn",
+      "scenarioName": "real-corpus",
+      "ns": 51.973616666666565,
+      "samples": [
+        18.138883333333432, 25.839583333333376, 51.973616666666565, 91.90416666666663,
+        94.04513333333331
+      ],
+      "checksum": 211570870,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "tailwind",
+      "scenarioName": "mixed-inputs",
+      "ns": 237.76458333333323,
+      "samples": [
+        234.36875000000015, 235.1208333333332, 237.76458333333323, 239.15139999999997,
+        243.30346666666668
+      ],
+      "checksum": 362320000,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "cn-twMerge",
+      "scenarioName": "mixed-inputs",
+      "ns": 291.4673666666665,
+      "samples": [
+        285.42916666666684, 286.3937500000001, 291.4673666666665, 293.1923666666667,
+        300.31944999999996
+      ],
+      "checksum": 362320000,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "cn-cn",
+      "scenarioName": "mixed-inputs",
+      "ns": 147.79444999999996,
+      "samples": [
+        146.8395833333332, 146.95068333333316, 147.79444999999996, 149.11528333333334,
+        156.52223333333322
+      ],
+      "checksum": 362320000,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "tailwind",
+      "scenarioName": "cold-diverse",
+      "ns": 14238.088625000004,
+      "samples": [
+        14192.614624999991, 14198.927124999991, 14238.088625000004, 14280.03650000001,
+        15006.677125000004
+      ],
+      "checksum": 62871592,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "cn-twMerge",
+      "scenarioName": "cold-diverse",
+      "ns": 2737.7812500000014,
+      "samples": [
+        2644.291750000001, 2720.072999999999, 2737.7812500000014, 2817.900999999999,
+        2851.3488749999997
+      ],
+      "checksum": 62871592,
+      "corpus": 310
+    },
+    {
+      "runtime": "bun",
+      "implementationName": "cn-cn",
+      "scenarioName": "cold-diverse",
+      "ns": 3962.7187500000005,
+      "samples": [
+        3852.2552499999993, 3942.6093749999964, 3962.7187500000005, 4088.1197500000003, 4308.401125
+      ],
+      "checksum": 62871592,
+      "corpus": 310
+    }
+  ]
+}
