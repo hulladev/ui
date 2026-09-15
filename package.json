@@ -120,7 +120,8 @@
     ],
     "catalog": {
       "@floating-ui/dom": "^1.7.6",
-      "@hulla/style": "0.3.0"
+      "@hulla/style": "0.4.0",
+      "cn": "0.3.0"
     }
   }
 }

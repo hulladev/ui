@@ -1,4 +1,4 @@
 import { style } from "@hulla/style"
-import { twMerge } from "tailwind-merge"
+import { cn as compose } from "cn"
 
-export const { vn, cn } = style({ composer: twMerge })
+export const { vn, cn } = style({ composer: compose })

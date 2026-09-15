@@ -73,7 +73,7 @@ export default defineConfig({
       },
     },
     resolve: {
-      dedupe: ["@hulla/style", "@lucide/astro", "tailwind-merge"],
+      dedupe: ["@hulla/style", "@lucide/astro", "cn"],
       alias: {
         "@/ui": generatedAstroRoot,
         "@": generatedAstroRoot,

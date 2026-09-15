@@ -138,7 +138,7 @@ export const ui = createLibrary({
           "@fontsource-variable/schibsted-grotesk": "^5.3.0",
           "@fontsource/ibm-plex-mono": "^5.3.0",
           "@hulla/style": "catalog:",
-          "tailwind-merge": "^3.3.1",
+          cn: "catalog:",
           tailwindcss: "^4.1.13",
         },
         devDependencies: {
