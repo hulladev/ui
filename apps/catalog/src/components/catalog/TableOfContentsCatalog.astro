@@ -35,10 +35,11 @@ const usageSources = [
   </div>
   <p>
     Wrap content with a unique, stable id and label. The for prop selects its container. Links
-    appear after JavaScript initializes; section anchors are native HTML. The offset sets the
-    active-section threshold (96px by default); match it with the sections’ scroll-margin-top when
-    customizing for a sticky header. Scrolling updates the active link without changing browser
-    history.
+    appear after JavaScript initializes; section anchors are native HTML. The active link follows
+    the section with the strongest vertical viewport intersection, biased toward the top of the
+    reading area. The offset excludes a top inset from tracking (96px by default); match it with the
+    sections’ scroll-margin-top when customizing for a sticky header. Scrolling does not change
+    browser history.
   </p>
   <article class="bench glass-panel" aria-label="Table of contents component preview">
     <div class="workbench">

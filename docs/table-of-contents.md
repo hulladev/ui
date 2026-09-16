@@ -33,12 +33,12 @@ from `@/ui/table-of-contents/table-of-contents.astro` and
 
 ## Contract
 
-| Component                | Prop              | Purpose                                                                             |
-| ------------------------ | ----------------- | ----------------------------------------------------------------------------------- |
-| `TableOfContents`        | `for: string`     | ID of the container whose descendant wrappers appear in the list.                   |
-| `TableOfContents`        | `offset?: number` | Active-section threshold from the scroll viewport's top, in pixels; defaults to 96. |
-| `TableOfContentsSection` | `id: string`      | Unique, stable HTML ID used in shareable links.                                     |
-| `TableOfContentsSection` | `label: string`   | Plain-text label for the navigation link.                                           |
+| Component                | Prop              | Purpose                                                                        |
+| ------------------------ | ----------------- | ------------------------------------------------------------------------------ |
+| `TableOfContents`        | `for: string`     | ID of the container whose descendant wrappers appear in the list.              |
+| `TableOfContents`        | `offset?: number` | Top viewport inset in pixels; defaults to 96. Match the section scroll margin. |
+| `TableOfContentsSection` | `id: string`      | Unique, stable HTML ID used in shareable links.                                |
+| `TableOfContentsSection` | `label: string`   | Plain-text label for the navigation link.                                      |
 
 Both components accept their native element attributes, children, refs where supported, and the
 framework's class/style props. The contents renders a labelled `nav` and an ordered list; the
@@ -53,13 +53,16 @@ without rewriting the URL or adding history entries.
 
 Wrappers are collected in DOM order. Mounted, removed, reordered, relabelled, hidden, and inert
 sections update automatically. Each navigation is scoped to its `for` container. Scroll tracking
-works with both the window and nested vertical scroll containers. The final section becomes active
-at the bottom even if it cannot reach the threshold.
+works with both the window and nested vertical scroll containers. The active section is chosen by
+how much of it intersects the vertical reading viewport, with a small bias toward a section whose
+leading edge is nearest the top inset. When no section intersects, the most recent section above the
+viewport remains active. The final section becomes active at the bottom. This keeps short sections
+reachable without letting a tall preceding section dominate the navigation.
 
 The wrapper's default scroll margin is `6rem`. If a sticky header needs a different clearance,
 set the wrapper's native `style`/class to the desired `scroll-margin-top` and set the navigation's
-`offset` to the matching pixel value. The offset affects tracking; the native scroll margin controls
-link alignment.
+`offset` to the matching pixel value. The offset excludes that top inset from visibility tracking;
+the native scroll margin controls link alignment.
 
 Styling hooks are `data-slot="table-of-contents"`, `table-of-contents-list`,
 `table-of-contents-item`, `table-of-contents-link`, and `table-of-contents-section`.

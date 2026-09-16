@@ -6,7 +6,7 @@ import { useEffect, useImperativeHandle, useRef, type ComponentPropsWithRef } fr
 
 export type TableOfContentsProps = ComponentPropsWithRef<"nav"> & {
   for: string
-  /** Active-section threshold in pixels. Match the sections' scroll-margin-top. */
+  /** Top viewport inset in pixels. Match the sections' scroll-margin-top. */
   offset?: number
 }
 

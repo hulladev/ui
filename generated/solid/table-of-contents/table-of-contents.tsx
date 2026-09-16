@@ -5,7 +5,7 @@ import { splitProps, type JSX } from "solid-js"
 
 export type TableOfContentsProps = JSX.IntrinsicElements["nav"] & {
   for: string
-  /** Active-section threshold in pixels. Match the sections' scroll-margin-top. */
+  /** Top viewport inset in pixels. Match the sections' scroll-margin-top. */
   offset?: number
 }
 
