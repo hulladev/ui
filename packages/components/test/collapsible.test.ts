@@ -48,4 +48,18 @@ describe("Collapsible generated contract", () => {
     expect(reactRoot).toContain('ComponentPropsWithRef<"details">')
     for (const source of sources) expect(source).toContain("motion-reduce:")
   })
+
+  test("points the disclosure chevron right when closed and down when open", async () => {
+    const sources = await Promise.all(
+      (["astro", "react"] as const).map((framework) =>
+        readGeneratedCollapsiblePart(framework, "collapsible-trigger")
+      )
+    )
+
+    for (const source of sources) {
+      expect(source).toContain("after:-rotate-45")
+      expect(source).toContain("group-open/collapsible:after:rotate-45")
+      expect(source).not.toContain("group-open/collapsible:after:rotate-[225deg]")
+    }
+  })
 })
