@@ -117,11 +117,11 @@ describe("Code authored contract", () => {
       const content = await readCodePart(framework, "code-block-content")
 
       expect(content).toContain("group/code-content")
-      expect(content).toContain("group-has-[[data-focused]]/code-content:opacity-45")
+      expect(content).toContain("group-has-[[data-focused]]/code-content:opacity-70")
       expect(content).toContain(
         "group-has-[[data-focused]]/code-content:data-[focused]:opacity-100"
       )
-      expect(content).not.toContain("group-has-[[data-focused]]/code-block:opacity-45")
+      expect(content).not.toContain("group-has-[[data-focused]]/code-block:opacity-70")
     }
   })
 })
@@ -160,6 +160,25 @@ describe("Code highlighting adapters", () => {
 
     expect(sourceFrom(result)).toBe(source)
     expect(result.lines.flatMap((line) => line.tokens).some((token) => token.color)).toBe(true)
+  })
+
+  test("preserves source-language tokens inside Shiki diffs", async () => {
+    const source = "-import { api } from '@hulla/api'\n+import { defineContract } from '@hulla/api'"
+    const highlighter = await createShikiCodeHighlighter({ languages: ["ts"] })
+    const result = highlighter.highlightDiff(source, { language: "ts" })
+
+    expect(sourceFrom(result)).toBe(source)
+    expect(result.lines[0]?.tokens[0]).toMatchObject({
+      color: "var(--color-danger)",
+      content: "-",
+    })
+    expect(result.lines[1]?.tokens[0]).toMatchObject({
+      color: "var(--color-success)",
+      content: "+",
+    })
+    expect(
+      new Set(result.lines[1]?.tokens.slice(1).map((token) => token.color)).size
+    ).toBeGreaterThan(1)
   })
 
   test("keeps highlighters optional, independently selectable generated components", async () => {

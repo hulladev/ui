@@ -98,7 +98,7 @@ export function CodeBlockContent(props: CodeBlockContentProps) {
                     data-focused={isFocused || undefined}
                     data-error={isError || undefined}
                     data-warning={isWarning || undefined}
-                    class="relative inline-block min-h-6 min-w-full border-l-2 border-transparent px-4 data-[highlighted]:border-primary data-[highlighted]:bg-primary/10 data-[inserted]:border-success data-[inserted]:bg-success/10 data-[deleted]:border-danger data-[deleted]:bg-danger/10 data-[error]:border-danger data-[error]:bg-danger/10 data-[warning]:border-warning data-[warning]:bg-warning/10 group-has-[[data-focused]]/code-content:opacity-45 group-has-[[data-focused]]/code-content:data-[focused]:opacity-100"
+                    class="relative inline-block min-h-6 min-w-full border-l-2 border-transparent px-4 data-[highlighted]:border-primary/70 data-[highlighted]:bg-primary/5 data-[inserted]:border-success data-[inserted]:bg-success/8 data-[deleted]:border-danger data-[deleted]:bg-danger/8 data-[error]:border-danger data-[error]:bg-danger/10 data-[warning]:border-warning data-[warning]:bg-warning/10 group-has-[[data-focused]]/code-content:opacity-70 group-has-[[data-focused]]/code-content:data-[focused]:opacity-100"
                   >
                     <For each={sourceLine.tokens}>
                       {(token) => (

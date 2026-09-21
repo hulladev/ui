@@ -30,6 +30,21 @@ test("highlights Astro frontmatter and component scripts", async ({ page }) => {
   )
 })
 
+test("keeps source-language highlighting in diff rows", async ({ page }) => {
+  const diff = page.locator('[data-preview-component="code-preview"] [data-code-diff]')
+  const inserted = diff.locator("[data-inserted]")
+  const deleted = diff.locator("[data-deleted]")
+
+  await expect(inserted).toContainText("+const featureEnabled = true")
+  await expect(deleted).toContainText("-const featureEnabled = false")
+  await expect(
+    inserted.locator('span[style*="--hulla-code-token-keyword"]', { hasText: "const" })
+  ).toHaveText("const")
+  await expect(
+    deleted.locator('span[style*="--hulla-code-token-keyword"]', { hasText: "const" })
+  ).toHaveText("const")
+})
+
 test("groups file tabs at the code block edge and updates the active path", async ({ page }) => {
   const preview = page.locator('[data-preview-component="code-preview"]')
   const tabs = preview.locator("[data-code-tabs]")

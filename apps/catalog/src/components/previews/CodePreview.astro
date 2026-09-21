@@ -46,14 +46,17 @@ export function ReleaseButton() {
 
 const shellSource = `bunx hulla ui add code code-highlighter-shiki
 bunx hulla ui add tabs button`
+const diffSource = `-const featureEnabled = false
++const featureEnabled = true`
 
-const shiki = await createShikiCodeHighlighter({ languages: ["astro"] })
+const shiki = await createShikiCodeHighlighter({ languages: ["astro", "ts"] })
 const tanstack = createTanStackCodeHighlighter({
   fallbackLanguage: "tsx",
   languages: [tsx],
 })
 
 const highlightedAstro = shiki.highlight(astroSource, { language: "astro" })
+const highlightedDiff = shiki.highlightDiff(diffSource, { language: "ts" })
 const highlightedReact = tanstack.highlight(reactSource, { language: "tsx" })
 const highlightedShell = {
   code: shellSource,
@@ -98,19 +101,10 @@ const codeComponent = manifest.library.components.code
 
         <CodeBlockBody>
           <TabsContent value="astro">
-            <CodeBlockContent
-              highlighted={highlightedAstro}
-              lineNumbers
-              highlightedLines={[4]}
-              insertedLines={[8, 9, 10]}
-            />
+            <CodeBlockContent highlighted={highlightedAstro} lineNumbers highlightedLines={[4]} />
           </TabsContent>
           <TabsContent value="react">
-            <CodeBlockContent
-              highlighted={highlightedReact}
-              lineNumbers
-              focusedLines={[4, 5, 6, 7, 8, 9, 10]}
-            />
+            <CodeBlockContent highlighted={highlightedReact} lineNumbers highlightedLines={[4]} />
           </TabsContent>
 
           <CodeBlockActions revealOnHover={false}>
@@ -138,6 +132,16 @@ const codeComponent = manifest.library.components.code
         </CodeBlockFooter>
       </CodeBlock>
     </Tabs>
+
+    <CodeBlock data-code-diff>
+      <CodeBlockHeader>
+        <CodeBlockTitle>feature.ts</CodeBlockTitle>
+      </CodeBlockHeader>
+      <CodeBlockBody>
+        <CodeBlockContent highlighted={highlightedDiff} />
+      </CodeBlockBody>
+      <CodeBlockFooter>Diff rows keep their TypeScript syntax colors.</CodeBlockFooter>
+    </CodeBlock>
   </div>
 
   <div slot="props" class="prop-playground">
@@ -174,7 +178,6 @@ const codeComponent = manifest.library.components.code
                   highlighted={highlightedShell}
                   lineNumbers={lineNumbers}
                   wrap={wrap}
-                  highlightedLines={[1]}
                   data-code-playground
                   data-example-line-numbers={String(lineNumbers)}
                   data-example-wrap={String(wrap)}
@@ -203,7 +206,7 @@ const codeComponent = manifest.library.components.code
     </div>
     <div class="fact">
       <dt class="label">Highlighting</dt>
-      <dd>plain · Shiki · TanStack</dd>
+      <dd>plain · Shiki · TanStack · syntax-aware diff</dd>
     </div>
     <div class="fact">
       <dt class="label">Composition</dt>
