@@ -168,6 +168,12 @@
     "copyFiles": {
       "shared": [
         {
+          "src": "lib/collapsible.ts",
+          "dest": "lib/collapsible.ts",
+          "required": true,
+          "description": "Framework-neutral user-activated native disclosure transitions"
+        },
+        {
           "src": "lib/table-of-contents.ts",
           "dest": "lib/table-of-contents.ts",
           "required": true,
@@ -361,7 +367,7 @@
     "astro/code-highlighter-tanstack/package.json": "cf4d64171274a593c9cf5f37d2e4068fb38de98a68b2639c0f6519d57f999445",
     "astro/collapsible/collapsible-content.astro": "58ac4b8aa338a0670e1edea722152d26e6e294e4431e721b5959f47230d06aab",
     "astro/collapsible/collapsible-trigger.astro": "661b80e9d0750addaf85849151f720682f36188be1b28d090d5508afc1fe232e",
-    "astro/collapsible/collapsible.astro": "d3d50e87489230f645c6ec1f0faee4af722249ed7d1bec141cc21f77615215ea",
+    "astro/collapsible/collapsible.astro": "b1f0a025c04ae49a5ce2b99dc57aeae2f44a5637c9c2da98a3c10d1e8f68adc2",
     "astro/collapsible/package.json": "0590cf41400cd22a339f7891c3610dcac5f4a334b5347fe1b2209fc6df437f8b",
     "astro/combobox/combobox-content.astro": "73e9ef95625c36f54055087b92c987c310d452d173fbaa72b3c7b9b9841b8271",
     "astro/combobox/combobox-empty.astro": "067f0584bfbf8626af32904fc5dbcda03b8222ac8e3358b6007734f2747d5204",
@@ -427,6 +433,7 @@
     "astro/kbd/kbd.astro": "f769db23d97b1f72bc4197e93d13b03980f336b0adef43a45358083220ceb96b",
     "astro/kbd/package.json": "ff495e8175cbb30887fd262664fec45cc651763836e8545956e91160709255e7",
     "astro/lib/calendar.ts": "e57689918b7606d8869b13188addf7b1ecedb394b4d00d50fb6d9b9ff77683c7",
+    "astro/lib/collapsible.ts": "d03205f058dddab91e9dd97980df69deb9ebcb29ebc62aedf9d5b1864dae63ce",
     "astro/lib/combobox.ts": "b0f3cfee7a056c2b6dc6b8dd0d805c43a9afcd6c767b05f89ad95debd4a9c65a",
     "astro/lib/command.ts": "2aff30fc247dbc6a4862f973b80476161bd1440ccc12a6f3ae95d8e2f226b499",
     "astro/lib/date-picker.ts": "009341c872f66a73497ee4a2858c8444a0b9686ecd9942937d32c6fda53fcd5a",
@@ -638,7 +645,7 @@
     "react/code-highlighter-tanstack/package.json": "cf4d64171274a593c9cf5f37d2e4068fb38de98a68b2639c0f6519d57f999445",
     "react/collapsible/collapsible-content.tsx": "b96bde174ddbf6ae19fa3d5e20ac4da69d6b5be4d02f1fceff9d79e52ba1353a",
     "react/collapsible/collapsible-trigger.tsx": "5e682d19b3a5c763a28609c922c576186785816fc82cccb2e1b427acd9cb5d8f",
-    "react/collapsible/collapsible.tsx": "715c99629d1733ef3816c13ff4e9cd12710783e047154d80e047cce09964e9cb",
+    "react/collapsible/collapsible.tsx": "d4f0650bc367ccc3cd5e533e874e4bae617331ce6fa962783a615b17ee17ae9e",
     "react/collapsible/index.tsx": "3a53f9aa30b3fd65d3f16e98e942e2f247c9f578c992e77addb4dabe99ddb4ee",
     "react/collapsible/package.json": "0590cf41400cd22a339f7891c3610dcac5f4a334b5347fe1b2209fc6df437f8b",
     "react/combobox/combobox-content.tsx": "a49542a00e9bd39f22e6e6dda947ceb1b999615447a7be71404c677bbbc97deb",
@@ -717,6 +724,7 @@
     "react/kbd/kbd.tsx": "66f365087aa253eab4339d3cdf5652d8bcafae82e60a363f73a0e27cc192f192",
     "react/kbd/package.json": "ff495e8175cbb30887fd262664fec45cc651763836e8545956e91160709255e7",
     "react/lib/calendar.ts": "e57689918b7606d8869b13188addf7b1ecedb394b4d00d50fb6d9b9ff77683c7",
+    "react/lib/collapsible.ts": "d03205f058dddab91e9dd97980df69deb9ebcb29ebc62aedf9d5b1864dae63ce",
     "react/lib/combobox.ts": "b0f3cfee7a056c2b6dc6b8dd0d805c43a9afcd6c767b05f89ad95debd4a9c65a",
     "react/lib/command.ts": "2aff30fc247dbc6a4862f973b80476161bd1440ccc12a6f3ae95d8e2f226b499",
     "react/lib/date-picker.ts": "009341c872f66a73497ee4a2858c8444a0b9686ecd9942937d32c6fda53fcd5a",
@@ -948,7 +956,7 @@
     "solid/code-highlighter-tanstack/package.json": "cf4d64171274a593c9cf5f37d2e4068fb38de98a68b2639c0f6519d57f999445",
     "solid/collapsible/collapsible-content.tsx": "7b4b02700576be67c91b55d140ccc12a6eca92361409f6ae841d3a426a994f01",
     "solid/collapsible/collapsible-trigger.tsx": "246f0c10e38b01bf27dad275d13b35fb36a013655adbef46c692b554289c9e18",
-    "solid/collapsible/collapsible.tsx": "db1b94d81011735b6dfb92b12c16d0ccd3296eea609c55f686f61cdad2e2f84d",
+    "solid/collapsible/collapsible.tsx": "003d7abbfe11d357910a148810a240f3757f2092e3b1a841ecb4a675b5cbea35",
     "solid/collapsible/index.tsx": "3a53f9aa30b3fd65d3f16e98e942e2f247c9f578c992e77addb4dabe99ddb4ee",
     "solid/collapsible/package.json": "0590cf41400cd22a339f7891c3610dcac5f4a334b5347fe1b2209fc6df437f8b",
     "solid/combobox/combobox-content.tsx": "f543e53c2ad8c881f324a531304a43db7fa5971b971cfa000f850b1604605cc1",
@@ -1027,6 +1035,7 @@
     "solid/kbd/kbd.tsx": "13428536bc7c9c5efb3e89983badc9e3d0ccd9807550343c08370b731ae07d32",
     "solid/kbd/package.json": "ff495e8175cbb30887fd262664fec45cc651763836e8545956e91160709255e7",
     "solid/lib/calendar.ts": "e57689918b7606d8869b13188addf7b1ecedb394b4d00d50fb6d9b9ff77683c7",
+    "solid/lib/collapsible.ts": "d03205f058dddab91e9dd97980df69deb9ebcb29ebc62aedf9d5b1864dae63ce",
     "solid/lib/combobox.ts": "b0f3cfee7a056c2b6dc6b8dd0d805c43a9afcd6c767b05f89ad95debd4a9c65a",
     "solid/lib/command.ts": "2aff30fc247dbc6a4862f973b80476161bd1440ccc12a6f3ae95d8e2f226b499",
     "solid/lib/date-picker.ts": "009341c872f66a73497ee4a2858c8444a0b9686ecd9942937d32c6fda53fcd5a",
@@ -1192,6 +1201,6 @@
     "solid/tree-view/tree-item.tsx": "1f851578880ec06f3ffa62df66e697f4f4e2529fbc0aa86c8b52428873bbc55f",
     "solid/tree-view/tree-view.tsx": "13257fbe7a8bd0a19462f229940f7fe0e787b507b739a2275ccdd364f3e1a632",
     "solid/tsconfig.json": "37e941a49cbc375f8dfc37529cbc03fbba8f5c9497683e0654099144e6f4a15d",
-    "ui.config.ts": "1c07cb6794627e17358776aa03188e454da3392888dfe38db64518834c924a9a"
+    "ui.config.ts": "a3d5724456420b5019580a8c09ed9e3ea959e559cefb11322acf91db8fee6fd4"
   }
 }

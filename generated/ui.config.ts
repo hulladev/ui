@@ -168,6 +168,12 @@ export const config = {
   copyFiles: {
     shared: [
       {
+        src: "lib/collapsible.ts",
+        dest: "lib/collapsible.ts",
+        required: true,
+        description: "Framework-neutral user-activated native disclosure transitions",
+      },
+      {
         src: "lib/table-of-contents.ts",
         dest: "lib/table-of-contents.ts",
         required: true,

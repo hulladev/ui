@@ -33,6 +33,10 @@ export const ui = createLibrary({
   copyFiles: {
     shared: [
       {
+        src: "lib/collapsible.ts",
+        description: "Framework-neutral user-activated native disclosure transitions",
+      },
+      {
         src: "lib/table-of-contents.ts",
         description: "Framework-neutral section discovery and scroll tracking",
       },
