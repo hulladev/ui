@@ -204,7 +204,10 @@ const sidebar = manifest.library.components.sidebar
         <SidebarContent aria-label="Example sidebar">
           <SidebarGroup>
             <Collapsible open data-playground-sidebar-workspace>
-              <SidebarGroupTrigger>Workspace</SidebarGroupTrigger>
+              <SidebarGroupTrigger>
+                <Boxes size={13} aria-hidden="true" />
+                <span>Workspace integrations and settings</span>
+              </SidebarGroupTrigger>
               <CollapsibleContent>
                 <SidebarMenu lines="nested" data-playground-sidebar-menu>
                   <SidebarMenuItem>

@@ -69,3 +69,35 @@ test("fits the composed sidebar at a narrow viewport", async ({ page }) => {
   expect(box?.width).toBeLessThanOrEqual(390)
   expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(390)
 })
+
+test("wraps long disclosure headings compactly without shrinking their icons", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.locator("#sidebar-preview-props-tab").click()
+  const trigger = page.locator("[data-playground-sidebar-workspace] > summary")
+
+  for (const theme of ["light", "dark"]) {
+    await page.evaluate((value) => {
+      document.documentElement.dataset.theme = value
+    }, theme)
+    await expect(trigger).toBeVisible()
+    const geometry = await trigger.evaluate((element) => {
+      const label = element.querySelector("span")!
+      const icon = element.querySelector("svg")!
+      return {
+        fontSize: parseFloat(getComputedStyle(label).fontSize),
+        lineHeight: parseFloat(getComputedStyle(label).lineHeight),
+        labelHeight: label.getBoundingClientRect().height,
+        iconWidth: icon.getBoundingClientRect().width,
+        overflows: element.scrollWidth > element.clientWidth,
+      }
+    })
+    expect(geometry.labelHeight).toBeGreaterThan(geometry.lineHeight)
+    expect(geometry.labelHeight).toBeLessThanOrEqual(geometry.fontSize * 3)
+    expect(geometry.iconWidth).toBe(13)
+    expect(geometry.overflows).toBe(false)
+    await trigger.press("Enter")
+    await expect(trigger.locator("..")).not.toHaveAttribute("open", "")
+    await trigger.press("Space")
+    await expect(trigger.locator("..")).toHaveAttribute("open", "")
+  }
+})
