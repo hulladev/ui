@@ -10,6 +10,7 @@ import StepperItem from "@/ui/stepper/stepper-item.astro"
 import StepperIndicator from "@/ui/stepper/stepper-indicator.astro"
 import StepperButton from "@/ui/stepper/stepper-button.astro"
 import StepperLink from "@/ui/stepper/stepper-link.astro"
+import StepperPanel from "@/ui/stepper/stepper-panel.astro"
 import ComponentPreview from "../ComponentPreview.astro"
 const steps = ["Project", "Team", "Review"]
 const descriptions = ["The essentials", "Your collaborators", "One last look"]
@@ -141,6 +142,37 @@ const descriptions = ["The essentials", "Your collaborators", "One last look"]
         >
       </Stepper>
     </nav>
+    <section aria-labelledby="ordered-steps-title" class="border-t border-border pt-6">
+      <h3 id="ordered-steps-title" class="mb-5 text-sm font-semibold">Ordered instructions</h3>
+      <Stepper variant="ordered">
+        <StepperItem>
+          <StepperIndicator>1</StepperIndicator>
+          <StepperContent>
+            <span>Install the package</span>
+            <StepperDescription>Add the dependency your project needs.</StepperDescription>
+          </StepperContent>
+          <StepperPanel>
+            <p>
+              Use body-sized text for instructions. Keep supporting details in the step description,
+              and compose commands or previews inside the panel.
+            </p>
+            <code class="rounded-md bg-muted px-3 py-2 font-mono text-xs text-foreground"
+              >bun add @hulla/ui</code
+            >
+          </StepperPanel>
+        </StepperItem>
+        <StepperItem>
+          <StepperIndicator>2</StepperIndicator>
+          <StepperContent>
+            <span>Use the component</span>
+            <StepperDescription>Continue in a fixed reading order.</StepperDescription>
+          </StepperContent>
+          <StepperPanel>
+            <p>No buttons, links, current state, or completion state are required.</p>
+          </StepperPanel>
+        </StepperItem>
+      </Stepper>
+    </section>
   </div>
 
   <div slot="props" class="prop-playground" data-stepper-props>
@@ -178,6 +210,7 @@ const descriptions = ["The essentials", "Your collaborators", "One last look"]
     <div class="fact"><dt class="label">Semantics</dt><dd>Ordered list</dd></div>
     <div class="fact"><dt class="label">Current step</dt><dd>aria-current</dd></div>
     <div class="fact"><dt class="label">Flow state</dt><dd>Application-owned</dd></div>
+    <div class="fact"><dt class="label">Ordered variant</dt><dd>Static instructions</dd></div>
   </dl>
 </ComponentPreview>
 

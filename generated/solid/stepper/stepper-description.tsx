@@ -9,7 +9,10 @@ export function StepperDescription(props: StepperDescriptionProps) {
     <span
       {...rest}
       data-slot="stepper-description"
-      class={cn("text-xs font-normal leading-4 text-muted-foreground", local.class)}
+      class={cn(
+        "text-xs font-normal leading-4 text-muted-foreground group-data-[variant=ordered]/stepper:text-sm group-data-[variant=ordered]/stepper:leading-5",
+        local.class
+      )}
     >
       {local.children}
     </span>

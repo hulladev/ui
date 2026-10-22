@@ -8,7 +8,10 @@ export function StepperDescription({ children, className, ...props }: StepperDes
     <span
       {...props}
       data-slot="stepper-description"
-      className={cn("text-xs font-normal leading-4 text-muted-foreground", className)}
+      className={cn(
+        "text-xs font-normal leading-4 text-muted-foreground group-data-[variant=ordered]/stepper:text-sm group-data-[variant=ordered]/stepper:leading-5",
+        className
+      )}
     >
       {children}
     </span>
