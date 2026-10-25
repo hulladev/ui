@@ -72,3 +72,13 @@ The application controls the current step, validation, which steps are reachable
 focus after navigation, and `aria-controls` relationships. This is a progress/navigation primitive,
 not a tabs widget: use normal Tab, Enter, and Space navigation rather than inventing roving arrow-key
 behavior. No context or implicit form submission is introduced.
+
+With `variant="ordered"`, compose each instruction with `StepperIndicator`, `StepperContent`,
+`StepperDescription`, and `StepperPanel`. This variant is always vertical. The final connector
+extends through the last item’s content and fades out over its final 6rem (or its full length for
+short items). Set `fadeLastStep={false}` on `Stepper` to omit that final connector. The prop defaults
+to `true` and does not change the progress variant.
+
+Ordered step titles use 18px type, descriptions use 14px, and panel body copy uses 16px.
+`StepperPanel` leaves 1rem above its content so the description stays visually separate from the
+instructions. Keep nested prose at its default body size to preserve this hierarchy.
