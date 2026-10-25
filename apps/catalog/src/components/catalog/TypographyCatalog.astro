@@ -1,0 +1,47 @@
+---
+import TypographyPreview from "../previews/TypographyPreview.astro"
+import renderedSource from "../previews/TypographyPreview.astro?raw"
+import ComponentSource from "../ComponentSource.astro"
+const previewSources = [
+  {
+    code: renderedSource,
+    filename: "apps/catalog/src/components/previews/TypographyPreview.astro",
+    framework: "Astro",
+    label: "Rendered source",
+    language: "astro" as const,
+  },
+]
+const usageSources = [
+  {
+    code: `<!-- hulla ui add typography activates the stylesheet. -->
+<!-- Prose uses the container width; constrain the wrapper when needed. -->
+<article class="prose">
+  <h2>Filter rows</h2>
+  <p>Use <code>where</code> to select the rows you need.</p>
+  <ul><li>Choose a table.</li><li>Add a filter.</li></ul>
+  <div class="not-prose"><!-- Shared UI components --></div>
+</article>`,
+    filename: "src/components/query-guide.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+]
+---
+
+<section class="component-section" id="typography" aria-labelledby="typography-title">
+  <div class="section-head">
+    <div><p class="eyebrow">Styles / Reading</p><h2 id="typography-title">Typography</h2></div><span
+      class="status">Optional stylesheet</span
+    >
+  </div>
+  <article class="bench glass-panel" aria-label="Typography stylesheet preview">
+    <div class="workbench">
+      <TypographyPreview /><ComponentSource
+        component="Typography"
+        generatedFamilies={["typography"]}
+        {previewSources}
+        {usageSources}
+      />
+    </div>
+  </article>
+</section>

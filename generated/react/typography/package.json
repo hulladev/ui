@@ -1,0 +1,5 @@
+{
+  "name": "@hulla/typography",
+  "private": true,
+  "style": "./prose.css"
+}

@@ -163,6 +163,9 @@ export const config = {
     "tree-view": {
       frameworks: ["astro", "react", "solid"],
     },
+    typography: {
+      frameworks: ["astro", "react", "solid"],
+    },
   },
   author: "Samuel Hulla",
   copyFiles: {

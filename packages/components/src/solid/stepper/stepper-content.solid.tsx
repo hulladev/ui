@@ -10,7 +10,7 @@ export function StepperContent(props: StepperContentProps) {
       {...rest}
       data-slot="stepper-content"
       class={cn(
-        "grid min-w-0 gap-1 group-data-[variant=ordered]/stepper:self-center group-data-[variant=ordered]/stepper:text-base group-data-[variant=ordered]/stepper:leading-6 group-data-[variant=ordered]/stepper:font-semibold",
+        "grid min-w-0 gap-1 group-data-[variant=ordered]/stepper:self-center group-data-[variant=ordered]/stepper:text-lg group-data-[variant=ordered]/stepper:leading-7 group-data-[variant=ordered]/stepper:font-semibold",
         local.class
       )}
     >

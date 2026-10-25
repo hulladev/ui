@@ -2,11 +2,11 @@
 import { cn } from "@/lib/style"
 import type { HTMLAttributes } from "astro/types"
 
-type Props = HTMLAttributes<"p">
+type Props = HTMLAttributes<"div">
 
 const { class: className, ...props } = Astro.props as Props
 ---
 
-<p {...props} data-slot="alert-description" class={cn("mt-1 text-muted-foreground", className)}>
+<div {...props} data-slot="alert-description" class={cn("mt-1 text-muted-foreground", className)}>
   <slot />
-</p>
+</div>

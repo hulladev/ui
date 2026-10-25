@@ -17,9 +17,9 @@ export const ui = createLibrary({
   tsconfigPath: "./tsconfig.json",
   frameworks: ["astro", "react", "solid"],
   inputDirs: {
-    astro: "./src/astro",
-    react: "./src/react",
-    solid: "./src/solid",
+    astro: ["./src/astro", "./src/shared"],
+    react: ["./src/react", "./src/shared"],
+    solid: ["./src/solid", "./src/shared"],
   },
   outputDirs: {
     rootDir: "../../generated",

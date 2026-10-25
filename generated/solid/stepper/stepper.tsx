@@ -4,10 +4,18 @@ import { splitProps, type JSX } from "solid-js"
 export type StepperProps = JSX.IntrinsicElements["ol"] & {
   orientation?: "horizontal" | "vertical"
   variant?: "progress" | "ordered"
+  /** Extend the ordered variant’s final connector through its content with a fading end. */
+  fadeLastStep?: boolean
 }
 
 export function Stepper(props: StepperProps) {
-  const [local, rest] = splitProps(props, ["children", "class", "orientation", "variant"])
+  const [local, rest] = splitProps(props, [
+    "children",
+    "class",
+    "orientation",
+    "variant",
+    "fadeLastStep",
+  ])
   const variant = () => local.variant ?? "progress"
   const orientation = () =>
     variant() === "ordered" ? "vertical" : (local.orientation ?? "horizontal")
@@ -16,6 +24,7 @@ export function Stepper(props: StepperProps) {
       {...rest}
       data-orientation={orientation()}
       data-variant={variant()}
+      data-fade-last-step={local.fadeLastStep ?? true}
       role="list"
       data-slot="stepper"
       class={cn(

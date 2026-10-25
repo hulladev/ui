@@ -2,6 +2,10 @@
 import Switch from "@/ui/switch/switch.astro"
 import Collapsible from "@/ui/collapsible/collapsible.astro"
 import CollapsibleContent from "@/ui/collapsible/collapsible-content.astro"
+import SidebarTabs from "@/ui/sidebar/sidebar-tabs.astro"
+import SidebarTabsList from "@/ui/sidebar/sidebar-tabs-list.astro"
+import TabsTrigger from "@/ui/tabs/tabs-trigger.astro"
+import TabsContent from "@/ui/tabs/tabs-content.astro"
 import Sidebar from "@/ui/sidebar/sidebar.astro"
 import SidebarContent from "@/ui/sidebar/sidebar-content.astro"
 import SidebarFooter from "@/ui/sidebar/sidebar-footer.astro"
@@ -36,7 +40,7 @@ const sidebar = manifest.library.components.sidebar
 
 <ComponentPreview
   component="Sidebar"
-  hint="Click to select · Tab · Enter or Space"
+  hint="Click to select · Tab · Arrow keys for tabs · Enter or Space"
   requirePropsView={true}
   variantsLabel="Composition"
 >
@@ -56,106 +60,127 @@ const sidebar = manifest.library.components.sidebar
         </span>
       </SidebarHeader>
 
-      <SidebarContent aria-label="Northstar workspace">
-        <SidebarGroup>
-          <SidebarGroupLabel>Overview</SidebarGroupLabel>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuLink href="#sidebar" aria-current="page">
-                <Gauge aria-hidden="true" />
-                Dashboard
-              </SidebarMenuLink>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuLink href="#sidebar">
-                <Inbox aria-hidden="true" />
-                Inbox
-              </SidebarMenuLink>
-              <SidebarMenuBadge>8</SidebarMenuBadge>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuLink href="#sidebar">
-                <Bell aria-hidden="true" />
-                Activity
-              </SidebarMenuLink>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroup>
-
-        <SidebarGroup>
-          <Collapsible open>
-            <SidebarGroupTrigger>
-              <Boxes size={13} aria-hidden="true" />
-              Workspace
-            </SidebarGroupTrigger>
-            <CollapsibleContent>
+      <SidebarTabs defaultValue="workspace">
+        <SidebarTabsList aria-label="Workspace area">
+          <TabsTrigger value="workspace">Workspace</TabsTrigger>
+          <TabsTrigger value="resources">Resources</TabsTrigger>
+          <TabsTrigger value="unavailable" disabled>Archive</TabsTrigger>
+        </SidebarTabsList>
+        <SidebarContent aria-label="Northstar workspace">
+          <TabsContent value="workspace">
+            <SidebarGroup>
+              <SidebarGroupLabel>Overview</SidebarGroupLabel>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <Collapsible open>
-                    <SidebarMenuTrigger>
-                      <Blocks aria-hidden="true" />
-                      Projects
-                    </SidebarMenuTrigger>
-                    <CollapsibleContent>
-                      <SidebarMenu>
-                        <SidebarMenuItem>
-                          <SidebarMenuLink href="#sidebar">Launchpad</SidebarMenuLink>
-                        </SidebarMenuItem>
-                        <SidebarMenuItem>
-                          <Collapsible open>
-                            <SidebarMenuTrigger>
-                              <CircleDot aria-hidden="true" />
-                              Platform
-                            </SidebarMenuTrigger>
-                            <CollapsibleContent>
-                              <SidebarMenu>
-                                <SidebarMenuItem>
-                                  <SidebarMenuLink href="#sidebar">API gateway</SidebarMenuLink>
-                                </SidebarMenuItem>
-                                <SidebarMenuItem>
-                                  <SidebarMenuLink href="#sidebar">Observability</SidebarMenuLink>
-                                </SidebarMenuItem>
-                              </SidebarMenu>
-                            </CollapsibleContent>
-                          </Collapsible>
-                        </SidebarMenuItem>
-                      </SidebarMenu>
-                    </CollapsibleContent>
-                  </Collapsible>
+                  <SidebarMenuLink href="#sidebar" aria-current="page">
+                    <Gauge aria-hidden="true" />
+                    Dashboard
+                  </SidebarMenuLink>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuLink href="#sidebar">
+                    <Inbox aria-hidden="true" />
+                    Inbox
+                  </SidebarMenuLink>
+                  <SidebarMenuBadge>8</SidebarMenuBadge>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuLink href="#sidebar">
+                    <Bell aria-hidden="true" />
+                    Activity
+                  </SidebarMenuLink>
                 </SidebarMenuItem>
               </SidebarMenu>
+            </SidebarGroup>
 
-              <SidebarGroup>
-                <Collapsible open>
-                  <SidebarGroupTrigger>
-                    <FileText size={13} aria-hidden="true" />
-                    Notes
-                  </SidebarGroupTrigger>
-                  <CollapsibleContent>
-                    <SidebarMenu>
-                      <SidebarMenuItem>
-                        <SidebarMenuLink href="#sidebar">Release brief</SidebarMenuLink>
-                      </SidebarMenuItem>
-                    </SidebarMenu>
-                  </CollapsibleContent>
-                </Collapsible>
-              </SidebarGroup>
-            </CollapsibleContent>
-          </Collapsible>
-        </SidebarGroup>
+            <SidebarGroup>
+              <Collapsible open>
+                <SidebarGroupTrigger>
+                  <Boxes size={13} aria-hidden="true" />
+                  Workspace
+                </SidebarGroupTrigger>
+                <CollapsibleContent>
+                  <SidebarMenu>
+                    <SidebarMenuItem>
+                      <Collapsible open>
+                        <SidebarMenuTrigger>
+                          <Blocks aria-hidden="true" />
+                          Projects
+                        </SidebarMenuTrigger>
+                        <CollapsibleContent>
+                          <SidebarMenu>
+                            <SidebarMenuItem>
+                              <SidebarMenuLink href="#sidebar">Launchpad</SidebarMenuLink>
+                            </SidebarMenuItem>
+                            <SidebarMenuItem>
+                              <Collapsible open>
+                                <SidebarMenuTrigger>
+                                  <CircleDot aria-hidden="true" />
+                                  Platform
+                                </SidebarMenuTrigger>
+                                <CollapsibleContent>
+                                  <SidebarMenu>
+                                    <SidebarMenuItem>
+                                      <SidebarMenuLink href="#sidebar">API gateway</SidebarMenuLink>
+                                    </SidebarMenuItem>
+                                    <SidebarMenuItem>
+                                      <SidebarMenuLink href="#sidebar"
+                                        >Observability</SidebarMenuLink
+                                      >
+                                    </SidebarMenuItem>
+                                  </SidebarMenu>
+                                </CollapsibleContent>
+                              </Collapsible>
+                            </SidebarMenuItem>
+                          </SidebarMenu>
+                        </CollapsibleContent>
+                      </Collapsible>
+                    </SidebarMenuItem>
+                  </SidebarMenu>
 
-        <SidebarGroup>
-          <SidebarGroupLabel>System</SidebarGroupLabel>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuLink href="#sidebar">
-                <Settings2 aria-hidden="true" />
-                Settings
-              </SidebarMenuLink>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroup>
-      </SidebarContent>
+                  <SidebarGroup>
+                    <Collapsible open>
+                      <SidebarGroupTrigger>
+                        <FileText size={13} aria-hidden="true" />
+                        Notes
+                      </SidebarGroupTrigger>
+                      <CollapsibleContent>
+                        <SidebarMenu>
+                          <SidebarMenuItem>
+                            <SidebarMenuLink href="#sidebar">Release brief</SidebarMenuLink>
+                          </SidebarMenuItem>
+                        </SidebarMenu>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </SidebarGroup>
+                </CollapsibleContent>
+              </Collapsible>
+            </SidebarGroup>
+
+            <SidebarGroup>
+              <SidebarGroupLabel>System</SidebarGroupLabel>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuLink href="#sidebar">
+                    <Settings2 aria-hidden="true" />
+                    Settings
+                  </SidebarMenuLink>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroup>
+          </TabsContent>
+          <TabsContent value="resources">
+            <SidebarMenu>
+              <SidebarMenuItem
+                ><SidebarMenuLink href="#sidebar">Documentation</SidebarMenuLink></SidebarMenuItem
+              >
+              <SidebarMenuItem
+                ><SidebarMenuLink href="#sidebar">Support</SidebarMenuLink></SidebarMenuItem
+              >
+            </SidebarMenu>
+          </TabsContent>
+        </SidebarContent>
+      </SidebarTabs>
 
       <SidebarFooter>
         <SidebarMenu>

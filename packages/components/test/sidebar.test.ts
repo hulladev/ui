@@ -61,10 +61,10 @@ describe("Sidebar generated contract", () => {
 
     for (const source of sources) {
       expect(source).toContain("<summary")
-      expect(source).toContain("group-open/collapsible")
+      expect(source).toContain("[details[open]>&]")
       expect(source).toContain("after:-rotate-45")
-      expect(source).toContain("group-open/collapsible:after:rotate-45")
-      expect(source).not.toContain("group-open/collapsible:after:rotate-[225deg]")
+      expect(source).toContain("[details[open]>&]:after:rotate-45")
+      expect(source).not.toContain("[details[open]>&]:after:rotate-[225deg]")
       expect(source).not.toContain("useContext")
     }
   })

@@ -9,7 +9,7 @@ export function Code({ children, className, ...props }: CodeProps) {
       {...props}
       data-slot="code"
       className={cn(
-        "rounded-sm border border-border bg-foreground/[0.045] px-1.5 py-0.5 font-mono text-[0.875em] font-medium text-foreground",
+        "box-decoration-clone rounded-[0.25em] bg-foreground/5 px-[0.25em] py-[0.125em] font-mono text-[0.875em] leading-[inherit] font-normal text-foreground [overflow-wrap:anywhere]",
         className
       )}
     >

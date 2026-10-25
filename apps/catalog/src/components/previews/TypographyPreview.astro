@@ -1,0 +1,49 @@
+---
+import Code from "@/ui/code/code.astro"
+import Card from "@/ui/card/card.astro"
+import CardHeader from "@/ui/card/card-header.astro"
+import CardTitle from "@/ui/card/card-title.astro"
+import CardDescription from "@/ui/card/card-description.astro"
+import ComponentPreview from "../ComponentPreview.astro"
+---
+
+<ComponentPreview component="Typography" hint="Optional CSS · native Markdown">
+  <div slot="variants" class="prose">
+    <h2>Read the rows you need</h2>
+    <p>
+      Use <Code>contains</Code>, <Code>startsWith</Code>, or <Code>endsWith</Code> for literal text. SQL
+      patterns use <Code>like</Code> or <Code>ilike</Code>.
+    </p>
+    <p>
+      Pass <code>{"{ caseSensitive: false }"}</code> to ignore case, as in <code
+        >{".where('title', 'contains', 'guide', { caseSensitive: false })"}</code
+      >.
+    </p>
+    <ul>
+      <li>Explain the default behavior first.</li>
+      <li>
+        Keep each rule easy to scan.
+        <ul><li>Use short paragraphs.</li><li>Put full examples in code blocks.</li></ul>
+      </li>
+    </ul>
+    <ol start={3}><li>Choose a table.</li><li>Add a filter.</li><li>Await the result.</li></ol>
+    <div class="not-prose">
+      <Card
+        ><CardHeader
+          ><CardTitle>Shared components keep their typography</CardTitle><CardDescription
+            >This uses CardDescription, even inside a prose region.</CardDescription
+          ></CardHeader
+        ></Card
+      >
+    </div>
+  </div>
+  <dl slot="facts" class="facts">
+    <div class="fact"><dt class="label">Install</dt><dd>hulla ui add typography</dd></div>
+    <div class="fact"><dt class="label">Body</dt><dd>15px · 1.75 line height</dd></div>
+    <div class="fact"><dt class="label">Width</dt><dd>Fills the parent container</dd></div>
+    <div class="fact"><dt class="label">Opt in</dt><dd>class="prose" on Markdown or HTML</dd></div>
+    <div class="fact">
+      <dt class="label">Opt out</dt><dd>not-prose · data-component-boundary</dd>
+    </div>
+  </dl>
+</ComponentPreview>

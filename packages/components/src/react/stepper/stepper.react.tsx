@@ -4,6 +4,8 @@ import type { ComponentPropsWithRef } from "react"
 export type StepperProps = ComponentPropsWithRef<"ol"> & {
   orientation?: "horizontal" | "vertical"
   variant?: "progress" | "ordered"
+  /** Extend the ordered variant’s final connector through its content with a fading end. */
+  fadeLastStep?: boolean
 }
 
 export function Stepper({
@@ -11,6 +13,7 @@ export function Stepper({
   className,
   orientation = "horizontal",
   variant = "progress",
+  fadeLastStep = true,
   ...props
 }: StepperProps) {
   const resolvedOrientation = variant === "ordered" ? "vertical" : orientation
@@ -19,6 +22,7 @@ export function Stepper({
       {...props}
       data-orientation={resolvedOrientation}
       data-variant={variant}
+      data-fade-last-step={fadeLastStep}
       role="list"
       data-slot="stepper"
       className={cn(

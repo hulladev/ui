@@ -20,7 +20,7 @@ export function SidebarMenuTrigger({ children, className, ...props }: SidebarMen
       className={cn(
         $control("default"),
         $interactiveRow("default"),
-        "list-none pr-8 after:absolute after:right-3 after:size-1.5 after:-translate-x-0.5 after:-rotate-45 after:border-r after:border-b after:border-current after:transition-transform after:duration-200 group-open/collapsible:after:translate-x-0 group-open/collapsible:after:-translate-y-0.5 group-open/collapsible:after:rotate-45 motion-reduce:after:transition-none [&::-webkit-details-marker]:hidden",
+        "list-none pr-8 after:absolute after:right-3 after:size-1.5 after:-translate-x-0.5 after:-rotate-45 after:border-r after:border-b after:border-current after:transition-transform after:duration-200 [details[open]>&]:after:translate-x-0 [details[open]>&]:after:-translate-y-0.5 [details[open]>&]:after:rotate-45 motion-reduce:after:transition-none [&::-webkit-details-marker]:hidden",
         className
       )}
     >

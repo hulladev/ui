@@ -17,6 +17,12 @@ export type CatalogNavigationItem = {
 export const catalogSections = [
   {
     group: "Foundations",
+    href: "#typography",
+    keywords: ["prose", "paragraph", "list", "reading", "text"],
+    label: "Typography",
+  },
+  {
+    group: "Foundations",
     href: "#button",
     keywords: ["action", "click", "control", "submit"],
     label: "Button",

@@ -6,6 +6,34 @@ import SidebarPreview from "../previews/SidebarPreview.astro"
 const usageSources = [
   {
     code: `---
+import Sidebar from "@/ui/sidebar/sidebar.astro"
+import SidebarHeader from "@/ui/sidebar/sidebar-header.astro"
+import SidebarContent from "@/ui/sidebar/sidebar-content.astro"
+import SidebarTabs from "@/ui/sidebar/sidebar-tabs.astro"
+import SidebarTabsList from "@/ui/sidebar/sidebar-tabs-list.astro"
+import TabsTrigger from "@/ui/tabs/tabs-trigger.astro"
+import TabsContent from "@/ui/tabs/tabs-content.astro"
+---
+
+<Sidebar class="h-96">
+  <SidebarHeader>Project</SidebarHeader>
+  <SidebarTabs defaultValue="docs">
+    <SidebarTabsList aria-label="Project area">
+      <TabsTrigger value="docs">Docs</TabsTrigger>
+      <TabsTrigger value="guides">Guides</TabsTrigger>
+    </SidebarTabsList>
+    <SidebarContent>
+      <TabsContent value="docs">Documentation navigation</TabsContent>
+      <TabsContent value="guides">Guide navigation</TabsContent>
+    </SidebarContent>
+  </SidebarTabs>
+</Sidebar>`,
+    filename: "src/components/tabbed-sidebar.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `---
 import Collapsible from "@/ui/collapsible/collapsible.astro"
 import CollapsibleContent from "@/ui/collapsible/collapsible-content.astro"
 import Sidebar from "@/ui/sidebar/sidebar.astro"
@@ -98,7 +126,7 @@ export function AppSidebar() {
 
       <ComponentSource
         component="Sidebar"
-        generatedFamilies={["sidebar", "collapsible"]}
+        generatedFamilies={["sidebar", "collapsible", "tabs"]}
         previewSources={sidebarPreviewSources}
         usageSources={usageSources}
       />

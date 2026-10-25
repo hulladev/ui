@@ -74,10 +74,21 @@ const codeComponent = manifest.library.components.code
         <span>Reveal copy on hover</span>
       </label>
     </div>
-    <p class="m-0 text-sm leading-7 text-muted-foreground">
-      Install the primitives with <Code>bunx hulla ui add code</Code>, then choose either
-      highlighting adapter—or both.
-    </p>
+    <div class="prose">
+      <p>
+        Install the primitives with <Code>bunx hulla ui add code</Code>, then choose either
+        highlighting adapter—or both.
+      </p>
+    </div>
+    <div class="prose">
+      <p data-code-prose>
+        Use <Code>contains</Code>, <Code>startsWith</Code>, or <Code>endsWith</Code> for literal text.
+        Pass
+        <Code>{"{ caseSensitive: false }"}</Code> to ignore case, as in
+        <Code>{".where('title', 'contains', 'guide', { caseSensitive: false })"}</Code>. SQL
+        patterns use <Code>like</Code> or <Code>ilike</Code> instead.
+      </p>
+    </div>
 
     <Tabs defaultValue="astro" data-code-tabs>
       <CodeBlock>

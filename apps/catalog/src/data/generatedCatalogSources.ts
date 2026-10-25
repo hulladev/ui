@@ -8,26 +8,26 @@ export type CatalogSourceFile = {
   language: CatalogSourceLanguage
 }
 
-const astroModules = import.meta.glob("../../../../generated/astro/**/*.{astro,ts}", {
+const astroModules = import.meta.glob("../../../../generated/astro/**/*.{astro,ts,css}", {
   eager: true,
   import: "default",
   query: "?raw",
 }) as Record<string, string>
 
-const reactModules = import.meta.glob("../../../../generated/react/**/*.{tsx,ts}", {
+const reactModules = import.meta.glob("../../../../generated/react/**/*.{tsx,ts,css}", {
   eager: true,
   import: "default",
   query: "?raw",
 }) as Record<string, string>
 
-const solidModules = import.meta.glob("../../../../generated/solid/**/*.{tsx,ts}", {
+const solidModules = import.meta.glob("../../../../generated/solid/**/*.{tsx,ts,css}", {
   eager: true,
   import: "default",
   query: "?raw",
 }) as Record<string, string>
 
 const basename = (filename: string) => filename.split("/").at(-1) ?? filename
-const withoutExtension = (filename: string) => filename.replace(/\.(?:astro|ts|tsx)$/, "")
+const withoutExtension = (filename: string) => filename.replace(/\.(?:astro|ts|tsx|css)$/, "")
 
 const fileLabel = (filename: string) =>
   withoutExtension(basename(filename))
@@ -54,7 +54,11 @@ const familySources = (
         filename,
         framework,
         label: fileLabel(filename),
-        language: filename.endsWith(".ts") ? ("ts" as const) : language,
+        language: filename.endsWith(".css")
+          ? ("css" as const)
+          : filename.endsWith(".ts")
+            ? ("ts" as const)
+            : language,
       }
     })
     .sort((left, right) => {

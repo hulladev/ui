@@ -1,4 +1,5 @@
 @import "../../../../generated/astro/styles.css";
+@import "../../../../generated/astro/typography/prose.css";
 @source "../../../../generated/astro";
 
 /* Catalog chrome and illustration layout only; shared component styles are imported above. */
