@@ -73,7 +73,17 @@ describe("framework dependency boundaries", () => {
     expect(catalog.dependencies?.["@lucide/astro"]).toBe("^1.26.0")
     expect(catalog.dependencies?.["lucide-react"]).toBeUndefined()
     expect(catalog.dependencies?.["@tabler/icons-astro"]).toBeUndefined()
-    expect(astroConfig).toContain('dedupe: ["@hulla/style", "@lucide/astro", "cn"]')
+    const deduped = astroConfig.match(/dedupe:\s*\[([^\]]+)\]/)?.[1] ?? ""
+    for (const dependency of [
+      "@hulla/style",
+      "@lucide/astro",
+      "cn",
+      "react",
+      "react-dom",
+      "react-native-web",
+    ]) {
+      expect(deduped).toContain(JSON.stringify(dependency))
+    }
     expect(astroConfig).not.toContain("node_modules/")
   })
 })

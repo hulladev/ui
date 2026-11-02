@@ -22,7 +22,10 @@
     "version-packages": "changeset version && bun install",
     "release": "bun run release:beta",
     "release:beta": "bun run verify && node scripts/verify-beta-release.mjs && changeset publish --tag beta",
-    "prepare": "husky"
+    "prepare": "husky",
+    "dev:native": "turbo run dev --filter=@hulla/native-catalog",
+    "dev:native:ios": "turbo run dev --filter=@hulla/native-catalog -- --ios",
+    "dev:native:android": "turbo run dev --filter=@hulla/native-catalog -- --android"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
@@ -43,7 +46,11 @@
     "prettier-plugin-svelte": "^3.4.0",
     "shiki": "^4.3.1",
     "turbo": "^2.5.6",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-native": "0.88.1",
+    "@types/react": "^19.3.0"
   },
   "packageManager": "bun@1.3.9",
   "engines": {

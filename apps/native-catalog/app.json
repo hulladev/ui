@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "@hulla/ui native catalog",
+    "slug": "hulla-ui-native-catalog",
+    "version": "1.0.0",
+    "orientation": "default",
+    "userInterfaceStyle": "automatic",
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "plugins": ["expo-font"]
+  }
+}

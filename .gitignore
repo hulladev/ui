@@ -50,3 +50,7 @@ apps/*/.hulla/.cache/
 # Interrupted atomic generation
 .generated.staging-*
 generated.backup-*
+
+# Expo local state
+.expo/
+output/playwright/

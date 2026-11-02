@@ -4,9 +4,12 @@
   "compilerOptions": {
     "paths": {
       "@/ui/*": ["../../generated/astro/*"],
-      "@/*": ["../../generated/astro/*"]
+      "@/*": ["../../generated/astro/*"],
+      "@/lib/native-theme": ["../../generated/react-native/lib/native-theme.ts"]
     },
-    "types": ["astro/client", "bun", "node"]
+    "types": ["astro/client", "bun", "node"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
   },
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist", "eslint.config.mjs"]

@@ -26,6 +26,38 @@
       "cache": false,
       "persistent": true,
       "with": ["components#dev"]
+    },
+    "@hulla/native-catalog#dev": {
+      "cache": false,
+      "persistent": true,
+      "with": ["components#dev"]
+    },
+    "@hulla/native-catalog#build": {
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/generated/react-native/**"]
+    },
+    "@hulla/catalog#build": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/generated/**",
+        "$TURBO_ROOT$/apps/native-catalog/src/**"
+      ]
+    },
+    "@hulla/native-catalog#check-types": {
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/generated/react-native/**"]
+    },
+    "@hulla/catalog#check-types": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/generated/**",
+        "$TURBO_ROOT$/apps/native-catalog/src/**"
+      ]
+    },
+    "@hulla/catalog#test": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/generated/**",
+        "$TURBO_ROOT$/apps/native-catalog/src/**"
+      ]
     }
   }
 }

@@ -1,3 +1,4 @@
+import react from "@astrojs/react"
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
 import { statSync } from "node:fs"
@@ -55,11 +56,14 @@ function reloadGeneratedOutput() {
 }
 
 export default defineConfig({
+  devToolbar: { enabled: false },
+  integrations: [react()],
   vite: {
     // Concurrent dev, catalog-test, and consumer-test servers must not invalidate
     // each other's optimized dependency URLs.
     cacheDir: process.env.HULLA_CATALOG_VITE_CACHE_DIR,
     plugins: [reloadGeneratedOutput(), tailwindcss()],
+    optimizeDeps: { include: ["react", "react-dom/client", "react-native"] },
     server: {
       watch: {
         // The desktop development environment can inherit macOS's 256-file
@@ -73,8 +77,21 @@ export default defineConfig({
       },
     },
     resolve: {
-      dedupe: ["@hulla/style", "@lucide/astro", "cn"],
+      dedupe: ["react", "react-dom", "react-native-web", "@hulla/style", "@lucide/astro", "cn"],
       alias: {
+        "@/lib/native-color": fileURLToPath(
+          new URL("../../generated/react-native/lib/native-color.ts", import.meta.url)
+        ),
+        "@/lib/native-date": fileURLToPath(
+          new URL("../../generated/react-native/lib/native-date.ts", import.meta.url)
+        ),
+        "@/lib/text-input-style": fileURLToPath(
+          new URL("../../generated/react-native/lib/text-input-style.ts", import.meta.url)
+        ),
+        "react-native": "react-native-web",
+        "@/lib/native-theme": fileURLToPath(
+          new URL("../../generated/react-native/lib/native-theme.ts", import.meta.url)
+        ),
         "@/ui": generatedAstroRoot,
         "@": generatedAstroRoot,
       },

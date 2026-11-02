@@ -1,0 +1,18 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "types": ["react"],
+    "ignoreDeprecations": "6.0",
+    "paths": {
+      "@/*": ["../../generated/react-native/*"]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "../../generated/react-native/**/*.ts",
+    "../../generated/react-native/**/*.tsx"
+  ]
+}
