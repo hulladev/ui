@@ -1,0 +1,10 @@
+---
+import NativeComponentPage from "../../components/catalog/NativeComponentPage.astro"
+import NativeListPreview from "../../components/previews/native/NativeListPreview"
+import exampleSource from "../../../../native-catalog/src/examples/ListExample.tsx?raw"
+import previewSource from "../../components/previews/native/NativeListPreview.tsx?raw"
+---
+
+<NativeComponentPage family="list" exampleSource={exampleSource} previewSource={previewSource}>
+  <NativeListPreview client:only="react" />
+</NativeComponentPage>

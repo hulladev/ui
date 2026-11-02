@@ -15,16 +15,16 @@
         "frameworks": ["astro", "react", "solid"]
       },
       "alert": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "avatar": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "backdrop": {
         "frameworks": ["astro", "react", "solid"]
       },
       "badge": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "breadcrumbs": {
         "frameworks": ["astro", "react", "solid"]
@@ -42,7 +42,7 @@
         "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "code": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "code-highlighter-shiki": {
         "frameworks": ["astro", "react", "solid"]
@@ -74,6 +74,9 @@
       "dropdown-menu": {
         "frameworks": ["astro", "react", "react-native", "solid"]
       },
+      "empty-state": {
+        "frameworks": ["react-native"]
+      },
       "field": {
         "frameworks": ["astro", "react", "react-native", "solid"]
       },
@@ -93,10 +96,13 @@
         "frameworks": ["react-native"]
       },
       "link-card": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
+      },
+      "list": {
+        "frameworks": ["react-native"]
       },
       "meter": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "navigation-menu": {
         "frameworks": ["astro", "react", "solid"]
@@ -111,7 +117,7 @@
         "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "progress": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "radio": {
         "frameworks": ["astro", "react", "react-native", "solid"]
@@ -123,13 +129,13 @@
         "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "separator": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "sidebar": {
         "frameworks": ["astro", "react", "solid"]
       },
       "skeleton": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "slider": {
         "frameworks": ["astro", "react", "react-native", "solid"]
@@ -147,7 +153,7 @@
         "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "table": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "table-of-contents": {
         "frameworks": ["astro", "react", "solid"]
@@ -1256,6 +1262,19 @@
     "react/tsconfig.json": "a8e5bae18429ccac746feb8fa00a6aabac25b622dbbe3b678ee81eba87ae361d",
     "react/typography/package.json": "ea5e1a9c4ae60cd565bcad16e7c2ff0e9ef3d6738a0cbc97950986be2c4bc4f4",
     "react/typography/prose.css": "49e2434afb0f16dc1d844772353b7d9e69f5d14c5f2589aafc7142d93c30a918",
+    "react-native/alert/alert-description.tsx": "56f8344335dd188c1bae9895068d6c65fe1b2b3d15f7afbf23237d9986ee9c07",
+    "react-native/alert/alert-title.tsx": "b94975e0bc8bb901bcb24a13e342307b62d8ef6165de2f0bea18b2fcb8170e75",
+    "react-native/alert/alert.tsx": "b70f38d12e44c5102cf6addb62082f209c84f9e9be23dfc7c90cc50ab39e8d41",
+    "react-native/alert/index.tsx": "86bee9149d8bc86f8148105cf0d51c4269015dae7fcdb205f1646f45ab09b113",
+    "react-native/alert/package.json": "cec22939652f7ee4f33f675041b88c86839fe5946703a5cd9c54dcabeff186bf",
+    "react-native/avatar/avatar-fallback.tsx": "4c3fc0cc6cf706d1cd694b786246a01cd3d0aeaa6295479296b1728ff7cddc21",
+    "react-native/avatar/avatar-image.tsx": "a0e404dae9c6bfb166f8218893362c17ddf991dc4c94f83a9636d3e9f56fb6ae",
+    "react-native/avatar/avatar.tsx": "c3905cdda20f13647662ccea720538dc8052c0e2ba08ee31e7534a234a25b301",
+    "react-native/avatar/index.tsx": "21d06e0401daad098a615f9636c4cbdf62070c6641ce3d6cfde68b475b17ff13",
+    "react-native/avatar/package.json": "d787e4ef021aaebac2bb743c82d5d3ed9e05a877e30878e208e10069436e186e",
+    "react-native/badge/badge.tsx": "652ed71d979d582f46fb721a58f42e2398b50ed7be26f686f65ad3f2b8ae1c52",
+    "react-native/badge/index.tsx": "58caaaf0c3a0750b39d00dcb5486093aebbd154606a4c49af8cf87edfd7607e0",
+    "react-native/badge/package.json": "a8bbd7cd67b44f1dbfdb3e7ecd59e9c0de40ecbd85f233aa05b7a0c8bdc32cbf",
     "react-native/button/button-text.tsx": "3e4f42fc576203634ac243cfeed40b2b8404a15abcaa9026dd4b5c93faaef4e6",
     "react-native/button/button.tsx": "d4bfb00e29062fc13b9922d9d6d593e62f9b174083c5ef023994f747b0d1f417",
     "react-native/button/colors.ts": "2fcfca4a83a0ce7ecbe85d05ae8f809315033b63f8e82298f9d5f45c9f62de4a",
@@ -1275,6 +1294,9 @@
     "react-native/checkbox/checkbox.tsx": "77314051f98867ba1110cf8fdd9c4fa5d71be5e58fedc571b1817d3f53f69e4c",
     "react-native/checkbox/index.tsx": "adce3165cc2e5c3e8c820c74317c821e9cb73cb2924c4e697b294fc3e5a60a3e",
     "react-native/checkbox/package.json": "260889b88338375bc5aa77f690662350381cdad863348c75e2dd2d861354d12c",
+    "react-native/code/code.tsx": "70894b2d28a859706df427a56843c9a7d54613f159c59308f5bb2bbd95fa7b95",
+    "react-native/code/index.tsx": "281739b535e4ee5e8d7a5c090dcecc9be6a634b5e14e41a6545734815394ec0b",
+    "react-native/code/package.json": "566409c11724066b98ede59e87423af5b62aa6b981a2b0aae08805c13c867019",
     "react-native/combobox/combobox-content.tsx": "a208fc30e26e2dc366b8f7396714ef16a4c5e2ed988797858858d6d7ba0f8fb1",
     "react-native/combobox/combobox-group-label.tsx": "1d4ab7aff2686d26ee7d91faee531f00188926adb83a7c117e3c6f27ed44ea62",
     "react-native/combobox/combobox-item-text.tsx": "4ab84471a361b2aa587d9970b21846969e421c79d0876d3bc4affbcbb3494e99",
@@ -1312,6 +1334,12 @@
     "react-native/dropdown-menu/dropdown-menu.tsx": "82036187d4a32b4c121bcbeaed412e126732727ea2429e443f3d9eaf1c5c7c26",
     "react-native/dropdown-menu/index.tsx": "13e88e942b20231225b66c5073718c321ab957e3cd615392fa78ecc44750296a",
     "react-native/dropdown-menu/package.json": "91080416daf73ba516ad51548911f986f7ef4c51473d9e486103b4c22105b62f",
+    "react-native/empty-state/empty-state-actions.tsx": "184dab3af619ee3093f803d4fa9a74d1e280fed2dafaa1744cf48f6422e9e4d6",
+    "react-native/empty-state/empty-state-description.tsx": "01f0de80f6694130cbd9a19f1d3238f9156923207f6490ebc29dc8ba8ee1bc93",
+    "react-native/empty-state/empty-state-title.tsx": "e73ce2378bf21d0a82738926efbeb92069ef1fb54784d65bba7a57aa33da9511",
+    "react-native/empty-state/empty-state.tsx": "8490a3bc5d0fdb6242ac580b7f458493e6bb6e8558c11bd65df015710c60483f",
+    "react-native/empty-state/index.tsx": "98a8a1bdaa74ae03dcd7e23e86ac4a8d5d4607a6493b6c9a2a7f53f15b3d281d",
+    "react-native/empty-state/package.json": "0728241373a5c9481cf5612892e8757c042165a62b2e340a07ec9058e0393129",
     "react-native/field/field-content.tsx": "4197b825bc98e418077496bb6122a0df5457e95a04ef719775070cc5315c227e",
     "react-native/field/field-description.tsx": "515340850f9ddbb9b8685b2e87eddcf910edd0fde1a3670deec4c70097c27ce1",
     "react-native/field/field-error.tsx": "aa63083e0b4feb3171aff826b9d49ae82d6026c0056f83e5a05b1e3fd0d946a3",
@@ -1342,6 +1370,22 @@
     "react-native/lib/native-theme.ts": "ad765ce61a9ae11eb0e8aa1a0b4c8ff61c929d27acf9de04c6c5fdd0227883b9",
     "react-native/lib/native-tokens.ts": "c1e85726caaa1395d752f2f6a2fc2f84a6da6be1c2525ba4995a5e6be04d4ced",
     "react-native/lib/text-input-style.ts": "7e3ca2303e19248aa82cfacdc7a45b3c3513054d79c4151004b21884dad46b3a",
+    "react-native/link-card/index.tsx": "afdfb73a0819313e8ef01fc330eb500ac33553791c23be197aa954ebeba8b481",
+    "react-native/link-card/link-card-content.tsx": "4632bd5f7320e8bbbfddb077b5e2326425eb6b84e7e559972c1e0930d1feb39c",
+    "react-native/link-card/link-card-description.tsx": "0bd383169fb41fc41983845ebde8e3137f4083ebebf495c2eae99d75ec80c542",
+    "react-native/link-card/link-card-title.tsx": "20a42b98f9a6cea917e5b66df8704547e9d1b0d5e27f0b9f66fcd18f7dea4346",
+    "react-native/link-card/link-card.tsx": "0a85f3c5c9d7a76613fe62af84e024d2ffd08e6dd04a10d9c6bd7e10d6786b82",
+    "react-native/link-card/package.json": "1ed4ee80653593bf2870ac0716be2524639ec1c14340452f851fe3e2c4210831",
+    "react-native/list/index.tsx": "3a4451cb1ab350b1267bc7f90fa66bc310ce63dea77d1fa0ceda8baf00283735",
+    "react-native/list/list-item-content.tsx": "70dcca8fa53de037b8fdbe3cc6a22fa2b01f8110fe2f85c37ae54e1e85801c4d",
+    "react-native/list/list-item-description.tsx": "d99bc9e020066f62bd7d857937632df959dc954d887f334639ed15cad8b76a3c",
+    "react-native/list/list-item-title.tsx": "de1ca98adad48e5fd119020b608bf64820a424891b4567c61a2a51f55a5adf88",
+    "react-native/list/list-item.tsx": "3fe35ae2197a46465b9152db8ba5ed7f830abad39186dd5160f7955b5165b304",
+    "react-native/list/list.tsx": "d46eded360f4a23dc127113e206a21b5b843f07f93a68ce0a2132bec69153496",
+    "react-native/list/package.json": "da183dfd08dbd82a0d1a3c9a88ea88e33563157af1946f21e68b50b17d1b7255",
+    "react-native/meter/index.tsx": "87f026a357c2f10ab0f9ab6bc4c3a6b1ebbc41a62c33707787735c1490eaced7",
+    "react-native/meter/meter.tsx": "0022e375e1d733adc334b6fbd7d946244db0931e96f29780cb2ae88a80c1c0ce",
+    "react-native/meter/package.json": "f6488ee1a76ce453708592591c9e6db67abd983f7a874fd6041f5b45acf7d7b2",
     "react-native/number-field/index.tsx": "f7e230c0484b81c3f04f8dd3ac2f98623ce7a0622369e2c1f104a5af8d976048",
     "react-native/number-field/number-field.tsx": "175d20b66ffa026cf187ba4d6b9b789157fc4709ee36f2095ca6c153675eb5de",
     "react-native/number-field/package.json": "abc874c61e9ef2c5de37a1994646a1251a13c5d41f7d03cd6ad8bf4ac206776f",
@@ -1352,6 +1396,9 @@
     "react-native/popover/popover-header.tsx": "11a004045d0c32ec6ffa1b34efac4ea06fb0eb4f1ba8c405c2fb8b6b79a2404d",
     "react-native/popover/popover-title.tsx": "b8d55c35e09412fb82e025b6f21c9852348b88b970e251e0f288482cb23af843",
     "react-native/popover/popover.tsx": "b9b17b0ecdca0308f03cff2f39436a5482d074fea574f573d8ad8ce3b0ade74f",
+    "react-native/progress/index.tsx": "3a500686799ef4337b0271961267665995be1b56b6e6d3e5767e7c18f46a557a",
+    "react-native/progress/package.json": "5650faf0d1d0644841ba055e49519dfe10af15dec3432dafda25dcb174120b5c",
+    "react-native/progress/progress.tsx": "a303e6c9feb967312806f811ab9b85120f790bbec7040abaa12881c040c3d398",
     "react-native/radio/index.tsx": "1b37f1e4e03116c6585aee4690bdc83bf9d513e7ddf01a2f26f964b48a93288d",
     "react-native/radio/package.json": "2cf9c7fb2d087971c77d0f594651dac631e677476afe7ea9e178c71026afa084",
     "react-native/radio/radio-group.tsx": "e0b05c62afc92ad01453fcdf5a632a26632da5cad0a3deec93fb1c9f3e257c6a",
@@ -1364,6 +1411,12 @@
     "react-native/select/select-item.tsx": "63b9826b79e72ee8804f41a19c86955aa96eb8521564efc7244dc718ea0f3948",
     "react-native/select/select-text.tsx": "013dc029f1bae634cac5ea1d0b04e61d94fb6feb2bd1aeaf30a7ae976623967d",
     "react-native/select/select.tsx": "f2ea087b5825453733ee596320bcda04ae1c1007a7e7558c9fac778e6a405139",
+    "react-native/separator/index.tsx": "c756fb0059b0d231c8a45691be566a43de183cc4a415f5d5182c71d453804336",
+    "react-native/separator/package.json": "5dd7ae5ed628b8f6417f41c826be49f5c06f25d0347d4e9c62fe4a0d8a662bce",
+    "react-native/separator/separator.tsx": "8c542de5b964fb36e13a894e7f86aefaca0051de9e573290171c4177c512c668",
+    "react-native/skeleton/index.tsx": "5dfcd9a3782d969030ab3f30a8445ea02d6645cc0325956d91bad626c69cbb44",
+    "react-native/skeleton/package.json": "394b5cc01e83a5a40f73eacb47931ec0b5de51686551074cfbf1436d80b6d7a1",
+    "react-native/skeleton/skeleton.tsx": "793662474d6e90fe8e39224bb23dfd7fbc82bd771a21dc23add805c0cc4b2a8e",
     "react-native/slider/index.tsx": "8dc57faa4194d5e55fe0695ee6ea35539d5c74b7933fba61d07696bc530fe87e",
     "react-native/slider/package.json": "64d03eb99f799b196e96ec187e7ad989ce50018c2710fc656386fd72990db21f",
     "react-native/slider/slider.tsx": "b5efa7eb77a547c05c11b733c414063465b2805c52a1b1df3b7d515d9dac42e9",
@@ -1376,6 +1429,12 @@
     "react-native/switch/index.tsx": "7b45f4e5c0eb12fb1683d10e1f4a5d992a94aa47878824a3f54d68d6c8dddea6",
     "react-native/switch/package.json": "2cb8ae051a62e18b3c778bf7be44adaa22646cb934ed2e59e6ce815d751019be",
     "react-native/switch/switch.tsx": "fb0c76390a927a0acb42d3171f2a0fac1c4fec1b162c89a5e5c6c37bfadf0cd5",
+    "react-native/table/index.tsx": "9f4e41452838698e6e9075fb4b58f5649842ad4c2923ef25b30c191341e89567",
+    "react-native/table/package.json": "7da5eb91be9f95e3aaf0fcef8b7df0639981883269574432b89ff89e2486f964",
+    "react-native/table/table-cell.tsx": "0d7345d44629887fe9beb272deb32828b9ecf8f973f12fb62af35b9107c36a99",
+    "react-native/table/table-header.tsx": "128919b960a4a9b66a34f994c86d14a47ab02a70a526f7a61d07ad4a601e5b44",
+    "react-native/table/table-row.tsx": "f5d33a5c2920a936d64fba0bfbbf748d798f8991c4081fcc1e14d2e6c6f1dfdc",
+    "react-native/table/table.tsx": "2ee7702e1426b1e61e9461c672971b543193933342901c549f56fdd75187b20a",
     "react-native/tag-input/index.tsx": "8081334cdec5a1e033e626c31f6083bf6f73fc0deffd49e12e31c4a5f1fead1a",
     "react-native/tag-input/package.json": "cc90c0f0ed924e2c935eb4819977e4f005ea22871b49c07f8bdb79b79b8d6992",
     "react-native/tag-input/tag-input.tsx": "bbb609da2e53008ab54764aafb7c64ee228b198a8d75544bca1dc9dce00d60c7",
@@ -1725,6 +1784,6 @@
     "solid/tsconfig.json": "37e941a49cbc375f8dfc37529cbc03fbba8f5c9497683e0654099144e6f4a15d",
     "solid/typography/package.json": "ea5e1a9c4ae60cd565bcad16e7c2ff0e9ef3d6738a0cbc97950986be2c4bc4f4",
     "solid/typography/prose.css": "49e2434afb0f16dc1d844772353b7d9e69f5d14c5f2589aafc7142d93c30a918",
-    "ui.config.ts": "314f2098b2135ef715b3d1d0977016736a601db5704303ca87bb99d01ab8c9e9"
+    "ui.config.ts": "8647cb9e97d4e4e61346e618932e568f68592dc2fc28e876e070f090bb51ca1b"
   }
 }

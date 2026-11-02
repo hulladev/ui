@@ -15,16 +15,16 @@ export const config = {
       frameworks: ["astro", "react", "solid"],
     },
     alert: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     avatar: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     backdrop: {
       frameworks: ["astro", "react", "solid"],
     },
     badge: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     breadcrumbs: {
       frameworks: ["astro", "react", "solid"],
@@ -42,7 +42,7 @@ export const config = {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
     code: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     "code-highlighter-shiki": {
       frameworks: ["astro", "react", "solid"],
@@ -74,6 +74,9 @@ export const config = {
     "dropdown-menu": {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
+    "empty-state": {
+      frameworks: ["react-native"],
+    },
     field: {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
@@ -93,10 +96,13 @@ export const config = {
       frameworks: ["react-native"],
     },
     "link-card": {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
+    },
+    list: {
+      frameworks: ["react-native"],
     },
     meter: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     "navigation-menu": {
       frameworks: ["astro", "react", "solid"],
@@ -111,7 +117,7 @@ export const config = {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
     progress: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     radio: {
       frameworks: ["astro", "react", "react-native", "solid"],
@@ -123,13 +129,13 @@ export const config = {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
     separator: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     sidebar: {
       frameworks: ["astro", "react", "solid"],
     },
     skeleton: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     slider: {
       frameworks: ["astro", "react", "react-native", "solid"],
@@ -147,7 +153,7 @@ export const config = {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
     table: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     "table-of-contents": {
       frameworks: ["astro", "react", "solid"],
