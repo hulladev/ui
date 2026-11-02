@@ -57,7 +57,7 @@
         "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "command": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "date-picker": {
         "frameworks": ["astro", "react", "react-native", "solid"]
@@ -72,7 +72,7 @@
         "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "dropdown-menu": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "field": {
         "frameworks": ["astro", "react", "react-native", "solid"]
@@ -108,7 +108,7 @@
         "frameworks": ["astro", "react", "solid"]
       },
       "popover": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "progress": {
         "frameworks": ["astro", "react", "solid"]
@@ -140,6 +140,9 @@
       "stepper": {
         "frameworks": ["astro", "react", "solid"]
       },
+      "swipe-actions": {
+        "frameworks": ["react-native"]
+      },
       "switch": {
         "frameworks": ["astro", "react", "react-native", "solid"]
       },
@@ -162,13 +165,13 @@
         "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "toast": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "toggle": {
         "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "tooltip": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "tree-view": {
         "frameworks": ["astro", "react", "solid"]
@@ -1279,6 +1282,14 @@
     "react-native/combobox/combobox.tsx": "4883b1c5e1158cdffc78c7a2f1788582d7b51c3ead9bc48ac117aea840ee8f7d",
     "react-native/combobox/index.tsx": "40d02f6a09d66fd119fc13fb571674d8a03d771bea3175e9b11e67132248aadb",
     "react-native/combobox/package.json": "08c2b903f7379cbde84209c45b98d9f81e539c8087ee87939733b2efefc5250e",
+    "react-native/command/command-empty.tsx": "bbe2d9209847051080cd244853e5d1db5ce048bc9aaaaca67bd8ac33d1dfe8af",
+    "react-native/command/command-input.tsx": "4696741f4ce47e839be2020b4cd9ca4f7ede1de1e276e606c2e8a09556877b85",
+    "react-native/command/command-item-text.tsx": "8110c0191efce63786caa8805f737d99552249749ab61c728799a6f6e4a5741e",
+    "react-native/command/command-item.tsx": "f8059a8d6e9295fcd2a9944608e067794bf9e5cf5ab31eff1c9cb3c4db59b166",
+    "react-native/command/command-list.tsx": "871b34f1588a5bcb49a8abd3277411facb3643d5042f264e92c50a528b9cce0c",
+    "react-native/command/command.tsx": "970bd229efa6a9e3624329caa3766c3be0d118cfc35c5aeaec6e378df2f76709",
+    "react-native/command/index.tsx": "8bd9996010e80d96d026de04b0457a28391790512c57b72845c1b0f69f14524d",
+    "react-native/command/package.json": "d8db4f31786e629e8f2979035b0e3064faf26ecc9081dfdc2103125a6086fb64",
     "react-native/date-picker/date-picker.tsx": "d1ee9756c20a9adb549c2f8ad5b529f50b7ae5d1db1007a192606a6fb7133274",
     "react-native/date-picker/index.tsx": "59496bbea00193e7c14b127e226bd3a7644f9fef33e66b9e416e704df1c6d857",
     "react-native/date-picker/package.json": "d7acea801383ed801fdfc40dc6b5bbb4c0247b45485893a13708f9a6610b82bf",
@@ -1295,6 +1306,12 @@
     "react-native/drawer/drawer.tsx": "561fbac08e09543d90debcff690cb8e3388a380a748de35df1ba611c58f00fdc",
     "react-native/drawer/index.tsx": "ab0255941277baedd34717a123db3df4f9456c09fefb73b6885b7b5d201e569f",
     "react-native/drawer/package.json": "b2ca7d1cee7260757f087ac8ab74986afb3241e347300df6496eeab9ab0f64df",
+    "react-native/dropdown-menu/dropdown-menu-item-text.tsx": "aa7873cdaabe3477a1d3f37eeeee693ea462754676817ee6c630399506245b83",
+    "react-native/dropdown-menu/dropdown-menu-item.tsx": "3c67e5357013f37fe6576b7d365096a9257e2f5bd8b2d68a05e56d0594bcdc39",
+    "react-native/dropdown-menu/dropdown-menu-label.tsx": "4ef6d9d9ed0b900cb37a7b6c7613f2700d81e498ce2b991322e2c93058cd6c34",
+    "react-native/dropdown-menu/dropdown-menu.tsx": "82036187d4a32b4c121bcbeaed412e126732727ea2429e443f3d9eaf1c5c7c26",
+    "react-native/dropdown-menu/index.tsx": "13e88e942b20231225b66c5073718c321ab957e3cd615392fa78ecc44750296a",
+    "react-native/dropdown-menu/package.json": "91080416daf73ba516ad51548911f986f7ef4c51473d9e486103b4c22105b62f",
     "react-native/field/field-content.tsx": "4197b825bc98e418077496bb6122a0df5457e95a04ef719775070cc5315c227e",
     "react-native/field/field-description.tsx": "515340850f9ddbb9b8685b2e87eddcf910edd0fde1a3670deec4c70097c27ce1",
     "react-native/field/field-error.tsx": "aa63083e0b4feb3171aff826b9d49ae82d6026c0056f83e5a05b1e3fd0d946a3",
@@ -1329,6 +1346,12 @@
     "react-native/number-field/number-field.tsx": "175d20b66ffa026cf187ba4d6b9b789157fc4709ee36f2095ca6c153675eb5de",
     "react-native/number-field/package.json": "abc874c61e9ef2c5de37a1994646a1251a13c5d41f7d03cd6ad8bf4ac206776f",
     "react-native/package.json": "f4bfb56b09a7818453f4c51e08e5ad358e0c7c18895cd6d0cbd7cda0327888e1",
+    "react-native/popover/index.tsx": "bd41fc931d2a28a3f2e81b4696814a7091f53d173eb15c07f0fc33aa2bca8008",
+    "react-native/popover/package.json": "5e541b9efc01d35f9452e766d3a567356dc8718365483ec3e657cb1684b002a3",
+    "react-native/popover/popover-description.tsx": "d972565e9ba1ec68e8ffc275da78828dc3be15acbc1f25aa228576ff72a93a0c",
+    "react-native/popover/popover-header.tsx": "11a004045d0c32ec6ffa1b34efac4ea06fb0eb4f1ba8c405c2fb8b6b79a2404d",
+    "react-native/popover/popover-title.tsx": "b8d55c35e09412fb82e025b6f21c9852348b88b970e251e0f288482cb23af843",
+    "react-native/popover/popover.tsx": "b9b17b0ecdca0308f03cff2f39436a5482d074fea574f573d8ad8ce3b0ade74f",
     "react-native/radio/index.tsx": "1b37f1e4e03116c6585aee4690bdc83bf9d513e7ddf01a2f26f964b48a93288d",
     "react-native/radio/package.json": "2cf9c7fb2d087971c77d0f594651dac631e677476afe7ea9e178c71026afa084",
     "react-native/radio/radio-group.tsx": "e0b05c62afc92ad01453fcdf5a632a26632da5cad0a3deec93fb1c9f3e257c6a",
@@ -1347,6 +1370,9 @@
     "react-native/spinner/index.tsx": "1bd62a0b1b00efd77d01dee0345e93517981d44f2ff936d275256475e95d663e",
     "react-native/spinner/package.json": "d56122abe951b0f6ea1ede9ee850dcbb2338567e4ef4e9a6a76719b0f754eeed",
     "react-native/spinner/spinner.tsx": "adfaa86fab370e00f7a36f83fcba4975f12da9dc0e29f530a6a928b36bb2ebc3",
+    "react-native/swipe-actions/index.tsx": "8bf2e4a6ef4337a9da4a023c5eb4915d1685d6f5ef8fb9e0c2a13a858bde3819",
+    "react-native/swipe-actions/package.json": "94d0cf22c968c3c17b66b80577edc9bf3e4f01122ce14533cfb7782b0761f0df",
+    "react-native/swipe-actions/swipe-actions.tsx": "4d4aa96767fb96f41a96f93e8543a6549d2f9a1cce77d44945e9ed0425bf2fdc",
     "react-native/switch/index.tsx": "7b45f4e5c0eb12fb1683d10e1f4a5d992a94aa47878824a3f54d68d6c8dddea6",
     "react-native/switch/package.json": "2cb8ae051a62e18b3c778bf7be44adaa22646cb934ed2e59e6ce815d751019be",
     "react-native/switch/switch.tsx": "fb0c76390a927a0acb42d3171f2a0fac1c4fec1b162c89a5e5c6c37bfadf0cd5",
@@ -1359,10 +1385,19 @@
     "react-native/time-picker/index.tsx": "ff1920edbc0d092c02413c5c229a4f4986f0d5d252c29eaf5180f5faeeca2339",
     "react-native/time-picker/package.json": "35f78b2201210ee02b2e33599a41ef4521746f2d80b200ea529bb90873a89510",
     "react-native/time-picker/time-picker.tsx": "dd5382623fd8d7e938dc21a2194e85e56d1afba32573374f866bb30b1a10eddf",
+    "react-native/toast/index.tsx": "d33f481e96bcab8244fbdaaa182e78ddfa5fcb4f9296c48bc03739eaaa743b99",
+    "react-native/toast/package.json": "bd5b37caf7149a0ffb527ca5fdd9c8ff74f36d27075fe52f4e82bf172ff8c800",
+    "react-native/toast/toast-description.tsx": "67b0ad7b472308a7c3335e3f1ab466b9b297b0da0ebbc30e22d6325e1b2a8bbc",
+    "react-native/toast/toast-title.tsx": "5130fbb7e26ed334a55c94de4310e7bc2c785d427410df3f752abb8cd32a9545",
+    "react-native/toast/toast.tsx": "77dd2e43ccb948bc670e104257ea2ecdaf802b3b371dc2e8e80dcd481493c81a",
     "react-native/toggle/index.tsx": "0021d25b13c3b49bb6817fcdeabed343a8ef6c0b06344e46f30dd66905205f8f",
     "react-native/toggle/package.json": "068df90a612d302eb73011270de13cfa53439a3e18766ba998e0673967204390",
     "react-native/toggle/toggle-text.tsx": "fe299464e51ab4f5646588758d510ac2c335284d24708ee40efa576c08e3d627",
     "react-native/toggle/toggle.tsx": "23d489749973584ec542a7532427e431f652cf9de9016d4246d4880d5866fd74",
+    "react-native/tooltip/index.tsx": "52f56e68aa7f8b5df3643f071457945735bb3ec855c6763d21d67b25accabdf6",
+    "react-native/tooltip/package.json": "0559fa6fd3b064ca247e9a65007ce0b9f5f891150372a7d6a5b62d82d63c8f8c",
+    "react-native/tooltip/tooltip-content.tsx": "061f12564e4f98c07805a08af2fb5f0ec1c78bba4f745dd94d74db8433f427fb",
+    "react-native/tooltip/tooltip.tsx": "30024c347f3b0e254500c47e9520a28ac15b628556330b5f8a2e8876a17bf483",
     "react-native/tsconfig.json": "5e68e223116c0d9ac6e57d871883ae911edde68ec444b22e437471f909d1701a",
     "react-native/typography/index.tsx": "42c4d78d2578d56b60f18f10c534dd5ecd96443a17204a39f28527ac96270cac",
     "react-native/typography/package.json": "fe6d828c7c9d1d95d6f7fe67d801d85c6e87526a37630ffcfde7929b198efc06",
@@ -1690,6 +1725,6 @@
     "solid/tsconfig.json": "37e941a49cbc375f8dfc37529cbc03fbba8f5c9497683e0654099144e6f4a15d",
     "solid/typography/package.json": "ea5e1a9c4ae60cd565bcad16e7c2ff0e9ef3d6738a0cbc97950986be2c4bc4f4",
     "solid/typography/prose.css": "49e2434afb0f16dc1d844772353b7d9e69f5d14c5f2589aafc7142d93c30a918",
-    "ui.config.ts": "30d299ee1042b662cf9f567a66a6d67dc58f2345b22020e9c511a4c42af288f7"
+    "ui.config.ts": "314f2098b2135ef715b3d1d0977016736a601db5704303ca87bb99d01ab8c9e9"
   }
 }

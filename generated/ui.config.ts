@@ -57,7 +57,7 @@ export const config = {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
     command: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     "date-picker": {
       frameworks: ["astro", "react", "react-native", "solid"],
@@ -72,7 +72,7 @@ export const config = {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
     "dropdown-menu": {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     field: {
       frameworks: ["astro", "react", "react-native", "solid"],
@@ -108,7 +108,7 @@ export const config = {
       frameworks: ["astro", "react", "solid"],
     },
     popover: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     progress: {
       frameworks: ["astro", "react", "solid"],
@@ -140,6 +140,9 @@ export const config = {
     stepper: {
       frameworks: ["astro", "react", "solid"],
     },
+    "swipe-actions": {
+      frameworks: ["react-native"],
+    },
     switch: {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
@@ -162,13 +165,13 @@ export const config = {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
     toast: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     toggle: {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
     tooltip: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     "tree-view": {
       frameworks: ["astro", "react", "solid"],

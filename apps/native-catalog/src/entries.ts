@@ -52,7 +52,21 @@ export const nativeCatalogEntries = [
     title: "Drawer",
     description: "Bottom sheets with explicit close and back behavior.",
   },
+  {
+    id: "dropdown-menu",
+    title: "DropdownMenu",
+    description: "Discoverable contextual actions in a sheet.",
+  },
+  { id: "popover", title: "Popover", description: "Contextual content in a modal surface." },
+  { id: "tooltip", title: "Tooltip", description: "Visible tap-to-reveal supplementary help." },
+  { id: "command", title: "Command", description: "Searchable actions with explicit execution." },
+  { id: "toast", title: "Toast", description: "Dismissible announcements and notice lifecycle." },
   { id: "spinner", title: "Spinner", description: "Native activity indicators." },
+  {
+    id: "swipe-actions",
+    title: "SwipeActions",
+    description: "Swipe disclosure with visible action alternatives.",
+  },
   {
     id: "keyboard-aware",
     title: "KeyboardAware",

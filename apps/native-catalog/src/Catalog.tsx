@@ -29,7 +29,13 @@ const examples = {
   card: lazy(() => import("./examples/CardExample")),
   dialog: lazy(() => import("./examples/DialogExample")),
   drawer: lazy(() => import("./examples/DrawerExample")),
+  "dropdown-menu": lazy(() => import("./examples/DropdownMenuExample")),
+  popover: lazy(() => import("./examples/PopoverExample")),
+  tooltip: lazy(() => import("./examples/TooltipExample")),
+  command: lazy(() => import("./examples/CommandExample")),
+  toast: lazy(() => import("./examples/ToastExample")),
   spinner: lazy(() => import("./examples/SpinnerExample")),
+  "swipe-actions": lazy(() => import("./examples/SwipeActionsExample")),
   "keyboard-aware": lazy(() => import("./examples/KeyboardAwareExample")),
 }
 
