@@ -63,7 +63,8 @@ export default defineConfig({
     // each other's optimized dependency URLs.
     cacheDir: process.env.HULLA_CATALOG_VITE_CACHE_DIR,
     plugins: [reloadGeneratedOutput(), tailwindcss()],
-    optimizeDeps: { include: ["react", "react-dom/client", "react-native"] },
+    // Late discovery would reload a cold catalog during an interaction test.
+    optimizeDeps: { include: ["react", "react-dom/client", "react-native", "@floating-ui/dom"] },
     server: {
       watch: {
         // The desktop development environment can inherit macOS's 256-file
