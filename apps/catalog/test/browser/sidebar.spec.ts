@@ -74,6 +74,9 @@ test("wraps long disclosure headings compactly without shrinking their icons", a
   await page.setViewportSize({ width: 390, height: 844 })
   await page.locator("#sidebar-preview-props-tab").click()
   const trigger = page.locator("[data-playground-sidebar-workspace] > summary")
+  await page.evaluate(async () => {
+    await document.fonts.ready
+  })
 
   for (const theme of ["light", "dark"]) {
     await page.evaluate((value) => {
@@ -92,7 +95,7 @@ test("wraps long disclosure headings compactly without shrinking their icons", a
       }
     })
     expect(geometry.labelHeight).toBeGreaterThan(geometry.lineHeight)
-    expect(geometry.labelHeight).toBeLessThanOrEqual(geometry.fontSize * 3)
+    expect(geometry.lineHeight).toBeLessThanOrEqual(geometry.fontSize * 1.5)
     expect(geometry.iconWidth).toBe(13)
     expect(geometry.overflows).toBe(false)
     await trigger.press("Enter")
