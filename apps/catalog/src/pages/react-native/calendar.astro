@@ -1,0 +1,6 @@
+---
+import { nativeCatalogDestination } from "../../data/catalogNavigation"
+
+const destination = nativeCatalogDestination("calendar")
+if (destination) return Astro.redirect(destination)
+---

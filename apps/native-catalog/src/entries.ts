@@ -5,7 +5,16 @@ export const nativeCatalogEntries = [
   { id: "textarea", title: "Textarea", description: "Multiline notes and native editing." },
   { id: "field", title: "Field", description: "Explicit labels, descriptions, and validation." },
   { id: "checkbox", title: "Checkbox", description: "Checked, mixed, and disabled selection." },
+  { id: "radio", title: "Radio", description: "Explicit single-choice selection and groups." },
   { id: "switch", title: "Switch", description: "Native on/off selection." },
+  { id: "toggle", title: "Toggle", description: "Independent pressed actions." },
+  { id: "select", title: "Select", description: "Touch-friendly choice sheets." },
+  { id: "combobox", title: "Combobox", description: "Searchable choices with explicit selection." },
+  {
+    id: "slider",
+    title: "Slider",
+    description: "Numeric adjustment by touch, keyboard, and accessibility actions.",
+  },
   {
     id: "number-field",
     title: "NumberField",
@@ -15,6 +24,21 @@ export const nativeCatalogEntries = [
     id: "tag-input",
     title: "TagInput",
     description: "Editable collections with removable entries.",
+  },
+  {
+    id: "calendar",
+    title: "Calendar",
+    description: "Local date selection, month navigation, and limits.",
+  },
+  {
+    id: "date-picker",
+    title: "DatePicker",
+    description: "Confirmable calendar selection in a modal.",
+  },
+  {
+    id: "time-picker",
+    title: "TimePicker",
+    description: "Local time entry with explicit confirmation.",
   },
   {
     id: "file-upload",

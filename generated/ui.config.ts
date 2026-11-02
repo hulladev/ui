@@ -33,7 +33,7 @@ export const config = {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
     calendar: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     card: {
       frameworks: ["astro", "react", "react-native", "solid"],
@@ -54,13 +54,13 @@ export const config = {
       frameworks: ["astro", "react", "solid"],
     },
     combobox: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     command: {
       frameworks: ["astro", "react", "solid"],
     },
     "date-picker": {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     dialog: {
       frameworks: ["astro", "react", "react-native", "solid"],
@@ -114,13 +114,13 @@ export const config = {
       frameworks: ["astro", "react", "solid"],
     },
     radio: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     resizable: {
       frameworks: ["astro", "react", "solid"],
     },
     select: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     separator: {
       frameworks: ["astro", "react", "solid"],
@@ -132,7 +132,7 @@ export const config = {
       frameworks: ["astro", "react", "solid"],
     },
     slider: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     spinner: {
       frameworks: ["astro", "react", "react-native", "solid"],
@@ -159,13 +159,13 @@ export const config = {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
     "time-picker": {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     toast: {
       frameworks: ["astro", "react", "solid"],
     },
     toggle: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     tooltip: {
       frameworks: ["astro", "react", "solid"],
