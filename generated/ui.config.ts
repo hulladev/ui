@@ -88,6 +88,9 @@ export const config = {
     kbd: {
       frameworks: ["astro", "react", "solid"],
     },
+    "link-card": {
+      frameworks: ["astro", "react", "solid"],
+    },
     meter: {
       frameworks: ["astro", "react", "solid"],
     },

@@ -287,6 +287,12 @@ export const catalogSections = [
   },
   {
     group: "Layout & feedback",
+    href: "#link-card",
+    keywords: ["link", "anchor", "navigation", "guide", "card"],
+    label: "LinkCard",
+  },
+  {
+    group: "Layout & feedback",
     href: "#draggable",
     keywords: ["drag", "move", "spatial", "interaction"],
     label: "Draggable",

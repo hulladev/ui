@@ -12,6 +12,7 @@ import badgeCatalogSource from "../components/previews/BadgePreview.astro?raw"
 import breadcrumbsCatalogSource from "../components/previews/BreadcrumbsPreview.astro?raw"
 import buttonCatalogSource from "../components/previews/ButtonPreview.astro?raw"
 import cardCatalogSource from "../components/previews/CardPreview.astro?raw"
+import linkCardCatalogSource from "../components/previews/LinkCardPreview.astro?raw"
 import calendarCatalogSource from "../components/previews/CalendarPreview.astro?raw"
 import checkboxCatalogSource from "../components/previews/CheckboxPreview.astro?raw"
 import codeCatalogSource from "../components/previews/CodePreview.astro?raw"
@@ -181,6 +182,10 @@ export const drawerPreviewSources = exactCatalogPreview("DrawerPreview.astro", d
 export const tabsPreviewSources = exactCatalogPreview("TabsPreview.astro", tabsCatalogSource)
 
 export const cardPreviewSources = exactCatalogPreview("CardPreview.astro", cardCatalogSource)
+export const linkCardPreviewSources = exactCatalogPreview(
+  "LinkCardPreview.astro",
+  linkCardCatalogSource
+)
 
 export const calendarPreviewSources = exactCatalogPreview(
   "CalendarPreview.astro",

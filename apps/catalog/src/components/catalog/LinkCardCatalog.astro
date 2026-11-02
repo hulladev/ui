@@ -1,0 +1,82 @@
+---
+import { linkCardPreviewSources } from "../../data/catalogPreviewSources"
+import ComponentSource from "../ComponentSource.astro"
+import LinkCardPreview from "../previews/LinkCardPreview.astro"
+
+const usageSources = [
+  {
+    code: `---
+import LinkCard from "@/ui/link-card/link-card.astro"
+import LinkCardContent from "@/ui/link-card/link-card-content.astro"
+import LinkCardTitle from "@/ui/link-card/link-card-title.astro"
+import LinkCardDescription from "@/ui/link-card/link-card-description.astro"
+---
+
+<LinkCard href="/guides/api/quick-start">
+  <LinkCardContent>
+    <LinkCardTitle>Build your first route</LinkCardTitle>
+    <LinkCardDescription>Contract, handler, and client in one example.</LinkCardDescription>
+  </LinkCardContent>
+</LinkCard>`,
+    filename: "src/components/guide-link.astro",
+    framework: "Astro",
+    language: "astro" as const,
+  },
+  {
+    code: `import { LinkCard, LinkCardContent, LinkCardTitle, LinkCardDescription } from "@/ui/link-card"
+
+export function GuideLink() {
+  return (
+    <LinkCard href="/guides/api/quick-start">
+      <LinkCardContent>
+        <LinkCardTitle>Build your first route</LinkCardTitle>
+        <LinkCardDescription>Contract, handler, and client in one example.</LinkCardDescription>
+      </LinkCardContent>
+    </LinkCard>
+  )
+}`,
+    filename: "src/components/guide-link.tsx",
+    framework: "React",
+    language: "tsx" as const,
+  },
+  {
+    code: `import { LinkCard, LinkCardContent, LinkCardTitle, LinkCardDescription } from "@/ui/link-card"
+
+export function GuideLink() {
+  return (
+    <LinkCard href="/guides/api/quick-start">
+      <LinkCardContent>
+        <LinkCardTitle>Build your first route</LinkCardTitle>
+        <LinkCardDescription>Contract, handler, and client in one example.</LinkCardDescription>
+      </LinkCardContent>
+    </LinkCard>
+  )
+}`,
+    filename: "src/components/guide-link.tsx",
+    framework: "Solid",
+    language: "tsx" as const,
+  },
+]
+---
+
+<section class="component-section" id="link-card" aria-labelledby="link-card-title">
+  <div class="section-head">
+    <div>
+      <p class="eyebrow">Primitive / Navigation</p>
+      <h2 id="link-card-title">LinkCard</h2>
+    </div>
+    <span class="status">Native anchor</span>
+  </div>
+
+  <article class="bench glass-panel" aria-label="LinkCard component preview">
+    <div class="workbench">
+      <LinkCardPreview />
+      <ComponentSource
+        component="LinkCard"
+        generatedFamilies={["link-card"]}
+        previewSources={linkCardPreviewSources}
+        usageSources={usageSources}
+      />
+    </div>
+  </article>
+</section>

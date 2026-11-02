@@ -9,6 +9,50 @@ import { TagInputRemove } from "../src/react/tag-input/tag-input-remove.react"
 import { FieldOutput } from "../src/react/field/field-output.react"
 import { FieldStatus } from "../src/react/field/field-status.react"
 import { PopoverLink } from "../src/react/popover/popover-link.react"
+import { LinkCard } from "../src/react/link-card/link-card.react"
+import { LinkCardContent } from "../src/react/link-card/link-card-content.react"
+import { LinkCardTitle } from "../src/react/link-card/link-card-title.react"
+import { LinkCardDescription } from "../src/react/link-card/link-card-description.react"
+
+test("link cards compose optional content inside one native anchor", () => {
+  const markup = renderToStaticMarkup(
+    createElement(
+      LinkCard,
+      {
+        href: "/guides/api/quick-start",
+        target: "_blank",
+        rel: "noreferrer",
+        "aria-labelledby": "guide-title",
+        "aria-describedby": "guide-description",
+        "aria-current": "page",
+        className: "max-w-sm",
+      },
+      createElement(
+        LinkCardContent,
+        {},
+        createElement(LinkCardTitle, { id: "guide-title" }, "Build your first route"),
+        createElement(LinkCardDescription, { id: "guide-description" }, "One working example.")
+      )
+    )
+  )
+  expect(markup).toStartWith("<a ")
+  expect(markup).toContain('href="/guides/api/quick-start"')
+  expect(markup).toContain('target="_blank"')
+  expect(markup).toContain('rel="noreferrer"')
+  expect(markup).toContain('aria-current="page"')
+  expect(markup).toContain('aria-labelledby="guide-title"')
+  expect(markup).toContain('aria-describedby="guide-description"')
+  expect(markup).toContain('id="guide-title"')
+  expect(markup).toContain('id="guide-description"')
+  expect(markup).toContain("Build your first route")
+  expect(markup).toContain("One working example.")
+  expect(markup).toContain("max-w-sm")
+  expect(markup.match(/<a /g)).toHaveLength(1)
+  expect(markup).not.toContain("<button")
+
+  const plain = renderToStaticMarkup(createElement(LinkCard, { href: "/docs" }, "Read the docs"))
+  expect(plain).toContain(">Read the docs</a>")
+})
 
 test("tag labels truncate without catalog attributes and retain consumer classes", () => {
   const markup = renderToStaticMarkup(

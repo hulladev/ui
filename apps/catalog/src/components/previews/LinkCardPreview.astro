@@ -1,0 +1,65 @@
+---
+import { ArrowUpRight } from "@lucide/astro"
+import LinkCard from "@/ui/link-card/link-card.astro"
+import LinkCardContent from "@/ui/link-card/link-card-content.astro"
+import LinkCardTitle from "@/ui/link-card/link-card-title.astro"
+import LinkCardDescription from "@/ui/link-card/link-card-description.astro"
+import manifest from "../../../../../generated/ui.manifest.json"
+import ComponentPreview from "../ComponentPreview.astro"
+
+const linkCard = manifest.library.components["link-card"]
+---
+
+<ComponentPreview component="LinkCard" hint="Native anchor · composable children">
+  <nav slot="variants" class="grid gap-2 sm:grid-cols-2" aria-label="Guide links">
+    <LinkCard href="#card">
+      <LinkCardContent>
+        <LinkCardTitle>Build your first route</LinkCardTitle>
+        <LinkCardDescription>
+          Contract, handler, and client in one working example.
+        </LinkCardDescription>
+      </LinkCardContent>
+      <ArrowUpRight
+        class="mt-0.5 ml-auto size-4 shrink-0 text-muted-foreground"
+        aria-hidden="true"
+      />
+    </LinkCard>
+    <LinkCard href="#link-card" aria-current="page">
+      <LinkCardContent>
+        <LinkCardTitle>Understand the model</LinkCardTitle>
+        <LinkCardDescription>
+          See what belongs in shared, server, and client code.
+        </LinkCardDescription>
+      </LinkCardContent>
+    </LinkCard>
+    <LinkCard href="/layout-feedback" target="_blank" rel="noreferrer">
+      <LinkCardContent>
+        <LinkCardTitle>Open the catalog in a new tab</LinkCardTitle>
+      </LinkCardContent>
+      <ArrowUpRight
+        class="mt-0.5 ml-auto size-4 shrink-0 text-muted-foreground"
+        aria-hidden="true"
+      />
+    </LinkCard>
+    <LinkCard href="#card">A link with plain text children</LinkCard>
+  </nav>
+
+  <dl slot="facts" class="facts">
+    <div class="fact">
+      <dt class="label">Available in</dt>
+      <dd>{linkCard.frameworks.join(" · ")}</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Native element</dt>
+      <dd>a · href, target, rel, aria-current</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Compound parts</dt>
+      <dd>LinkCard · Content · Title · Description</dd>
+    </div>
+    <div class="fact">
+      <dt class="label">Custom props</dt>
+      <dd>None · icons and text are children</dd>
+    </div>
+  </dl>
+</ComponentPreview>

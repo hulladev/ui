@@ -88,6 +88,9 @@
       "kbd": {
         "frameworks": ["astro", "react", "solid"]
       },
+      "link-card": {
+        "frameworks": ["astro", "react", "solid"]
+      },
       "meter": {
         "frameworks": ["astro", "react", "solid"]
       },
@@ -456,6 +459,11 @@
     "astro/lib/toast.ts": "fcebef2342a38c12295932c61efbb2da1eda2afef63f3af98c29873453dbc542",
     "astro/lib/toggle.ts": "d7cdded20cdc3b4fcebf204415ac8145a517a74270845ab31aecb854a61c3377",
     "astro/lib/tree-view.ts": "350ddf7c7b446c4a9a1b33d3defd816c45a1caddcccc5005e5820c18db66bf01",
+    "astro/link-card/link-card-content.astro": "22a58e9770c29288bdbc59942724904a3a636057873fa42576988672e2171cc1",
+    "astro/link-card/link-card-description.astro": "13617abdc31e617561e5fa0204bd8591411c2b5ec60a7db94d6f8631e3e210ca",
+    "astro/link-card/link-card-title.astro": "4cf3c4e71e69eb5429d5ed8d4070bfc8956c51fa85a82f46d06a5f9d112776bf",
+    "astro/link-card/link-card.astro": "1defb70d63b20599d2340b5ebb6e8129da47cf53e4f498a5d45e9d8a533ac90b",
+    "astro/link-card/package.json": "1ed4ee80653593bf2870ac0716be2524639ec1c14340452f851fe3e2c4210831",
     "astro/meter/meter.astro": "6cba2f5dcfe9d9c13e8980eebc84bd1355d896abfa81ec5c5ecd0294cbd7bbad",
     "astro/meter/package.json": "f6488ee1a76ce453708592591c9e6db67abd983f7a874fd6041f5b45acf7d7b2",
     "astro/navigation-menu/navigation-menu-content.astro": "dfc7be9f3c19bf3d161f52ef20eb32ae4376e2f9bad1ac31e5daccd0ba029421",
@@ -751,6 +759,12 @@
     "react/lib/toast.ts": "fcebef2342a38c12295932c61efbb2da1eda2afef63f3af98c29873453dbc542",
     "react/lib/toggle.ts": "d7cdded20cdc3b4fcebf204415ac8145a517a74270845ab31aecb854a61c3377",
     "react/lib/tree-view.ts": "350ddf7c7b446c4a9a1b33d3defd816c45a1caddcccc5005e5820c18db66bf01",
+    "react/link-card/index.tsx": "afdfb73a0819313e8ef01fc330eb500ac33553791c23be197aa954ebeba8b481",
+    "react/link-card/link-card-content.tsx": "097e2d176f32fa17c813d54fe0e479532f12fb7c0d427e581df5ecfaceca2e5a",
+    "react/link-card/link-card-description.tsx": "34dab5e2412f81a1ac935408c8d31acbc56d8ecd2ddbbfe6e7a21bcca51e7241",
+    "react/link-card/link-card-title.tsx": "08cf4341a7d32e68f64b485a79fffaacc4231d542caadc3c3258cb998a3ccd72",
+    "react/link-card/link-card.tsx": "fb66408b75cec4433da1edae5c407bd6f9a39eb63c02ab8e30a384d3b5362570",
+    "react/link-card/package.json": "1ed4ee80653593bf2870ac0716be2524639ec1c14340452f851fe3e2c4210831",
     "react/meter/index.tsx": "87f026a357c2f10ab0f9ab6bc4c3a6b1ebbc41a62c33707787735c1490eaced7",
     "react/meter/meter.tsx": "4495bf3d212bfbdc4e62989af79a63f9344a33282d3f0d1ed8afdfd80bd65c7e",
     "react/meter/package.json": "f6488ee1a76ce453708592591c9e6db67abd983f7a874fd6041f5b45acf7d7b2",
@@ -1067,6 +1081,12 @@
     "solid/lib/toast.ts": "fcebef2342a38c12295932c61efbb2da1eda2afef63f3af98c29873453dbc542",
     "solid/lib/toggle.ts": "d7cdded20cdc3b4fcebf204415ac8145a517a74270845ab31aecb854a61c3377",
     "solid/lib/tree-view.ts": "350ddf7c7b446c4a9a1b33d3defd816c45a1caddcccc5005e5820c18db66bf01",
+    "solid/link-card/index.tsx": "afdfb73a0819313e8ef01fc330eb500ac33553791c23be197aa954ebeba8b481",
+    "solid/link-card/link-card-content.tsx": "fefc298bfaf1544f64672e1f1dfb5ebb845eb6bfde8f58572900dd1c9ca9d359",
+    "solid/link-card/link-card-description.tsx": "6291418aab57d28adc014360463c5347c27fcb22d3ff7b64e69f61e1e1e5b8ac",
+    "solid/link-card/link-card-title.tsx": "8eca0577209f01757cc7bd3ca5f0d2045e92cc277fbf2c1c043a16690c63536a",
+    "solid/link-card/link-card.tsx": "95c5fe61760a609b877dfda34b4117521395f24e2c927f747047dbebc7cfd097",
+    "solid/link-card/package.json": "1ed4ee80653593bf2870ac0716be2524639ec1c14340452f851fe3e2c4210831",
     "solid/meter/index.tsx": "87f026a357c2f10ab0f9ab6bc4c3a6b1ebbc41a62c33707787735c1490eaced7",
     "solid/meter/meter.tsx": "49d29eb84f71db383ab03860399f151b304bd4676229b43915c6266d424a1106",
     "solid/meter/package.json": "f6488ee1a76ce453708592591c9e6db67abd983f7a874fd6041f5b45acf7d7b2",
@@ -1216,6 +1236,6 @@
     "solid/tsconfig.json": "37e941a49cbc375f8dfc37529cbc03fbba8f5c9497683e0654099144e6f4a15d",
     "solid/typography/package.json": "ea5e1a9c4ae60cd565bcad16e7c2ff0e9ef3d6738a0cbc97950986be2c4bc4f4",
     "solid/typography/prose.css": "49e2434afb0f16dc1d844772353b7d9e69f5d14c5f2589aafc7142d93c30a918",
-    "ui.config.ts": "d182e6fa5a78d8ce86b409e6cde488ec5a1e6d6a31c0be4e3dbcde5807f89017"
+    "ui.config.ts": "a97a5f31371b59ae9fdf0752110b8c4aff9d541f97f2016e74238ad901dee021"
   }
 }
