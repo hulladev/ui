@@ -333,13 +333,12 @@
     min-width: 13.5rem;
   }
 
-  h1,
-  .section-head h2,
-  p {
+  .masthead h1,
+  .section-head h2 {
     margin-top: 0;
   }
 
-  h1 {
+  .masthead h1 {
     max-width: 12ch;
     margin-bottom: 1rem;
     font-family: var(--font-sans);

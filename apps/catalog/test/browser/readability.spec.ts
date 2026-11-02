@@ -1,19 +1,32 @@
 import { expect, test } from "@playwright/test"
-import { catalogPages } from "../../src/data/catalogNavigation"
+import { catalogPages, nativeCatalogDestination } from "../../src/data/catalogNavigation"
+import { nativeCatalogEntries } from "../../../native-catalog/src/entries"
 
-for (const { href, group } of catalogPages) {
+const reviewPages = [
+  ...catalogPages.filter((page) => page.group !== "Native only"),
+  ...nativeCatalogEntries.map((entry) => ({
+    href: nativeCatalogDestination(entry.id)!,
+    group: `React Native / ${entry.title}`,
+  })),
+]
+
+for (const { href, group } of reviewPages) {
   for (const theme of ["light", "dark"]) {
     test(`${group} component text stays readable on ${theme} surfaces`, async ({ page }) => {
+      if (group.startsWith("React Native /")) test.setTimeout(60_000)
       await page.emulateMedia({ reducedMotion: "reduce" })
       await page.addInitScript(() =>
         localStorage.setItem("hulla-catalog-canvas-background", "plain")
       )
+      await page.addInitScript((theme) => localStorage.setItem("catalog-theme", theme), theme)
       await page.goto(href, { waitUntil: "domcontentloaded" })
       // Contrast checks sample settled theme colors, not intermediate transitions.
       await page.addStyleTag({ content: "*, *::before, *::after { transition: none !important; }" })
       await page.locator("html").evaluate((element, value) => {
         element.dataset.theme = value
       }, theme)
+      if (group.startsWith("React Native /"))
+        await expect(page.locator(`#native-preview-${theme}`)).toBeVisible({ timeout: 30_000 })
       // Let the theme change paint before sampling transition end colors.
       await page.evaluate(
         () =>
@@ -51,6 +64,14 @@ for (const { href, group } of catalogPages) {
           return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)
         }
         const checks = [
+          { selector: '[data-testid="native-description"]' },
+          { selector: '[data-testid="native-catalog"] [data-testid="action-label"]' },
+          { selector: '[data-testid="native-catalog"] [data-testid="status-label"]' },
+          { selector: '[data-testid="native-catalog"] [role="heading"]' },
+          {
+            selector: '[data-testid="native-catalog"] input[placeholder]',
+            pseudo: "::placeholder",
+          },
           { selector: "#button [role=tabpanel] button:not(:disabled)" },
           { selector: "#badge [data-slot=badge]" },
           { selector: "#toggle [data-slot=toggle][aria-pressed=true]" },
@@ -72,7 +93,9 @@ for (const { href, group } of catalogPages) {
                 // choice. Warning trades some WCAG contrast for consistency with the set.
                 !(
                   document.documentElement.dataset.theme === "light" &&
-                  element.matches('[data-slot="badge"][data-variant="warning"]')
+                  element.matches(
+                    '[data-slot="badge"][data-variant="warning"], [data-testid="status-label"][data-variant="warning"]'
+                  )
                 )
             )
             .map((element) => ({
