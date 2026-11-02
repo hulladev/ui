@@ -16,7 +16,7 @@
       "dependsOn": ["^check-types", "^build"]
     },
     "test": {
-      "dependsOn": ["build", "^build"]
+      "dependsOn": ["^build"]
     },
     "dev": {
       "cache": false,
@@ -58,6 +58,9 @@
         "$TURBO_ROOT$/generated/**",
         "$TURBO_ROOT$/apps/native-catalog/src/**"
       ]
+    },
+    "@hulla/ui#test": {
+      "dependsOn": ["build"]
     }
   }
 }

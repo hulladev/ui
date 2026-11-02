@@ -8,7 +8,10 @@
     "check-types": "astro check",
     "dev": "astro dev",
     "lint": "eslint . --max-warnings 0",
-    "test": "bun test test/unit && playwright test"
+    "test": "bun test test/unit",
+    "test:browser": "playwright test",
+    "test:browser:smoke": "playwright test --project=chromium --grep @smoke",
+    "test:browser:compat": "playwright test --grep @compat"
   },
   "dependencies": {
     "@floating-ui/dom": "catalog:",

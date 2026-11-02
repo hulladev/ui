@@ -36,14 +36,18 @@ test("navigates enabled items and selects with Enter", async ({ page }) => {
   await expect(input).toBeFocused()
 })
 
-test("Escape clears a query before it can dismiss a containing layer", async ({ page }) => {
-  const input = page.locator("#catalog-command-input")
-  await input.fill("theme")
-  await input.press("Escape")
+test(
+  "Escape clears a query before it can dismiss a containing layer",
+  { tag: "@smoke" },
+  async ({ page }) => {
+    const input = page.locator("#catalog-command-input")
+    await input.fill("theme")
+    await input.press("Escape")
 
-  await expect(input).toHaveValue("")
-  await expect(page.getByRole("option", { name: /New file/ })).toBeVisible()
-})
+    await expect(input).toHaveValue("")
+    await expect(page.getByRole("option", { name: /New file/ })).toBeVisible()
+  }
+)
 
 test("composes with Dialog as a page-level command palette", async ({ page }) => {
   const trigger = page.getByRole("button", { name: /Open command menu/ })

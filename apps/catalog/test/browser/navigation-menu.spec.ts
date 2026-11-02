@@ -22,26 +22,30 @@ test("opens rich navigation content on hover and switches without a dropdown rol
   await expect(navigation.getByRole("menu")).toHaveCount(0)
 })
 
-test("uses arrow keys across triggers and restores trigger focus with Escape", async ({ page }) => {
-  const navigation = page.getByRole("navigation", { name: "Primary navigation" })
-  const product = navigation.getByRole("button", { name: "Product" })
-  const solutions = navigation.getByRole("button", { name: "Solutions" })
+test(
+  "uses arrow keys across triggers and restores trigger focus with Escape",
+  { tag: ["@smoke", "@compat"] },
+  async ({ page }) => {
+    const navigation = page.getByRole("navigation", { name: "Primary navigation" })
+    const product = navigation.getByRole("button", { name: "Product" })
+    const solutions = navigation.getByRole("button", { name: "Solutions" })
 
-  await expect(navigation).toHaveAttribute("data-state", "closed")
-  await product.focus()
-  await expect(navigation.getByRole("region", { name: "Product" })).toBeVisible()
+    await expect(navigation).toHaveAttribute("data-state", "closed")
+    await product.focus()
+    await expect(navigation.getByRole("region", { name: "Product" })).toBeVisible()
 
-  await product.press("ArrowRight")
-  await expect(solutions).toBeFocused()
-  await expect(navigation.getByRole("region", { name: "Solutions" })).toBeVisible()
+    await product.press("ArrowRight")
+    await expect(solutions).toBeFocused()
+    await expect(navigation.getByRole("region", { name: "Solutions" })).toBeVisible()
 
-  await solutions.press("ArrowDown")
-  await expect(navigation.getByRole("link", { name: /Product teams/ })).toBeFocused()
-  await page.keyboard.press("Escape")
+    await solutions.press("ArrowDown")
+    await expect(navigation.getByRole("link", { name: /Product teams/ })).toBeFocused()
+    await page.keyboard.press("Escape")
 
-  await expect(solutions).toBeFocused()
-  await expect(solutions).toHaveAttribute("aria-expanded", "false")
-})
+    await expect(solutions).toBeFocused()
+    await expect(solutions).toHaveAttribute("aria-expanded", "false")
+  }
+)
 
 test("keeps the active panel inside the viewport at narrow width", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })

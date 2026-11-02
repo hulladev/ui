@@ -54,37 +54,41 @@ test("preserves the initial highlight on keyboard focus", async ({ page }) => {
   await expect(input).toHaveAttribute("aria-activedescendant", (await design.getAttribute("id"))!)
 })
 
-test("filters options and selects one result with the keyboard", async ({ page }) => {
-  const input = page.locator("#combobox-team-input")
-  const group = input.locator("xpath=..")
-  const root = input.locator("xpath=ancestor::*[@data-slot='combobox']")
-  const contentId = await input.getAttribute("aria-controls")
+test(
+  "filters options and selects one result with the keyboard",
+  { tag: "@smoke" },
+  async ({ page }) => {
+    const input = page.locator("#combobox-team-input")
+    const group = input.locator("xpath=..")
+    const root = input.locator("xpath=ancestor::*[@data-slot='combobox']")
+    const contentId = await input.getAttribute("aria-controls")
 
-  await expect(input).toHaveValue("Engineering")
-  await expect(group).toHaveAttribute("data-slot", "input-group")
-  await expect(group).toHaveCSS("border-top-width", "1px")
-  await expect(input).toHaveCSS("border-top-width", "0px")
-  await expect(group.locator('[data-slot="input-adornment"]')).toBeVisible()
-  expect(contentId).toBeTruthy()
+    await expect(input).toHaveValue("Engineering")
+    await expect(group).toHaveAttribute("data-slot", "input-group")
+    await expect(group).toHaveCSS("border-top-width", "1px")
+    await expect(input).toHaveCSS("border-top-width", "0px")
+    await expect(group.locator('[data-slot="input-adornment"]')).toBeVisible()
+    expect(contentId).toBeTruthy()
 
-  await input.focus()
-  await input.fill("opera")
+    await input.focus()
+    await input.fill("opera")
 
-  const content = page.locator(`#${contentId}`)
-  const operations = content.getByRole("option", { name: "Operations" })
-  const operationsId = await operations.getAttribute("id")
-  await expect(content).toBeVisible()
-  await expect(operations).toBeVisible()
-  await expect(content.getByRole("option", { name: "Engineering" })).toBeHidden()
-  expect(operationsId).toBeTruthy()
-  await expect(input).toHaveAttribute("aria-activedescendant", operationsId!)
+    const content = page.locator(`#${contentId}`)
+    const operations = content.getByRole("option", { name: "Operations" })
+    const operationsId = await operations.getAttribute("id")
+    await expect(content).toBeVisible()
+    await expect(operations).toBeVisible()
+    await expect(content.getByRole("option", { name: "Engineering" })).toBeHidden()
+    expect(operationsId).toBeTruthy()
+    await expect(input).toHaveAttribute("aria-activedescendant", operationsId!)
 
-  await input.press("Enter")
+    await input.press("Enter")
 
-  await expect(input).toHaveValue("Operations")
-  await expect(content).not.toBeVisible()
-  await expect(root.locator('[data-slot="combobox-native-control"]')).toHaveValue("operations")
-})
+    await expect(input).toHaveValue("Operations")
+    await expect(content).not.toBeVisible()
+    await expect(root.locator('[data-slot="combobox-native-control"]')).toHaveValue("operations")
+  }
+)
 
 test("announces an empty filtered result", async ({ page }) => {
   const input = page.locator("#combobox-team-input")

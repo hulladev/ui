@@ -17,25 +17,29 @@ test("links tabs and panels with one selected value", async ({ page }) => {
   await expect(activityPanel).toBeVisible()
 })
 
-test("automatically activates focused tabs and skips disabled tabs", async ({ page }) => {
-  const list = page.getByRole("tablist", { name: "Project details" })
-  const activity = list.getByRole("tab", { name: "Activity 12" })
-  const settings = list.getByRole("tab", { name: "Settings" })
-  const archived = list.getByRole("tab", { name: "Archived" })
+test(
+  "automatically activates focused tabs and skips disabled tabs",
+  { tag: "@smoke" },
+  async ({ page }) => {
+    const list = page.getByRole("tablist", { name: "Project details" })
+    const activity = list.getByRole("tab", { name: "Activity 12" })
+    const settings = list.getByRole("tab", { name: "Settings" })
+    const archived = list.getByRole("tab", { name: "Archived" })
 
-  await activity.focus()
-  await activity.press("End")
+    await activity.focus()
+    await activity.press("End")
 
-  await expect(settings).toBeFocused()
-  await expect(settings).toHaveAttribute("aria-selected", "true")
-  await expect(archived).toBeDisabled()
+    await expect(settings).toBeFocused()
+    await expect(settings).toHaveAttribute("aria-selected", "true")
+    await expect(archived).toBeDisabled()
 
-  await settings.press("ArrowRight")
-  await expect(activity).toBeFocused()
-  await expect(activity).toHaveAttribute("aria-selected", "true")
-})
+    await settings.press("ArrowRight")
+    await expect(activity).toBeFocused()
+    await expect(activity).toHaveAttribute("aria-selected", "true")
+  }
+)
 
-test("manual vertical tabs move focus before activation", async ({ page }) => {
+test("manual vertical tabs move focus before activation", { tag: "@smoke" }, async ({ page }) => {
   const list = page.getByRole("tablist", { name: "Workspace settings" })
   const general = list.getByRole("tab", { name: "General" })
   const members = list.getByRole("tab", { name: "Members" })

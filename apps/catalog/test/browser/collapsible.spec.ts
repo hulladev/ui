@@ -64,13 +64,17 @@ test("animates pointer and keyboard toggles but keeps mounted and restored state
   expect(await transitionCount()).toBe(0)
 })
 
-test("respects reduced motion for native disclosure activation", async ({ page }) => {
-  await page.emulateMedia({ reducedMotion: "reduce" })
-  await page.goto("/navigation-overlays#collapsible")
-  const disclosure = page.locator("#collapsible details").first()
-  await disclosure.locator(":scope > summary").click()
-  await expect(disclosure).toHaveJSProperty("open", false)
-  expect(
-    await disclosure.evaluate((element) => element.getAnimations({ subtree: true }).length)
-  ).toBe(0)
-})
+test(
+  "respects reduced motion for native disclosure activation",
+  { tag: "@compat" },
+  async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" })
+    await page.goto("/navigation-overlays#collapsible")
+    const disclosure = page.locator("#collapsible details").first()
+    await disclosure.locator(":scope > summary").click()
+    await expect(disclosure).toHaveJSProperty("open", false)
+    expect(
+      await disclosure.evaluate((element) => element.getAnimations({ subtree: true }).length)
+    ).toBe(0)
+  }
+)

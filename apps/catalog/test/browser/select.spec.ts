@@ -4,28 +4,32 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/forms#select", { waitUntil: "domcontentloaded" })
 })
 
-test("selects one option and synchronizes the native form control", async ({ page }) => {
-  const trigger = page.locator("#select-team-trigger")
-  const group = trigger.locator("xpath=..")
-  const root = trigger.locator("xpath=ancestor::*[@data-slot='select']")
-  const contentId = await trigger.getAttribute("aria-controls")
+test(
+  "selects one option and synchronizes the native form control",
+  { tag: "@smoke" },
+  async ({ page }) => {
+    const trigger = page.locator("#select-team-trigger")
+    const group = trigger.locator("xpath=..")
+    const root = trigger.locator("xpath=ancestor::*[@data-slot='select']")
+    const contentId = await trigger.getAttribute("aria-controls")
 
-  await expect(trigger).toContainText("Engineering")
-  await expect(group).toHaveAttribute("data-slot", "input-group")
-  await expect(group).toHaveCSS("border-top-width", "1px")
-  await expect(trigger).toHaveCSS("border-top-width", "0px")
-  await expect(group.locator('[data-slot="input-adornment"]')).toBeVisible()
-  expect(contentId).toBeTruthy()
+    await expect(trigger).toContainText("Engineering")
+    await expect(group).toHaveAttribute("data-slot", "input-group")
+    await expect(group).toHaveCSS("border-top-width", "1px")
+    await expect(trigger).toHaveCSS("border-top-width", "0px")
+    await expect(group.locator('[data-slot="input-adornment"]')).toBeVisible()
+    expect(contentId).toBeTruthy()
 
-  await trigger.click()
-  const content = page.locator(`#${contentId}`)
-  await expect(content).toBeVisible()
-  await content.getByRole("option", { name: "Design" }).click()
+    await trigger.click()
+    const content = page.locator(`#${contentId}`)
+    await expect(content).toBeVisible()
+    await content.getByRole("option", { name: "Design" }).click()
 
-  await expect(trigger).toContainText("Design")
-  await expect(content).not.toBeVisible()
-  await expect(root.locator('[data-slot="select-native-control"]')).toHaveValue("design")
-})
+    await expect(trigger).toContainText("Design")
+    await expect(content).not.toBeVisible()
+    await expect(root.locator('[data-slot="select-native-control"]')).toHaveValue("design")
+  }
+)
 
 test("toggles multiple options without closing the listbox", async ({ page }) => {
   const trigger = page.locator("#select-members-trigger")
@@ -51,24 +55,28 @@ test("toggles multiple options without closing the listbox", async ({ page }) =>
   expect(values).toEqual(["alex", "mina", "samuel"])
 })
 
-test("supports keyboard navigation, grouping, and typeahead", async ({ page }) => {
-  const trigger = page.locator("#select-team-trigger")
-  const contentId = await trigger.getAttribute("aria-controls")
+test(
+  "supports keyboard navigation, grouping, and typeahead",
+  { tag: "@smoke" },
+  async ({ page }) => {
+    const trigger = page.locator("#select-team-trigger")
+    const contentId = await trigger.getAttribute("aria-controls")
 
-  expect(contentId).toBeTruthy()
-  await trigger.press("ArrowDown")
+    expect(contentId).toBeTruthy()
+    await trigger.press("ArrowDown")
 
-  const content = page.locator(`#${contentId}`)
-  await expect(content).toBeVisible()
-  await expect(content.getByRole("group").first()).toHaveAttribute("aria-labelledby")
+    const content = page.locator(`#${contentId}`)
+    await expect(content).toBeVisible()
+    await expect(content.getByRole("group").first()).toHaveAttribute("aria-labelledby")
 
-  await page.keyboard.type("op")
-  await expect(content.getByRole("option", { name: "Operations" })).toBeFocused()
-  await page.keyboard.press("Enter")
+    await page.keyboard.type("op")
+    await expect(content.getByRole("option", { name: "Operations" })).toBeFocused()
+    await page.keyboard.press("Enter")
 
-  await expect(trigger).toContainText("Operations")
-  await expect(trigger).toBeFocused()
-})
+    await expect(trigger).toContainText("Operations")
+    await expect(trigger).toBeFocused()
+  }
+)
 
 test("fits the custom and native controls at a narrow viewport", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })

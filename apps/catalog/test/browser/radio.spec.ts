@@ -26,21 +26,25 @@ test("uses native pointer and keyboard selection within a named group", async ({
   await expect(company).toBeChecked()
 })
 
-test("inherits disabled state through the native fieldset", async ({ page }) => {
-  const group = page.locator('[data-slot="radio-group"]').first()
-  const radios = group.locator('[data-slot="radio"]')
+test(
+  "inherits disabled state through the native fieldset",
+  { tag: "@compat" },
+  async ({ page }) => {
+    const group = page.locator('[data-slot="radio-group"]').first()
+    const radios = group.locator('[data-slot="radio"]')
 
-  await group.evaluate((element) => {
-    const fieldset = element as HTMLFieldSetElement
-    fieldset.disabled = true
-  })
+    await group.evaluate((element) => {
+      const fieldset = element as HTMLFieldSetElement
+      fieldset.disabled = true
+    })
 
-  await expect(group).toHaveAttribute("disabled", "")
-  await expect(radios).toHaveCount(3)
-  for (const radio of await radios.all()) {
-    await expect(radio).toBeDisabled()
+    await expect(group).toHaveAttribute("disabled", "")
+    await expect(radios).toHaveCount(3)
+    for (const radio of await radios.all()) {
+      await expect(radio).toBeDisabled()
+    }
   }
-})
+)
 
 test("keeps disabled radios unavailable", async ({ page }) => {
   const disabled = page.locator("#radio-disabled")

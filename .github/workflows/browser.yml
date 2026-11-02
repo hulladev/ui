@@ -1,0 +1,77 @@
+name: Browser checks
+
+on:
+  pull_request:
+    paths:
+      - "apps/catalog/**"
+      - "apps/native-catalog/**"
+      - "packages/**"
+      - "generated/**"
+      - "package.json"
+      - "bun.lock"
+      - "turbo.json"
+      - ".github/workflows/browser.yml"
+      - "!**/*.md"
+      - "!**/*.mdx"
+  push:
+    branches: [master]
+    paths:
+      - "apps/catalog/**"
+      - "apps/native-catalog/**"
+      - "packages/**"
+      - "generated/**"
+      - "package.json"
+      - "bun.lock"
+      - "turbo.json"
+      - ".github/workflows/browser.yml"
+      - "!**/*.md"
+      - "!**/*.mdx"
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Browser validation scope
+        type: choice
+        default: compatibility
+        options:
+          - compatibility
+          - full
+
+concurrency:
+  group: browsers-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ github.event_name == 'workflow_dispatch' && inputs.suite == 'full' && 60 || 15 }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.9
+
+      - run: bun install --frozen-lockfile
+
+      - name: Install Chromium for automatic checks
+        if: github.event_name != 'workflow_dispatch'
+        run: bunx playwright install --with-deps chromium
+
+      - name: Check essential interactions
+        if: github.event_name != 'workflow_dispatch'
+        run: bun run test:browser:smoke
+
+      - name: Install browsers for requested validation
+        if: github.event_name == 'workflow_dispatch'
+        run: bunx playwright install --with-deps chromium firefox webkit
+
+      - name: Check browser-specific behavior
+        if: github.event_name == 'workflow_dispatch' && inputs.suite == 'compatibility'
+        run: bun run test:browser:compat
+
+      - name: Run the full catalog sweep
+        if: github.event_name == 'workflow_dispatch' && inputs.suite == 'full'
+        run: bun run test:browser
