@@ -226,7 +226,11 @@ async function renderPlannedFile(
 function copyFilesForConfig(config: NormalizedConfig): UILibrary["copyFiles"] {
   const result: Record<string, NormalizedCopyFile[] | undefined> = {}
   for (const [framework, files] of Object.entries(config.copyFiles)) {
-    if (files && files.length > 0) result[framework] = files
+    // Registry consumers read from the emitted tree, where a copied file has
+    // already moved to dest. Authoring paths must not leak into install metadata.
+    if (files && files.length > 0) {
+      result[framework] = files.map((file) => ({ ...file, src: file.dest }))
+    }
   }
   return Object.keys(result).length > 0 ? (result as UILibrary["copyFiles"]) : undefined
 }

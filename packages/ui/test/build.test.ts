@@ -170,6 +170,31 @@ describe("deterministic generation", () => {
     expect((await library.build({ mode: "check", quiet: true })).changed).toBe(false)
   })
 
+  test("publishes emitted paths for relocated support files", async () => {
+    const current = await fixture()
+    const library = createLibrary({
+      ...current.config,
+      copyFiles: {
+        shared: [
+          "lib/style.ts",
+          { src: "styles.css", dest: "theme/styles.css", globalStyle: true },
+        ],
+      },
+    })
+    await library.build({ quiet: true })
+    const manifest = JSON.parse(await readFile(join(current.generated, "ui.manifest.json"), "utf8"))
+    const entry = manifest.library.copyFiles.shared.find(
+      (file: { globalStyle?: boolean }) => file.globalStyle
+    )
+    expect(entry.src).toBe("theme/styles.css")
+    expect(entry.dest).toBe("theme/styles.css")
+    for (const framework of ["astro", "react"]) {
+      expect(await readFile(join(current.generated, framework, entry.src), "utf8")).toContain(
+        "--fixture"
+      )
+    }
+  })
+
   test("rebuilds transitive inline dependencies without a stale cache", async () => {
     const current = await fixture()
     const library = createLibrary(current.config)
