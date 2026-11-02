@@ -12,7 +12,7 @@ export const config = {
   },
   components: {
     accordion: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     alert: {
       frameworks: ["astro", "react", "react-native", "solid"],
@@ -27,7 +27,7 @@ export const config = {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
     breadcrumbs: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     button: {
       frameworks: ["astro", "react", "react-native", "solid"],
@@ -51,7 +51,7 @@ export const config = {
       frameworks: ["astro", "react", "solid"],
     },
     collapsible: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     combobox: {
       frameworks: ["astro", "react", "react-native", "solid"],
@@ -111,7 +111,7 @@ export const config = {
       frameworks: ["react-native"],
     },
     pagination: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     popover: {
       frameworks: ["astro", "react", "react-native", "solid"],
@@ -144,7 +144,7 @@ export const config = {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
     stepper: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     "swipe-actions": {
       frameworks: ["react-native"],
@@ -159,7 +159,7 @@ export const config = {
       frameworks: ["astro", "react", "solid"],
     },
     tabs: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     "tag-input": {
       frameworks: ["astro", "react", "react-native", "solid"],
@@ -180,7 +180,7 @@ export const config = {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
     "tree-view": {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     typography: {
       frameworks: ["astro", "react", "react-native", "solid"],

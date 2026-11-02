@@ -62,6 +62,25 @@ export const nativeCatalogEntries = [
   },
   { id: "code", title: "Code", description: "Selectable code and exported data." },
   { id: "separator", title: "Separator", description: "Horizontal and vertical dividers." },
+  {
+    id: "accordion",
+    title: "Accordion",
+    description: "Explicit single- and multiple-section disclosure.",
+  },
+  { id: "collapsible", title: "Collapsible", description: "Discoverable content disclosure." },
+  { id: "tabs", title: "Tabs", description: "Related panels and explicit selected state." },
+  { id: "stepper", title: "Stepper", description: "Current, completed, and upcoming steps." },
+  {
+    id: "breadcrumbs",
+    title: "Breadcrumbs",
+    description: "Hierarchical navigation with touch targets.",
+  },
+  {
+    id: "pagination",
+    title: "Pagination",
+    description: "Explicit navigation through result pages.",
+  },
+  { id: "tree-view", title: "TreeView", description: "Hierarchical disclosure and selection." },
   { id: "dialog", title: "Dialog", description: "Modal tasks, focus containment, and dismissal." },
   {
     id: "drawer",
