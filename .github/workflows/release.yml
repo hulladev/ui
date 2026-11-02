@@ -29,6 +29,8 @@ jobs:
 
       - uses: changesets/action@v1
         with:
+          commit: ":package: release: version packages"
+          title: ":package: release: version packages"
           version: bun run version-packages
           publish: bun run release
         env:
