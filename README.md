@@ -6,7 +6,7 @@ contributors; application developers install components through `hulla` (CLI), n
 workspace.
 
 The generator turns framework-specific source templates into complete, validated registries. The
-official component registry currently ships Astro, React, and Solid components; Svelte and Vue adapters
+official component registry currently ships Astro, React, Solid, and React Native components; Svelte and Vue adapters
 remain planned. Every build is staged, compared by content, and swapped into place atomically, so
 failed generation never leaves a partially updated registry.
 
@@ -75,3 +75,84 @@ bun run verify
 - [Beta compatibility and release process](./docs/beta-release.md)
 
 For application installation flows, see the [`hulla` CLI](https://github.com/hulladev/cli).
+
+## React Native
+
+The `react-native` registry target ships 48 component families, covering forms, content, navigation,
+modal surfaces, feedback, date/time selection, and native swipe/keyboard compositions. Each family
+renders React Native elements and preserves native props, events, refs, and `style`. All families
+have independent Expo examples and browser previews. See [native architecture](./docs/native-architecture.md)
+for coverage, explicit composition contracts, and desktop patterns that intentionally differ on mobile.
+
+Select **react-native** in the framework picker (the CLI may also detect React from Expo). Then run
+`hulla ui add --framework react-native button input` or choose another available family. Keep the
+React and React Native versions aligned with the Expo SDK already installed in the app.
+
+Start the component catalog with `bun run dev:native`, then open it in Expo Go on iOS or Android.
+`bun run dev:native:ios` and `bun run dev:native:android` open a simulator/emulator when installed.
+The browser catalog keeps shared components in their usual sections. Select **React Native** in the
+component's framework picker to load its native preview and source, for example
+`/layout-feedback?framework=react-native#card`. The **Native only** section at `/react-native` contains
+EmptyState, KeyboardAware, List, NumberField, and SwipeActions, derived from registry availability.
+Existing shared-family routes such as `/react-native/button` lead to their corresponding component
+section. Native previews load on demand and follow the catalog theme control.
+The Expo catalog retains its full 48-family index and mounts one detail example at a time; its back
+action returns to the index. Browser previews do not substitute for device accessibility and interaction checks.
+Run `bun run generate` after editing canonical sources; the Expo catalog consumes `generated`.
+
+### Shared design foundations
+
+See [platform design](./docs/platform-design.md) for current size differences, density policy,
+touch interaction patterns, and components that may exist on only one platform.
+
+`packages/components/src/theme.json` is the source of truth for semantic colors and radii.
+`bun run generate` produces the web `theme.css` and native sRGB tokens before generating registries.
+`bun run generate:check` detects drift in both theme outputs and generated component sources.
+Web colors retain their OKLCH values; native values are gamut-mapped to sRGB, including alpha-aware
+color mixing. Browser behavior utilities, fonts, Tailwind, and CSS files are scoped to web targets.
+
+Configure appearance and fonts once with `NativeThemeProvider`. Components inherit the nearest
+provider; ordinary usage does not pass `theme`. With no provider, built-in themes follow device
+appearance. `mode` supports `system`, `light`, and `dark`; nested providers can scope a theme or
+font override. An optional component `theme` prop overrides only that component.
+
+The native registry installs its provider, context, tokens, and hook under `lib/native-theme*` and `lib/native-tokens.ts`.
+For components under `src/components/ui` and support files under `src/lib`:
+
+```tsx
+import { NativeThemeProvider } from "@/lib/native-theme"
+import { Button, ButtonText } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+
+export function Example() {
+  return (
+    <NativeThemeProvider mode="system">
+      <Input accessibilityLabel="Weight" inputMode="decimal" />
+      <Button
+        onPress={() => {
+          /* save */
+        }}
+      >
+        <ButtonText>Save</ButtonText>
+      </Button>
+    </NativeThemeProvider>
+  )
+}
+```
+
+`Button` paints a compact 32-unit surface inside a minimum 48-unit press region. Its `style` prop controls the press region and layout; `contentStyle` controls the painted surface. Both support pressed-state callbacks.
+
+`Button` accepts native children, including Pressable's render callback. Compose its label with
+`ButtonText`; pass matching `variant` and `disabled` props to both parts. This keeps icons,
+text, state, and accessibility under the application's control. Raw strings must be inside a text
+component, as with any React Native view. Inputs preserve `multiline`, `inputMode`, `editable`,
+`onChangeText`, and native accessibility attributes. Associate labels explicitly using native props
+rather than expecting a wrapper to infer relationships.
+
+For typography matching the web theme, load Schibsted Grotesk and IBM Plex Mono with your app's
+font loader and pass `fonts` (`regular`, `medium`, `semibold`, `mono`) to the root provider.
+The Expo catalog demonstrates `expo-font` with `@expo-google-fonts` assets. Without font configuration,
+components use platform fonts and keep system text scaling enabled. The registry itself requires
+React Native and React, with no Expo dependency or CSS styling runtime.
+
+For current coverage gaps and styling-backend tradeoffs, see [native architecture](./docs/native-architecture.md).

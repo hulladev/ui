@@ -4,7 +4,7 @@ These instructions apply to work under `packages/components`.
 
 ## Product model
 
-Hulla's public components are UI primitives: small, directly usable building blocks that stay close
+`@hulla/ui` public components are UI primitives: small, directly usable building blocks that stay close
 to native platform semantics and are intended to be composed into application-specific patterns.
 Their default styling is a starting point, not a behavioral abstraction or a prescribed application
 architecture.
@@ -29,9 +29,10 @@ reusable behavior, and that architecture must be discussed explicitly before imp
 - Prefer transparent composition and native attributes over hidden coordination. Do not walk
   children, generate relationships, inherit native state, or propagate `disabled`, `required`,
   `invalid`, IDs, or ARIA attributes through context for convenience.
-- Add framework context only when state must cross a component subtree for essential interaction
-  behavior and native composition cannot express it. Discuss and document that requirement before
-  implementing it.
+- Add framework context when app configuration or essential interaction state must cross a subtree
+  and native composition cannot express it. Native theme mode and font inheritance belong at a
+  provider boundary; ordinary components must not require theme props. Keep local overrides optional.
+  Discuss and document other context requirements before implementing them.
 - Give components stable state and part hooks where useful. Prefer semantic `data-*` attributes and
   framework-appropriate class/style hooks over theme-specific markup.
 - Complex components should reuse established primitives and internal behavior utilities. Reuse a
@@ -134,6 +135,25 @@ Material-style component set, or a copy of another design system.
 
 Raycast and other contemporary products may inform qualities such as restraint, depth, density, and
 layering. They are references, not templates to reproduce.
+
+## Platform design contract
+
+- Follow `docs/platform-design.md` at the repository root when adding or adapting platform targets.
+- Share design language and semantic intent across web and native. Choose and document each
+  platform's sizing and interaction deliberately; equal component names do not require equal pixels,
+  props, presentation, or availability.
+- Distinguish visible control bounds, layout space, and the interactive hit region. A compact
+  appearance must retain a usable target without overlapping neighboring controls or relying on
+  expansion beyond the parent bounds. Do not shrink controls solely to match a web screenshot.
+- Design touch discovery explicitly. Hover-only help needs a visible, accessible touch trigger or
+  inline explanation. Long press can supplement discovery; essential help must not depend on it.
+- Treat swipe and drag as interaction choices with explicit and accessible alternatives. Specify
+  cancellation, dismissal, and conflicts with scrolling before implementing gesture behavior.
+- Native-only and web-only components are valid. Do not create artificial counterparts or hide a
+  substantially different interaction behind a shared API merely to claim framework parity.
+- Catalogs must distinguish implemented platform behavior from proposed patterns and show actual
+  platform availability. React Native Web previews demonstrate native target definitions, not the
+  browser component's density or full device behavior.
 
 ## Workflow
 
