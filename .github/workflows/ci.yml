@@ -15,7 +15,14 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    name: verify (${{ matrix.browser }})
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    env:
+      PLAYWRIGHT_PROJECT: ${{ matrix.browser }}
     steps:
       - uses: actions/checkout@v4
 

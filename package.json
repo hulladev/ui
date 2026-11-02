@@ -14,7 +14,7 @@
     "fmt": "prettier --write . --ignore-unknown",
     "fmt:check": "prettier --check . --ignore-unknown",
     "check-types": "turbo run check-types",
-    "test": "turbo run test",
+    "test": "turbo run test --log-order=stream",
     "test:consumers:prepare": "bun scripts/consumer-sandbox.ts",
     "test:consumers": "bun run test:consumers:prepare && bunx playwright test --config playwright.consumer.config.ts",
     "verify": "bun run fmt:check && bun run lint && bun run check-types && bun run test && bun run build && bun run generate:check && bun run check-generated",
