@@ -188,5 +188,6 @@ Before handing off a component:
 5. Confirm the rendered source is derived directly from the rendering file, and keep any simplified
    copy-ready example under the minimal source view.
 6. Audit existing examples and showcases for facsimiles superseded by the component.
-7. Run formatting, lint, type checks, generation checks, and the repository verification suite
-   appropriate to the change.
+7. Choose checks for the affected behavior using the root validation guidance. Run relevant
+   formatting, lint, type, and generation checks; use focused interaction or compatibility tests
+   where warranted. A component edit does not automatically require every catalog build and browser.
