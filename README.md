@@ -31,16 +31,29 @@ bun run verify
 
 ## Common commands
 
-| Command                    | Purpose                                                            |
-| -------------------------- | ------------------------------------------------------------------ |
-| `bun run dev`              | Watch, regenerate, and hot-reload the linked catalog               |
-| `bun run dev:generator`    | Watch and regenerate without the catalog                           |
-| `bun run dev:catalog`      | Run the catalog together with its generator watcher                |
-| `bun run dev:catalog-only` | Run only Astro against the current generated output                |
-| `bun run generate`         | Rebuild the committed registry atomically                          |
-| `bun run generate:check`   | Report generated drift without writing files                       |
-| `bun run check-generated`  | Type-check generated output in isolated framework projects         |
-| `bun run verify`           | Format, lint, type-check, test, build, and verify generated output |
+| Command                       | Purpose                                                                 |
+| ----------------------------- | ----------------------------------------------------------------------- |
+| `bun run dev`                 | Watch, regenerate, and hot-reload the linked catalog                    |
+| `bun run dev:generator`       | Watch and regenerate without the catalog                                |
+| `bun run dev:catalog`         | Run the catalog together with its generator watcher                     |
+| `bun run dev:catalog-only`    | Run only Astro against the current generated output                     |
+| `bun run generate`            | Rebuild the committed registry atomically                               |
+| `bun run generate:check`      | Report generated drift without writing files                            |
+| `bun run check-generated`     | Type-check generated output in isolated framework projects              |
+| `bun run test`                | Run unit and package tests without browsers or catalog builds           |
+| `bun run verify`              | Check the generator and shipping registry once, without browsers        |
+| `bun run test:browser:smoke`  | Run essential interactions in Chromium                                  |
+| `bun run test:browser:compat` | Run focused engine-specific behavior across all three browsers          |
+| `bun run verify:full`         | Also check source types, build catalogs, and run the full browser suite |
+
+Automatic CI runs the library checks once. Changes to components, generated output, or catalog
+code also run ten existing interaction tests in Chromium. Documentation-only changes do not
+install browsers. Full catalog sweeps and cross-browser compatibility checks can be requested
+through the **Browser checks** workflow or the commands above; they are not repeated for every PR.
+
+Use compatibility checks for native forms/reset, focus, reduced motion, and engine-specific CSS
+changes. Use the full suite for broader theme, framework, or catalog changes and release-candidate
+validation. Browser commands require the corresponding Playwright browsers to be installed.
 
 ## Repository map
 

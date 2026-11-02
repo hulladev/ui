@@ -50,14 +50,25 @@ strict source-template contract.
 
 ## Verification
 
-Run the full local and CI gate before requesting review:
+Run the library gate before requesting review:
 
 ```bash
 bun run verify
 ```
 
-This checks formatting, lint, source types, unit and integration tests, package builds, generated
-drift, and isolated framework compilation. To diagnose one layer, run its root script directly.
+This checks formatting, lint, generator types, unit and package tests, the generator build,
+generated drift, and isolated compilation of the generated frameworks. It does not build either
+catalog or start browsers. To diagnose one layer, run its root script directly.
+
+Component and catalog changes also run `bun run test:browser:smoke` in Chromium in CI. These ten
+existing scenarios protect core keyboard, selection, form, dismissal, and timer behavior. A prose-only
+change does not run browsers. Use a relevant test file locally for a focused component change.
+
+Run `bun run test:browser:compat` for native form/reset, focus, motion, or engine-specific CSS
+changes. Run `bun run verify:full` for broad theme/framework changes or release-candidate validation;
+it adds source checks, catalog builds, and the complete three-browser catalog suite. The
+**Browser checks** workflow offers manual compatibility and full runs. Consumer installation
+validation remains an explicit `bun run test:consumers` check for CLI/packaging changes.
 
 When a pull request intentionally changes `@hulla/ui`, add a changeset:
 

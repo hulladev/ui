@@ -64,8 +64,9 @@ other emitted file.
 ## Check mode
 
 `uigen --check` renders the same staging tree but never replaces output. It fails with a categorized
-list of missing, changed, and unexpected files. CI uses this after the normal build and test suites
-to enforce that source and committed generated output are synchronized.
+list of missing, changed, and unexpected files. The library CI gate uses this alongside package
+tests and isolated generated-framework compilation to enforce that source and committed output
+are synchronized, without building the catalogs or running a browser matrix.
 
 ## Isolation boundaries
 
