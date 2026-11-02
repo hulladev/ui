@@ -1,6 +1,6 @@
 {
   "name": "@hulla/ui",
-  "version": "0.0.2-beta.0",
+  "version": "0.0.2-beta.1",
   "description": "Deterministic multi-framework source component library generator",
   "keywords": [
     "component-registry",
