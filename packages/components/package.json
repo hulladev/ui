@@ -9,8 +9,8 @@
     "check-types": "bun scripts/check-types.ts",
     "check-generated": "bun scripts/check-generated.ts",
     "test": "bun test",
-    "generate": "bun scripts/generate-theme.ts && uigen src/ui.ts",
-    "generate:check": "bun scripts/generate-theme.ts --check && uigen --check src/ui.ts"
+    "generate": "bun scripts/generate-theme.ts && node ../ui/dist/bin/uigen.js src/ui.ts",
+    "generate:check": "bun scripts/generate-theme.ts --check && node ../ui/dist/bin/uigen.js --check src/ui.ts"
   },
   "dependencies": {
     "@floating-ui/dom": "catalog:",
