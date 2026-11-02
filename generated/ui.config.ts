@@ -36,7 +36,7 @@ export const config = {
       frameworks: ["astro", "react", "solid"],
     },
     card: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     checkbox: {
       frameworks: ["astro", "react", "react-native", "solid"],
@@ -78,7 +78,7 @@ export const config = {
       frameworks: ["astro", "react", "react-native", "solid"],
     },
     "file-upload": {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     "hover-card": {
       frameworks: ["astro", "react", "solid"],
@@ -89,6 +89,9 @@ export const config = {
     kbd: {
       frameworks: ["astro", "react", "solid"],
     },
+    "keyboard-aware": {
+      frameworks: ["react-native"],
+    },
     "link-card": {
       frameworks: ["astro", "react", "solid"],
     },
@@ -97,6 +100,9 @@ export const config = {
     },
     "navigation-menu": {
       frameworks: ["astro", "react", "solid"],
+    },
+    "number-field": {
+      frameworks: ["react-native"],
     },
     pagination: {
       frameworks: ["astro", "react", "solid"],
@@ -147,10 +153,10 @@ export const config = {
       frameworks: ["astro", "react", "solid"],
     },
     "tag-input": {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     textarea: {
-      frameworks: ["astro", "react", "solid"],
+      frameworks: ["astro", "react", "react-native", "solid"],
     },
     "time-picker": {
       frameworks: ["astro", "react", "solid"],

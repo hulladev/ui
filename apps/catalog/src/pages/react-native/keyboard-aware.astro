@@ -1,0 +1,14 @@
+---
+import NativeComponentPage from "../../components/catalog/NativeComponentPage.astro"
+import NativeKeyboardAwarePreview from "../../components/previews/native/NativeKeyboardAwarePreview"
+import exampleSource from "../../../../native-catalog/src/examples/KeyboardAwareExample.tsx?raw"
+import previewSource from "../../components/previews/native/NativeKeyboardAwarePreview.tsx?raw"
+---
+
+<NativeComponentPage
+  family="keyboard-aware"
+  exampleSource={exampleSource}
+  previewSource={previewSource}
+>
+  <NativeKeyboardAwarePreview client:only="react" />
+</NativeComponentPage>

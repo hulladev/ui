@@ -15,6 +15,12 @@ const previewSources = import.meta.glob("../components/previews/native/*.tsx", {
   query: "?raw",
 }) as Record<string, string>
 
+const platformSources = import.meta.glob("../../../native-catalog/src/platform/pickDocument*.ts", {
+  eager: true,
+  import: "default",
+  query: "?raw",
+}) as Record<string, string>
+
 const runtimeSources = import.meta.glob("../lib/native-preview-runtime.tsx", {
   eager: true,
   import: "default",
@@ -46,6 +52,16 @@ export function nativeRenderedSourcesFor(family: string): CatalogSourceFile[] {
       filename: "apps/catalog/src/components/previews/native/NativePreviewFrame.tsx",
     },
   ]
+  if (entry.id === "file-upload") {
+    for (const suffix of [".native", ""]) {
+      files.push({
+        modules: platformSources,
+        path: `../../../native-catalog/src/platform/pickDocument${suffix}.ts`,
+        filename: `apps/native-catalog/src/platform/pickDocument${suffix}.ts`,
+        label: suffix ? "Native document picker" : "Browser document picker",
+      })
+    }
+  }
   files.push({
     modules: runtimeSources,
     path: "../lib/native-preview-runtime.tsx",

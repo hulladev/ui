@@ -36,7 +36,7 @@
         "frameworks": ["astro", "react", "solid"]
       },
       "card": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "checkbox": {
         "frameworks": ["astro", "react", "react-native", "solid"]
@@ -78,7 +78,7 @@
         "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "file-upload": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "hover-card": {
         "frameworks": ["astro", "react", "solid"]
@@ -89,6 +89,9 @@
       "kbd": {
         "frameworks": ["astro", "react", "solid"]
       },
+      "keyboard-aware": {
+        "frameworks": ["react-native"]
+      },
       "link-card": {
         "frameworks": ["astro", "react", "solid"]
       },
@@ -97,6 +100,9 @@
       },
       "navigation-menu": {
         "frameworks": ["astro", "react", "solid"]
+      },
+      "number-field": {
+        "frameworks": ["react-native"]
       },
       "pagination": {
         "frameworks": ["astro", "react", "solid"]
@@ -147,10 +153,10 @@
         "frameworks": ["astro", "react", "solid"]
       },
       "tag-input": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "textarea": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "time-picker": {
         "frameworks": ["astro", "react", "solid"]
@@ -1252,6 +1258,14 @@
     "react-native/button/colors.ts": "2fcfca4a83a0ce7ecbe85d05ae8f809315033b63f8e82298f9d5f45c9f62de4a",
     "react-native/button/index.tsx": "fa2d8c880ac2f21784b0c8e5826f087189b272a7a8c4edf8220450cf316ab147",
     "react-native/button/package.json": "b7f614c54781aa37fd86ed439ca0fe6c06ade1a4cd806c30cce2377dd6890fd1",
+    "react-native/card/card-content.tsx": "79a7a0732bdda5b9a0ee8b9936428658aca801fffa193ddb8b8ac4560ec80bf9",
+    "react-native/card/card-description.tsx": "a8fc0d4941fb40c547d09f3a9e20109fc5dfe29f15c99cb551deffb0befe3e6e",
+    "react-native/card/card-footer.tsx": "c8572455ba9af6fbad5424a6247f9e25c08ca7121ef47c5ef309439213d5bce4",
+    "react-native/card/card-header.tsx": "acf85e22c9aa4c1d931cc1c57afb5aa4e2f72712e7641184f10d925adfb0d900",
+    "react-native/card/card-title.tsx": "b484877fe0808abd3354f146323feada1bcb0a0ee4cad1c510b36cffd21cfced",
+    "react-native/card/card.tsx": "2df1cd3f5c4d3324938913e779a0a150f43049db92b0d84815434cd9a5f66d54",
+    "react-native/card/index.tsx": "7c04dd4a58dcc2b2a7e909a0c4de420102444768fb307a0657f1be7861481c24",
+    "react-native/card/package.json": "f9526d4b301489efe543562cef67945237a871a63e23fad8cb7e4755d8fe4316",
     "react-native/checkbox/checkbox.tsx": "77314051f98867ba1110cf8fdd9c4fa5d71be5e58fedc571b1817d3f53f69e4c",
     "react-native/checkbox/index.tsx": "adce3165cc2e5c3e8c820c74317c821e9cb73cb2924c4e697b294fc3e5a60a3e",
     "react-native/checkbox/package.json": "260889b88338375bc5aa77f690662350381cdad863348c75e2dd2d861354d12c",
@@ -1275,9 +1289,22 @@
     "react-native/field/field.tsx": "62516bc18b001ee30a0876c91f3ef490e700561499f093156b0dd1be53cd9ed3",
     "react-native/field/index.tsx": "74dbcd6e6d28f5ee35fd0924c8fc44f5db4b4082af38b15d96af27bc39ca9c09",
     "react-native/field/package.json": "cb577548a90e99c25732561b123f14e2235eb4061f44d48d680ebbf3fa7b243d",
+    "react-native/file-upload/file-upload-description.tsx": "e29562aa8f15af1adf1cf25f032b5634566b40dcc420ee1d25516f06893cadb2",
+    "react-native/file-upload/file-upload-item.tsx": "c4997f7326e79e4c827048ce0c39a2f7546910483ed74c9fad3d531bd81372c8",
+    "react-native/file-upload/file-upload-name.tsx": "4f1e72c1efe4bd7cceaee31d4d6bb57613b00f43637718a8f61e8168be304cd4",
+    "react-native/file-upload/file-upload-remove-label.tsx": "012fcead7ec0c5d77806bd93f57814abd65801de72455bf6679f9467c0141c09",
+    "react-native/file-upload/file-upload-remove.tsx": "79c2bafcda5f6efe9b26befe84b7b2142bb14cd84c165e5ead1e03c8af5fa279",
+    "react-native/file-upload/file-upload-trigger-label.tsx": "63e62658e0233e067047a2a744a3012dd44f6d95314dbfcf406dac195a199aed",
+    "react-native/file-upload/file-upload-trigger.tsx": "520ca29b19558f7c35a955927a53bf20e992c1f581daa96d091f87616be38be6",
+    "react-native/file-upload/file-upload.tsx": "f9ccb9c3a11860dddb9a85a3d8797ba36287527948f1d033b90d7ef9af8ccd0b",
+    "react-native/file-upload/index.tsx": "357ac7cf4d820516d9a5059ff0105324171e41a14fad9d2f8d8bd1335a5c1859",
+    "react-native/file-upload/package.json": "4013b1aedbac2dc208f8d43bcc094f82e1e20932d3a80166c894c4d4f52bb2e1",
     "react-native/input/index.tsx": "3116182228536c5b9f9a84ad00741dbbf40ba9fc3c037d1742ba387b0c34e539",
     "react-native/input/input.tsx": "c7544a4ac8a1f89e2c6bff648be185579d199bd8523c9619ab65297a8512b01d",
     "react-native/input/package.json": "7f37d483a0819672d662024832cfabc1d5b728e585b5062dfb6721d3efb9e8a0",
+    "react-native/keyboard-aware/index.tsx": "7af0e12a10f6d181baca766305609872df309aab31f33ac7fcc3bb1de68d59fb",
+    "react-native/keyboard-aware/keyboard-aware.tsx": "c235ae9b71b89e2a52b3ee355f604772cfdbdb26d7f2e95f0720bedde314f554",
+    "react-native/keyboard-aware/package.json": "6f5f84a18b624c1b001a5c26263f9873411f3bca51f434edaa5bfc30b9762394",
     "react-native/lib/native-color.ts": "31faec62ea3ed6ca7f90e59d3291bf85ee89994465e350632db84f6608697a0a",
     "react-native/lib/native-date.ts": "239e540098b0adbab1db201fa9b59a224ed8ae43e91ce5de7988dbcd663c07c1",
     "react-native/lib/native-theme-context.ts": "18a58817ebef94a6ae0106efccd0908b6bfe58bba7725ec3afbc93a6c04e60df",
@@ -1285,6 +1312,9 @@
     "react-native/lib/native-theme.ts": "ad765ce61a9ae11eb0e8aa1a0b4c8ff61c929d27acf9de04c6c5fdd0227883b9",
     "react-native/lib/native-tokens.ts": "c1e85726caaa1395d752f2f6a2fc2f84a6da6be1c2525ba4995a5e6be04d4ced",
     "react-native/lib/text-input-style.ts": "7e3ca2303e19248aa82cfacdc7a45b3c3513054d79c4151004b21884dad46b3a",
+    "react-native/number-field/index.tsx": "f7e230c0484b81c3f04f8dd3ac2f98623ce7a0622369e2c1f104a5af8d976048",
+    "react-native/number-field/number-field.tsx": "175d20b66ffa026cf187ba4d6b9b789157fc4709ee36f2095ca6c153675eb5de",
+    "react-native/number-field/package.json": "abc874c61e9ef2c5de37a1994646a1251a13c5d41f7d03cd6ad8bf4ac206776f",
     "react-native/package.json": "f4bfb56b09a7818453f4c51e08e5ad358e0c7c18895cd6d0cbd7cda0327888e1",
     "react-native/spinner/index.tsx": "1bd62a0b1b00efd77d01dee0345e93517981d44f2ff936d275256475e95d663e",
     "react-native/spinner/package.json": "d56122abe951b0f6ea1ede9ee850dcbb2338567e4ef4e9a6a76719b0f754eeed",
@@ -1292,6 +1322,12 @@
     "react-native/switch/index.tsx": "7b45f4e5c0eb12fb1683d10e1f4a5d992a94aa47878824a3f54d68d6c8dddea6",
     "react-native/switch/package.json": "2cb8ae051a62e18b3c778bf7be44adaa22646cb934ed2e59e6ce815d751019be",
     "react-native/switch/switch.tsx": "fb0c76390a927a0acb42d3171f2a0fac1c4fec1b162c89a5e5c6c37bfadf0cd5",
+    "react-native/tag-input/index.tsx": "8081334cdec5a1e033e626c31f6083bf6f73fc0deffd49e12e31c4a5f1fead1a",
+    "react-native/tag-input/package.json": "cc90c0f0ed924e2c935eb4819977e4f005ea22871b49c07f8bdb79b79b8d6992",
+    "react-native/tag-input/tag-input.tsx": "bbb609da2e53008ab54764aafb7c64ee228b198a8d75544bca1dc9dce00d60c7",
+    "react-native/textarea/index.tsx": "4d24cf05eb2ac939ac81aa6fa6a222e514355dd4df29b99da7c262750132e1b8",
+    "react-native/textarea/package.json": "91cf0857926001ceb0eda54e4da2127f0c47edff47b7091141df307a7521faed",
+    "react-native/textarea/textarea.tsx": "a3619cdcfb0736a0981a74ed1a482678b9d328927d3293740b5838390f38c56b",
     "react-native/tsconfig.json": "5e68e223116c0d9ac6e57d871883ae911edde68ec444b22e437471f909d1701a",
     "react-native/typography/index.tsx": "42c4d78d2578d56b60f18f10c534dd5ecd96443a17204a39f28527ac96270cac",
     "react-native/typography/package.json": "fe6d828c7c9d1d95d6f7fe67d801d85c6e87526a37630ffcfde7929b198efc06",
@@ -1619,6 +1655,6 @@
     "solid/tsconfig.json": "37e941a49cbc375f8dfc37529cbc03fbba8f5c9497683e0654099144e6f4a15d",
     "solid/typography/package.json": "ea5e1a9c4ae60cd565bcad16e7c2ff0e9ef3d6738a0cbc97950986be2c4bc4f4",
     "solid/typography/prose.css": "49e2434afb0f16dc1d844772353b7d9e69f5d14c5f2589aafc7142d93c30a918",
-    "ui.config.ts": "83f36f91411d6b70e040b30380315854eb0403e1aed413a81eecd82cdcabd85e"
+    "ui.config.ts": "4d4d56c3e4336937dd4ce0385b2b4619277ae17fe4166c3601c050f7654d5c5b"
   }
 }

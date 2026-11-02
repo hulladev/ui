@@ -11,12 +11,18 @@ const examples = {
   typography: lazy(() => import("./examples/TypographyExample")),
   button: lazy(() => import("./examples/ButtonExample")),
   input: lazy(() => import("./examples/InputExample")),
+  textarea: lazy(() => import("./examples/TextareaExample")),
   field: lazy(() => import("./examples/FieldExample")),
   checkbox: lazy(() => import("./examples/CheckboxExample")),
   switch: lazy(() => import("./examples/SwitchExample")),
+  "number-field": lazy(() => import("./examples/NumberFieldExample")),
+  "tag-input": lazy(() => import("./examples/TagInputExample")),
+  "file-upload": lazy(() => import("./examples/FileUploadExample")),
+  card: lazy(() => import("./examples/CardExample")),
   dialog: lazy(() => import("./examples/DialogExample")),
   drawer: lazy(() => import("./examples/DrawerExample")),
   spinner: lazy(() => import("./examples/SpinnerExample")),
+  "keyboard-aware": lazy(() => import("./examples/KeyboardAwareExample")),
 }
 
 export function Catalog({
@@ -53,7 +59,7 @@ export function Catalog({
         alignSelf: "center",
       }}
       keyboardShouldPersistTaps="handled"
-      automaticallyAdjustKeyboardInsets
+      automaticallyAdjustKeyboardInsets={selected !== "keyboard-aware"}
       keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
     >
       <Text variant="caption" tone="muted">
