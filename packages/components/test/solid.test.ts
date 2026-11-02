@@ -28,7 +28,12 @@ describe("Solid generated parity", () => {
     }
 
     for (const component of Object.values(manifest.library.components)) {
-      expect(component.frameworks).toEqual(["astro", "react", "solid"])
+      if (!component.frameworks.some((framework) => framework !== "react-native")) continue
+      expect(component.frameworks.filter((framework) => framework !== "react-native")).toEqual([
+        "astro",
+        "react",
+        "solid",
+      ])
     }
   })
 

@@ -1,0 +1,13 @@
+{
+  "name": "@hulla/ui-react-native",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "react": "^19.3.0",
+    "react-native": "^0.88.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "typescript": "*"
+  }
+}

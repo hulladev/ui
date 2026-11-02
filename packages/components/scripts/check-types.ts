@@ -15,6 +15,10 @@ const commands: Command[] = [
     args: ["bunx", "tsc", "--noEmit", "-p", "src/react/tsconfig.json"],
   },
   {
+    label: "React Native TypeScript",
+    args: ["bunx", "tsc", "--noEmit", "-p", "src/react-native/tsconfig.json"],
+  },
+  {
     label: "Solid TypeScript",
     args: ["bunx", "tsc", "--noEmit", "-p", "src/solid/tsconfig.json"],
   },

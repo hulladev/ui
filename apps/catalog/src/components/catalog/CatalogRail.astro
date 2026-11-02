@@ -1,5 +1,5 @@
 ---
-import { Blocks, Boxes, FileText, Gauge, Moon } from "@lucide/astro"
+import { Blocks, Boxes, FileText, Gauge, Moon, Smartphone } from "@lucide/astro"
 import Collapsible from "@/ui/collapsible/collapsible.astro"
 import CollapsibleContent from "@/ui/collapsible/collapsible-content.astro"
 import Sidebar from "@/ui/sidebar/sidebar.astro"
@@ -20,6 +20,7 @@ import {
   catalogSectionGroups,
   catalogSections,
   type CatalogSectionGroup,
+  type CatalogNavigationItem,
 } from "../../data/catalogNavigation"
 
 type Props = {
@@ -35,6 +36,7 @@ const catalogGroupIcons = {
   Forms: FileText,
   "Navigation & overlays": Blocks,
   "Layout & feedback": Gauge,
+  "Native only": Smartphone,
 } satisfies Record<CatalogSectionGroup, typeof Boxes>
 ---
 
@@ -50,7 +52,7 @@ const catalogGroupIcons = {
             h.
           </span>
           <span class="grid min-w-0">
-            <strong class="truncate text-sm leading-5">Hulla UI</strong>
+            <strong class="truncate text-sm leading-5">@hulla/ui</strong>
             <span class="truncate font-mono text-[0.625rem] text-muted-foreground uppercase">
               Component foundry
             </span>
@@ -60,69 +62,77 @@ const catalogGroupIcons = {
     </SidebarMenu>
   </SidebarHeader>
 
-  <SidebarContent aria-label="Component catalog" data-catalog-nav>
-    {
-      catalogSectionGroups.map((group) => {
-        const groupSections = catalogSections.filter((item) => item.group === group)
-        const GroupIcon = catalogGroupIcons[group]
+  <details class="catalog-navigation-disclosure" data-catalog-navigation open>
+    <summary>Browse components</summary>
+    <SidebarContent aria-label="Component catalog" data-catalog-nav>
+      {
+        catalogSectionGroups.map((group) => {
+          const groupSections: readonly CatalogNavigationItem[] = catalogSections.filter(
+            (item) => item.group === group
+          )
+          const GroupIcon = catalogGroupIcons[group]
 
-        return (
-          <SidebarGroup aria-label={`${group} components`}>
-            <Collapsible open>
-              <SidebarGroupTrigger>
-                <GroupIcon size={13} aria-hidden="true" />
-                {group}
-              </SidebarGroupTrigger>
-              <CollapsibleContent>
-                <SidebarMenu>
-                  {groupSections.map(({ href, label }) => {
-                    const index = catalogSections.findIndex((item) => item.href === href)
+          return (
+            <SidebarGroup aria-label={`${group} components`}>
+              <Collapsible open>
+                <SidebarGroupTrigger>
+                  <GroupIcon size={13} aria-hidden="true" />
+                  {group}
+                </SidebarGroupTrigger>
+                <CollapsibleContent>
+                  <SidebarMenu>
+                    {groupSections.map(({ href, label, pageHref }) => {
+                      const index = catalogSections.findIndex((item) => item.href === href)
 
-                    return (
-                      <SidebarMenuItem>
-                        <SidebarMenuLink
-                          href={getCatalogSectionHref({ group, href }, currentGroup)}
-                          aria-current={
-                            group === currentGroup && href === groupSections[0]?.href
-                              ? "page"
-                              : undefined
-                          }
-                        >
-                          <GroupIcon aria-hidden="true" />
-                          <span>{label}</span>
-                        </SidebarMenuLink>
-                        <SidebarMenuBadge>{String(index + 1).padStart(2, "0")}</SidebarMenuBadge>
-                      </SidebarMenuItem>
-                    )
-                  })}
-                </SidebarMenu>
-              </CollapsibleContent>
-            </Collapsible>
-          </SidebarGroup>
-        )
-      })
-    }
+                      return (
+                        <SidebarMenuItem>
+                          <SidebarMenuLink
+                            href={getCatalogSectionHref({ group, href, pageHref }, currentGroup)}
+                            aria-current={
+                              group === currentGroup &&
+                              (pageHref
+                                ? pageHref === Astro.url.pathname.replace(/\/$/, "")
+                                : href === groupSections[0]?.href)
+                                ? "page"
+                                : undefined
+                            }
+                          >
+                            <GroupIcon aria-hidden="true" />
+                            <span>{label}</span>
+                          </SidebarMenuLink>
+                          <SidebarMenuBadge>{String(index + 1).padStart(2, "0")}</SidebarMenuBadge>
+                        </SidebarMenuItem>
+                      )
+                    })}
+                  </SidebarMenu>
+                </CollapsibleContent>
+              </Collapsible>
+            </SidebarGroup>
+          )
+        })
+      }
 
-    <SidebarGroup>
-      <SidebarGroupLabel class="gap-2">
-        <FileText size={13} aria-hidden="true" />
-        Resources
-      </SidebarGroupLabel>
-      <SidebarMenu>
-        {
-          catalogResources.map(({ href, label }) => (
-            <SidebarMenuItem>
-              <SidebarMenuLink href={href}>
-                <FileText aria-hidden="true" />
-                <span>{label}</span>
-              </SidebarMenuLink>
-              <SidebarMenuBadge aria-hidden="true">↗</SidebarMenuBadge>
-            </SidebarMenuItem>
-          ))
-        }
-      </SidebarMenu>
-    </SidebarGroup>
-  </SidebarContent>
+      <SidebarGroup>
+        <SidebarGroupLabel class="gap-2">
+          <FileText size={13} aria-hidden="true" />
+          Resources
+        </SidebarGroupLabel>
+        <SidebarMenu>
+          {
+            catalogResources.map(({ href, label }) => (
+              <SidebarMenuItem>
+                <SidebarMenuLink href={href}>
+                  <FileText aria-hidden="true" />
+                  <span>{label}</span>
+                </SidebarMenuLink>
+                <SidebarMenuBadge aria-hidden="true">↗</SidebarMenuBadge>
+              </SidebarMenuItem>
+            ))
+          }
+        </SidebarMenu>
+      </SidebarGroup>
+    </SidebarContent>
+  </details>
 
   <SidebarFooter>
     <SidebarMenu>
@@ -146,3 +156,13 @@ const catalogGroupIcons = {
     </p>
   </SidebarFooter>
 </Sidebar>
+
+<script>
+  const navigation = document.querySelector<HTMLDetailsElement>("[data-catalog-navigation]")
+  const compactNavigation = window.matchMedia("(max-width: 760px)")
+  const syncNavigation = () => {
+    if (navigation) navigation.open = !compactNavigation.matches
+  }
+  syncNavigation()
+  compactNavigation.addEventListener("change", syncNavigation)
+</script>

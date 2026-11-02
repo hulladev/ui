@@ -35,7 +35,7 @@ async function run(command: Command): Promise<void> {
 
 try {
   await symlink(join(packageRoot, "node_modules"), join(temporaryRoot, "node_modules"), "dir")
-  for (const framework of ["astro", "react", "solid"]) {
+  for (const framework of ["astro", "react", "solid", "react-native"]) {
     await cp(join(repositoryRoot, "generated", framework), join(temporaryRoot, framework), {
       recursive: true,
     })
@@ -48,6 +48,11 @@ try {
   await mkdir(join(temporaryRoot, "astro", "pages"), { recursive: true })
 
   const commands: Command[] = [
+    {
+      label: "React Native",
+      framework: "react-native",
+      args: ["bunx", "tsc", "--noEmit", "-p", join(temporaryRoot, "react-native/tsconfig.json")],
+    },
     {
       label: "React",
       framework: "react",

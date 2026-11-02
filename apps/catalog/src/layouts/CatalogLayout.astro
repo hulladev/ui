@@ -11,8 +11,13 @@ import {
 import manifest from "../../../../generated/ui.manifest.json"
 import "../styles/catalog.css"
 
-type Props = { group: CatalogSectionGroup }
-const { group } = Astro.props
+type Props = {
+  group: CatalogSectionGroup
+  title?: string
+  description?: string
+  pagination?: boolean
+}
+const { group, title = group, description, pagination = true } = Astro.props
 const frameworkCount = Object.keys(manifest.library.frameworks).length
 const pageIndex = catalogPages.findIndex((page) => page.group === group)
 const currentPage = catalogPages[pageIndex]!
@@ -30,7 +35,7 @@ const legacyDestinations = Object.fromEntries(
     <meta name="viewport" content="width=device-width" />
     <meta
       name="description"
-      content="Development catalog for inspecting Hulla UI components and generated framework output."
+      content="Development catalog for inspecting @hulla/ui components and generated framework output."
     />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <script is:inline define:vars={{ legacyDestinations }}>
@@ -48,7 +53,7 @@ const legacyDestinations = Object.fromEntries(
         /* Storage may be unavailable. */
       }
     </script>
-    <title>{group} — Hulla UI</title>
+    <title>{title} — @hulla/ui</title>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to component canvas</a>
@@ -61,33 +66,33 @@ const legacyDestinations = Object.fromEntries(
 
       <main class="content" id="main">
         <CatalogHeader
-          group={group}
-          description={currentPage.description}
+          group={title}
+          description={description ?? currentPage.description}
           pageNumber={pageIndex + 1}
         />
         <slot />
-        <nav class="catalog-pagination" aria-label="Catalog pages">
-          {
-            previousPage && (
-              <a href={previousPage.href} rel="prev">
-                <>
-                  <span>← Previous page</span>
-                  <strong>{previousPage.group}</strong>
-                </>
-              </a>
-            )
-          }
-          {
-            nextPage && (
-              <a href={nextPage.href} rel="next">
-                <>
-                  <span>Next page →</span>
-                  <strong>{nextPage.group}</strong>
-                </>
-              </a>
-            )
-          }
-        </nav>
+        {
+          pagination && (
+            <nav class="catalog-pagination" aria-label="Catalog pages">
+              {previousPage && (
+                <a href={previousPage.href} rel="prev">
+                  <>
+                    <span>← Previous page</span>
+                    <strong>{previousPage.group}</strong>
+                  </>
+                </a>
+              )}
+              {nextPage && (
+                <a href={nextPage.href} rel="next">
+                  <>
+                    <span>Next page →</span>
+                    <strong>{nextPage.group}</strong>
+                  </>
+                </a>
+              )}
+            </nav>
+          )
+        }
       </main>
     </div>
     <CatalogCommand group={group} />

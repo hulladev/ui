@@ -1,0 +1,37 @@
+---
+import CatalogLayout from "../layouts/CatalogLayout.astro"
+import LinkCard from "@/ui/link-card/link-card.astro"
+import LinkCardContent from "@/ui/link-card/link-card-content.astro"
+import LinkCardTitle from "@/ui/link-card/link-card-title.astro"
+import LinkCardDescription from "@/ui/link-card/link-card-description.astro"
+import { nativeOnlyCatalogEntries } from "../data/nativeCatalog"
+---
+
+<CatalogLayout group="Native only" title="Native-only components">
+  <p>
+    {nativeOnlyCatalogEntries.length} components have no web counterpart. Shared components live in their
+    usual catalog sections; select React Native in the framework picker to inspect their mobile appearance
+    and source. <a href="/?framework=react-native#button">Browse shared components</a>.
+  </p>
+  <p>
+    These compositions support mobile forms, lists, empty results, and swipe actions. Open the Expo
+    catalog for device interaction and use the catalog theme control to compare light and dark
+    appearance.
+  </p>
+  <div class="native-component-links">
+    {
+      nativeOnlyCatalogEntries.map((entry) => (
+        <section id={`native-${entry.id}`}>
+          <LinkCard href={`/react-native/${entry.id}`}>
+            <LinkCardContent>
+              <>
+                <LinkCardTitle>{entry.title}</LinkCardTitle>
+                <LinkCardDescription>{entry.description}</LinkCardDescription>
+              </>
+            </LinkCardContent>
+          </LinkCard>
+        </section>
+      ))
+    }
+  </div>
+</CatalogLayout>

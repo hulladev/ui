@@ -106,6 +106,10 @@ export const initializeSourceInspector = (inspector: HTMLElement) => {
     })
     modeTabs.forEach((tab) => {
       const selected = tab.dataset.sourceMode === record.mode
+      tab.disabled = !records.some(
+        (candidate) =>
+          candidate.framework === record.framework && candidate.mode === tab.dataset.sourceMode
+      )
       tab.setAttribute("aria-selected", String(selected))
       tab.tabIndex = selected ? 0 : -1
     })
@@ -131,6 +135,13 @@ export const initializeSourceInspector = (inspector: HTMLElement) => {
       diagnostics.textContent = statusFor(record)
       diagnostics.dataset.state = "ready"
     }
+    inspector.dataset.sourceFramework = record.framework
+    inspector.dispatchEvent(
+      new CustomEvent("sourceframeworkchange", {
+        bubbles: true,
+        detail: { framework: record.framework },
+      })
+    )
   }
 
   tabs.forEach((tab) => {
@@ -160,17 +171,14 @@ export const initializeSourceInspector = (inspector: HTMLElement) => {
     )
   })
 
-  modeTabs.forEach((tab, index) => {
+  modeTabs.forEach((tab) => {
     tab.addEventListener(
       "click",
       () => {
         const activeFramework = records[activeIndex]?.framework
-        let recordIndex = records.findIndex(
+        const recordIndex = records.findIndex(
           ({ framework, mode }) => framework === activeFramework && mode === tab.dataset.sourceMode
         )
-        if (recordIndex < 0) {
-          recordIndex = records.findIndex(({ mode }) => mode === tab.dataset.sourceMode)
-        }
         selectSource(recordIndex)
       },
       { signal: lifecycle.signal }
@@ -178,17 +186,19 @@ export const initializeSourceInspector = (inspector: HTMLElement) => {
     tab.addEventListener(
       "keydown",
       (event) => {
+        const availableTabs = modeTabs.filter((candidate) => !candidate.disabled)
+        const index = availableTabs.indexOf(tab)
         let nextIndex = index
-        if (event.key === "ArrowRight") nextIndex = (index + 1) % modeTabs.length
+        if (event.key === "ArrowRight") nextIndex = (index + 1) % availableTabs.length
         if (event.key === "ArrowLeft") {
-          nextIndex = (index - 1 + modeTabs.length) % modeTabs.length
+          nextIndex = (index - 1 + availableTabs.length) % availableTabs.length
         }
         if (event.key === "Home") nextIndex = 0
-        if (event.key === "End") nextIndex = modeTabs.length - 1
+        if (event.key === "End") nextIndex = availableTabs.length - 1
         if (nextIndex === index) return
         event.preventDefault()
-        modeTabs[nextIndex]?.click()
-        modeTabs[nextIndex]?.focus()
+        availableTabs[nextIndex]?.click()
+        availableTabs[nextIndex]?.focus()
       },
       { signal: lifecycle.signal }
     )

@@ -1,6 +1,7 @@
 ---
 import Resizable from "@/ui/resizable/resizable.astro"
 import ResizeHandle from "@/ui/resizable/resize-handle.astro"
+import { nativeCatalogEntryFor } from "../data/nativeCatalog"
 
 type Props = {
   component: string
@@ -19,6 +20,7 @@ const {
 } = Astro.props
 const previewId = `${component.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}-preview`
 const hasProps = Astro.slots.has("props")
+const nativeEntry = nativeCatalogEntryFor(component)
 
 if (requirePropsView && !hasProps) {
   throw new Error(`ComponentPreview for "${component}" requires an interactive slot="props" view.`)
@@ -30,13 +32,20 @@ if (requirePropsView && !hasProps) {
   data-catalog-preview-resizable
   data-component-preview
   data-preview-component={previewId}
+  data-native-family={nativeEntry?.id}
+  data-preview-framework="Astro"
 >
   <header class="bench-bar label">
     <div class="preview-heading">
-      <span>Live canvas</span>
+      <span data-preview-canvas-label>Web canvas · Astro</span>
       {
         hasProps && (
-          <div class="preview-tabs" role="tablist" aria-label={`${component} preview mode`}>
+          <div
+            class="preview-tabs"
+            data-preview-mode-controls
+            role="tablist"
+            aria-label={`${component} preview mode`}
+          >
             <button
               id={`${previewId}-variants-tab`}
               type="button"
@@ -72,38 +81,41 @@ if (requirePropsView && !hasProps) {
           <option value="plain" selected>Plain</option>
         </select>
       </label>
-      <span class="bench-hint">{hint}</span>
+      <span class="bench-hint" data-web-preview-hint>{hint}</span>
     </div>
   </header>
 
   <div class="canvas" data-preview-canvas data-background="plain">
-    <div
-      class="preview-panel"
-      id={`${previewId}-variants`}
-      role={hasProps ? "tabpanel" : undefined}
-      aria-labelledby={hasProps ? `${previewId}-variants-tab` : undefined}
-      data-preview-panel="variants"
-    >
-      <slot name="variants" />
-    </div>
+    <div data-web-preview style="display: contents">
+      <div
+        class="preview-panel"
+        id={`${previewId}-variants`}
+        role={hasProps ? "tabpanel" : undefined}
+        aria-labelledby={hasProps ? `${previewId}-variants-tab` : undefined}
+        data-preview-panel="variants"
+      >
+        <slot name="variants" />
+      </div>
 
-    {
-      hasProps && (
-        <div
-          class="preview-panel"
-          id={`${previewId}-props`}
-          role="tabpanel"
-          aria-labelledby={`${previewId}-props-tab`}
-          data-preview-panel="props"
-          hidden
-        >
-          <slot name="props" />
-        </div>
-      )
-    }
+      {
+        hasProps && (
+          <div
+            class="preview-panel"
+            id={`${previewId}-props`}
+            role="tabpanel"
+            aria-labelledby={`${previewId}-props-tab`}
+            data-preview-panel="props"
+            hidden
+          >
+            <slot name="props" />
+          </div>
+        )
+      }
+    </div>
+    {nativeEntry && <div data-native-preview-host data-native-family={nativeEntry.id} hidden />}
   </div>
 
-  <slot name="facts" />
+  <div data-web-preview-facts style="display: contents"><slot name="facts" /></div>
 
   <ResizeHandle
     edge="east"
@@ -114,6 +126,11 @@ if (requirePropsView && !hasProps) {
 </Resizable>
 
 <script>
+  import { initializeCatalogPlatformPreviews } from "../lib/catalog-platform-preview"
+
+  initializeCatalogPlatformPreviews()
+  document.addEventListener("astro:page-load", initializeCatalogPlatformPreviews)
+
   type CanvasBackground = "grid" | "plain"
 
   const setCanvasBackground = (value: CanvasBackground) => {

@@ -7,7 +7,8 @@
     "frameworks": {
       "astro": "./astro",
       "react": "./react",
-      "solid": "./solid"
+      "solid": "./solid",
+      "react-native": "./react-native"
     },
     "components": {
       "accordion": {
@@ -29,7 +30,7 @@
         "frameworks": ["astro", "react", "solid"]
       },
       "button": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "calendar": {
         "frameworks": ["astro", "react", "solid"]
@@ -38,7 +39,7 @@
         "frameworks": ["astro", "react", "solid"]
       },
       "checkbox": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "code": {
         "frameworks": ["astro", "react", "solid"]
@@ -62,19 +63,19 @@
         "frameworks": ["astro", "react", "solid"]
       },
       "dialog": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "draggable": {
         "frameworks": ["astro", "react", "solid"]
       },
       "drawer": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "dropdown-menu": {
         "frameworks": ["astro", "react", "solid"]
       },
       "field": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "file-upload": {
         "frameworks": ["astro", "react", "solid"]
@@ -83,7 +84,7 @@
         "frameworks": ["astro", "react", "solid"]
       },
       "input": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "kbd": {
         "frameworks": ["astro", "react", "solid"]
@@ -128,13 +129,13 @@
         "frameworks": ["astro", "react", "solid"]
       },
       "spinner": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "stepper": {
         "frameworks": ["astro", "react", "solid"]
       },
       "switch": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       },
       "table": {
         "frameworks": ["astro", "react", "solid"]
@@ -167,12 +168,12 @@
         "frameworks": ["astro", "react", "solid"]
       },
       "typography": {
-        "frameworks": ["astro", "react", "solid"]
+        "frameworks": ["astro", "react", "react-native", "solid"]
       }
     },
     "author": "Samuel Hulla",
     "copyFiles": {
-      "shared": [
+      "astro": [
         {
           "src": "lib/collapsible.ts",
           "dest": "lib/collapsible.ts",
@@ -303,11 +304,341 @@
           "src": "styles.css",
           "dest": "styles.css",
           "required": true,
-          "description": "Shared Hulla design tokens and Tailwind theme",
+          "description": "Shared @hulla/ui design tokens and Tailwind theme",
           "globalStyle": true
+        },
+        {
+          "src": "theme.css",
+          "dest": "theme.css",
+          "required": true,
+          "description": "Shared semantic theme generated from theme.json"
+        }
+      ],
+      "react": [
+        {
+          "src": "lib/collapsible.ts",
+          "dest": "lib/collapsible.ts",
+          "required": true,
+          "description": "Framework-neutral user-activated native disclosure transitions"
+        },
+        {
+          "src": "lib/table-of-contents.ts",
+          "dest": "lib/table-of-contents.ts",
+          "required": true,
+          "description": "Framework-neutral section discovery and scroll tracking"
+        },
+        {
+          "src": "lib/tag-input.ts",
+          "dest": "lib/tag-input.ts",
+          "required": true,
+          "description": "Framework-neutral tag entry keyboard and commit behavior"
+        },
+        {
+          "src": "lib/style.ts",
+          "dest": "lib/style.ts",
+          "required": true,
+          "description": "Shared class and variant composition helpers"
+        },
+        {
+          "src": "lib/layer-stack.ts",
+          "dest": "lib/layer-stack.ts",
+          "required": true,
+          "description": "Internal deterministic dialog stack"
+        },
+        {
+          "src": "lib/dialog.ts",
+          "dest": "lib/dialog.ts",
+          "required": true,
+          "description": "Framework-neutral modal dialog behavior"
+        },
+        {
+          "src": "lib/dropdown-menu.ts",
+          "dest": "lib/dropdown-menu.ts",
+          "required": true,
+          "description": "Framework-neutral dropdown menu behavior"
+        },
+        {
+          "src": "lib/navigation-menu.ts",
+          "dest": "lib/navigation-menu.ts",
+          "required": true,
+          "description": "Framework-neutral navigation menu disclosure behavior"
+        },
+        {
+          "src": "lib/combobox.ts",
+          "dest": "lib/combobox.ts",
+          "required": true,
+          "description": "Framework-neutral editable combobox and listbox behavior"
+        },
+        {
+          "src": "lib/command.ts",
+          "dest": "lib/command.ts",
+          "required": true,
+          "description": "Framework-neutral command menu filtering and keyboard behavior"
+        },
+        {
+          "src": "lib/select.ts",
+          "dest": "lib/select.ts",
+          "required": true,
+          "description": "Framework-neutral select and listbox behavior"
+        },
+        {
+          "src": "lib/floating-layer.ts",
+          "dest": "lib/floating-layer.ts",
+          "required": true,
+          "description": "Shared hover, focus, and Floating UI positioning behavior"
+        },
+        {
+          "src": "lib/spatial-interaction.ts",
+          "dest": "lib/spatial-interaction.ts",
+          "required": true,
+          "description": "Framework-neutral draggable and resizable element behavior"
+        },
+        {
+          "src": "lib/range-slider.ts",
+          "dest": "lib/range-slider.ts",
+          "required": true,
+          "description": "Framework-neutral two-thumb range slider behavior"
+        },
+        {
+          "src": "lib/tabs.ts",
+          "dest": "lib/tabs.ts",
+          "required": true,
+          "description": "Framework-neutral tabs selection and keyboard behavior"
+        },
+        {
+          "src": "lib/toggle.ts",
+          "dest": "lib/toggle.ts",
+          "required": true,
+          "description": "Framework-neutral toggle and toggle group state behavior"
+        },
+        {
+          "src": "lib/tree-view.ts",
+          "dest": "lib/tree-view.ts",
+          "required": true,
+          "description": "Framework-neutral tree view focus, selection, and disclosure behavior"
+        },
+        {
+          "src": "lib/calendar.ts",
+          "dest": "lib/calendar.ts",
+          "required": true,
+          "description": "Framework-neutral ISO calendar rendering and selection behavior"
+        },
+        {
+          "src": "lib/date-picker.ts",
+          "dest": "lib/date-picker.ts",
+          "required": true,
+          "description": "Framework-neutral date and local date-time picker behavior"
+        },
+        {
+          "src": "lib/time-picker.ts",
+          "dest": "lib/time-picker.ts",
+          "required": true,
+          "description": "Framework-neutral local time picker behavior"
+        },
+        {
+          "src": "lib/toast.ts",
+          "dest": "lib/toast.ts",
+          "required": true,
+          "description": "Framework-neutral toast store, utility API, and presentation contract"
+        },
+        {
+          "src": "styles.css",
+          "dest": "styles.css",
+          "required": true,
+          "description": "Shared @hulla/ui design tokens and Tailwind theme",
+          "globalStyle": true
+        },
+        {
+          "src": "theme.css",
+          "dest": "theme.css",
+          "required": true,
+          "description": "Shared semantic theme generated from theme.json"
+        }
+      ],
+      "react-native": [
+        {
+          "src": "lib/native-color.ts",
+          "dest": "lib/native-color.ts",
+          "required": true,
+          "description": "Native opacity and OKLab color mixing shared with web visual recipes"
+        },
+        {
+          "src": "lib/native-date.ts",
+          "dest": "lib/native-date.ts",
+          "required": true,
+          "description": "Local ISO date parsing, serialization, and selection limits"
+        },
+        {
+          "src": "lib/text-input-style.ts",
+          "dest": "lib/text-input-style.ts",
+          "required": true,
+          "description": "Shared native text-entry sizing, colors, and focus/invalid styling"
+        },
+        {
+          "src": "lib/native-theme-context.ts",
+          "dest": "lib/native-theme-context.ts",
+          "required": true,
+          "description": "Scoped theme context and system appearance subscription"
+        },
+        {
+          "src": "lib/native-theme-provider.tsx",
+          "dest": "lib/native-theme-provider.tsx",
+          "required": true,
+          "description": "App-wide theme mode, fonts, and subtree overrides"
+        },
+        {
+          "src": "lib/native-tokens.ts",
+          "dest": "lib/native-tokens.ts",
+          "required": true,
+          "description": "Shared theme converted to native sRGB colors"
+        },
+        {
+          "src": "lib/native-theme.ts",
+          "dest": "lib/native-theme.ts",
+          "required": true,
+          "description": "System color scheme and explicit theme selection"
         }
       ],
       "solid": [
+        {
+          "src": "lib/collapsible.ts",
+          "dest": "lib/collapsible.ts",
+          "required": true,
+          "description": "Framework-neutral user-activated native disclosure transitions"
+        },
+        {
+          "src": "lib/table-of-contents.ts",
+          "dest": "lib/table-of-contents.ts",
+          "required": true,
+          "description": "Framework-neutral section discovery and scroll tracking"
+        },
+        {
+          "src": "lib/tag-input.ts",
+          "dest": "lib/tag-input.ts",
+          "required": true,
+          "description": "Framework-neutral tag entry keyboard and commit behavior"
+        },
+        {
+          "src": "lib/style.ts",
+          "dest": "lib/style.ts",
+          "required": true,
+          "description": "Shared class and variant composition helpers"
+        },
+        {
+          "src": "lib/layer-stack.ts",
+          "dest": "lib/layer-stack.ts",
+          "required": true,
+          "description": "Internal deterministic dialog stack"
+        },
+        {
+          "src": "lib/dialog.ts",
+          "dest": "lib/dialog.ts",
+          "required": true,
+          "description": "Framework-neutral modal dialog behavior"
+        },
+        {
+          "src": "lib/dropdown-menu.ts",
+          "dest": "lib/dropdown-menu.ts",
+          "required": true,
+          "description": "Framework-neutral dropdown menu behavior"
+        },
+        {
+          "src": "lib/navigation-menu.ts",
+          "dest": "lib/navigation-menu.ts",
+          "required": true,
+          "description": "Framework-neutral navigation menu disclosure behavior"
+        },
+        {
+          "src": "lib/combobox.ts",
+          "dest": "lib/combobox.ts",
+          "required": true,
+          "description": "Framework-neutral editable combobox and listbox behavior"
+        },
+        {
+          "src": "lib/command.ts",
+          "dest": "lib/command.ts",
+          "required": true,
+          "description": "Framework-neutral command menu filtering and keyboard behavior"
+        },
+        {
+          "src": "lib/select.ts",
+          "dest": "lib/select.ts",
+          "required": true,
+          "description": "Framework-neutral select and listbox behavior"
+        },
+        {
+          "src": "lib/floating-layer.ts",
+          "dest": "lib/floating-layer.ts",
+          "required": true,
+          "description": "Shared hover, focus, and Floating UI positioning behavior"
+        },
+        {
+          "src": "lib/spatial-interaction.ts",
+          "dest": "lib/spatial-interaction.ts",
+          "required": true,
+          "description": "Framework-neutral draggable and resizable element behavior"
+        },
+        {
+          "src": "lib/range-slider.ts",
+          "dest": "lib/range-slider.ts",
+          "required": true,
+          "description": "Framework-neutral two-thumb range slider behavior"
+        },
+        {
+          "src": "lib/tabs.ts",
+          "dest": "lib/tabs.ts",
+          "required": true,
+          "description": "Framework-neutral tabs selection and keyboard behavior"
+        },
+        {
+          "src": "lib/toggle.ts",
+          "dest": "lib/toggle.ts",
+          "required": true,
+          "description": "Framework-neutral toggle and toggle group state behavior"
+        },
+        {
+          "src": "lib/tree-view.ts",
+          "dest": "lib/tree-view.ts",
+          "required": true,
+          "description": "Framework-neutral tree view focus, selection, and disclosure behavior"
+        },
+        {
+          "src": "lib/calendar.ts",
+          "dest": "lib/calendar.ts",
+          "required": true,
+          "description": "Framework-neutral ISO calendar rendering and selection behavior"
+        },
+        {
+          "src": "lib/date-picker.ts",
+          "dest": "lib/date-picker.ts",
+          "required": true,
+          "description": "Framework-neutral date and local date-time picker behavior"
+        },
+        {
+          "src": "lib/time-picker.ts",
+          "dest": "lib/time-picker.ts",
+          "required": true,
+          "description": "Framework-neutral local time picker behavior"
+        },
+        {
+          "src": "lib/toast.ts",
+          "dest": "lib/toast.ts",
+          "required": true,
+          "description": "Framework-neutral toast store, utility API, and presentation contract"
+        },
+        {
+          "src": "styles.css",
+          "dest": "styles.css",
+          "required": true,
+          "description": "Shared @hulla/ui design tokens and Tailwind theme",
+          "globalStyle": true
+        },
+        {
+          "src": "theme.css",
+          "dest": "theme.css",
+          "required": true,
+          "description": "Shared semantic theme generated from theme.json"
+        },
         {
           "src": "lib/solid.ts",
           "dest": "lib/solid.ts",
@@ -541,7 +872,7 @@
     "astro/stepper/stepper-link.astro": "00421d6af0cfafe6274f757eccf3346ff834e61c6d01c02a410a5d4d3c49a087",
     "astro/stepper/stepper-panel.astro": "db9abdc7ee2956570113e7c84954bce37f3ee77d3231ec33c3311ac173e4fe90",
     "astro/stepper/stepper.astro": "47583971347994378a1721b2ffe7ea707300dc5778e9525eff1175fc376d426c",
-    "astro/styles.css": "6dece87d4996b5fc1b227c3075c907d2b1b11bce232e84a59f21298a2bc0e946",
+    "astro/styles.css": "b1306457f32042933e1fc509e4284a00771cbb9b8ae424fedaaf72e1437ebb5c",
     "astro/switch/package.json": "2cb8ae051a62e18b3c778bf7be44adaa22646cb934ed2e59e6ce815d751019be",
     "astro/switch/switch.astro": "feaaf84be023de9062b4a8284ae5585c987a413479dd90d2f54cce46b55eb485",
     "astro/table/package.json": "7da5eb91be9f95e3aaf0fcef8b7df0639981883269574432b89ff89e2486f964",
@@ -570,6 +901,7 @@
     "astro/tag-input/tag-input.astro": "f89ca85638e7a48773e8975cda503bada90e156f1ec49d134c44b38392618499",
     "astro/textarea/package.json": "91cf0857926001ceb0eda54e4da2127f0c47edff47b7091141df307a7521faed",
     "astro/textarea/textarea.astro": "320c24dbebaaf1e56f49389f683c3d1e781222a1eab3757fb328d1ed631d6a5b",
+    "astro/theme.css": "ade181931525bba5e4006c64d59daaf90037be51dafb37bcfb95cf28ff1e254a",
     "astro/time-picker/package.json": "35f78b2201210ee02b2e33599a41ef4521746f2d80b200ea529bb90873a89510",
     "astro/time-picker/time-picker.astro": "7a4fe2df9958ad9953f96ec9f117773c92e68bf5838e970417a09e87dfd935b5",
     "astro/toast/package.json": "bd5b37caf7149a0ffb527ca5fdd9c8ff74f36d27075fe52f4e82bf172ff8c800",
@@ -856,7 +1188,7 @@
     "react/stepper/stepper-link.tsx": "8d36732de37ca11d1f152bc51be990ad3b4bbb3f412371cb7ceb49d26d06e36a",
     "react/stepper/stepper-panel.tsx": "97e008a72d1ed93c08659923a358415b6537aa04ea8ed7a7653312d8a5d492b2",
     "react/stepper/stepper.tsx": "1ee3dfd4a3a89ee0dc21e30373e258e53800607f7a0b15a451a6de6e0d3d0d08",
-    "react/styles.css": "6dece87d4996b5fc1b227c3075c907d2b1b11bce232e84a59f21298a2bc0e946",
+    "react/styles.css": "b1306457f32042933e1fc509e4284a00771cbb9b8ae424fedaaf72e1437ebb5c",
     "react/switch/index.tsx": "7b45f4e5c0eb12fb1683d10e1f4a5d992a94aa47878824a3f54d68d6c8dddea6",
     "react/switch/package.json": "2cb8ae051a62e18b3c778bf7be44adaa22646cb934ed2e59e6ce815d751019be",
     "react/switch/switch.tsx": "74898f82ee797e7c30bd104bea8ee8d3d5faeec058034bb793e6276bd6bd049d",
@@ -891,6 +1223,7 @@
     "react/textarea/index.tsx": "4d24cf05eb2ac939ac81aa6fa6a222e514355dd4df29b99da7c262750132e1b8",
     "react/textarea/package.json": "91cf0857926001ceb0eda54e4da2127f0c47edff47b7091141df307a7521faed",
     "react/textarea/textarea.tsx": "9e7832695ae1a147b680f34a886710608e42b6cf59d67a9d638629855646e4a7",
+    "react/theme.css": "ade181931525bba5e4006c64d59daaf90037be51dafb37bcfb95cf28ff1e254a",
     "react/time-picker/index.tsx": "ff1920edbc0d092c02413c5c229a4f4986f0d5d252c29eaf5180f5faeeca2339",
     "react/time-picker/package.json": "35f78b2201210ee02b2e33599a41ef4521746f2d80b200ea529bb90873a89510",
     "react/time-picker/time-picker.tsx": "548f5178291dffe350ebe7502072946a3b2fc4144c602b3be68b7d83c9852e19",
@@ -914,6 +1247,55 @@
     "react/tsconfig.json": "a8e5bae18429ccac746feb8fa00a6aabac25b622dbbe3b678ee81eba87ae361d",
     "react/typography/package.json": "ea5e1a9c4ae60cd565bcad16e7c2ff0e9ef3d6738a0cbc97950986be2c4bc4f4",
     "react/typography/prose.css": "49e2434afb0f16dc1d844772353b7d9e69f5d14c5f2589aafc7142d93c30a918",
+    "react-native/button/button-text.tsx": "3e4f42fc576203634ac243cfeed40b2b8404a15abcaa9026dd4b5c93faaef4e6",
+    "react-native/button/button.tsx": "d4bfb00e29062fc13b9922d9d6d593e62f9b174083c5ef023994f747b0d1f417",
+    "react-native/button/colors.ts": "2fcfca4a83a0ce7ecbe85d05ae8f809315033b63f8e82298f9d5f45c9f62de4a",
+    "react-native/button/index.tsx": "fa2d8c880ac2f21784b0c8e5826f087189b272a7a8c4edf8220450cf316ab147",
+    "react-native/button/package.json": "b7f614c54781aa37fd86ed439ca0fe6c06ade1a4cd806c30cce2377dd6890fd1",
+    "react-native/checkbox/checkbox.tsx": "77314051f98867ba1110cf8fdd9c4fa5d71be5e58fedc571b1817d3f53f69e4c",
+    "react-native/checkbox/index.tsx": "adce3165cc2e5c3e8c820c74317c821e9cb73cb2924c4e697b294fc3e5a60a3e",
+    "react-native/checkbox/package.json": "260889b88338375bc5aa77f690662350381cdad863348c75e2dd2d861354d12c",
+    "react-native/dialog/dialog-description.tsx": "657bebaa6ce6e2578fa36b48079a052dbb34686d633051486cb7227a84ea4d26",
+    "react-native/dialog/dialog-footer.tsx": "f32505a2c37b50719fd064ae077e9d0221d899c78ad8ce5c1b6b1b16ee557dc9",
+    "react-native/dialog/dialog-header.tsx": "11f4d11394136eeba395df41bbaf4703fe282d66b2d43b75e0d7a8210539e42c",
+    "react-native/dialog/dialog-title.tsx": "ec681c3b033580f66855810197f13d59483beca2f1f6da6abfedadd0f23f84b6",
+    "react-native/dialog/dialog.tsx": "21fa60165f71219b4328eced0accd4961686cf7fcce92a2c75a832b4e93f8b70",
+    "react-native/dialog/index.tsx": "2c6427d8a581e358794fc016a18783736929c5bed93ba3b34f0abc14cf15858a",
+    "react-native/dialog/package.json": "4cb3d2c1363e1f2261931710c41fb6f643fb7ee643c61fe5f0335da7b0670b62",
+    "react-native/drawer/drawer-description.tsx": "1f4bbb56e25f7c8c885a1765c0a0e07a314acd646e9943ab0d10f4e2b5e9c9f6",
+    "react-native/drawer/drawer-header.tsx": "1954d206dfca8c0abef42b10b715de15f9355266f24ba7a50f1a231daf4e0cc5",
+    "react-native/drawer/drawer-title.tsx": "c645a1c66e2c5f94341ae33eda5ea5475a488189242b54525018c3832514cfaf",
+    "react-native/drawer/drawer.tsx": "561fbac08e09543d90debcff690cb8e3388a380a748de35df1ba611c58f00fdc",
+    "react-native/drawer/index.tsx": "ab0255941277baedd34717a123db3df4f9456c09fefb73b6885b7b5d201e569f",
+    "react-native/drawer/package.json": "b2ca7d1cee7260757f087ac8ab74986afb3241e347300df6496eeab9ab0f64df",
+    "react-native/field/field-content.tsx": "4197b825bc98e418077496bb6122a0df5457e95a04ef719775070cc5315c227e",
+    "react-native/field/field-description.tsx": "515340850f9ddbb9b8685b2e87eddcf910edd0fde1a3670deec4c70097c27ce1",
+    "react-native/field/field-error.tsx": "aa63083e0b4feb3171aff826b9d49ae82d6026c0056f83e5a05b1e3fd0d946a3",
+    "react-native/field/field-label.tsx": "624a779e2d76763624f008794cb054b458c0ca68c13976e8f027fb4d62705fd9",
+    "react-native/field/field.tsx": "62516bc18b001ee30a0876c91f3ef490e700561499f093156b0dd1be53cd9ed3",
+    "react-native/field/index.tsx": "74dbcd6e6d28f5ee35fd0924c8fc44f5db4b4082af38b15d96af27bc39ca9c09",
+    "react-native/field/package.json": "cb577548a90e99c25732561b123f14e2235eb4061f44d48d680ebbf3fa7b243d",
+    "react-native/input/index.tsx": "3116182228536c5b9f9a84ad00741dbbf40ba9fc3c037d1742ba387b0c34e539",
+    "react-native/input/input.tsx": "c7544a4ac8a1f89e2c6bff648be185579d199bd8523c9619ab65297a8512b01d",
+    "react-native/input/package.json": "7f37d483a0819672d662024832cfabc1d5b728e585b5062dfb6721d3efb9e8a0",
+    "react-native/lib/native-color.ts": "31faec62ea3ed6ca7f90e59d3291bf85ee89994465e350632db84f6608697a0a",
+    "react-native/lib/native-date.ts": "239e540098b0adbab1db201fa9b59a224ed8ae43e91ce5de7988dbcd663c07c1",
+    "react-native/lib/native-theme-context.ts": "18a58817ebef94a6ae0106efccd0908b6bfe58bba7725ec3afbc93a6c04e60df",
+    "react-native/lib/native-theme-provider.tsx": "a24c134cd815fdc9c3289149a401477c2c3918f077edb4cfb3eddd236481eee5",
+    "react-native/lib/native-theme.ts": "ad765ce61a9ae11eb0e8aa1a0b4c8ff61c929d27acf9de04c6c5fdd0227883b9",
+    "react-native/lib/native-tokens.ts": "c1e85726caaa1395d752f2f6a2fc2f84a6da6be1c2525ba4995a5e6be04d4ced",
+    "react-native/lib/text-input-style.ts": "7e3ca2303e19248aa82cfacdc7a45b3c3513054d79c4151004b21884dad46b3a",
+    "react-native/package.json": "f4bfb56b09a7818453f4c51e08e5ad358e0c7c18895cd6d0cbd7cda0327888e1",
+    "react-native/spinner/index.tsx": "1bd62a0b1b00efd77d01dee0345e93517981d44f2ff936d275256475e95d663e",
+    "react-native/spinner/package.json": "d56122abe951b0f6ea1ede9ee850dcbb2338567e4ef4e9a6a76719b0f754eeed",
+    "react-native/spinner/spinner.tsx": "adfaa86fab370e00f7a36f83fcba4975f12da9dc0e29f530a6a928b36bb2ebc3",
+    "react-native/switch/index.tsx": "7b45f4e5c0eb12fb1683d10e1f4a5d992a94aa47878824a3f54d68d6c8dddea6",
+    "react-native/switch/package.json": "2cb8ae051a62e18b3c778bf7be44adaa22646cb934ed2e59e6ce815d751019be",
+    "react-native/switch/switch.tsx": "fb0c76390a927a0acb42d3171f2a0fac1c4fec1b162c89a5e5c6c37bfadf0cd5",
+    "react-native/tsconfig.json": "5e68e223116c0d9ac6e57d871883ae911edde68ec444b22e437471f909d1701a",
+    "react-native/typography/index.tsx": "42c4d78d2578d56b60f18f10c534dd5ecd96443a17204a39f28527ac96270cac",
+    "react-native/typography/package.json": "fe6d828c7c9d1d95d6f7fe67d801d85c6e87526a37630ffcfde7929b198efc06",
+    "react-native/typography/text.tsx": "7069ad40d6af6f05f0f29cbcdd8dec70a08eec124f06c372b62159192f8939d1",
     "solid/accordion/accordion-content.tsx": "61eaf2f13a13ad0ccd543a0f1b97e3a1d9502c3b23bb59fa0d9239c55cd30bd1",
     "solid/accordion/accordion-item.tsx": "91ee557f6c1481a828b5290b01a6f85dfb96889e826a787f92911a5486eba66b",
     "solid/accordion/accordion-trigger.tsx": "3dd99b510ce9dded5616784aa371dd1a9f7560d59a31c6e2689d4c0ad59feec8",
@@ -1178,7 +1560,7 @@
     "solid/stepper/stepper-link.tsx": "f625f3057cc2a50da04e622fc2116f7e6257d3a9a41dfd507f04685e09b0cbdd",
     "solid/stepper/stepper-panel.tsx": "1d492e19caff280dc0209c8393a89403a07a5e65d09bb6bc66cd8bf84786c082",
     "solid/stepper/stepper.tsx": "1250d2690f32152c647277c8bd239fa692beb19133283197c3c0af83f3c02c50",
-    "solid/styles.css": "6dece87d4996b5fc1b227c3075c907d2b1b11bce232e84a59f21298a2bc0e946",
+    "solid/styles.css": "b1306457f32042933e1fc509e4284a00771cbb9b8ae424fedaaf72e1437ebb5c",
     "solid/switch/index.tsx": "7b45f4e5c0eb12fb1683d10e1f4a5d992a94aa47878824a3f54d68d6c8dddea6",
     "solid/switch/package.json": "2cb8ae051a62e18b3c778bf7be44adaa22646cb934ed2e59e6ce815d751019be",
     "solid/switch/switch.tsx": "d1bba5c7096c9946f5b7656103bb25dcd3184b67e0fc4dcc44218b29e4e6f867",
@@ -1213,6 +1595,7 @@
     "solid/textarea/index.tsx": "4d24cf05eb2ac939ac81aa6fa6a222e514355dd4df29b99da7c262750132e1b8",
     "solid/textarea/package.json": "91cf0857926001ceb0eda54e4da2127f0c47edff47b7091141df307a7521faed",
     "solid/textarea/textarea.tsx": "ca2e4165d33dc6c7050d3002d10cb58d39a4be95cb21b97cc4d7b45393a9ce27",
+    "solid/theme.css": "ade181931525bba5e4006c64d59daaf90037be51dafb37bcfb95cf28ff1e254a",
     "solid/time-picker/index.tsx": "ff1920edbc0d092c02413c5c229a4f4986f0d5d252c29eaf5180f5faeeca2339",
     "solid/time-picker/package.json": "35f78b2201210ee02b2e33599a41ef4521746f2d80b200ea529bb90873a89510",
     "solid/time-picker/time-picker.tsx": "90f3f3a59709f7d498f42dd9b5ed5385020e46f89c58284b74f6fa63dfe06523",
@@ -1236,6 +1619,6 @@
     "solid/tsconfig.json": "37e941a49cbc375f8dfc37529cbc03fbba8f5c9497683e0654099144e6f4a15d",
     "solid/typography/package.json": "ea5e1a9c4ae60cd565bcad16e7c2ff0e9ef3d6738a0cbc97950986be2c4bc4f4",
     "solid/typography/prose.css": "49e2434afb0f16dc1d844772353b7d9e69f5d14c5f2589aafc7142d93c30a918",
-    "ui.config.ts": "a97a5f31371b59ae9fdf0752110b8c4aff9d541f97f2016e74238ad901dee021"
+    "ui.config.ts": "83f36f91411d6b70e040b30380315854eb0403e1aed413a81eecd82cdcabd85e"
   }
 }

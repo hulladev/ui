@@ -4,6 +4,28 @@
 
 /* Catalog chrome and illustration layout only; shared component styles are imported above. */
 @layer catalog {
+  .catalog-navigation-disclosure {
+    min-height: 0;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .catalog-navigation-disclosure > summary {
+    display: none;
+  }
+
+  .catalog-navigation-disclosure [data-catalog-nav] {
+    max-height: calc(100dvh - 15rem);
+  }
+
+  .native-component-links {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  }
+
   :root {
     --catalog-hover: color-mix(in oklab, var(--color-foreground) 5%, transparent);
     --catalog-selected: color-mix(in oklab, var(--color-primary) 12%, transparent);
@@ -558,6 +580,11 @@
     display: none;
   }
 
+  [data-native-preview-host] {
+    width: min(100%, 32rem);
+    min-width: 0;
+  }
+
   .workbench--badge {
     --workbench-height: 40rem;
   }
@@ -1036,9 +1063,14 @@
       transform var(--catalog-duration-fast) var(--catalog-ease);
   }
 
-  .source-mode-tab:hover {
+  .source-mode-tab:hover:not(:disabled) {
     background: oklch(1 0 0 / 0.045);
     color: oklch(0.9 0.02 245);
+  }
+
+  .source-mode-tab:disabled {
+    cursor: default;
+    opacity: 0.45;
   }
 
   .source-mode-tab[aria-selected="true"] {
@@ -1330,6 +1362,24 @@
   }
 
   @media (max-width: 760px) {
+    .catalog-navigation-disclosure {
+      display: block;
+      flex: none;
+      overflow: visible;
+    }
+
+    .catalog-navigation-disclosure > summary {
+      display: list-item;
+      cursor: pointer;
+      padding: 14px 24px;
+      color: var(--color-foreground);
+      font-size: 14px;
+    }
+
+    .catalog-navigation-disclosure [data-catalog-nav] {
+      max-height: 60dvh;
+    }
+
     .canvas {
       min-height: 0;
     }

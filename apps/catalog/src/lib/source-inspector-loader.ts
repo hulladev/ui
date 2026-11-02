@@ -105,6 +105,12 @@ export function observeSourceInspectors() {
   for (const type of ["click", "change", "keydown"]) {
     document.addEventListener(type, onInteraction, { capture: true, signal: lifecycle.signal })
   }
+  // Server-rendered pickers must not accept changes before the capture handler
+  // can initialize the inspector and replay the selected framework.
+  inspectors.forEach((inspector) => {
+    const framework = inspector.querySelector<HTMLSelectElement>("[data-source-framework-select]")
+    if (framework) framework.disabled = false
+  })
   window.addEventListener("hashchange", prioritizeHash, { signal: lifecycle.signal })
   prioritizeHash()
   cleanup = () => {

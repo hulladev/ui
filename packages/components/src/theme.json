@@ -1,0 +1,48 @@
+{
+  "light": {
+    "background": "oklch(0.982 0.012 250)",
+    "surface": "oklch(0.996 0.004 250)",
+    "surface-raised": "oklch(1 0 0)",
+    "foreground": "oklch(0.16 0.04 265)",
+    "muted-foreground": "oklch(0.44 0.04 255)",
+    "prose": "color-mix(in oklab, var(--color-foreground) 85%, var(--color-background))",
+    "border": "color-mix(in oklab, var(--color-foreground) 14%, transparent)",
+    "primary": "oklch(0.52 0.22 264)",
+    "primary-text": "var(--color-primary)",
+    "primary-foreground": "oklch(0.99 0.005 245)",
+    "focus-ring": "color-mix(in oklab, var(--color-primary) 82%, var(--color-foreground))",
+    "success": "oklch(0.54 0.14 150)",
+    "warning": "oklch(0.77 0.13 85)",
+    "danger": "oklch(0.56 0.18 27)",
+    "on-emphasis": "oklch(0.99 0.005 245)",
+    "disabled-foreground": "color-mix(in oklab, var(--color-muted-foreground) 75%, transparent)",
+    "disabled-surface": "color-mix(in oklab, var(--color-foreground) 3.5%, transparent)",
+    "disabled-border": "color-mix(in oklab, var(--color-foreground) 8%, transparent)",
+    "hover-surface": "color-mix(in oklab, var(--color-foreground) 8%, transparent)",
+    "selected-surface": "color-mix(in oklab, var(--color-primary) 10%, transparent)",
+    "selected-hover-surface": "color-mix(in oklab, var(--color-primary) 16%, transparent)"
+  },
+  "dark": {
+    "background": "oklch(0.105 0 0)",
+    "surface": "oklch(0.145 0 0)",
+    "surface-raised": "oklch(0.19 0 0)",
+    "foreground": "oklch(0.97 0 0)",
+    "muted-foreground": "oklch(0.7 0 0)",
+    "hover-surface": "color-mix(in oklab, var(--color-foreground) 12%, transparent)",
+    "selected-surface": "color-mix(in oklab, var(--color-primary) 18%, transparent)",
+    "selected-hover-surface": "color-mix(in oklab, var(--color-primary) 26%, transparent)",
+    "border": "color-mix(in oklab, var(--color-foreground) 14%, transparent)",
+    "primary": "oklch(0.52 0.22 264)",
+    "primary-text": "color-mix(in oklab, var(--color-primary) 55%, var(--color-foreground))",
+    "primary-foreground": "oklch(0.97 0 0)",
+    "focus-ring": "color-mix(in oklab, var(--color-primary) 72%, white)",
+    "success": "oklch(0.73 0.105 155)",
+    "warning": "oklch(0.77 0.105 75)",
+    "danger": "oklch(0.68 0.18 20)"
+  },
+  "radius": {
+    "sm": 7,
+    "md": 11,
+    "lg": 16
+  }
+}

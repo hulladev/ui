@@ -1,0 +1,99 @@
+---
+import CatalogLayout from "../../layouts/CatalogLayout.astro"
+import ComponentSource from "../ComponentSource.astro"
+import frameSource from "../previews/native/NativePreviewFrame.tsx?raw"
+import { generatedSourcesFor } from "../../data/generatedCatalogSources"
+import type { NativeCatalogId } from "../../../../native-catalog/src/entries"
+import { nativeOnlyCatalogEntries } from "../../data/nativeCatalog"
+type Props = {
+  family: NativeCatalogId
+  exampleSource: string
+  previewSource: string
+  additionalSources?: {
+    code: string
+    filename: string
+    framework: string
+    language: "ts" | "tsx"
+  }[]
+}
+const { family, exampleSource, previewSource, additionalSources = [] } = Astro.props
+const index = nativeOnlyCatalogEntries.findIndex((entry) => entry.id === family)
+const entry = nativeOnlyCatalogEntries[index]!
+const previous = nativeOnlyCatalogEntries[index - 1]
+const next = nativeOnlyCatalogEntries[index + 1]
+---
+
+<CatalogLayout
+  group="Native only"
+  title={entry.title}
+  description={entry.description}
+  pagination={false}
+>
+  <section
+    class="component-section"
+    id={`native-${family}`}
+    aria-labelledby={`native-${family}-title`}
+  >
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">React Native / {entry.title}</p><h2 id={`native-${family}-title`}>
+          Default appearance
+        </h2>
+      </div><span class="status">Generated components</span>
+    </div>
+    <article class="bench glass-panel" aria-label={`${entry.title} native component preview`}>
+      <div class="workbench">
+        <div data-preview-canvas><slot /></div>
+        <ComponentSource
+          component={`Native ${entry.title}`}
+          sources={generatedSourcesFor(family).filter(
+            (source) => source.framework === "React Native"
+          )}
+          previewSources={[
+            {
+              code: exampleSource,
+              filename: `apps/native-catalog/src/examples/${entry.title}Example.tsx`,
+              framework: "React Native",
+              language: "tsx",
+            },
+            {
+              code: previewSource,
+              filename: `apps/catalog/src/components/previews/native/Native${entry.title}Preview.tsx`,
+              framework: "React Native",
+              language: "tsx",
+            },
+            {
+              code: frameSource,
+              filename: "apps/catalog/src/components/previews/native/NativePreviewFrame.tsx",
+              framework: "React Native",
+              language: "tsx",
+            },
+            ...additionalSources,
+          ]}
+        />
+      </div>
+    </article>
+    <nav class="catalog-pagination" aria-label="Native component pages">
+      {
+        previous && (
+          <a href={`/react-native/${previous.id}`} rel="prev">
+            <>
+              <span>← Previous component</span>
+              <strong>{previous.title}</strong>
+            </>
+          </a>
+        )
+      }
+      {
+        next && (
+          <a href={`/react-native/${next.id}`} rel="next">
+            <>
+              <span>Next component →</span>
+              <strong>{next.title}</strong>
+            </>
+          </a>
+        )
+      }
+    </nav>
+  </section>
+</CatalogLayout>

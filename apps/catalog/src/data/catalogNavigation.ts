@@ -1,8 +1,11 @@
+import { nativeCatalogEntryFor, nativeOnlyCatalogEntries } from "./nativeCatalog"
+
 export const catalogSectionGroups = [
   "Foundations",
   "Forms",
   "Navigation & overlays",
   "Layout & feedback",
+  "Native only",
 ] as const
 
 export type CatalogSectionGroup = (typeof catalogSectionGroups)[number]
@@ -12,6 +15,7 @@ export type CatalogNavigationItem = {
   href: `#${string}`
   keywords: readonly string[]
   label: string
+  pageHref?: string
 }
 
 export const catalogSections = [
@@ -321,6 +325,13 @@ export const catalogSections = [
     keywords: ["feedback", "notification", "message", "queue", "stack"],
     label: "Toast",
   },
+  ...nativeOnlyCatalogEntries.map((entry) => ({
+    group: "Native only" as const,
+    href: `#native-${entry.id}` as const,
+    keywords: ["expo", "mobile", "ios", "android", "native"],
+    label: entry.title,
+    pageHref: `/react-native/${entry.id}`,
+  })),
 ] as const satisfies readonly CatalogNavigationItem[]
 
 export type CatalogSectionHref = (typeof catalogSections)[number]["href"]
@@ -363,12 +374,34 @@ export const catalogPages = [
     href: "/layout-feedback",
     description: "Structure content and keep people informed.",
   },
+  {
+    group: "Native only",
+    href: "/react-native",
+    description: "Mobile-specific components without a web counterpart.",
+  },
 ] as const satisfies readonly { group: CatalogSectionGroup; href: string; description: string }[]
 
 export const getCatalogSectionHref = (
-  section: Pick<CatalogNavigationItem, "group" | "href">,
+  section: Pick<CatalogNavigationItem, "group" | "href" | "pageHref">,
   currentGroup?: CatalogSectionGroup
 ) =>
-  section.group === currentGroup
-    ? section.href
-    : `${catalogPages.find((page) => page.group === section.group)!.href}${section.href}`
+  section.pageHref
+    ? `${section.pageHref}${section.href}`
+    : section.group === currentGroup
+      ? section.href
+      : `${catalogPages.find((page) => page.group === section.group)!.href}${section.href}`
+
+export function nativeCatalogDestination(family: string): string | undefined {
+  const entry = nativeCatalogEntryFor(family)
+  if (!entry) return undefined
+  const section = catalogSections.find(
+    (section) => section.group !== "Native only" && section.href === `#${entry.id}`
+  )
+  if (section) {
+    const page = catalogPages.find((page) => page.group === section.group)
+    return page ? `${page.href}?framework=react-native${section.href}` : undefined
+  }
+  return nativeOnlyCatalogEntries.some((native) => native.id === entry.id)
+    ? `/react-native/${entry.id}#native-${entry.id}`
+    : undefined
+}

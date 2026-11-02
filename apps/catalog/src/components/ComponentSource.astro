@@ -4,6 +4,8 @@ import CodeBlock from "@/ui/code/code-block.astro"
 import CodeBlockContent from "@/ui/code/code-block-content.astro"
 import CodeBlockPath from "@/ui/code/code-block-path.astro"
 import { generatedSourcesFor, type CatalogSourceLanguage } from "../data/generatedCatalogSources"
+import { nativeCatalogEntryFor } from "../data/nativeCatalog"
+import { nativeRenderedSourcesFor } from "../data/nativeCatalogSources"
 
 type SourceFile = {
   code: string
@@ -22,7 +24,7 @@ type Props = {
 }
 
 type SourceMode = "visible" | "minimal" | "generated"
-type Framework = "Astro" | "React" | "Solid"
+type Framework = "Astro" | "React" | "Solid" | "React Native"
 type SourceRecord = Omit<SourceFile, "framework"> & {
   framework: Framework
   mode: SourceMode
@@ -36,19 +38,35 @@ const {
   usageSources = [],
 } = Astro.props
 const inspectorId = `${component.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-")}-source`
+const nativeEntry = nativeCatalogEntryFor(component)
+const renderedSources = [
+  ...previewSources,
+  ...(nativeEntry ? nativeRenderedSourcesFor(nativeEntry.id) : []),
+]
 const hasUsage = usageSources.length > 0
-const hasPreview = previewSources.length > 0
+const hasPreview = renderedSources.length > 0
 const initialMode: SourceMode = hasPreview ? "visible" : hasUsage ? "minimal" : "generated"
 const frameworkOf = (source: SourceFile): Framework => {
   const framework = source.framework.toLowerCase()
+  if (framework.includes("native")) return "React Native"
   if (framework.includes("react")) return "React"
   if (framework.includes("solid")) return "Solid"
   return "Astro"
 }
 const normalizeSources = (groupSources: SourceFile[], mode: SourceMode): SourceRecord[] =>
   groupSources.map((source) => ({ ...source, framework: frameworkOf(source), mode }))
-const generatedSources =
-  generatedFamilies.length > 0 ? generatedSourcesFor(...generatedFamilies) : sources
+const generatedSources = [
+  ...(generatedFamilies.length > 0 ? generatedSourcesFor(...generatedFamilies) : sources),
+  ...(nativeEntry
+    ? generatedSourcesFor(nativeEntry.id).filter((source) => source.framework === "React Native")
+    : []),
+].filter(
+  (source, index, all) =>
+    all.findIndex(
+      (candidate) =>
+        candidate.filename === source.filename && candidate.framework === source.framework
+    ) === index
+)
 const sourceGroups: {
   description: string
   label: string
@@ -61,7 +79,7 @@ const sourceGroups: {
           description: "Exact rendered source",
           label: "Rendered",
           mode: "visible" as const,
-          sources: previewSources,
+          sources: renderedSources,
         },
       ]
     : []),
@@ -85,13 +103,15 @@ const sourceGroups: {
 const records = sourceGroups.flatMap(({ mode, sources: groupSources }) =>
   normalizeSources(groupSources, mode)
 )
-const frameworks = (["React", "Solid", "Astro"] as const).filter((framework) =>
+const frameworks = (["React", "Solid", "Astro", "React Native"] as const).filter((framework) =>
   records.some((record) => record.framework === framework)
 )
 const initialModeFrameworks = frameworks.filter((framework) =>
   records.some((record) => record.mode === initialMode && record.framework === framework)
 )
-const initialFramework: Framework = initialModeFrameworks.includes("React") ? "React" : "Astro"
+const initialFramework: Framework = initialModeFrameworks.includes("React")
+  ? "React"
+  : (initialModeFrameworks[0] ?? frameworks[0] ?? "Astro")
 const firstSource =
   records.find((record) => record.mode === initialMode && record.framework === initialFramework) ??
   records[0]
@@ -100,7 +120,12 @@ const fileIconTone = (source: SourceRecord) =>
   source.framework === "Solid" ? "solid" : source.language === "tsx" ? "react" : source.language
 ---
 
-<section class="source-inspector" data-source-inspector aria-labelledby={`${inspectorId}-title`}>
+<section
+  class="source-inspector"
+  data-source-inspector
+  data-source-framework={initialFramework}
+  aria-labelledby={`${inspectorId}-title`}
+>
   <header class="source-head">
     <div class="source-heading">
       <h3 id={`${inspectorId}-title`} class="sr-only">{component} source code</h3>
@@ -108,7 +133,7 @@ const fileIconTone = (source: SourceRecord) =>
       <div class="source-controls">
         <label class="source-framework-field">
           <span class="sr-only">{component} framework</span>
-          <select data-source-framework-select aria-label={`${component} framework`}>
+          <select data-source-framework-select aria-label={`${component} framework`} disabled>
             {
               frameworks.map((framework) => (
                 <option value={framework} selected={framework === initialFramework}>
@@ -132,6 +157,11 @@ const fileIconTone = (source: SourceRecord) =>
                   tabindex={mode === initialMode ? 0 : -1}
                   title={`${label}: ${description}`}
                   data-source-mode={mode}
+                  disabled={
+                    !records.some(
+                      (record) => record.mode === mode && record.framework === initialFramework
+                    )
+                  }
                 >
                   <span class="source-mode-name">{label}</span>
                   <span class="sr-only">{description}</span>
@@ -248,7 +278,12 @@ const fileIconTone = (source: SourceRecord) =>
 
 <script>
   import { observeSourceInspectors } from "../lib/source-inspector-loader"
+  import { catalogSourceInspectorsReady } from "../lib/catalog-platform-preview"
 
-  observeSourceInspectors()
-  document.addEventListener("astro:page-load", observeSourceInspectors)
+  const initializeSources = () => {
+    observeSourceInspectors()
+    catalogSourceInspectorsReady()
+  }
+  initializeSources()
+  document.addEventListener("astro:page-load", initializeSources)
 </script>

@@ -3,7 +3,7 @@ export type CatalogSourceLanguage = "astro" | "css" | "ts" | "tsx"
 export type CatalogSourceFile = {
   code: string
   filename: string
-  framework: "Astro" | "React" | "Solid"
+  framework: "Astro" | "React" | "Solid" | "React Native"
   label?: string
   language: CatalogSourceLanguage
 }
@@ -26,6 +26,12 @@ const solidModules = import.meta.glob("../../../../generated/solid/**/*.{tsx,ts,
   query: "?raw",
 }) as Record<string, string>
 
+const nativeModules = import.meta.glob("../../../../generated/react-native/**/*.{tsx,ts}", {
+  eager: true,
+  import: "default",
+  query: "?raw",
+}) as Record<string, string>
+
 const basename = (filename: string) => filename.split("/").at(-1) ?? filename
 const withoutExtension = (filename: string) => filename.replace(/\.(?:astro|ts|tsx|css)$/, "")
 
@@ -39,11 +45,11 @@ const normalizedFilename = (path: string) => path.replace(/^.*\/generated\//, "g
 
 const familySources = (
   modules: Record<string, string>,
-  framework: "Astro" | "React" | "Solid",
+  framework: "Astro" | "React" | "Solid" | "React Native",
   language: "astro" | "tsx",
   family: string
 ): CatalogSourceFile[] => {
-  const familyPath = `/generated/${framework.toLowerCase()}/${family}/`
+  const familyPath = `/generated/${framework.toLowerCase().replace(" ", "-")}/${family}/`
 
   return Object.entries(modules)
     .filter(([path]) => path.includes(familyPath) && !path.endsWith("/index.tsx"))
@@ -71,10 +77,16 @@ const familySources = (
 }
 
 export const generatedSourcesFor = (...families: string[]): CatalogSourceFile[] =>
-  (["React", "Solid", "Astro"] as const).flatMap((framework) =>
+  (["React", "Solid", "Astro", "React Native"] as const).flatMap((framework) =>
     families.flatMap((family) =>
       familySources(
-        framework === "React" ? reactModules : framework === "Solid" ? solidModules : astroModules,
+        framework === "React Native"
+          ? nativeModules
+          : framework === "React"
+            ? reactModules
+            : framework === "Solid"
+              ? solidModules
+              : astroModules,
         framework,
         framework === "Astro" ? "astro" : "tsx",
         family
