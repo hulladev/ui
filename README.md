@@ -95,7 +95,7 @@ validation. Browser commands require the corresponding Playwright browsers to be
 - [Build architecture](./docs/architecture.md)
 - [Framework generation](./docs/framework-generation.md)
 - [Consumer installation and local dogfooding](./docs/consumer-installation.md)
-- [Beta compatibility and release process](./docs/beta-release.md)
+- [Compatibility and release process](./docs/release.md)
 
 For application installation flows, see the [`hulla` CLI](https://github.com/hulladev/cli).
 
