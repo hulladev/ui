@@ -31,10 +31,10 @@ Full documentation is available in the
 
 ## AI agent guidance
 
-For application work with installed components, use the [hulla-ui skill](https://github.com/hulladev/skills/tree/main/skills/hulla-ui). It covers consumer composition, themes, and native interactions; generator authoring remains covered by this package's documentation.
+For application work with installed components, use the [@hulla/ui skill](https://github.com/hulladev/skills/tree/main/skills/ui). It covers consumer composition, themes, and native interactions; generator authoring remains covered by this package's documentation.
 
 ```sh
-npx skills add hulladev/skills --skill hulla-ui
+npx skills add hulladev/skills --skill ui
 ```
 
 See the [agent skills guide](https://hulla.dev/docs/cli/agent-skills) for agent selection and package compatibility.

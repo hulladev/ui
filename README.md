@@ -12,10 +12,10 @@ failed generation never leaves a partially updated registry.
 
 ## AI agent guidance
 
-Install the [hulla-ui skill](https://github.com/hulladev/skills/tree/main/skills/hulla-ui) for package-specific guidance on installing and composing application components, shared themes, and native interactions:
+Install the [@hulla/ui skill](https://github.com/hulladev/skills/tree/main/skills/ui) for package-specific guidance on installing and composing application components, shared themes, and native interactions:
 
 ```sh
-npx skills add hulladev/skills --skill hulla-ui
+npx skills add hulladev/skills --skill ui
 ```
 
 Choose your coding agent in the installer. See [installation and version compatibility](https://hulla.dev/docs/cli/agent-skills) before adding or updating skills in your application.
