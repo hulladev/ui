@@ -10,6 +10,16 @@ official component registry currently ships Astro, React, Solid, and React Nativ
 remain planned. Every build is staged, compared by content, and swapped into place atomically, so
 failed generation never leaves a partially updated registry.
 
+## AI agent guidance
+
+Install the [hulla-ui skill](https://github.com/hulladev/skills/tree/main/skills/hulla-ui) for package-specific guidance on installing and composing application components, shared themes, and native interactions:
+
+```sh
+npx skills add hulladev/skills --skill hulla-ui
+```
+
+Choose your coding agent in the installer. See [installation and version compatibility](https://hulla.dev/docs/cli/agent-skills) before adding or updating skills in your application.
+
 ## Start developing
 
 Requirements: Bun 1.3.9 and Node.js 20 or newer.
