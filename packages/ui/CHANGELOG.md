@@ -1,5 +1,12 @@
 # @hulla/ui
 
+## 0.1.1
+
+### Patch Changes
+
+- c4e8776: Normalize published package metadata and introduce coordinated release preparation with verified npm artifacts. GitHub Release announcements remain disabled by default.
+- a5d61c9: Use the coordinated stable `@hulla/style` release in generated component dependencies.
+
 ## 0.1.0
 
 ### Minor Changes
