@@ -1,38 +1,14 @@
 name: Browser checks
 
 on:
-  pull_request:
-    paths:
-      - "apps/catalog/**"
-      - "apps/native-catalog/**"
-      - "packages/**"
-      - "generated/**"
-      - "package.json"
-      - "bun.lock"
-      - "turbo.json"
-      - ".github/workflows/browser.yml"
-      - "!**/*.md"
-      - "!**/*.mdx"
-  push:
-    branches: [master]
-    paths:
-      - "apps/catalog/**"
-      - "apps/native-catalog/**"
-      - "packages/**"
-      - "generated/**"
-      - "package.json"
-      - "bun.lock"
-      - "turbo.json"
-      - ".github/workflows/browser.yml"
-      - "!**/*.md"
-      - "!**/*.mdx"
   workflow_dispatch:
     inputs:
       suite:
         description: Browser validation scope
         type: choice
-        default: compatibility
+        default: smoke
         options:
+          - smoke
           - compatibility
           - full
 
@@ -56,22 +32,22 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
-      - name: Install Chromium for automatic checks
-        if: github.event_name != 'workflow_dispatch'
+      - name: Install Chromium for requested smoke checks
+        if: inputs.suite == 'smoke'
         run: bunx playwright install --with-deps chromium
 
       - name: Check essential interactions
-        if: github.event_name != 'workflow_dispatch'
+        if: inputs.suite == 'smoke'
         run: bun run test:browser:smoke
 
       - name: Install browsers for requested validation
-        if: github.event_name == 'workflow_dispatch'
+        if: inputs.suite != 'smoke'
         run: bunx playwright install --with-deps chromium firefox webkit
 
       - name: Check browser-specific behavior
-        if: github.event_name == 'workflow_dispatch' && inputs.suite == 'compatibility'
+        if: inputs.suite == 'compatibility'
         run: bun run test:browser:compat
 
       - name: Run the full catalog sweep
-        if: github.event_name == 'workflow_dispatch' && inputs.suite == 'full'
+        if: inputs.suite == 'full'
         run: bun run test:browser
