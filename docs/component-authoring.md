@@ -136,3 +136,21 @@ Before submitting a component:
 4. Exercise pointer, keyboard focus, disabled, and loading states that the component exposes.
 5. Run `bun run verify` and commit the generated registry with the source change.
 6. Use a sibling consumer sandbox for `hulla ui add` or update-flow changes.
+
+## Install support files on demand
+
+Mark a framework support file `onDemand: true` to defer it until a consuming component is added:
+
+```ts
+"react-native": [{
+  src: "react-native/lib/date.react-native.ts",
+  dest: "lib/date.ts",
+  onDemand: true,
+}]
+```
+
+The generator derives a `components` list from emitted relative and `@/` imports, including
+transitive imports, type dependencies and cycles. Do not maintain that list by hand. If an
+initialization file depends on the helper, it is promoted to initialization too. Entries without
+`onDemand` keep the existing initialization behavior. Framework suffixes are removed from local
+relative and `@/` import paths; package specifiers are preserved.

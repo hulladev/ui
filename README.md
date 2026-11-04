@@ -138,11 +138,11 @@ provider; ordinary usage does not pass `theme`. With no provider, built-in theme
 appearance. `mode` supports `system`, `light`, and `dark`; nested providers can scope a theme or
 font override. An optional component `theme` prop overrides only that component.
 
-The native registry installs its provider, context, tokens, and hook under `lib/native-theme*` and `lib/native-tokens.ts`.
+Native initialization installs `lib/theme.tsx` and editable `lib/tokens.ts`. Date and text-input support are installed only with components that need them. Shared color operations come from `@hulla/style-native/color` (1.1.0 or later), installed as a native dependency.
 For components under `src/components/ui` and support files under `src/lib`:
 
 ```tsx
-import { NativeThemeProvider } from "@/lib/native-theme"
+import { NativeThemeProvider } from "@/lib/theme"
 import { Button, ButtonText } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 

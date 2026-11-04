@@ -95,33 +95,30 @@ code and requires a development build, so it changes the existing Expo Go workfl
 
 ## Role of `@hulla/style`
 
-The stable `@hulla/style` 0.4 `cn` and `vn` APIs compose class strings. Their serializer and composer both return
-strings, so they cannot correctly consume React Native style objects as-is.
+`style(native)` composes native style objects and variants through the existing core factory.
+The root preset in `@hulla/style-native` has no runtime imports; it keeps native style arrays,
+references, and override order. It does not supply theme propagation or a CSS runtime.
 
-For a utility-class backend, the existing APIs can compose class/variant strings; a new native
-style engine in `@hulla/style` is not required. Shared theme emission, recipes, and setup adapters
-are useful integration points.
+Native UI components depend on the separate `@hulla/style-native/color` entry point (1.1.0 or
+later) for opacity and premultiplied OKLab mixing. Its bounded result caches reuse repeated
+recipes. Built-in themes declare light/dark mode explicitly. Custom palettes can declare mode;
+legacy palettes without mode resolve background lightness once per immutable theme object.
+Replace a theme object when changing its configuration.
 
-The optional `@hulla/style-native` 1.0.0 companion package is published from the sibling
-`style` workspace under `packages/native`. It extends the existing core factory with
-`style(native)`. The plugin supplies an identity serializer and a native composer through the
-existing hooks; the core supplies `cn`, `vn`, and variant inference. Generic hook types
-are available from `@hulla/style` 0.5.0; older 0.4 declarations require string-based hooks. The preset imports React Native only for types,
-and the core does not acquire native dependencies.
+The registry authors support files as `theme.react-native.tsx`, `tokens.react-native.ts`,
+`date.react-native.ts`, and `text-input-style.react-native.ts`. Their emitted paths omit the
+framework suffix. Initialization installs only theme and tokens. Date and text-entry helpers
+are marked `onDemand`; the generator follows emitted relative and `@/` imports, type imports,
+and transitive support dependencies to derive component consumers. The CLI installs those
+helpers when the corresponding component is added, preserving existing edited helpers.
 
-Native `cn` preserves references, nested arrays, and native override order. The shared `vn`
-composes the selected value through `cn`, preserving active style references and normalizing
-empty variants to `undefined`. The core maps inputs through the identity serializer first;
-this allocates an argument array without cloning style objects or nested arrays. A single
-`style(native)` instance serves view, text, and image recipes. Its helpers retain each call's
-style shape and each selected variant's value type; component style props validate their use. Theme resolution stays in `NativeThemeProvider` / `useNativeTheme()`.
-Consumers can compose public native `style` props and `Button.contentStyle` with the adapter.
-The source registry does not require this optional package; it remains an optional authoring
-utility rather than a native rendering engine. The adapter guide lives in the sibling workspace
-at `style/packages/native/README.md`.
+For migration, initialize the new registry, update installed native component families, and
+switch app imports from `@/lib/native-theme` to `@/lib/theme`. Provider, hook, theme type, and
+palette export names remain unchanged. Remove old support files only after their imports have been replaced. Old and new
+provider modules have distinct contexts, so migrate the app boundary and components together.
 
-The provider boundary is independent of this backend choice. Adopting the adapter does not require
-changing theme inheritance, migrating to NativeWind, or changing native component behavior.
+Theme resolution stays in `NativeThemeProvider` / `useNativeTheme()`, with fonts and scoped overrides.
+The adapter guide lives in `style/packages/native/README.md` in the sibling workspace.
 
 ## Primary references
 
