@@ -44,7 +44,9 @@ catalog previews, usage examples, and showcases.
 
 - Keep automatic CI focused on the shipped generator and component registry. Do not repeat lint, unit tests, generation, or type checks inside a browser matrix.
 - `bun run test` runs unit and package tests. `bun run verify` adds formatting, lint, generator types, generated drift detection, and isolated generated-framework types; neither command starts browsers or builds the catalogs.
-- Automatic browser checks reuse a small set of existing behavior tests tagged `@smoke` in Chromium. Add a case only for a distinct, important interaction failure; do not grow this into a catalog-wide visual sweep.
+- Browser checks are manual only. Do not add browser, visual, or cross-browser suites to automatic push/PR gates. Reuse existing targeted behavior checks during implementation when they resolve a concrete risk; avoid adding maintained visual coverage by default.
 - Tag browser-engine risks `@compat` only with a concrete reason, such as native form/reset semantics, focus restoration, reduced-motion handling, or engine-specific CSS. Run these when relevant with `bun run test:browser:compat`; the Browser checks workflow also supports manual compatibility and full runs.
 - Catalog appearance, exhaustive viewport/theme combinations, full browser matrices, Expo exports, and consumer sandboxes are targeted or release-candidate checks. Use `bun run verify:full` or narrower commands when the actual change warrants them, rather than requiring every layer for every edit.
 - Keep formatting or prose-only changes browser-free. Document the behavior exercised and any relevant checks not run; do not automatically invoke the full suite at handoff.
+
+- Do not maintain matrices of computed colors, fonts, radii, cursors, or other browser style properties just to mirror recipes. Review appearance during implementation and retain automated checks for distinct observable behavior or accessibility failures.

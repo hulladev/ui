@@ -56,10 +56,9 @@ bun run verify
 | `bun run test:browser:compat` | Run focused engine-specific behavior across all three browsers          |
 | `bun run verify:full`         | Also check source types, build catalogs, and run the full browser suite |
 
-Automatic CI runs the library checks once. Changes to components, generated output, or catalog
-code also run ten existing interaction tests in Chromium. Documentation-only changes do not
-install browsers. Full catalog sweeps and cross-browser compatibility checks can be requested
-through the **Browser checks** workflow or the commands above; they are not repeated for every PR.
+Automatic CI runs the library checks once and does not install or run browsers. Browser checks
+are opt-in through the **Browser checks** workflow or the commands above. The workflow defaults
+to the small Chromium smoke suite; compatibility and full sweeps require an explicit selection.
 
 Use compatibility checks for native forms/reset, focus, reduced motion, and engine-specific CSS
 changes. Use the full suite for broader theme, framework, or catalog changes and release-candidate

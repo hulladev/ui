@@ -36,10 +36,10 @@ fills (including their semantic tint) on native, so background text cannot bleed
 The React Native Web preview uses the same fallback. Ordinary alpha-tinted states within a solid
 surface still follow the web recipe. Add a host blur surface explicitly when the application needs it.
 
-The `native-*-language.spec.ts` browser suites compare actual web and native component paint,
-typography, geometry, and state. Keep these comparisons alongside native interaction checks and
-catalog CSS isolation. The isolation check alone cannot detect drift between platform recipes;
-its margin checks also prevent catalog resets from hiding a shipping component's spacing.
+Review web/native paint, typography, and spacing visually during component implementation.
+Keep automated browser checks focused on interaction and accessibility behavior. Avoid maintaining
+computed-style or screenshot matrices that duplicate the shared recipes; the native interaction
+suites and catalog isolation checks protect the distinct runtime contracts.
 
 ## Catalog organization
 
