@@ -179,3 +179,7 @@ components use platform fonts and keep system text scaling enabled. The registry
 React Native and React, with no Expo dependency or CSS styling runtime.
 
 For current coverage gaps and styling-backend tradeoffs, see [native architecture](./docs/native-architecture.md).
+
+## Publishing
+
+See [the release workflow](docs/releasing.md) for changesets, version preparation, coordinated releases and npm trusted publishing.
