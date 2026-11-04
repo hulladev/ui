@@ -104,7 +104,7 @@ const webCopyFiles = [
 
 export const ui = createLibrary({
   name: "@hulla/ui",
-  version: "0.2.0",
+  version: "0.2.1",
   author: "Samuel Hulla",
   url: "https://hulla.dev/docs/ui",
   basePath: fileURLToPath(new URL("..", import.meta.url)),

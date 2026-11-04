@@ -1,5 +1,11 @@
 # @hulla/ui
 
+## 0.2.1
+
+### Patch Changes
+
+- 0d0dd7b: Lead the packaged README with application component-discovery commands and link to consumer and generator documentation.
+
 ## 0.2.0
 
 ### Minor Changes
