@@ -17,7 +17,8 @@
   },
   "license": "UNLICENSED",
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "lint": "eslint . --max-warnings 0",

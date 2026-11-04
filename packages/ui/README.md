@@ -1,40 +1,22 @@
 # @hulla/ui
 
-Deterministic, atomic source-component registry generation. The official `@hulla/ui` registry currently
-publishes Astro, React, and Solid targets.
-
-```ts
-import { createLibrary } from "@hulla/ui"
-
-export const ui = createLibrary({
-  name: "@acme/ui",
-  version: "1.0.0",
-  frameworks: ["react"],
-  inputDirs: { react: "./src/react" },
-  outputDirs: {
-    rootDir: "./generated",
-    frameworks: { react: "react" },
-  },
-})
-```
-
-```bash
-uigen ./src/ui.ts
-uigen --check ./src/ui.ts
-```
-
-The package is intended for component-library authors. Application developers consume generated
-registries through the [`hulla` CLI](https://github.com/hulladev/cli).
-
-Full documentation is available in the
-[@hulla/ui repository](https://github.com/hulladev/ui/tree/master/docs).
-
-## AI agent guidance
-
-For application work with installed components, use the [@hulla/ui skill](https://github.com/hulladev/skills/tree/main/skills/ui). It covers consumer composition, themes, and native interactions; generator authoring remains covered by this package's documentation.
+Application developers install editable component source through the `hulla` CLI. Discover the selected registry's families, source exports, and files instead of assuming a component's install name:
 
 ```sh
-npx skills add hulladev/skills --skill ui
+bunx hulla ui --help
+bunx hulla ui list --help
+bunx hulla ui list --framework react-native
+bunx hulla ui search text --framework react-native
+bunx hulla ui add --help
 ```
 
-See the [agent skills guide](https://hulla.dev/docs/cli/agent-skills) for agent selection and package compatibility.
+Use `--source <URL-or-directory>` to inspect another library. Follow the install command in its listing.
+See [UI commands](https://hulla.dev/docs/cli/ui), [React Native components](https://hulla.dev/docs/ui/native), or the [Markdown guides](https://github.com/hulladev/cli/blob/master/docs/ui.md).
+
+This npm package is the registry generator for **library authors**:
+
+```sh
+uigen --help
+```
+
+See [generator authoring](https://github.com/hulladev/ui/tree/master/docs) and the optional [UI agent skill](https://github.com/hulladev/skills/tree/main/skills/ui).
