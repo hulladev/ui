@@ -1,7 +1,7 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { Platform, TextInput } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { textInputStyle } from "@/lib/text-input-style"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
+import { textInputStyle } from "@/lib/text-input-style.react-native"
 
 export type InputProps = ComponentPropsWithRef<typeof TextInput> & {
   theme?: NativeTheme

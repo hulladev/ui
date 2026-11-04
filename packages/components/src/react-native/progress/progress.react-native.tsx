@@ -1,7 +1,7 @@
 import type { ComponentPropsWithRef } from "react"
 import { View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
+import { alpha } from "@hulla/style-native/color"
 
 export type ProgressProps = ComponentPropsWithRef<typeof View> & {
   value?: number
@@ -49,7 +49,7 @@ export function Progress({
         {
           height: 6,
           borderRadius: 999,
-          backgroundColor: nativeColorAlpha(theme.colors.foreground, 0.1),
+          backgroundColor: alpha(theme.colors.foreground, 0.1),
           overflow: "hidden",
         },
         style,

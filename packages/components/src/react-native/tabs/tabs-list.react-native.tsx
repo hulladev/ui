@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react"
 import { View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
 export type TabsListProps = ComponentPropsWithRef<typeof View> & { theme?: NativeTheme }
 export function TabsList({ children, style, theme: override, ...props }: TabsListProps) {
   const theme = useNativeTheme(override)

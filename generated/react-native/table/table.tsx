@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react"
 import { ScrollView } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
 
 export type TableProps = Omit<ComponentPropsWithRef<typeof ScrollView>, "horizontal"> & {
   theme?: NativeTheme

@@ -1,7 +1,7 @@
 import type { ComponentPropsWithRef } from "react"
 import { Platform, Switch as NativeSwitch } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { isNativeDark, nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
+import { alpha } from "@hulla/style-native/color"
 
 export type SwitchProps = ComponentPropsWithRef<typeof NativeSwitch> & { theme?: NativeTheme }
 
@@ -16,7 +16,7 @@ export function Switch({
   const theme = useNativeTheme(override)
   const inactive = Boolean(disabled || accessibilityState?.disabled)
   const resolvedThumbColor =
-    thumbColor ?? (isNativeDark(theme) ? theme.colors.foreground : theme.colors.surfaceRaised)
+    thumbColor ?? (theme.mode === "dark" ? theme.colors.foreground : theme.colors.surfaceRaised)
   return (
     <NativeSwitch
       {...props}
@@ -26,7 +26,7 @@ export function Switch({
         trackColor ?? {
           false: inactive
             ? theme.colors.disabledBorder
-            : nativeColorAlpha(theme.colors.foreground, isNativeDark(theme) ? 0.18 : 0.12),
+            : alpha(theme.colors.foreground, theme.mode === "dark" ? 0.18 : 0.12),
           true: inactive ? theme.colors.disabledForeground : theme.colors.primary,
         }
       }

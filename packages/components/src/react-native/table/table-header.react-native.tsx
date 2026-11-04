@@ -1,7 +1,7 @@
 import type { ComponentPropsWithRef } from "react"
 import { Text } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
+import { alpha } from "@hulla/style-native/color"
 
 export type TableHeaderProps = ComponentPropsWithRef<typeof Text> & { theme?: NativeTheme }
 
@@ -16,7 +16,7 @@ export function TableHeader({ children, style, theme: override, ...props }: Tabl
           flexShrink: 0,
           paddingHorizontal: 16,
           paddingVertical: 12,
-          backgroundColor: nativeColorAlpha(theme.colors.foreground, 0.045),
+          backgroundColor: alpha(theme.colors.foreground, 0.045),
           color: theme.colors.foreground,
           fontSize: 13,
           lineHeight: 20,

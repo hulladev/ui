@@ -6,8 +6,8 @@ import {
   type ComponentRef,
 } from "react"
 import { View, TextInput, Pressable, Text } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
+import { alpha } from "@hulla/style-native/color"
 
 export type TagInputProps = ComponentPropsWithRef<typeof View> & {
   value?: string[]
@@ -86,7 +86,7 @@ export function TagInput({
           borderRadius: theme.radius.md,
           backgroundColor: theme.colors.surface,
           boxShadow: focusWithin
-            ? `0px 0px 0px 2px ${nativeColorAlpha(theme.colors.focusRing, 0.25)}`
+            ? `0px 0px 0px 2px ${alpha(theme.colors.focusRing, 0.25)}`
             : "0px 1px 2px rgba(0,0,0,0.05)",
         }}
       />

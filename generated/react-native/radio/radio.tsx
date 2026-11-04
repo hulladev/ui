@@ -1,7 +1,7 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { Platform, Pressable, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { isNativeDark, nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
+import { alpha } from "@hulla/style-native/color"
 export type RadioProps = ComponentPropsWithRef<typeof Pressable> & {
   checked?: boolean
   defaultChecked?: boolean
@@ -102,8 +102,8 @@ export function Radio({
                   : theme.colors.disabledSurface
                 : selected
                   ? accent
-                  : isNativeDark(theme)
-                    ? nativeColorAlpha(theme.colors.foreground, 0.1)
+                  : theme.mode === "dark"
+                    ? alpha(theme.colors.foreground, 0.1)
                     : theme.colors.surface,
               boxShadow: inactive ? undefined : "0px 1px 2px rgba(0,0,0,0.05)",
               alignItems: "center",

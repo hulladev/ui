@@ -127,6 +127,73 @@ afterEach(async () => {
 })
 
 describe("deterministic generation", () => {
+  test("derives on-demand support consumers through aliased imports, types and cycles", async () => {
+    const current = await fixture()
+    await write(
+      join(current.library, "src/lib/input.react.ts"),
+      'import type { DateValue } from "./date.react"\nexport type InputValue = DateValue\n'
+    )
+    await write(
+      join(current.library, "src/lib/date.react.ts"),
+      'import type { InputValue } from "./input.react"\nexport type DateValue = string\nexport type PreviousInput = InputValue\n'
+    )
+    await write(join(current.library, "src/lib/unused.react.ts"), "export const unused = true\n")
+    await write(join(current.library, "src/lib/bootstrap.ts"), "export const bootstrap = true\n")
+    await write(
+      join(current.library, "src/lib/style.ts"),
+      'export { bootstrap } from "./bootstrap"\nexport const cn = (...values: string[]) => values.join(" ")\n'
+    )
+    await write(
+      join(current.library, "src/react/button/button.react.tsx"),
+      'import type { InputValue } from "@/lib/input.react"\nexport const Button = (props: { value: InputValue }) => <button>{props.value}</button>\n'
+    )
+    await write(join(current.library, "src/lib/astro-field.ts"), 'export const field = "field"\n')
+    await write(
+      join(current.library, "src/astro/button/button.astro"),
+      '<button>Save</button>\n<script>import { field } from "@/lib/astro-field"; console.log(field)</script>\n'
+    )
+    const library = createLibrary({
+      ...current.config,
+      copyFiles: {
+        shared: ["lib/style.ts", { src: "lib/bootstrap.ts", onDemand: true }],
+        astro: [{ src: "lib/astro-field.ts", onDemand: true }],
+        react: [
+          ...["input", "date", "unused"].map((name) => ({
+            src: `lib/${name}.react.ts`,
+            dest: `lib/${name}.ts`,
+            onDemand: true,
+          })),
+        ],
+      },
+    })
+    await library.build({ quiet: true })
+    const manifest = JSON.parse(await readFile(join(current.generated, "ui.manifest.json"), "utf8"))
+    const consumers = Object.fromEntries(
+      manifest.library.copyFiles.react.map((file: { dest: string; components?: string[] }) => [
+        file.dest,
+        file.components,
+      ])
+    )
+    expect(consumers).toEqual({
+      "lib/input.ts": ["button"],
+      "lib/date.ts": ["button"],
+      "lib/unused.ts": [],
+    })
+    expect(await readFile(join(current.generated, "react/button/button.tsx"), "utf8")).toContain(
+      '"@/lib/input"'
+    )
+    expect(await readFile(join(current.generated, "react/lib/input.ts"), "utf8")).toContain(
+      '"./date"'
+    )
+    expect(
+      manifest.library.copyFiles.shared.find(
+        (file: { dest: string }) => file.dest === "lib/bootstrap.ts"
+      ).components
+    ).toBeUndefined()
+    expect(manifest.library.copyFiles.astro[0].components).toEqual(["button"])
+    expect((await library.build({ mode: "check", quiet: true })).changed).toBe(false)
+  })
+
   test("inlines declarations, rewrites framework suffixes, and emits availability metadata", async () => {
     const current = await fixture()
     const library = createLibrary(current.config)

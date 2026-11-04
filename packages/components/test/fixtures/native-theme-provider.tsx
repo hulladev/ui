@@ -1,12 +1,10 @@
-import { mock } from "bun:test"
 import { strict as assert } from "node:assert"
 import { renderToStaticMarkup } from "react-dom/server"
 
-mock.module("react-native", () => ({
-  Appearance: { getColorScheme: () => "dark", addChangeListener: () => ({ remove() {} }) },
-}))
+import "./native-platform"
+
 const { NativeThemeProvider, nativeThemes, useNativeTheme } =
-  await import("../../src/react-native/lib/native-theme")
+  await import("../../src/react-native/lib/theme.react-native")
 let result: ReturnType<typeof useNativeTheme>
 function Probe({ override }: { override?: ReturnType<typeof useNativeTheme> }) {
   result = useNativeTheme(override)
@@ -53,3 +51,26 @@ renderToStaticMarkup(
   </NativeThemeProvider>
 )
 assert.equal(result!, custom)
+
+// Legacy custom palettes without mode still resolve once and keep stable identity.
+const unmarked = { colors: nativeThemes.dark.colors, radius: nativeThemes.dark.radius }
+renderToStaticMarkup(
+  <NativeThemeProvider theme={unmarked}>
+    <Probe />
+  </NativeThemeProvider>
+)
+assert.equal(result!.mode, "dark")
+const first = result!
+renderToStaticMarkup(
+  <NativeThemeProvider theme={unmarked}>
+    <Probe />
+  </NativeThemeProvider>
+)
+assert.equal(result!, first)
+const explicit = { ...nativeThemes.light, mode: "dark" as const }
+renderToStaticMarkup(
+  <NativeThemeProvider theme={explicit}>
+    <Probe />
+  </NativeThemeProvider>
+)
+assert.equal(result!.mode, "dark")

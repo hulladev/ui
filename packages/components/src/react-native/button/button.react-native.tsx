@@ -1,8 +1,8 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { Pressable, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
 import { buttonColors, type ButtonVariant } from "./colors"
-import { isNativeDark, nativeColorAlpha, nativeColorMix } from "@/lib/native-color"
+import { alpha, mix } from "@hulla/style-native/color"
 
 export type ButtonProps = ComponentPropsWithRef<typeof Pressable> & {
   contentStyle?: ComponentPropsWithRef<typeof Pressable>["style"]
@@ -65,22 +65,19 @@ export function Button({
               borderColor: colors.border,
               backgroundColor:
                 state.pressed && !inactive
-                  ? variant === "primary" || (variant === "danger" && !isNativeDark(theme))
-                    ? nativeColorMix(
+                  ? variant === "primary" || (variant === "danger" && theme.mode !== "dark")
+                    ? mix(
                         colors.background,
-                        isNativeDark(theme) ? theme.colors.background : theme.colors.foreground,
+                        theme.mode === "dark" ? theme.colors.background : theme.colors.foreground,
                         0.24
                       )
                     : variant === "inverted"
-                      ? nativeColorAlpha(theme.colors.foreground, 0.7)
+                      ? alpha(theme.colors.foreground, 0.7)
                       : variant === "secondary"
-                        ? nativeColorAlpha(
-                            theme.colors.foreground,
-                            isNativeDark(theme) ? 0.25 : 0.15
-                          )
+                        ? alpha(theme.colors.foreground, theme.mode === "dark" ? 0.25 : 0.15)
                         : variant === "danger"
-                          ? nativeColorAlpha(theme.colors.danger, 0.25)
-                          : nativeColorAlpha(theme.colors.foreground, 0.12)
+                          ? alpha(theme.colors.danger, 0.25)
+                          : alpha(theme.colors.foreground, 0.12)
                   : colors.background,
               paddingHorizontal: 12,
               paddingVertical: 5,
@@ -89,8 +86,8 @@ export function Button({
                 !state.pressed &&
                 (variant === "primary" ||
                   variant === "inverted" ||
-                  (variant === "danger" && !isNativeDark(theme)))
-                  ? isNativeDark(theme)
+                  (variant === "danger" && theme.mode !== "dark"))
+                  ? theme.mode === "dark"
                     ? "0px 1px 2px rgba(0,0,0,0.3), inset 0px 1px 0px rgba(255,255,255,0.1)"
                     : "0px 1px 2px rgba(0,0,0,0.1), inset 0px 1px 0px rgba(255,255,255,0.12)"
                   : undefined,

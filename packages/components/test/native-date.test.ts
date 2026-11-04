@@ -3,7 +3,7 @@ import {
   formatNativeDate,
   nativeDateDisabled,
   parseNativeDate,
-} from "../src/react-native/lib/native-date"
+} from "../src/react-native/lib/date.react-native"
 
 describe("local native dates", () => {
   test("rejects rollover and ambiguous date strings", () => {

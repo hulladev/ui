@@ -14,6 +14,7 @@ import { formatGeneratedSource } from "./helpers/format"
 import { generateFrameworkPackageJson } from "./helpers/generateFrameworkPackageJson"
 import { generateFrameworkTsconfig } from "./helpers/generateFrameworkTsconfig"
 import { log } from "./helpers/log"
+import { supportDependencies } from "./helpers/supportDependencies"
 import { resolveInside, toPosixPath } from "./helpers/paths"
 import {
   getGeneratedOutputFilename,
@@ -223,19 +224,74 @@ async function renderPlannedFile(
   await copyFile(file.source, file.destination)
 }
 
-function copyFilesForConfig(config: NormalizedConfig): UILibrary["copyFiles"] {
+async function copyFilesForConfig(
+  config: NormalizedConfig,
+  plans: FrameworkPlan[]
+): Promise<UILibrary["copyFiles"]> {
   const result: Record<string, NormalizedCopyFile[] | undefined> = {}
+  const dependencies = new Map<
+    string,
+    {
+      always: Set<string>
+      components: Map<string, Set<string>>
+    }
+  >()
+  for (const plan of plans) {
+    const entries = [...(config.copyFiles.shared ?? []), ...(config.copyFiles[plan.name] ?? [])]
+    if (!entries.some((entry) => entry.onDemand)) continue
+    const reach = await supportDependencies(
+      plan.outputDir,
+      plan.files.map((file) => file.destination)
+    )
+    const always = reach(
+      entries.filter((entry) => !entry.onDemand).map((entry) => join(plan.outputDir, entry.dest))
+    )
+    const components = new Map(
+      plan.components.map((component) => [
+        component,
+        reach(
+          plan.files
+            .filter((file) =>
+              toPosixPath(relative(plan.outputDir, file.destination)).startsWith(`${component}/`)
+            )
+            .map((file) => file.destination)
+        ),
+      ])
+    )
+    dependencies.set(plan.name, { always, components })
+  }
   for (const [framework, files] of Object.entries(config.copyFiles)) {
     // Registry consumers read from the emitted tree, where a copied file has
     // already moved to dest. Authoring paths must not leak into install metadata.
     if (files && files.length > 0) {
-      result[framework] = files.map((file) => ({ ...file, src: file.dest }))
+      result[framework] = files.map(({ onDemand, ...file }) => {
+        const consumers = new Set<string>()
+        let always = !onDemand
+        for (const plan of plans.filter(
+          (plan) => framework === "shared" || framework === plan.name
+        )) {
+          const graph = dependencies.get(plan.name)
+          const target = resolve(plan.outputDir, file.dest)
+          if (graph?.always.has(target)) always = true
+          for (const [component, paths] of graph?.components ?? []) {
+            if (paths.has(target)) consumers.add(component)
+          }
+        }
+        return {
+          ...file,
+          src: file.dest,
+          ...(!always ? { components: [...consumers].sort() } : {}),
+        }
+      })
     }
   }
   return Object.keys(result).length > 0 ? (result as UILibrary["copyFiles"]) : undefined
 }
 
-function createLibraryConfig(config: NormalizedConfig, plans: FrameworkPlan[]): UILibrary {
+async function createLibraryConfig(
+  config: NormalizedConfig,
+  plans: FrameworkPlan[]
+): Promise<UILibrary> {
   const components: UILibrary["components"] = {}
   for (const plan of plans) {
     for (const component of plan.components) {
@@ -246,7 +302,7 @@ function createLibraryConfig(config: NormalizedConfig, plans: FrameworkPlan[]): 
     }
   }
 
-  const copyFiles = copyFilesForConfig(config)
+  const copyFiles = await copyFilesForConfig(config, plans)
   return {
     schemaVersion: 1,
     name: config.name,
@@ -291,7 +347,7 @@ async function renderOutput(
     )
   }
 
-  const library = createLibraryConfig(config, plans)
+  const library = await createLibraryConfig(config, plans)
   const uiConfigPath = join(stagingRoot, "ui.config.ts")
   const uiConfigContent =
     `import type { UILibrary } from "@hulla/ui"\n\n` +

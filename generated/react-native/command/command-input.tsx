@@ -1,6 +1,6 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { TextInput, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
 export type CommandInputProps = ComponentPropsWithRef<typeof TextInput> & {
   theme?: NativeTheme
   containerStyle?: ComponentPropsWithRef<typeof View>["style"]

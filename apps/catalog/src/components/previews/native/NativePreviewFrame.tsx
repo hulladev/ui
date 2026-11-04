@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react"
 import { View } from "react-native"
-import { NativeThemeProvider } from "../../../../../../generated/react-native/lib/native-theme"
+import { NativeThemeProvider } from "../../../../../../generated/react-native/lib/theme"
 
 const fonts = {
   regular: "Schibsted Grotesk Variable",

@@ -62,6 +62,7 @@ function normalizeCopyFile(entry: CopyFileEntry): NormalizedCopyFile {
     required: entry.required ?? true,
     ...(entry.description ? { description: entry.description } : {}),
     ...(entry.globalStyle ? { globalStyle: true } : {}),
+    ...(entry.onDemand ? { onDemand: true } : {}),
   }
 }
 

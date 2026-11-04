@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ComponentPropsWithRef } from "react"
 import { AccessibilityInfo, Platform, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { isNativeDark, nativeColorMix } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
+import { mix } from "@hulla/style-native/color"
 export type ToastProps = ComponentPropsWithRef<typeof View> & {
   visible: boolean
   onDismiss: () => void
@@ -105,17 +105,18 @@ export function Toast({
       }}
       style={[
         {
-          backgroundColor: nativeColorMix(
+          backgroundColor: mix(
             theme.colors.surfaceRaised,
             theme.colors.primary,
-            isNativeDark(theme) ? 0.04 : 0.03
+            theme.mode === "dark" ? 0.04 : 0.03
           ),
           borderWidth: 1,
-          borderColor: nativeColorMix(theme.colors.border, theme.colors.primary, 0.14),
+          borderColor: mix(theme.colors.border, theme.colors.primary, 0.14),
           borderRadius: theme.radius.lg,
-          boxShadow: isNativeDark(theme)
-            ? "0 2px 4px -2px rgba(0,0,0,0.24), 0 16px 48px -16px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.08)"
-            : "0 2px 4px -2px rgba(0,0,0,0.1), 0 16px 48px -16px rgba(0,0,0,0.26)",
+          boxShadow:
+            theme.mode === "dark"
+              ? "0 2px 4px -2px rgba(0,0,0,0.24), 0 16px 48px -16px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.08)"
+              : "0 2px 4px -2px rgba(0,0,0,0.1), 0 16px 48px -16px rgba(0,0,0,0.26)",
           padding: 16,
           paddingBottom: 26,
           gap: 0,

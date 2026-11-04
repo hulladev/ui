@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react"
 import { Text } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
 export type PopoverTitleProps = ComponentPropsWithRef<typeof Text> & { theme?: NativeTheme }
 export function PopoverTitle({ children, style, theme: override, ...props }: PopoverTitleProps) {
   const theme = useNativeTheme(override)

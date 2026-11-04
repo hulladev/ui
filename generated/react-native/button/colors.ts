@@ -1,5 +1,5 @@
-import type { NativeTheme } from "@/lib/native-theme"
-import { isNativeDark, nativeColorAlpha } from "@/lib/native-color"
+import type { NativeTheme } from "@/lib/theme"
+import { alpha } from "@hulla/style-native/color"
 
 export type ButtonVariant = "primary" | "secondary" | "inverted" | "outline" | "ghost" | "danger"
 
@@ -11,7 +11,7 @@ export function buttonColors(theme: NativeTheme, variant: ButtonVariant, disable
       border: colors.disabledBorder,
       foreground: colors.disabledForeground,
     }
-  const dark = isNativeDark(theme)
+  const dark = theme.mode === "dark"
   const variants = {
     primary: {
       background: colors.primary,
@@ -19,7 +19,7 @@ export function buttonColors(theme: NativeTheme, variant: ButtonVariant, disable
       foreground: colors.primaryForeground,
     },
     secondary: {
-      background: nativeColorAlpha(colors.foreground, dark ? 0.12 : 0.05),
+      background: alpha(colors.foreground, dark ? 0.12 : 0.05),
       border: colors.border,
       foreground: colors.foreground,
     },
@@ -30,13 +30,13 @@ export function buttonColors(theme: NativeTheme, variant: ButtonVariant, disable
     },
     outline: {
       background: "transparent",
-      border: nativeColorAlpha(colors.foreground, 0.2),
+      border: alpha(colors.foreground, 0.2),
       foreground: colors.foreground,
     },
     ghost: { background: "transparent", border: "transparent", foreground: colors.mutedForeground },
     danger: {
-      background: dark ? nativeColorAlpha(colors.danger, 0.15) : colors.danger,
-      border: dark ? nativeColorAlpha(colors.danger, 0.25) : colors.danger,
+      background: dark ? alpha(colors.danger, 0.15) : colors.danger,
+      border: dark ? alpha(colors.danger, 0.25) : colors.danger,
       foreground: dark ? colors.danger : colors.onEmphasis,
     },
   }

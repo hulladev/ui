@@ -11,7 +11,7 @@ import {
   NativeThemeProvider,
   nativeThemes,
   useNativeTheme,
-} from "../../generated/react-native/lib/native-theme"
+} from "../../generated/react-native/lib/theme"
 import { Catalog } from "./src/Catalog"
 
 const fonts = {

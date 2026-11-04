@@ -80,18 +80,15 @@ export default defineConfig({
     resolve: {
       dedupe: ["react", "react-dom", "react-native-web", "@hulla/style", "@lucide/astro", "cn"],
       alias: {
-        "@/lib/native-color": fileURLToPath(
-          new URL("../../generated/react-native/lib/native-color.ts", import.meta.url)
-        ),
-        "@/lib/native-date": fileURLToPath(
-          new URL("../../generated/react-native/lib/native-date.ts", import.meta.url)
+        "@/lib/date": fileURLToPath(
+          new URL("../../generated/react-native/lib/date.ts", import.meta.url)
         ),
         "@/lib/text-input-style": fileURLToPath(
           new URL("../../generated/react-native/lib/text-input-style.ts", import.meta.url)
         ),
         "react-native": "react-native-web",
-        "@/lib/native-theme": fileURLToPath(
-          new URL("../../generated/react-native/lib/native-theme.ts", import.meta.url)
+        "@/lib/theme": fileURLToPath(
+          new URL("../../generated/react-native/lib/theme.tsx", import.meta.url)
         ),
         "@/ui": generatedAstroRoot,
         "@": generatedAstroRoot,

@@ -1,7 +1,7 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { Pressable, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
+import { alpha } from "@hulla/style-native/color"
 export type FileUploadTriggerProps = ComponentPropsWithRef<typeof Pressable> & {
   theme?: NativeTheme
   contentStyle?: ComponentPropsWithRef<typeof Pressable>["style"]
@@ -81,7 +81,7 @@ export function FileUploadTrigger({
               backgroundColor:
                 !inactive && (hovered || state.pressed)
                   ? theme.colors.hoverSurface
-                  : nativeColorAlpha(theme.colors.foreground, 0.05),
+                  : alpha(theme.colors.foreground, 0.05),
             },
             typeof contentStyle === "function" ? contentStyle(state) : contentStyle,
           ]}

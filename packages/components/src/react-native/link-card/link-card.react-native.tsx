@@ -1,6 +1,6 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { Platform, Pressable } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
 
 export type LinkCardProps = ComponentPropsWithRef<typeof Pressable> & { theme?: NativeTheme }
 

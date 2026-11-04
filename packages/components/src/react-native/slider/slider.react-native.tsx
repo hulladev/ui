@@ -7,8 +7,8 @@ import {
   type StyleProp,
   type ViewStyle,
 } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { isNativeDark, nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
+import { alpha } from "@hulla/style-native/color"
 export type SliderProps = Omit<ComponentPropsWithRef<typeof Pressable>, "children"> & {
   containerStyle?: StyleProp<ViewStyle>
   value?: number
@@ -208,10 +208,7 @@ export function Slider({
           style={{
             height: 6,
             borderRadius: 3,
-            backgroundColor: nativeColorAlpha(
-              theme.colors.foreground,
-              isNativeDark(theme) ? 0.22 : 0.14
-            ),
+            backgroundColor: alpha(theme.colors.foreground, theme.mode === "dark" ? 0.22 : 0.14),
             boxShadow: "inset 0px 2px 4px rgba(0,0,0,0.05)",
           }}
         >

@@ -1,7 +1,7 @@
 import type { ComponentPropsWithRef } from "react"
 import { KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { isNativeDark, nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
+import { alpha } from "@hulla/style-native/color"
 export type DrawerProps = ComponentPropsWithRef<typeof Modal> & {
   onClose: () => void
   contentStyle?: ComponentPropsWithRef<typeof View>["style"]
@@ -51,9 +51,10 @@ export function Drawer({
             bottom: 0,
             left: 0,
             right: 0,
-            backgroundColor: isNativeDark(theme)
-              ? nativeColorAlpha(theme.colors.background, 0.72)
-              : nativeColorAlpha(theme.colors.foreground, 0.4),
+            backgroundColor:
+              theme.mode === "dark"
+                ? alpha(theme.colors.background, 0.72)
+                : alpha(theme.colors.foreground, 0.4),
           }}
         />
         <View
@@ -69,12 +70,12 @@ export function Drawer({
               alignSelf: "center",
               backgroundColor: theme.colors.surfaceRaised,
               borderTopWidth: 1,
-              borderColor: isNativeDark(theme)
-                ? nativeColorAlpha(theme.colors.foreground, 0.15)
-                : theme.colors.border,
-              boxShadow: isNativeDark(theme)
-                ? "0 2px 4px -2px rgba(0,0,0,0.28), 0 24px 80px -28px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.08)"
-                : "0 2px 4px -2px rgba(0,0,0,0.12), 0 24px 80px -28px rgba(0,0,0,0.28)",
+              borderColor:
+                theme.mode === "dark" ? alpha(theme.colors.foreground, 0.15) : theme.colors.border,
+              boxShadow:
+                theme.mode === "dark"
+                  ? "0 2px 4px -2px rgba(0,0,0,0.28), 0 24px 80px -28px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.08)"
+                  : "0 2px 4px -2px rgba(0,0,0,0.12), 0 24px 80px -28px rgba(0,0,0,0.28)",
               borderRadius: 0,
               borderBottomLeftRadius: 0,
               borderBottomRightRadius: 0,

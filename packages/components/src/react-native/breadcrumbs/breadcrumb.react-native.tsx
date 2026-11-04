@@ -1,6 +1,6 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { Pressable } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
 export type BreadcrumbProps = ComponentPropsWithRef<typeof Pressable> & {
   current?: boolean
   theme?: NativeTheme

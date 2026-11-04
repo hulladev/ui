@@ -1,6 +1,6 @@
 import type { DialogProps } from "../dialog/dialog"
 import { Dialog } from "../dialog/dialog"
-import { useNativeTheme } from "@/lib/native-theme"
+import { useNativeTheme } from "@/lib/theme"
 export type CommandProps = DialogProps
 export function Command({
   children,

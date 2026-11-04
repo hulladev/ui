@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState, type ComponentPropsWithRef, type ReactNode } from "react"
 import { PanResponder, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
 import { Button } from "../button/button"
 import { ButtonText } from "../button/button-text"
 

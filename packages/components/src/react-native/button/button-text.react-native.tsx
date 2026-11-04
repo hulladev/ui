@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react"
 import { Text } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
 import { buttonColors, type ButtonVariant } from "./colors"
 
 export type ButtonTextProps = ComponentPropsWithRef<typeof Text> & {

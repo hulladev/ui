@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react"
 import { Text as NativeText } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
 
 export type TextProps = ComponentPropsWithRef<typeof NativeText> & {
   variant?: "body" | "heading" | "caption" | "code"

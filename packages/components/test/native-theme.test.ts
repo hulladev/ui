@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import Color from "colorjs.io"
 import { resolve } from "node:path"
-import { nativeThemes } from "../src/react-native/lib/native-tokens"
+import { nativeThemes } from "../src/react-native/lib/tokens.react-native"
 
 describe("shared native theme", () => {
   for (const [mode, theme] of Object.entries(nativeThemes)) {
@@ -33,7 +33,7 @@ test("provider inherits themes and fonts, supports scopes, and preserves local o
   expect(result.exitCode, new TextDecoder().decode(result.stderr)).toBe(0)
 })
 
-test("native color recipes match web opacity and premultiplied OKLab mixing", () => {
+test("native button variants retain readable label contrast", () => {
   const result = Bun.spawnSync(
     [process.execPath, resolve(import.meta.dir, "fixtures/native-color.ts")],
     {

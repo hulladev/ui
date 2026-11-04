@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react"
 import { View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
 
 export type SeparatorProps = ComponentPropsWithRef<typeof View> & {
   orientation?: "horizontal" | "vertical"

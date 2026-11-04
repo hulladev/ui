@@ -1,6 +1,6 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { Platform, Pressable, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
 export type ComboboxItemProps = ComponentPropsWithRef<typeof Pressable> & {
   contentStyle?: ComponentPropsWithRef<typeof Pressable>["style"]
   theme?: NativeTheme

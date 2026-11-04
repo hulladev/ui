@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react"
 import { Text } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
 export type CommandEmptyProps = ComponentPropsWithRef<typeof Text> & { theme?: NativeTheme }
 export function CommandEmpty({ children, style, theme: override, ...props }: CommandEmptyProps) {
   const theme = useNativeTheme(override)

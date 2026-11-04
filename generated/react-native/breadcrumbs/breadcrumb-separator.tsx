@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react"
 import { View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
 export type BreadcrumbSeparatorProps = ComponentPropsWithRef<typeof View> & { theme?: NativeTheme }
 export function BreadcrumbSeparator({
   children,

@@ -1,7 +1,7 @@
 import type { ComponentPropsWithRef } from "react"
 import { View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
+import { alpha } from "@hulla/style-native/color"
 
 export type MeterProps = ComponentPropsWithRef<typeof View> & {
   value: number
@@ -45,7 +45,7 @@ export function Meter({
         {
           height: 8,
           borderRadius: 999,
-          backgroundColor: nativeColorAlpha(theme.colors.foreground, 0.1),
+          backgroundColor: alpha(theme.colors.foreground, 0.1),
           overflow: "hidden",
         },
         style,

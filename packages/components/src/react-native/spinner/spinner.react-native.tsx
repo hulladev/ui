@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react"
 import { ActivityIndicator } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
 
 export type SpinnerProps = ComponentPropsWithRef<typeof ActivityIndicator> & { theme?: NativeTheme }
 

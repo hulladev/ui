@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react"
 import { Text } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
 export type DrawerTitleProps = ComponentPropsWithRef<typeof Text> & { theme?: NativeTheme }
 export function DrawerTitle({ children, style, theme: override, ...props }: DrawerTitleProps) {
   const theme = useNativeTheme(override)

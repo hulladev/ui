@@ -1,6 +1,6 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
 import { Button } from "../button/button.react-native"
 import { ButtonText } from "../button/button-text.react-native"
 import { Input } from "../input/input.react-native"

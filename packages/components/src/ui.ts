@@ -131,39 +131,26 @@ export const ui = createLibrary({
     react: webCopyFiles,
     "react-native": [
       {
-        src: "react-native/lib/native-color.ts",
-        dest: "lib/native-color.ts",
-        description: "Native opacity and OKLab color mixing shared with web visual recipes",
+        src: "react-native/lib/theme.react-native.tsx",
+        dest: "lib/theme.tsx",
+        description: "Scoped UI theme, fonts, and system appearance",
       },
       {
-        src: "react-native/lib/native-date.ts",
-        dest: "lib/native-date.ts",
-        description: "Local ISO date parsing, serialization, and selection limits",
+        src: "react-native/lib/tokens.react-native.ts",
+        dest: "lib/tokens.ts",
+        description: "Editable UI design tokens generated from theme.json",
       },
       {
-        src: "react-native/lib/text-input-style.ts",
+        src: "react-native/lib/date.react-native.ts",
+        dest: "lib/date.ts",
+        onDemand: true,
+        description: "Local date parsing and selection limits",
+      },
+      {
+        src: "react-native/lib/text-input-style.react-native.ts",
         dest: "lib/text-input-style.ts",
-        description: "Shared native text-entry sizing, colors, and focus/invalid styling",
-      },
-      {
-        src: "react-native/lib/native-theme-context.ts",
-        dest: "lib/native-theme-context.ts",
-        description: "Scoped theme context and system appearance subscription",
-      },
-      {
-        src: "react-native/lib/native-theme-provider.tsx",
-        dest: "lib/native-theme-provider.tsx",
-        description: "App-wide theme mode, fonts, and subtree overrides",
-      },
-      {
-        src: "react-native/lib/native-tokens.ts",
-        dest: "lib/native-tokens.ts",
-        description: "Shared theme converted to native sRGB colors",
-      },
-      {
-        src: "react-native/lib/native-theme.ts",
-        dest: "lib/native-theme.ts",
-        description: "System color scheme and explicit theme selection",
+        onDemand: true,
+        description: "Shared text-entry recipe",
       },
     ],
     solid: [
@@ -199,7 +186,11 @@ export const ui = createLibrary({
     frameworkModifiers: {
       "react-native": (packageJson) => ({
         ...packageJson,
-        dependencies: { react: "^19.3.0", "react-native": "^0.88.1" },
+        dependencies: {
+          react: "^19.3.0",
+          "react-native": "^0.88.1",
+          "@hulla/style-native": "^1.1.0",
+        },
         devDependencies: { "@types/react": "^19.3.0", typescript: "*" },
       }),
       astro: (packageJson) =>

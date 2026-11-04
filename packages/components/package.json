@@ -17,7 +17,8 @@
     "@fontsource-variable/schibsted-grotesk": "^5.3.0",
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@hulla/style": "catalog:",
-    "tailwindcss": "^4.1.13"
+    "tailwindcss": "^4.1.13",
+    "@hulla/style-native": "^1.1.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",

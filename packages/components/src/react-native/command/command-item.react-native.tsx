@@ -1,7 +1,7 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { Pressable, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { nativeColorAlpha, isNativeDark } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
+import { alpha } from "@hulla/style-native/color"
 export type CommandItemProps = ComponentPropsWithRef<typeof Pressable> & {
   contentStyle?: ComponentPropsWithRef<typeof Pressable>["style"]
   theme?: NativeTheme
@@ -63,7 +63,7 @@ export function CommandItem({
                 ? "transparent"
                 : state.pressed || focused
                   ? destructive
-                    ? nativeColorAlpha(theme.colors.danger, isNativeDark(theme) ? 0.15 : 0.1)
+                    ? alpha(theme.colors.danger, theme.mode === "dark" ? 0.15 : 0.1)
                     : theme.colors.hoverSurface
                   : "transparent",
             },

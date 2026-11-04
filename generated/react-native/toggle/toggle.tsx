@@ -1,7 +1,7 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { Pressable, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
+import { alpha } from "@hulla/style-native/color"
 export type ToggleProps = ComponentPropsWithRef<typeof Pressable> & {
   variant?: "outline" | "ghost" | "inverted"
   pressed?: boolean
@@ -75,18 +75,18 @@ export function Toggle({
             borderWidth: 1,
             borderColor: inactive
               ? selected
-                ? nativeColorAlpha(theme.colors.disabledForeground, 0.4)
+                ? alpha(theme.colors.disabledForeground, 0.4)
                 : theme.colors.disabledBorder
               : selected && variant === "inverted"
                 ? theme.colors.foreground
                 : selected && variant === "outline"
-                  ? nativeColorAlpha(theme.colors.primary, 0.6)
+                  ? alpha(theme.colors.primary, 0.6)
                   : variant === "ghost"
                     ? "transparent"
-                    : nativeColorAlpha(theme.colors.foreground, 0.2),
+                    : alpha(theme.colors.foreground, 0.2),
             backgroundColor: inactive
               ? selected
-                ? nativeColorAlpha(theme.colors.foreground, 0.1)
+                ? alpha(theme.colors.foreground, 0.1)
                 : theme.colors.disabledSurface
               : selected
                 ? variant === "inverted"

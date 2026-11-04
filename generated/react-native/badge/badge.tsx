@@ -1,7 +1,7 @@
 import type { ComponentPropsWithRef } from "react"
 import { Platform, Text } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { isNativeDark, nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
+import { alpha } from "@hulla/style-native/color"
 
 export type BadgeProps = ComponentPropsWithRef<typeof Text> & {
   variant?: "neutral" | "primary" | "success" | "warning" | "danger"
@@ -16,7 +16,7 @@ export function Badge({
   ...props
 }: BadgeProps) {
   const theme = useNativeTheme(override)
-  const dark = isNativeDark(theme)
+  const dark = theme.mode === "dark"
   const accent = variant === "neutral" ? theme.colors.foreground : theme.colors[variant]
   return (
     <Text
@@ -30,9 +30,9 @@ export function Badge({
           borderColor: "transparent",
           backgroundColor:
             variant === "neutral"
-              ? nativeColorAlpha(accent, dark ? 0.15 : 0.1)
+              ? alpha(accent, dark ? 0.15 : 0.1)
               : dark
-                ? nativeColorAlpha(accent, 0.15)
+                ? alpha(accent, 0.15)
                 : accent,
           color:
             variant === "neutral"

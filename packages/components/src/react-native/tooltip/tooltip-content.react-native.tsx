@@ -1,7 +1,7 @@
 import type { ComponentPropsWithRef } from "react"
 import { Text } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
+import { alpha } from "@hulla/style-native/color"
 export type TooltipContentProps = ComponentPropsWithRef<typeof Text> & { theme?: NativeTheme }
 export function TooltipContent({
   children,
@@ -21,7 +21,7 @@ export function TooltipContent({
           fontFamily: theme.fonts?.medium,
           color: theme.colors.background,
           backgroundColor: theme.colors.foreground,
-          borderColor: nativeColorAlpha(theme.colors.foreground, 0.1),
+          borderColor: alpha(theme.colors.foreground, 0.1),
           borderWidth: 1,
           borderRadius: theme.radius.sm,
           paddingHorizontal: 8,

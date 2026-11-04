@@ -1,7 +1,7 @@
 import { useState, type ComponentPropsWithRef, type ReactNode } from "react"
 import { Pressable, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
+import { alpha } from "@hulla/style-native/color"
 export type SelectProps = ComponentPropsWithRef<typeof Pressable> & {
   contentStyle?: ComponentPropsWithRef<typeof Pressable>["style"]
   theme?: NativeTheme
@@ -61,7 +61,7 @@ export function Select({
                 ? theme.colors.disabledBorder
                 : focused
                   ? theme.colors.focusRing
-                  : nativeColorAlpha(theme.colors.foreground, 0.25),
+                  : alpha(theme.colors.foreground, 0.25),
               borderRadius: theme.radius.md,
               paddingHorizontal: 12,
               paddingVertical: 9,
@@ -72,7 +72,7 @@ export function Select({
               boxShadow: inactive ? "none" : "inset 0 1px 2px rgba(0,0,0,0.025)",
               outlineWidth: focused && !inactive ? 2 : 0,
               outlineOffset: 0,
-              outlineColor: nativeColorAlpha(theme.colors.focusRing, 0.25),
+              outlineColor: alpha(theme.colors.focusRing, 0.25),
             },
             typeof contentStyle === "function" ? contentStyle(state) : contentStyle,
           ]}

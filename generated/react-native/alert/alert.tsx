@@ -1,7 +1,7 @@
 import type { ComponentPropsWithRef } from "react"
 import { View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { nativeColorMix } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
+import { mix } from "@hulla/style-native/color"
 
 export type AlertProps = ComponentPropsWithRef<typeof View> & {
   theme?: NativeTheme
@@ -29,8 +29,8 @@ export function Alert({
       style={[
         {
           borderWidth: 1,
-          borderColor: nativeColorMix(theme.colors.border, accent, 0.16),
-          backgroundColor: nativeColorMix(theme.colors.surface, accent, 0.03),
+          borderColor: mix(theme.colors.border, accent, 0.16),
+          backgroundColor: mix(theme.colors.surface, accent, 0.03),
           borderRadius: theme.radius.md,
           paddingHorizontal: 16,
           paddingVertical: 14,

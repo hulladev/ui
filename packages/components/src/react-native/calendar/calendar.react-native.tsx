@@ -1,7 +1,7 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { Pressable, ScrollView, Text, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { formatNativeDate, nativeDateDisabled, parseNativeDate } from "@/lib/native-date"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
+import { formatNativeDate, nativeDateDisabled, parseNativeDate } from "@/lib/date.react-native"
 
 export type CalendarProps = ComponentPropsWithRef<typeof View> & {
   value?: string

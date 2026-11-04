@@ -1,6 +1,6 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { Pressable, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
 export type CollapsibleTriggerProps = ComponentPropsWithRef<typeof Pressable> & {
   expanded: boolean
   onExpandedChange?: (expanded: boolean) => void

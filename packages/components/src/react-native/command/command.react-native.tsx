@@ -1,6 +1,6 @@
 import type { DialogProps } from "../dialog/dialog.react-native"
 import { Dialog } from "../dialog/dialog.react-native"
-import { useNativeTheme } from "@/lib/native-theme"
+import { useNativeTheme } from "@/lib/theme.react-native"
 export type CommandProps = DialogProps
 export function Command({
   children,

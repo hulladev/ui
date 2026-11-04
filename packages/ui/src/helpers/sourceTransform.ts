@@ -399,7 +399,7 @@ function consolidateNamedImports(content: string, path: string): string {
 }
 
 function stripFrameworkSuffix(specifier: string, framework: string): string {
-  if (!specifier.startsWith(".")) return specifier
+  if (!specifier.startsWith(".") && !specifier.startsWith("@/")) return specifier
   const queryIndex = specifier.search(/[?#]/)
   const path = queryIndex >= 0 ? specifier.slice(0, queryIndex) : specifier
   const trailing = queryIndex >= 0 ? specifier.slice(queryIndex) : ""

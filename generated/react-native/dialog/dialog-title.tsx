@@ -1,6 +1,6 @@
 import type { ComponentPropsWithRef } from "react"
 import { Text } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
 export type DialogTitleProps = ComponentPropsWithRef<typeof Text> & { theme?: NativeTheme }
 export function DialogTitle({ children, style, theme: override, ...props }: DialogTitleProps) {
   const theme = useNativeTheme(override)

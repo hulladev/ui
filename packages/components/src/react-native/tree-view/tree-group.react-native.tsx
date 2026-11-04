@@ -1,7 +1,7 @@
 import type { ComponentPropsWithRef } from "react"
 import { View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme.react-native"
+import { alpha } from "@hulla/style-native/color"
 
 export type TreeGroupProps = ComponentPropsWithRef<typeof View> & { theme?: NativeTheme }
 export function TreeGroup({ children, style, theme: override, ...props }: TreeGroupProps) {
@@ -16,7 +16,7 @@ export function TreeGroup({ children, style, theme: override, ...props }: TreeGr
           paddingLeft: 8,
           gap: 2,
           borderLeftWidth: 1,
-          borderLeftColor: nativeColorAlpha(theme.colors.border, 0.7),
+          borderLeftColor: alpha(theme.colors.border, 0.7),
         },
         style,
       ]}

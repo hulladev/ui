@@ -10,6 +10,8 @@ export type CopyFileEntry =
       required?: boolean
       description?: string
       globalStyle?: boolean
+      /** Install only with components whose emitted imports reach this file. */
+      onDemand?: boolean
     }
 
 export type NormalizedCopyFile = {
@@ -18,6 +20,9 @@ export type NormalizedCopyFile = {
   required: boolean
   description?: string
   globalStyle?: boolean
+  onDemand?: boolean
+  /** Generated component dependency closure for an on-demand file. */
+  components?: string[]
 }
 
 export type OutputDirs<F extends Frameworks> = {

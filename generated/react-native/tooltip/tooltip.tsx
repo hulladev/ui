@@ -1,6 +1,6 @@
 import { useState, type ReactNode, type ComponentPropsWithRef } from "react"
 import { Platform, Pressable, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
 export type TooltipProps = ComponentPropsWithRef<typeof Pressable> & {
   content: ReactNode
   expanded?: boolean

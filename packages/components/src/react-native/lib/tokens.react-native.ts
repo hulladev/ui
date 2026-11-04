@@ -2,6 +2,7 @@
 // sRGB colors work on both React Native platforms without CSS or a styling runtime.
 export const nativeThemes = {
   light: {
+    mode: "light",
     colors: {
       background: "#f3faff",
       surface: "#fcfeff",
@@ -32,6 +33,7 @@ export const nativeThemes = {
     },
   },
   dark: {
+    mode: "dark",
     colors: {
       background: "#040404",
       surface: "#0a0a0a",
@@ -61,8 +63,12 @@ export const nativeThemes = {
       lg: 16,
     },
   },
-}
+} satisfies Record<
+  "light" | "dark",
+  { mode: "light" | "dark"; colors: Record<string, string>; radius: Record<string, number> }
+>
 
-export type NativeTheme = typeof nativeThemes.light & {
+export type NativeTheme = Omit<typeof nativeThemes.light, "mode"> & {
+  mode?: "light" | "dark"
   fonts?: Partial<Record<"regular" | "medium" | "semibold" | "mono", string>>
 }

@@ -59,21 +59,26 @@ const native = `// Generated from theme.json. Run bun run generate to update.
 // sRGB colors work on both React Native platforms without CSS or a styling runtime.
 export const nativeThemes = ${JSON.stringify(
   {
-    light: { colors: palette(theme.light), radius: theme.radius },
-    dark: { colors: palette({ ...theme.light, ...theme.dark }), radius: theme.radius },
+    light: { mode: "light", colors: palette(theme.light), radius: theme.radius },
+    dark: {
+      mode: "dark",
+      colors: palette({ ...theme.light, ...theme.dark }),
+      radius: theme.radius,
+    },
   },
   null,
   2
-)}
+)} satisfies Record<"light" | "dark", { mode: "light" | "dark"; colors: Record<string, string>; radius: Record<string, number> }>
 
-export type NativeTheme = typeof nativeThemes.light & {
+export type NativeTheme = Omit<typeof nativeThemes.light, "mode"> & {
+  mode?: "light" | "dark"
   fonts?: Partial<Record<"regular" | "medium" | "semibold" | "mono", string>>
 }
 `
 
 for (const [path, content, parser] of [
   ["theme.css", css, "css"],
-  ["react-native/lib/native-tokens.ts", native, "typescript"],
+  ["react-native/lib/tokens.react-native.ts", native, "typescript"],
 ] as const) {
   const output = await format(content, {
     parser,

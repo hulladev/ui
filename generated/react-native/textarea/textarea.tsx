@@ -1,6 +1,6 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { Platform, TextInput } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
 import { textInputStyle } from "@/lib/text-input-style"
 
 export type TextareaProps = Omit<ComponentPropsWithRef<typeof TextInput>, "multiline"> & {

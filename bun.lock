@@ -8,6 +8,7 @@
         "@changesets/cli": "3.0.3",
         "@commitlint/cli": "^19.8.1",
         "@floating-ui/dom": "catalog:",
+        "@hulla/style-native": "^1.1.0",
         "@hulla/ui": "workspace:*",
         "@playwright/test": "^1.62.0",
         "@repo/eslint-config": "workspace:*",
@@ -39,6 +40,7 @@
         "@fontsource-variable/schibsted-grotesk": "^5.3.0",
         "@fontsource/ibm-plex-mono": "^5.3.0",
         "@hulla/style": "catalog:",
+        "@hulla/style-native": "^1.1.0",
         "@lucide/astro": "^1.26.0",
         "@tanstack/highlight": "^0.0.9",
         "astro": "^5.18.0",
@@ -69,6 +71,7 @@
         "@expo-google-fonts/ibm-plex-mono": "^0.4.1",
         "@expo-google-fonts/schibsted-grotesk": "^0.4.2",
         "@expo/metro-runtime": "~58.0.15",
+        "@hulla/style-native": "^1.1.0",
         "expo": "~58.0.21",
         "expo-document-picker": "~58.0.4",
         "expo-font": "~58.0.11",
@@ -94,6 +97,7 @@
         "@fontsource-variable/schibsted-grotesk": "^5.3.0",
         "@fontsource/ibm-plex-mono": "^5.3.0",
         "@hulla/style": "catalog:",
+        "@hulla/style-native": "^1.1.0",
         "tailwindcss": "^4.1.13",
       },
       "devDependencies": {
@@ -142,7 +146,7 @@
     },
     "packages/ui": {
       "name": "@hulla/ui",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "bin": {
         "uigen": "./dist/bin/uigen.js",
       },
@@ -168,7 +172,7 @@
   },
   "catalog": {
     "@floating-ui/dom": "^1.7.6",
-    "@hulla/style": "1.0.1",
+    "@hulla/style": "1.1.0",
     "cn": "0.3.0",
   },
   "packages": {
@@ -584,7 +588,9 @@
 
     "@hulla/native-catalog": ["@hulla/native-catalog@workspace:apps/native-catalog"],
 
-    "@hulla/style": ["@hulla/style@1.0.1", "", {}, "sha512-PCt0L8snAxg+X4BKPPVp6ARzDQmtGd11BUNn6QCOzGOtqScHq0TnioPbopvPdsdHf49+La+g/7IW+dUQgpBisw=="],
+    "@hulla/style": ["@hulla/style@1.1.0", "", {}, "sha512-lpSnfEWRzLdGiCAnCALJ5ufVNU7F/E5C2Zc6azVMpfmyEwCZKhVjb7ZeYa7wNvJmNO7pgi2NWXLyLs5HewlopA=="],
+
+    "@hulla/style-native": ["@hulla/style-native@1.1.0", "", { "peerDependencies": { "@hulla/style": "^1.1.0", "react-native": ">=0.81.0 <1.0.0" }, "optionalPeers": ["@hulla/style"] }, "sha512-gtSWOmik7EJCzZEehWXoW5zXSrQBRiORFXdAi5ndvihedLNB1W5G4pHUgQrhLJrdUNBKyHGQSG3HMkViRRL3EQ=="],
 
     "@hulla/ui": ["@hulla/ui@workspace:packages/ui"],
 
@@ -2654,10 +2660,6 @@
 
     "components/@types/node": ["@types/node@22.19.13", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-akNQMv0wW5uyRpD2v2IEyRSZiR+BeGuoB6L310EgGObO44HSMNT8z1xzio28V8qOrgYaopIDNA18YgdXd+qTiw=="],
 
-    "components/react": ["react@19.2.4", "", {}, "sha512-9nfp2hYpCwOjAN+8TZFGhtWEwgvWHXqESH8qT89AT/lWklpLON22Lc8pEtnpsZz7VmawabSU0gCjnj8aC0euHQ=="],
-
-    "components/react-dom": ["react-dom@19.2.4", "", { "dependencies": { "scheduler": "^0.27.0" }, "peerDependencies": { "react": "^19.2.4" } }, "sha512-AXJdLo8kgMbimY95O2aKQqsz2iWi9jMgKJhRBAxECE4IFxfcazB2LmzloIoibJI3C12IlY20+KFaLv+71bUJeQ=="],
-
     "compression/debug": ["debug@2.6.9", "", { "dependencies": { "ms": "2.0.0" } }, "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA=="],
 
     "compression/negotiator": ["negotiator@0.6.4", "", {}, "sha512-myRT3DiWPHqho5PrJaIRyaMv2kgYf0mUVgBNOYMuCH5Ki1yEiQaf/ZJuQ62nvpc44wL5WDbTX7yGJi1Neevw8w=="],
@@ -2959,8 +2961,6 @@
     "cli-truncate/string-width/strip-ansi": ["strip-ansi@4.0.0", "", { "dependencies": { "ansi-regex": "^3.0.0" } }, "sha512-4XaJ2zQdCzROZDivEVIDPkcQn8LMFSa8kj8Gxb/Lnwzv9A8VctNZ+lfivC/sV3ivW8ElJTERXZoPBRrZKkNKow=="],
 
     "components/@types/node/undici-types": ["undici-types@6.21.0", "", {}, "sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ=="],
-
-    "components/react-dom/scheduler": ["scheduler@0.27.0", "", {}, "sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q=="],
 
     "compression/debug/ms": ["ms@2.0.0", "", {}, "sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A=="],
 

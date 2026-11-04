@@ -5,7 +5,7 @@
     "paths": {
       "@/ui/*": ["../../generated/astro/*"],
       "@/*": ["../../generated/astro/*"],
-      "@/lib/native-theme": ["../../generated/react-native/lib/native-theme.ts"]
+      "@/lib/theme": ["../../generated/react-native/lib/theme.tsx"]
     },
     "types": ["astro/client", "bun", "node"],
     "jsx": "react-jsx",

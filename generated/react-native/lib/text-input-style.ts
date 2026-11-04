@@ -1,6 +1,6 @@
 import type { TextStyle } from "react-native"
-import type { NativeTheme } from "./native-theme"
-import { nativeColorAlpha } from "./native-color"
+import type { NativeTheme } from "./theme"
+import { alpha } from "@hulla/style-native/color"
 
 export function textInputStyle(
   theme: NativeTheme,
@@ -20,12 +20,12 @@ export function textInputStyle(
         ? theme.colors.danger
         : focused
           ? theme.colors.focusRing
-          : nativeColorAlpha(theme.colors.foreground, 0.25),
+          : alpha(theme.colors.foreground, 0.25),
     backgroundColor: inactive ? theme.colors.disabledSurface : theme.colors.surface,
     boxShadow: inactive
       ? undefined
       : focused
-        ? `0px 0px 0px 2px ${nativeColorAlpha(theme.colors.focusRing, 0.25)}, inset 0px 1px 2px rgba(0,0,0,0.025)`
+        ? `0px 0px 0px 2px ${alpha(theme.colors.focusRing, 0.25)}, inset 0px 1px 2px rgba(0,0,0,0.025)`
         : "inset 0px 1px 2px rgba(0,0,0,0.025)",
     color: inactive ? theme.colors.disabledForeground : theme.colors.foreground,
     fontSize: 14,

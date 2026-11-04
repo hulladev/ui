@@ -1,7 +1,7 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { Pressable, Text, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
+import { alpha } from "@hulla/style-native/color"
 export type StepperItemProps = ComponentPropsWithRef<typeof Pressable> & {
   step: number
   status?: "complete" | "current" | "upcoming"
@@ -63,7 +63,7 @@ export function StepperItem({
           borderColor:
             status === "current"
               ? theme.colors.foreground
-              : nativeColorAlpha(theme.colors.foreground, status === "complete" ? 0.4 : 0.15),
+              : alpha(theme.colors.foreground, status === "complete" ? 0.4 : 0.15),
           paddingLeft: 20,
           paddingVertical: 4,
           outlineWidth: focused && !inactive ? 2 : 0,

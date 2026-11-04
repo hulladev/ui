@@ -1,7 +1,7 @@
 import { useState, type ComponentPropsWithRef } from "react"
 import { Platform, Pressable, View } from "react-native"
-import { useNativeTheme, type NativeTheme } from "@/lib/native-theme"
-import { isNativeDark, nativeColorAlpha } from "@/lib/native-color"
+import { useNativeTheme, type NativeTheme } from "@/lib/theme"
+import { alpha } from "@hulla/style-native/color"
 
 export type CheckboxProps = ComponentPropsWithRef<typeof Pressable> & {
   checked?: boolean | "mixed"
@@ -111,8 +111,8 @@ export function Checkbox({
                   : theme.colors.disabledSurface
                 : selected
                   ? accent
-                  : isNativeDark(theme)
-                    ? nativeColorAlpha(theme.colors.foreground, 0.1)
+                  : theme.mode === "dark"
+                    ? alpha(theme.colors.foreground, 0.1)
                     : theme.colors.surface,
               outlineWidth: focused && !inactive ? 2 : 0,
               outlineOffset: 2,

@@ -4,7 +4,7 @@ import { Text } from "../../../generated/react-native/typography"
 import { Switch } from "../../../generated/react-native/switch"
 import { Button, ButtonText } from "../../../generated/react-native/button"
 import { Spinner } from "../../../generated/react-native/spinner"
-import { nativeThemes, useNativeTheme } from "../../../generated/react-native/lib/native-theme"
+import { nativeThemes, useNativeTheme } from "../../../generated/react-native/lib/theme"
 import { nativeCatalogEntries, type NativeCatalogId } from "./entries"
 
 const examples = {
