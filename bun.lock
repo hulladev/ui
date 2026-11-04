@@ -168,7 +168,7 @@
   },
   "catalog": {
     "@floating-ui/dom": "^1.7.6",
-    "@hulla/style": "0.4.0",
+    "@hulla/style": "1.0.1",
     "cn": "0.3.0",
   },
   "packages": {
@@ -584,7 +584,7 @@
 
     "@hulla/native-catalog": ["@hulla/native-catalog@workspace:apps/native-catalog"],
 
-    "@hulla/style": ["@hulla/style@0.4.0", "", {}, "sha512-kHNm7A3EyMyFzL5cG2qnbAXuQ8LtY1uqVMK9GRwxj6ffN5IeZpKpQf5OIugQaIWxmpN0bHrkLnx1zCaWJ9vGrg=="],
+    "@hulla/style": ["@hulla/style@1.0.1", "", {}, "sha512-PCt0L8snAxg+X4BKPPVp6ARzDQmtGd11BUNn6QCOzGOtqScHq0TnioPbopvPdsdHf49+La+g/7IW+dUQgpBisw=="],
 
     "@hulla/ui": ["@hulla/ui@workspace:packages/ui"],
 
