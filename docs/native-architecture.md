@@ -102,7 +102,7 @@ references, and override order. It does not supply theme propagation or a CSS ru
 Native UI components depend on the separate `@hulla/style-native/color` entry point (1.1.0 or
 later) for opacity and premultiplied OKLab mixing. Its bounded result caches reuse repeated
 recipes. Built-in themes declare light/dark mode explicitly. Custom palettes can declare mode;
-legacy palettes without mode resolve background lightness once per immutable theme object.
+without it, background lightness is resolved once per immutable theme object.
 Replace a theme object when changing its configuration.
 
 The registry authors support files as `theme.react-native.tsx`, `tokens.react-native.ts`,
@@ -111,11 +111,6 @@ framework suffix. Initialization installs only theme and tokens. Date and text-e
 are marked `onDemand`; the generator follows emitted relative and `@/` imports, type imports,
 and transitive support dependencies to derive component consumers. The CLI installs those
 helpers when the corresponding component is added, preserving existing edited helpers.
-
-For migration, initialize the new registry, update installed native component families, and
-switch app imports from `@/lib/native-theme` to `@/lib/theme`. Provider, hook, theme type, and
-palette export names remain unchanged. Remove old support files only after their imports have been replaced. Old and new
-provider modules have distinct contexts, so migrate the app boundary and components together.
 
 Theme resolution stays in `NativeThemeProvider` / `useNativeTheme()`, with fonts and scoped overrides.
 The adapter guide lives in `style/packages/native/README.md` in the sibling workspace.
