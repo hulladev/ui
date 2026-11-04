@@ -3,7 +3,7 @@
   "library": {
     "schemaVersion": 1,
     "name": "@hulla/ui",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "frameworks": {
       "astro": "./astro",
       "react": "./react",
@@ -1809,6 +1809,6 @@
     "solid/tsconfig.json": "37e941a49cbc375f8dfc37529cbc03fbba8f5c9497683e0654099144e6f4a15d",
     "solid/typography/package.json": "ea5e1a9c4ae60cd565bcad16e7c2ff0e9ef3d6738a0cbc97950986be2c4bc4f4",
     "solid/typography/prose.css": "49e2434afb0f16dc1d844772353b7d9e69f5d14c5f2589aafc7142d93c30a918",
-    "ui.config.ts": "746e8dcedd5127ebef69529b324ab9d679cbd3d60e3e714dd0e2a895b895290b"
+    "ui.config.ts": "4f13d75cfdc365b63bd53b73b4b4376d31ea78c38cc92dfe942083b47865637e"
   }
 }
