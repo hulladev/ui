@@ -1,0 +1,8 @@
+{
+  "repository": "hulladev/ui",
+  "title": "@hulla/ui",
+  "packageManager": "bun",
+  "packages": ["packages/ui"],
+  "smokeImports": [],
+  "smokeDependencies": []
+}

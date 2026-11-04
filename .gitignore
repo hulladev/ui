@@ -54,3 +54,6 @@ generated.backup-*
 # Expo local state
 .expo/
 output/playwright/
+
+# Release workflow artifacts
+/.release/
